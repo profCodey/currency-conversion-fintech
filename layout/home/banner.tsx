@@ -1,4 +1,5 @@
 import { Button } from "@mantine/core";
+import Link from "next/link";
 import { ArrowRight } from "iconsax-react";
 
 export default function Banner() {
@@ -15,13 +16,15 @@ export default function Banner() {
             payments or convert currencies, all in one place.
           </article>
 
-          <Button
-            rightIcon={<ArrowRight color="white" />}
-            size="lg"
-            className="self-left w-fit bg-slate-800 hover:bg-slate-700"
-          >
-            Register Now
-          </Button>
+          <Link href="/sign-up">
+            <Button
+              rightIcon={<ArrowRight color="white" />}
+              size="lg"
+              className="self-left w-fit bg-slate-800 hover:bg-slate-700"
+            >
+              Register Now
+            </Button>
+          </Link>
         </div>
         <div className="hidden lg:block w-[600px] max-w-[600px] bg-slate-300 h-full"></div>
       </section>

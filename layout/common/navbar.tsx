@@ -39,7 +39,7 @@ export function Navbar() {
           <Link href="#!">About Us</Link>
           <Link href="#!">Contact</Link>
           <Link href="#!">Help Center</Link>
-          <Link href="#!">
+          <Link href="/login">
             <Button className="bg-slate-800 hover:bg-slate-700 text-white">
               Sign in
             </Button>

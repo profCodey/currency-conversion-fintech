@@ -62,7 +62,7 @@ const useStyles = createStyles((theme) => ({
 export function Faq() {
   // const { classes } = useStyles();
   return (
-    <section className="py-24">
+    <section className="py-16 sm:py-24 px-5">
       <div className={`text-center max-w-[1000px] mx-auto`}>
         <h2 className={"font-secondary text-4xl font-bold"}>
           Let’s Answer Some Of Your Questions.

@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
+import { MantineProvider } from "@mantine/core";
 import { Inter, Sora } from "next/font/google";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
@@ -13,7 +13,7 @@ export default function App(props: AppProps) {
   return (
     <>
       <Head>
-        <title>Page</title>
+        <title>API Client</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

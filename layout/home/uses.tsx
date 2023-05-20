@@ -18,9 +18,9 @@ const USES = [
 
 export function Uses() {
   return (
-    <section className="py-24">
-      <section className="max-w-7xl mx-auto flex justify-between items-end">
-        <div className="text-white max-w-[600px]">
+    <section className="py-16 sm:py-24 px-5">
+      <section className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start sm:items-end gap-8 sm:gap-5">
+        <div className="text-white max-w-[600px] order-2 sm:order-1">
           <h2 className="text-3xl font-secondary font-semibold text-gray-700">
             Shopping on abroad online stores Just Got Easier
           </h2>
@@ -35,7 +35,7 @@ export function Uses() {
             ))}
           </section>
         </div>
-        <div className="w-[450px] aspect-square bg-slate-400 rounded-lg"></div>
+        <div className="w-[400px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg order-1 sm:order-2 "></div>
       </section>
     </section>
   );

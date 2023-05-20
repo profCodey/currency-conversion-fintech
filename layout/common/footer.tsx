@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="py-24 bg-slate-900 px-5">
+    <footer className="py-16 sm:py-24 bg-slate-900 px-5">
       <div className="max-w-7xl mx-auto text-slate-300 text-sm">
         <span className="text-3xl font-semibold">LOGO</span>
-        <section className="grid grid-cols-4 gap-20 mt-4">
+        <section className="grid grid-cols-1 sm:grid-cols-4 gap-12 sm:gap-20 mt-4">
           <article className="text-slate-400 mt-4">
             Api-client is a digital solution agency that provide financial
             transactions through seamless expereience, fast and secured platform

@@ -18,7 +18,7 @@ const BENEFITS = [
 
 export function Benefits() {
   return (
-    <section className="py-24">
+    <section className="py-24 px-5">
       <div className={`text-center max-w-[700px] mx-auto`}>
         <h2 className={"font-secondary text-4xl font-bold"}>
           Send money cheaper and easier than old-school banks
@@ -28,7 +28,7 @@ export function Benefits() {
         </h4>
       </div>
 
-      <section className="max-w-7xl mx-auto mt-20 grid grid-cols-3 gap-14">
+      <section className="max-w-7xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-3 gap-14">
         {BENEFITS.map((benefit, idx) => (
           <Benefit
             title={benefit.title}

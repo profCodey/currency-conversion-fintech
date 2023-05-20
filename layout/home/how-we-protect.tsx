@@ -19,7 +19,7 @@ const PROTECTION = [
 
 export function HowWeProtect() {
   return (
-    <section className="py-24">
+    <section className="py-16 sm:py-24 px-5">
       <div className={`text-center max-w-[1000px] mx-auto`}>
         <h2 className={"font-secondary text-4xl font-bold"}>
           Protecting You and Your Money
@@ -30,7 +30,7 @@ export function HowWeProtect() {
         </h4>
       </div>
 
-      <section className="max-w-7xl mx-auto mt-20 grid grid-cols-2 grid-rows-2 gap-10">
+      <section className="max-w-7xl mx-auto mt-20 grid grid-cols-1 sm:grid-cols-2 sm:grid-rows-2 gap-10">
         {PROTECTION.map((protection, idx) => (
           <Protection description={protection.description} key={idx} />
         ))}

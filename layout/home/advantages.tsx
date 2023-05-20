@@ -20,7 +20,7 @@ export function Advantages() {
   return (
     <section className="py-16 sm:py-24 px-5 bg-slate-900">
       <section className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start sm:items-end gap-8 sm:gap-5">
-        <div className="w-[400px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg"></div>
+        <div className="w-[300px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg"></div>
         <div className="text-white max-w-[600px]">
           <h2 className="text-3xl font-secondary font-semibold">
             Receive money Anywhere around the world at any time.

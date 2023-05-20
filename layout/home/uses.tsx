@@ -35,7 +35,7 @@ export function Uses() {
             ))}
           </section>
         </div>
-        <div className="w-[400px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg order-1 sm:order-2 "></div>
+        <div className="w-[300px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg order-1 sm:order-2 "></div>
       </section>
     </section>
   );

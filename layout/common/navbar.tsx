@@ -36,10 +36,10 @@ export function Navbar() {
         </ActionIcon>
 
         <ul className="hidden sm:flex items-center gap-10">
-          <Link href="/about">About Us</Link>
-          <Link href="/contact">Contact</Link>
-          <Link href="/help-center">Help Center</Link>
-          <Link href="/login">
+          <Link href="#!">About Us</Link>
+          <Link href="#!">Contact</Link>
+          <Link href="#!">Help Center</Link>
+          <Link href="#!">
             <Button className="bg-slate-800 hover:bg-slate-700 text-white">
               Sign in
             </Button>

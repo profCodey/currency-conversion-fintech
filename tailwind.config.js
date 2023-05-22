@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: { 100: "#132144" },
+      },
       fontFamily: {
         primary: ["var(--font-inter)"],
         secondary: ["var(--font-sora)"],

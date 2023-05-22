@@ -1,4 +1,4 @@
-import { Accordion, createStyles, rem } from "@mantine/core";
+import { Accordion } from "@mantine/core";
 
 const FAQs = [
   {
@@ -27,37 +27,6 @@ const FAQs = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   },
 ];
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    backgroundColor: theme.colors.gray[0],
-    borderRadius: theme.radius.sm,
-  },
-
-  item: {
-    backgroundColor: theme.colors.gray[0],
-    border: `${rem(1)} solid transparent`,
-    position: "relative",
-    zIndex: 0,
-    transition: "transform 150ms ease",
-
-    "&[data-active]": {
-      transform: "scale(1.03)",
-      backgroundColor:
-        theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-      boxShadow: theme.shadows.md,
-      borderColor: theme.colors.gray[2],
-      borderRadius: theme.radius.md,
-      zIndex: 1,
-    },
-  },
-
-  chevron: {
-    "&[data-rotate]": {
-      transform: "rotate(-90deg)",
-    },
-  },
-}));
 
 export function Faq() {
   // const { classes } = useStyles();

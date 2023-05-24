@@ -1,0 +1,6 @@
+.worldBackground {
+  background-image: url(../public/world-map-bg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  @apply h-[160px] w-full relative p-8 text-sm flex flex-col items-center justify-center rounded;
+}

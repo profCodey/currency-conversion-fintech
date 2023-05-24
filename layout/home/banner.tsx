@@ -1,6 +1,7 @@
 import { Button } from "@mantine/core";
 import Link from "next/link";
 import { ArrowRight } from "iconsax-react";
+import { sora } from "@/utils/fonts";
 
 export default function Banner() {
   return (

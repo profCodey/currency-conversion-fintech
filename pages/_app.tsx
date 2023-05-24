@@ -3,17 +3,25 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { MantineProvider } from "@mantine/core";
-import { Inter, Sora } from "next/font/google";
 import { AppProps } from "next/app";
 import Head from "next/head";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+import { inter, sora } from "@/utils/fonts";
 
 export const queryClient = new QueryClient({});
-export default function App(props: AppProps) {
-  const { Component, pageProps } = props;
 
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App(props: AppPropsWithLayout) {
+  const { Component, pageProps } = props;
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <>
       <Head>
@@ -33,9 +41,11 @@ export default function App(props: AppProps) {
         }}
       >
         <QueryClientProvider client={queryClient}>
-          <main className={`${inter.variable} ${sora.variable} font-primary`}>
-            <Component {...pageProps} />
-          </main>
+          <section
+            className={`${inter.variable} ${sora.variable} font-primary`}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </section>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </MantineProvider>

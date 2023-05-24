@@ -9,7 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: { 100: "#132144" },
+        primary: { 100: "#132144", 70: "#7F8698" },
+        gray: { 30: "#F3F3FA" },
+        accent: "#00B0F0"
       },
       fontFamily: {
         primary: ["var(--font-inter)"],

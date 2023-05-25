@@ -10,8 +10,8 @@ module.exports = {
     extend: {
       colors: {
         primary: { 100: "#132144", 70: "#7F8698" },
-        gray: { 30: "#F3F3FA" },
-        accent: "#00B0F0"
+        gray: { 30: "#F3F3FA", 90: "#494949" },
+        accent: "#00B0F0",
       },
       fontFamily: {
         primary: ["var(--font-inter)"],

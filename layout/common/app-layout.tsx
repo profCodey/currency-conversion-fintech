@@ -7,7 +7,6 @@ interface AppLayoutProps {
   children: ReactNode;
 }
 export function AppLayout({ children }: AppLayoutProps) {
-  console.log("Applayout was reloaded")
   return (
     <AppShell
       padding="md"

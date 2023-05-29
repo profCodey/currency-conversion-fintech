@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import { useDisableScroll, useEnableScroll } from "@/hooks/utils";
 import { ActionIcon, Button } from "@mantine/core";
 import { Add, HambergerMenu } from "iconsax-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import Logo from "@/public/logo.svg";
 
 export function Navbar() {
   const [mobileNavigationIsVisible, setMobileNavigationIsVisible] =
@@ -28,7 +29,7 @@ export function Navbar() {
     <header className={`h-20 flex items-center border-b px-5 relative z-10`}>
       <nav className="w-full max-w-7xl mx-auto flex justify-between items-center relative">
         <Link href="/" className="text-3xl font-semibold">
-          LOGO
+          <Logo />
         </Link>
 
         <ActionIcon className="sm:hidden" onClick={toggleMobileNav}>

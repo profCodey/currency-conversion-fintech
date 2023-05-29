@@ -1,3 +1,7 @@
+import CheckIcon from "@/public/check.svg";
+import AdvantagesImage from "@/public/advantages-image.png";
+import Image from "next/image";
+
 const ADVANTAGES = [
   {
     title: "Pay at the real exchange rate",
@@ -18,9 +22,16 @@ const ADVANTAGES = [
 
 export function Advantages() {
   return (
-    <section className="py-16 sm:py-24 px-5 bg-slate-900">
+    <section className="py-16 sm:py-24 px-5 bg-[#132144]">
       <section className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start sm:items-end gap-8 sm:gap-5">
-        <div className="w-[300px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg"></div>
+        <div className="w-[300px] sm:w-[450px] aspect-square rounded-lg">
+          <Image
+            src={AdvantagesImage}
+            placeholder="blur"
+            quality={100}
+            alt=""
+          />
+        </div>
         <div className="text-white max-w-[600px]">
           <h2 className="text-3xl font-secondary font-semibold">
             Receive money Anywhere around the world at any time.
@@ -50,7 +61,9 @@ function Advantage({
 }) {
   return (
     <div className="flex gap-5">
-      <span className="h-8 w-8 rounded-md bg-slate-500 flex-shrink-0"></span>
+      <span className="h-8 w-8 rounded-lg bg-accent flex-shrink-0 flex items-center justify-center">
+        <CheckIcon />
+      </span>
       <div className="flex flex-col gap-4">
         <h4 className="text-xl font-semibold font-secondary">{title}</h4>
         <article className="text-gray-300">{description}</article>

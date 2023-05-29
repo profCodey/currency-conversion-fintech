@@ -1,22 +1,31 @@
-const BENEFITS = [
-  {
-    title: "Secure Transaction",
-    description:
-      "We don't lend out your money and we make sure that it's always secure with our institutional partners so you have nothing to worry about.",
-  },
-  {
-    title: "Data Protection",
-    description:
-      "We protect your information with us and it's always secure. We collect and use your information fairly, lawfully and transparently.",
-  },
-  {
-    title: "Fraud Protection",
-    description:
-      "Our AML and security teams are dedicated to keeping your account safe and protected from fraud at all times.",
-  },
-];
+import { ReactElement } from "react";
+import SecureTransactionIcon from "@/public/transaction.svg";
+import DataProtectionIcon from "@/public/fingerprint.svg";
+import FraudProtectionIcon from "@/public/bank.svg";
+import { IconProps } from "iconsax-react";
 
 export function Benefits() {
+  const BENEFITS = [
+    {
+      title: "Secure Transaction",
+      description:
+        "We don't lend out your money and we make sure that it's always secure with our institutional partners so you have nothing to worry about.",
+      icon: <SecureTransactionIcon />,
+    },
+    {
+      title: "Data Protection",
+      description:
+        "We protect your information with us and it's always secure. We collect and use your information fairly, lawfully and transparently.",
+      icon: <DataProtectionIcon />,
+    },
+    {
+      title: "Fraud Protection",
+      description:
+        "Our AML and security teams are dedicated to keeping your account safe and protected from fraud at all times.",
+      icon: <FraudProtectionIcon />,
+    },
+  ];
+
   return (
     <section className="py-24 px-5">
       <div className={`text-center max-w-[700px] mx-auto`}>
@@ -33,6 +42,7 @@ export function Benefits() {
           <Benefit
             title={benefit.title}
             description={benefit.description}
+            icon={benefit.icon}
             key={idx}
           />
         ))}
@@ -44,13 +54,17 @@ export function Benefits() {
 function Benefit({
   title,
   description,
+  icon,
 }: {
   title: string;
   description: string;
+  icon: ReactElement<IconProps>;
 }) {
   return (
     <div className="flex flex-col justify-center items-center text-center gap-8">
-      <div className="h-20 w-20 rounded-full bg-slate-400"></div>
+      <div className="h-20 w-20 rounded-full border bg-[#00B0F0] flex items-center justify-center">
+        {icon}
+      </div>
       <h4 className="text-2xl font-semibold">{title}</h4>
       <article>{description}</article>
     </div>

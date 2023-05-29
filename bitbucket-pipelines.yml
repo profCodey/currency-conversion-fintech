@@ -1,0 +1,41 @@
+
+image: aaithal/aws-sdk
+
+options:
+  docker: true
+
+pipelines:
+  branches:
+    dev:
+      - step:
+            name: Build And Deploy ApiClient Frontend Image
+            deployment:
+            image: docker/compose:1.25.4
+            
+            script:
+              - echo "Building Application"
+              - pipe: atlassian/aws-ecs-deploy:1.6.0
+                variables:
+                  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                  AWS_DEFAULT_REGION: "eu-west-1"
+                  CLUSTER_NAME: 'apiclient-cluster'
+                  SERVICE_NAME: 'apiclient-frontend'
+
+              - echo "Building..."
+                  
+              - alias aws='docker run --rm -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY amazon/aws-cli'
+
+              - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 280766738545.dkr.ecr.eu-west-1.amazonaws.com
+
+              #Build docker Image
+              - docker build -t api-client-frontend . --no-cache
+
+              #Tag and push docker image to ECR
+              - docker tag api-client-frontend:latest 280766738545.dkr.ecr.eu-west-1.amazonaws.com/api-client-frontend:latest
+
+              #Push the Image
+              - docker push 280766738545.dkr.ecr.eu-west-1.amazonaws.com/api-client-frontend:latest
+
+              # Update and deploy Service
+              - aws ecs update-service --cluster apiclient-cluster --service apiclient-frontend --force-new-deployment --region eu-west-1 

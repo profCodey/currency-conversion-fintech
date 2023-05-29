@@ -1,6 +1,6 @@
 import { AppLayout } from "@/layout/common/app-layout";
 import { ChangeNumberForm, ChangePasswordForm } from "@/layout/settings";
-import { Button, Modal, PasswordInput, Stack, TextInput } from "@mantine/core";
+import { Modal, Stack, } from "@mantine/core";
 import { ReactElement, useState } from "react";
 
 export default function Settings() {

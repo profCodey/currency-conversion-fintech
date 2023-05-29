@@ -72,6 +72,15 @@ export function DashboardItems() {
         <TransactionsIcon color={isCurrentPath("/transactions")} />
         <span>Transactions</span>
       </Link>
+
+      {/* ADMIN FEATURE */}
+      <Link
+        href="/config"
+        className={`flex gap-4 items-center ${getTextColorFromPath("/config")}`}
+      >
+        <SettingsIcon color={isCurrentPath("/config")} />
+        <span>Config</span>
+      </Link>
       <Link
         href="/settings"
         className={`flex gap-4 items-center ${getTextColorFromPath(

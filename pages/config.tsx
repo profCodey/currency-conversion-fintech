@@ -1,19 +1,23 @@
-import { AppLayout } from "@/layout/common/app-layout";
-import { ChangeNumberForm, ChangePasswordForm } from "@/layout/settings";
-import { Button, Modal, Stack } from "@mantine/core";
 import { ReactElement, useState } from "react";
+import { Button, Modal } from "@mantine/core";
+import { AppLayout } from "@/layout/common/app-layout";
+import { AddNewGateway, MakeDefaultGateway } from "@/layout/config";
 
 export default function Settings() {
-  const [modalState, setModalState] = useState<null | "number" | "password">(
-    null
-  );
+  const [modalState, setModalState] = useState<
+    null | "make-default" | "new-gateway"
+  >(null);
 
-  function getModalTitle() {
+  function closeModal() {
+    setModalState(null);
+  }
+
+  function getModalContent() {
     switch (modalState) {
-      case "number":
-        return "Change Phone number";
-      case "password":
-        return "Change Password";
+      case "make-default":
+        return <MakeDefaultGateway closeModal={closeModal} />;
+      case "new-gateway":
+        return <AddNewGateway closeModal={closeModal} />;
       default:
         break;
     }
@@ -26,9 +30,9 @@ export default function Settings() {
         <span>Request and manage gateway here</span>
       </div>
 
-      <Button className="bg-accent hover:bg-accent w-80" size="lg">
+      {/* <Button className="bg-accent hover:bg-accent w-80" size="lg">
         Request For Multiple Gateways
-      </Button>
+      </Button> */}
 
       <section className="max-w-[700px] rounded-lg bg-gray-30 border text-gray-90 p-5">
         <h3 className="text-secondary">Select Default Gateway</h3>
@@ -39,29 +43,41 @@ export default function Settings() {
         <section className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4">
           <div className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px]">
             <span>Gateway 1</span>
-            <button className="bg-[#132144] py-2 px-3 text-white rounded-[4px]">
+            <button
+              disabled
+              className="bg-[#132144] py-2 px-3 text-white rounded-[4px]"
+            >
               Default
             </button>
           </div>
 
           <div className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px]">
             <span>Gateway 2</span>
-            <button className="border border-[#F3F3FA] py-2 px-3 rounded-[4px] font-medium text-primary-100">
+            <button
+              className="border border-[#F3F3FA] py-2 px-3 rounded-[4px] font-medium text-primary-100"
+              onClick={() => setModalState("make-default")}
+            >
               Make Default
             </button>
           </div>
 
           <div className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px]">
             <span>Gateway 3</span>
-            <button className="border border-[#F3F3FA] py-2 px-3 rounded-[4px] font-medium text-primary-100">
+            <button
+              className="border border-[#F3F3FA] py-2 px-3 rounded-[4px] font-medium text-primary-100"
+              onClick={() => setModalState("make-default")}
+            >
               Make Default
             </button>
           </div>
 
           <div className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px]">
             <span>Gateway 4</span>
-            <button className="border border-[#F3F3FA] py-2 px-3 rounded-[4px] font-medium text-primary-100">
-              Make Default
+            <button
+              className="border border-[#F3F3FA] py-2 px-3 rounded-[4px] font-medium text-primary-100"
+              onClick={() => setModalState("new-gateway")}
+            >
+              Add
             </button>
           </div>
         </section>
@@ -101,15 +117,12 @@ export default function Settings() {
       <Modal
         opened={!!modalState}
         centered
-        title={
-          <span className="font-secondary text-accent text-xl">
-            {getModalTitle()}
-          </span>
-        }
         onClose={() => setModalState(null)}
+        withCloseButton={false}
+        size="sm"
+        padding="lg"
       >
-        {modalState === "number" && <ChangeNumberForm />}
-        {modalState === "password" && <ChangePasswordForm />}
+        {getModalContent()}
       </Modal>
     </div>
   );

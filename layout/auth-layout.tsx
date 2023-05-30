@@ -1,7 +1,7 @@
-import { TextInput, PasswordInput, Stack, Button } from "@mantine/core";
-import Link from "next/link";
 import { ReactNode } from "react";
-
+import styles from "./auth-layout.module.css";
+import Logo from "@/public/logo-light.svg";
+import Link from "next/link";
 interface AuthLayoutProps {
   children: ReactNode;
   title: string;
@@ -15,8 +15,20 @@ export default function AuthLayout({
 }: AuthLayoutProps) {
   return (
     <main className="flex h-screen">
-      <div className="hidden md:block sm:w-1/3 h-full bg-slate-800"></div>
-      <div className="w-full md:w-2/3 border border-r-2 h-full flex justify-center items-center p-4">
+      <div
+        className={
+          "hidden md:flex sm:w-[450px] h-full bg-primary-100 flex-col justify-between py-14 px-10 " +
+          styles.sidebarBackground
+        }
+      >
+        <Link href="/">
+          <Logo />
+        </Link>
+        <p className="text-white font-secondary">
+          Receive money Anywhere around the world at any time.
+        </p>
+      </div>
+      <div className="w-full flex-grow border border-r-2 h-full flex justify-center items-center p-4">
         <section className="w-full max-w-[500px] p-4">
           <div className="mb-8">
             <h1 className="font-bold">{title}</h1>

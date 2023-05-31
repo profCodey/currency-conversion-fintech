@@ -31,8 +31,10 @@ export default function AuthLayout({
       <div className="w-full flex-grow border border-r-2 h-full flex justify-center items-center p-4">
         <section className="w-full max-w-[500px] p-4">
           <div className="mb-8">
-            <h1 className="font-bold">{title}</h1>
-            <p className="mt-2">{subtitle}</p>
+            <h1 className="font-bold font-secondary text-primary-100">
+              {title}
+            </h1>
+            <p className="mt-2 font-secondary text-primary-100">{subtitle}</p>
           </div>
           {children}
         </section>

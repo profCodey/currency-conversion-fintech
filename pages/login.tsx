@@ -1,18 +1,14 @@
-import AuthLayout from "@/layout/auth-layout";
+import { useLogin } from "@/hooks/auth";
+import AuthLayout from "@/layout/auth/auth-layout";
+import { loginFormValidator } from "@/utils/validators";
 import { TextInput, PasswordInput, Stack, Button } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { z } from "zod";
 
-export const loginFormValidator = z.object({
-  email: z.string().email("Enter valid email"),
-  password: z
-    .string()
-    .min(5, { message: "Enter password with 5 characters at least" }),
-});
-
 export default function Login() {
+  const { mutate: login, isLoading } = useLogin();
   const loginForm = useForm({
     initialValues: {
       email: "",
@@ -22,8 +18,8 @@ export default function Login() {
   });
 
   function handleSubmit(values: z.infer<typeof loginFormValidator>) {
-    // handle login
     console.log({ values });
+    login(values);
   }
 
   return (
@@ -46,7 +42,8 @@ export default function Login() {
         <Button
           type="submit"
           size="lg"
-          className="mt-1 bg-[#132144] hover:bg-[#132144]"
+          className="mt-1 bg-[#132144] hover:bg-[#132144] font-secondary"
+          loading={isLoading}
         >
           Login
         </Button>

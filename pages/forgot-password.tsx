@@ -1,5 +1,5 @@
-import AuthLayout from "@/layout/auth-layout";
-import { TextInput, PasswordInput, Stack, Button } from "@mantine/core";
+import AuthLayout from "@/layout/auth/auth-layout";
+import { TextInput, Stack, Button } from "@mantine/core";
 import Link from "next/link";
 
 export default function Login() {

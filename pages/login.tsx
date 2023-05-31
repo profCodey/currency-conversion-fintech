@@ -1,4 +1,4 @@
-import { useLogin } from "@/hooks/auth";
+import { useLogin } from "@/api/hooks/auth";
 import AuthLayout from "@/layout/auth/auth-layout";
 import { loginFormValidator } from "@/utils/validators";
 import { TextInput, PasswordInput, Stack, Button } from "@mantine/core";

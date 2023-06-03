@@ -16,6 +16,7 @@ import { _allCountries } from "@/utils/countries";
 import { useForm, zodResolver } from "@mantine/form";
 import { signupFormValidator } from "@/utils/validators";
 import { useRegister } from "@/api/hooks/auth";
+import { USER_CATEGORIES } from "@/utils/constants";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   flag: string;
   label: string;
@@ -47,13 +48,17 @@ export default function Signup() {
       confirm_password: "",
       phone_number: "",
       phone_code: "+234",
+      category: USER_CATEGORIES.API_CLIENT
     },
     validate: zodResolver(signupFormValidator),
   });
 
   function handleSignup(values: z.infer<typeof signupFormValidator>) {
     console.log({ values });
-    register(values);
+    const {phone_code, ...payload} = values
+    payload.phone_number = phone_code + payload.phone_number
+
+    register(payload);
   }
 
   return (

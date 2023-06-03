@@ -3,6 +3,7 @@ import SecureTransactionIcon from "@/public/transaction.svg";
 import DataProtectionIcon from "@/public/fingerprint.svg";
 import FraudProtectionIcon from "@/public/bank.svg";
 import { IconProps } from "iconsax-react";
+import { motion } from "framer-motion";
 
 export function Benefits() {
   const BENEFITS = [
@@ -61,12 +62,16 @@ function Benefit({
   icon: ReactElement<IconProps>;
 }) {
   return (
-    <div className="flex flex-col justify-center items-center text-center gap-8">
+    <motion.div
+      initial={{ marginTop: "4rem" }}
+      whileInView={{ marginTop: 0, animationDelay: "2s" }}
+      className="flex flex-col justify-center items-center text-center gap-8"
+    >
       <div className="h-20 w-20 rounded-full border bg-[#00B0F0] flex items-center justify-center">
         {icon}
       </div>
       <h4 className="text-2xl font-semibold">{title}</h4>
       <article>{description}</article>
-    </div>
+    </motion.div>
   );
 }

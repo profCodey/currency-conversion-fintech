@@ -1477,3 +1477,9 @@ export const _allCountries: {
   description: country.name,
   key: country.name,
 }));
+
+export const allCountryNames = COUNTRIES.map((country) => ({
+  label: country.name,
+  value: country.code,
+  key: country.name,
+}));

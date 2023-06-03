@@ -2,12 +2,17 @@ import "@/styles/globals.css";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, Notification } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { NextPage } from "next";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { inter, sora } from "@/utils/fonts";
+import { ModalsProvider } from "@mantine/modals";
+import { axiosInstance } from "@/api";
+import { AxiosError } from "axios";
+import { ErrorItem, useGetRefreshToken } from "@/api/hooks/auth";
 
 export const queryClient = new QueryClient({});
 
@@ -22,6 +27,7 @@ type AppPropsWithLayout = AppProps & {
 export default function App(props: AppPropsWithLayout) {
   const { Component, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <>
       <Head>
@@ -32,23 +38,26 @@ export default function App(props: AppPropsWithLayout) {
         />
       </Head>
 
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          /** Put your mantine theme override here */
-          colorScheme: "light",
-        }}
-      >
-        <QueryClientProvider client={queryClient}>
-          <section
-            className={`${inter.variable} ${sora.variable} font-primary`}
-          >
-            {getLayout(<Component {...pageProps} />)}
-          </section>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            /** Put your mantine theme override here */
+            colorScheme: "light",
+          }}
+        >
+          <Notifications position="top-right" />
+          <ModalsProvider>
+            <section
+              className={`${inter.variable} ${sora.variable} font-primary`}
+            >
+              {getLayout(<Component {...pageProps} />)}
+            </section>
+          </ModalsProvider>
           <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </MantineProvider>
+        </MantineProvider>
+      </QueryClientProvider>
     </>
   );
 }

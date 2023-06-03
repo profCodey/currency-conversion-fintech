@@ -3,12 +3,19 @@ import AuthLayout from "@/layout/auth/auth-layout";
 import { loginFormValidator } from "@/utils/validators";
 import { TextInput, PasswordInput, Stack, Button } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { AxiosResponse } from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { z } from "zod";
 
 export default function Login() {
-  const { mutate: login, isLoading } = useLogin();
+  const router = useRouter();
+  const { mutate: login, isLoading } = useLogin(
+    handleLoginSuccess,
+    handleLoginError
+  );
   const loginForm = useForm({
     initialValues: {
       email: "",
@@ -20,6 +27,26 @@ export default function Login() {
   function handleSubmit(values: z.infer<typeof loginFormValidator>) {
     console.log({ values });
     login(values);
+  }
+
+  function handleLoginSuccess(data: AxiosResponse) {
+    showNotification({
+      title: "Login successful",
+      message: "Signing you in",
+      color: "green",
+    });
+
+    if (data.data.is_approved) router.push("/dashboard");
+    else router.push("/onboarding");
+  }
+
+  function handleLoginError(error: string) {
+    const message = error || "We were unable to log you in";
+    showNotification({
+      title: "An error occured",
+      message,
+      color: "red",
+    });
   }
 
   return (

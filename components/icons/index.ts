@@ -11,3 +11,4 @@ export { CircleEuropeFlag } from "./circle-europe-flag";
 export { CircleUsFlag } from "./circle-us-flag";
 export * from "./nigerian-flag";
 export { ConvertIcon } from "./converter-icon";
+export * from "./briefcase";

@@ -1,0 +1,6 @@
+.sidebarBackground {
+  background-image: url(/world-map-bg.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}

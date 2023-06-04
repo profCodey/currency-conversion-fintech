@@ -4,12 +4,16 @@ import styles from "@/styles/dashboard.module.css";
 import { ReactElement } from "react";
 import { Button, NumberInput, Select } from "@mantine/core";
 import { TransactionHistory, Wallets } from "@/layout/dashboard";
+import { useGetCurrentUser } from "@/api/hooks/user";
 
 export default function Dashboard() {
+  const { data } = useGetCurrentUser();
+
   return (
     <div className="flex flex-col gap-6 h-full">
       <h2 className={"text-primary-100 text-2xl font-secondary"}>
-        Thank you for choosing us, Wahab
+        Thank you for choosing us,{" "}
+        <span className="font-semibold">{data?.data.last_name}</span>
       </h2>
       <section className="flex-grow flex gap-6">
         <section className="flex-grow flex flex-col gap-8">

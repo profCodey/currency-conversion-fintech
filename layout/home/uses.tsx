@@ -1,3 +1,7 @@
+import CheckIcon from "@/public/check.svg";
+import UsesImage from "@/public/uses-image.png";
+import Image from "next/image";
+
 const USES = [
   {
     title: "Pay online securely with instant notifications.",
@@ -35,7 +39,9 @@ export function Uses() {
             ))}
           </section>
         </div>
-        <div className="w-[300px] sm:w-[450px] aspect-square bg-slate-400 rounded-lg order-1 sm:order-2 "></div>
+        <div className="w-[300px] sm:w-[450px] aspect-square rounded-lg order-1 sm:order-2 ">
+          <Image src={UsesImage} placeholder="blur" quality={100} alt="" />
+        </div>
       </section>
     </section>
   );
@@ -50,7 +56,9 @@ function Advantage({
 }) {
   return (
     <div className="flex gap-5">
-      <span className="h-8 w-8 rounded-md bg-slate-500 flex-shrink-0"></span>
+      <span className="h-8 w-8 rounded-md bg-[#00B0F0] flex items-center justify-center flex-shrink-0">
+        <CheckIcon />
+      </span>
       <div className="flex flex-col gap-4">
         <h4 className="text-xl font-semibold font-secondary text-gray-700">
           {title}

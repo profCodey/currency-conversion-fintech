@@ -1,4 +1,4 @@
-import AuthLayout from "@/layout/auth-layout";
+import AuthLayout from "@/layout/auth/auth-layout";
 import {
   TextInput,
   PasswordInput,
@@ -8,132 +8,148 @@ import {
   Text,
   Select,
 } from "@mantine/core";
+import { z } from "zod";
 import Link from "next/link";
-import { forwardRef } from "react";
+import { ReactElement, forwardRef } from "react";
 import ReactCountryFlag from "react-country-flag";
-import { ArrowDown2, Location } from "iconsax-react";
-import { allCountries } from "@/utils/countries";
+import { _allCountries } from "@/utils/countries";
 import { useForm, zodResolver } from "@mantine/form";
-import { string, z } from "zod";
+import { signupFormValidator } from "@/utils/validators";
+import { useRegister } from "@/api/hooks/auth";
+import { USER_CATEGORIES } from "@/utils/constants";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   flag: string;
   label: string;
+  description: string;
 }
 
-export const signupFormValidator = z
-  .object({
-    country: z.string().min(1, { message: "Select country" }),
-    firstName: z.string().min(1, { message: "Enter first name" }),
-    lastName: z.string().min(1, { message: "Enter last name" }),
-    email: z.string().email("Enter valid email"),
-    password: z.string().min(5, "Enter password with at least 5 characters"),
-    confirmPassword: z
-      .string()
-      .min(5, "Enter password with at least 5 characters"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirm"], // path of error
-  });
+// eslint-disable-next-line react/display-name
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({ flag, label, description, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others} key={label}>
+      <Group noWrap>
+        <ReactCountryFlag countryCode={flag} svg />
+        <div>
+          <Text size="sm">{label}</Text>
+        </div>
+      </Group>
+    </div>
+  )
+);
 
 export default function Signup() {
+  const { mutate: register, isLoading } = useRegister();
   const signupForm = useForm({
     initialValues: {
-      country: "",
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      confirm_password: "",
+      phone_number: "",
+      phone_code: "+234",
+      category: USER_CATEGORIES.API_CLIENT
     },
     validate: zodResolver(signupFormValidator),
   });
 
-  // eslint-disable-next-line react/display-name
-  const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-    ({ flag, label, ...others }: ItemProps, ref) => (
-      <div ref={ref} {...others}>
-        <Group noWrap>
-          <ReactCountryFlag countryCode={flag} svg />
-          <Text size="sm">{label}</Text>
-        </Group>
-      </div>
-    )
+  function handleSignup(values: z.infer<typeof signupFormValidator>) {
+    console.log({ values });
+    const {phone_code, ...payload} = values
+    payload.phone_number = phone_code + payload.phone_number
+
+    register(payload);
+  }
+
+  return (
+    <form className="w-full" onSubmit={signupForm.onSubmit(handleSignup)}>
+      <Stack spacing="lg">
+        <div className="flex gap-2">
+          <Select
+            placeholder=""
+            searchable
+            data={_allCountries}
+            itemComponent={SelectItem}
+            filter={(value, item) =>
+              item.label!.toLowerCase().includes(value.toLowerCase().trim()) ||
+              item.description
+                .toLowerCase()
+                .includes(value.toLowerCase().trim())
+            }
+            size="lg"
+            classNames={{
+              input: "w-[140px]",
+            }}
+            {...signupForm.getInputProps("phone_code")}
+          />
+          <TextInput
+            placeholder="Phone number"
+            size="lg"
+            className="flex-grow"
+            {...signupForm.getInputProps("phone_number")}
+          />
+        </div>
+        <TextInput
+          placeholder="First Name"
+          size="lg"
+          {...signupForm.getInputProps("first_name")}
+        />
+        <TextInput
+          placeholder="Last Name"
+          size="lg"
+          {...signupForm.getInputProps("last_name")}
+        />
+        <TextInput
+          type="email"
+          placeholder="Enter email address"
+          size="lg"
+          {...signupForm.getInputProps("email")}
+        />
+
+        <PasswordInput
+          placeholder="Password"
+          size="lg"
+          {...signupForm.getInputProps("password")}
+        />
+        <PasswordInput
+          placeholder="Confirm Password"
+          size="lg"
+          {...signupForm.getInputProps("confirm_password")}
+        />
+        <Button
+          type="submit"
+          size="lg"
+          className="mt-1 bg-[#132144] hover:bg-[#132144] font-secondary"
+          loading={isLoading}
+        >
+          Sign Up
+        </Button>
+
+        <div>
+          Have an account?{" "}
+          <Link className="text-blue-700" href="/login">
+            Login
+          </Link>
+        </div>
+
+        <div>
+          By Clicking the Sign Up button, you agree to our{" "}
+          <Link className="text-blue-700" href="/sign-up">
+            Privacy Policy
+          </Link>
+        </div>
+      </Stack>
+    </form>
   );
+}
 
-  function handleSignup() {}
-
+Signup.getLayout = function getLayout(page: ReactElement) {
   return (
     <AuthLayout
       title="Sign up"
       subtitle="Please enter your details to get started"
     >
-      <form className="w-full" onSubmit={signupForm.onSubmit(handleSignup)}>
-        <Stack spacing="lg">
-          <Select
-            searchable
-            rightSection={
-              <ArrowDown2 size="16" color="#8F9BB2" variant="Outline" />
-            }
-            icon={<Location size="16" color="#8F9BB2" variant="Bold" />}
-            itemComponent={SelectItem}
-            data={allCountries}
-            size="lg"
-            placeholder="Select country"
-            {...signupForm.getInputProps("country")}
-          />
-          <TextInput
-            placeholder="First Name"
-            size="lg"
-            {...signupForm.getInputProps("firstName")}
-          />
-          <TextInput
-            placeholder="Last Name"
-            size="lg"
-            {...signupForm.getInputProps("lastName")}
-          />
-          <TextInput
-            type="email"
-            placeholder="Enter email address"
-            size="lg"
-            {...signupForm.getInputProps("email")}
-          />
-
-          <PasswordInput
-            placeholder="Password"
-            size="lg"
-            {...signupForm.getInputProps("password")}
-          />
-          <PasswordInput
-            placeholder="Confirm Password"
-            size="lg"
-            {...signupForm.getInputProps("confirmPassword")}
-          />
-
-          {/* <small className="text-red-700 text-sm">Forgot Password?</small> */}
-          <Button
-            type="submit"
-            size="lg"
-            className="mt-1 bg-[#132144] hover:bg-[#132144]"
-          >
-            Sign Up
-          </Button>
-
-          <div>
-            Have an account?{" "}
-            <Link className="text-blue-700" href="/login">
-              Login
-            </Link>
-          </div>
-
-          <div>
-            By Clicking the Sign Up button, you agree to our{" "}
-            <Link className="text-blue-700" href="/sign-up">
-              Privacy Policy
-            </Link>
-          </div>
-        </Stack>
-      </form>
+      {page}
     </AuthLayout>
   );
-}
+};

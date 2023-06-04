@@ -1,7 +1,8 @@
 import { Button } from "@mantine/core";
 import Link from "next/link";
 import { ArrowRight } from "iconsax-react";
-import { sora } from "@/utils/fonts";
+import BannerImage from "@/public/banner-image.png";
+import Image from "next/image";
 
 export default function Banner() {
   return (
@@ -27,7 +28,9 @@ export default function Banner() {
             </Button>
           </Link>
         </div>
-        <div className="hidden lg:block w-[600px] max-w-[600px] bg-slate-300 h-full"></div>
+        <div className="hidden lg:block w-[600px] max-w-[600px] h-full relative">
+          <Image src={BannerImage} placeholder="blur" fill alt="" />
+        </div>
       </section>
     </section>
   );

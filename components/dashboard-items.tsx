@@ -1,4 +1,5 @@
 import {
+  Briefcase,
   ConverterIcon,
   DashboardIcon,
   FundAccountIcon,
@@ -34,6 +35,18 @@ export function DashboardItems() {
 
   return (
     <Stack spacing="xl" className="mt-24 mb-auto text-lg text-slate-400 ">
+      <Link
+        href="/onboarding"
+        className={`flex gap-4 items-center group ${getTextColorFromPath(
+          "/onboarding"
+        )}`}
+      >
+        <Briefcase color={isCurrentPath("/onboarding")} />
+        <span className="group-hover:text-white peer-hover:text-white">
+          Onboarding
+        </span>
+      </Link>
+
       <Link
         href="/dashboard"
         className={`flex gap-4 items-center group ${getTextColorFromPath(
@@ -72,7 +85,16 @@ export function DashboardItems() {
         <TransactionsIcon color={isCurrentPath("/transactions")} />
         <span>Transactions</span>
       </Link>
+
+      {/* ADMIN FEATURE */}
       <Link
+        href="/config"
+        className={`flex gap-4 items-center ${getTextColorFromPath("/config")}`}
+      >
+        <SettingsIcon color={isCurrentPath("/config")} />
+        <span>Config</span>
+      </Link>
+      {/* <Link
         href="/settings"
         className={`flex gap-4 items-center ${getTextColorFromPath(
           "/settings"
@@ -80,7 +102,7 @@ export function DashboardItems() {
       >
         <SettingsIcon color={isCurrentPath("/settings")} />
         <span>Settings</span>
-      </Link>
+      </Link> */}
       <Link
         href="/support"
         className={`flex gap-4 items-center ${getTextColorFromPath(

@@ -1,10 +1,13 @@
 import Link from "next/link";
+import Logo from "@/public/logo-light.svg";
 
 export function Footer() {
   return (
-    <footer className="py-16 sm:py-24 bg-slate-900 px-5">
+    <footer className="py-16 sm:py-24 bg-primary-100 px-5">
       <div className="max-w-7xl mx-auto text-slate-300 text-sm">
-        <span className="text-3xl font-semibold">LOGO</span>
+        <span className="text-3xl font-semibold">
+          <Logo />
+        </span>
         <section className="grid grid-cols-1 sm:grid-cols-4 gap-12 sm:gap-20 mt-4">
           <article className="text-slate-400 mt-4">
             Api-client is a digital solution agency that provide financial

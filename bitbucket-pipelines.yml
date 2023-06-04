@@ -13,13 +13,13 @@ pipelines:
             image: docker/compose:1.25.4
             
             script:
-              - echo "Building Application"
+              - echo "Building  ApiClient Frontend Application"
               - pipe: atlassian/aws-ecs-deploy:1.6.0
                 variables:
                   AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
                   AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
                   AWS_DEFAULT_REGION: "eu-west-1"
-                  CLUSTER_NAME: 'apiclient-cluster'
+                  CLUSTER_NAME: 'payceler-cluser-dev'
                   SERVICE_NAME: 'apiclient-frontend'
 
               - echo "Building..."
@@ -29,7 +29,7 @@ pipelines:
               - aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 280766738545.dkr.ecr.eu-west-1.amazonaws.com
 
               #Build docker Image
-              - docker build -t api-client-frontend . --no-cache
+              - docker build -t api-client-frontend -f DockerfilePipeline . --no-cache
 
               #Tag and push docker image to ECR
               - docker tag api-client-frontend:latest 280766738545.dkr.ecr.eu-west-1.amazonaws.com/api-client-frontend:latest
@@ -38,4 +38,4 @@ pipelines:
               - docker push 280766738545.dkr.ecr.eu-west-1.amazonaws.com/api-client-frontend:latest
 
               # Update and deploy Service
-              - aws ecs update-service --cluster apiclient-cluster --service apiclient-frontend --force-new-deployment --region eu-west-1 
+              - aws ecs update-service --cluster payceler-cluser-dev --service apiclient-frontend --force-new-deployment --region eu-west-1 

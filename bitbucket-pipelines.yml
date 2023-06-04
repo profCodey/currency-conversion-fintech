@@ -3,6 +3,7 @@ image: aaithal/aws-sdk
 
 options:
   docker: true
+  size: 2x
 
 pipelines:
   branches:
@@ -11,7 +12,8 @@ pipelines:
             name: Build And Deploy ApiClient Frontend Image
             deployment:
             image: docker/compose:1.25.4
-            
+            services:
+              - docker
             script:
               - echo "Building  ApiClient Frontend Application"
               - pipe: atlassian/aws-ecs-deploy:1.6.0
@@ -38,4 +40,9 @@ pipelines:
               - docker push 280766738545.dkr.ecr.eu-west-1.amazonaws.com/api-client-frontend:latest
 
               # Update and deploy Service
-              - aws ecs update-service --cluster payceler-cluser-dev --service apiclient-frontend --force-new-deployment --region eu-west-1 
+              - aws ecs update-service --cluster payceler-cluser-dev --service apiclient-frontend --force-new-deployment --region eu-west-1
+
+definitions:
+  services:
+    docker:
+      memory: 4096

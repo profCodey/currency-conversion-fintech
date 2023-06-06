@@ -1,7 +1,12 @@
 import { AppLayout } from "@/layout/common/app-layout";
 import { ReactElement } from "react";
 import { Tabs, Loader } from "@mantine/core";
-import { BasicProfileForm } from "@/layout/onboarding";
+import {
+  BasicProfileForm,
+  DocumentUpload,
+  GatewayOptions,
+  IdVerification,
+} from "@/layout/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { useGetBasicProfile } from "@/api/hooks/onboarding";
 
@@ -29,7 +34,7 @@ export default function Onboarding() {
           the Dashboard.`}
         </span>
       </div>
-      <section className="rounded-lg bg-gray-30 border text-gray-90 p-5">
+      <section className="rounded-lg bg-gray-30 border text-gray-90 p-5 flex-grow">
         <Tabs defaultValue="basic-profile">
           <Tabs.List>
             <Tabs.Tab value="basic-profile">Basic Profile</Tabs.Tab>
@@ -43,13 +48,13 @@ export default function Onboarding() {
             <BasicProfileForm formData={basicProfile?.data} />
           </Tabs.Panel>
           <Tabs.Panel value="id-verification" pt="lg">
-            ID Verification
+            <IdVerification />
           </Tabs.Panel>
           <Tabs.Panel value="document-upload" pt="lg">
-            Document Upload
+            <DocumentUpload />
           </Tabs.Panel>
           <Tabs.Panel value="gateway-options" pt="lg">
-            Gateway Options
+            <GatewayOptions />
           </Tabs.Panel>
           <Tabs.Panel value="status" pt="lg">
             Status

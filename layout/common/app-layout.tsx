@@ -2,7 +2,7 @@ import { ErrorItem, useGetRefreshToken, useLogout } from "@/api/hooks/auth";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { DashboardItems } from "@/components/dashboard-items";
 import { LogoutIcon } from "@/components/icons";
-import { AppShell, Aside } from "@mantine/core";
+import { AppShell, Aside, Navbar } from "@mantine/core";
 import { Text, Loader } from "@mantine/core";
 import { modals, closeAllModals } from "@mantine/modals";
 import { ReactNode, useEffect } from "react";
@@ -41,7 +41,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     <AppShell
       padding="md"
       aside={
-        <Aside
+        <Navbar
           p={32}
           className="bg-primary-100 border-none order-1 left-0"
           width={{ sm: 200, lg: 300 }}
@@ -58,12 +58,10 @@ export function AppLayout({ children }: AppLayoutProps) {
               <span className="text-slate-400 text-lg">Logout</span>
             </div>
           </section>
-        </Aside>
+        </Navbar>
       }
     >
-      <section className="order-2 h-full w-full ml-[200px] lg:ml-[300px] px-2 pt-5">
-        {children}
-      </section>
+      <section className="order-2 h-full w-full px-2 pt-5">{children}</section>
     </AppShell>
   );
 }

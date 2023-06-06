@@ -12,3 +12,5 @@ export { CircleUsFlag } from "./circle-us-flag";
 export * from "./nigerian-flag";
 export { ConvertIcon } from "./converter-icon";
 export * from "./briefcase";
+export * from "./pin"
+export * from "./bin-delete"

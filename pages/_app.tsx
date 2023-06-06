@@ -2,17 +2,14 @@ import "@/styles/globals.css";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { MantineProvider, Notification } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { NextPage } from "next";
-import { ReactElement, ReactNode, useEffect } from "react";
+import { ReactElement, ReactNode } from "react";
 import { inter, sora } from "@/utils/fonts";
 import { ModalsProvider } from "@mantine/modals";
-import { axiosInstance } from "@/api";
-import { AxiosError } from "axios";
-import { ErrorItem, useGetRefreshToken } from "@/api/hooks/auth";
 
 export const queryClient = new QueryClient({});
 

@@ -4,6 +4,6 @@ import { axiosInstance } from "..";
 export function useGetCurrentUser() {
   return useQuery({
     queryKey: ["user", "details"],
-    queryFn: () => axiosInstance().get("/user/current-user/"),
+    queryFn: () => axiosInstance.get("/user/current-user/"),
   });
 }

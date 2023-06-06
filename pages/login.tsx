@@ -12,10 +12,7 @@ import { z } from "zod";
 
 export default function Login() {
   const router = useRouter();
-  const { mutate: login, isLoading } = useLogin(
-    handleLoginSuccess,
-    handleLoginError
-  );
+  const { mutate: login, isLoading } = useLogin();
   const loginForm = useForm({
     initialValues: {
       email: "",
@@ -27,26 +24,6 @@ export default function Login() {
   function handleSubmit(values: z.infer<typeof loginFormValidator>) {
     console.log({ values });
     login(values);
-  }
-
-  function handleLoginSuccess(data: AxiosResponse) {
-    showNotification({
-      title: "Login successful",
-      message: "Signing you in",
-      color: "green",
-    });
-
-    if (data.data.is_approved) router.push("/dashboard");
-    else router.push("/onboarding");
-  }
-
-  function handleLoginError(error: string) {
-    const message = error || "We were unable to log you in";
-    showNotification({
-      title: "An error occured",
-      message,
-      color: "red",
-    });
   }
 
   return (

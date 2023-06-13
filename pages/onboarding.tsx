@@ -1,26 +1,77 @@
 import { AppLayout } from "@/layout/common/app-layout";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { Tabs, Loader } from "@mantine/core";
 import {
   BasicProfileForm,
   DocumentUpload,
   GatewayOptions,
   IdVerification,
+  OnboardingStatus,
 } from "@/layout/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
-import { useGetBasicProfile } from "@/api/hooks/onboarding";
+import {
+  useGetBasicProfile,
+  useGetBusinessDocuments,
+} from "@/api/hooks/onboarding";
+import { useGetSelectedGateways } from "@/api/hooks/gateways";
 
 export default function Onboarding() {
+  const [activeTab, setActiveTab] = useState<string | null>("basic-profile");
   const { data } = useGetCurrentUser();
   const { data: basicProfile, isLoading } = useGetBasicProfile(data?.data.id);
+  const { data: documents, isLoading: documentLoading } =
+    useGetBusinessDocuments(data?.data.id);
+  const { data: userSelectedGateways, isLoading: userSelectedGatewaysLoading } =
+    useGetSelectedGateways();
 
-  if (isLoading) {
+  if (isLoading || documentLoading || userSelectedGatewaysLoading) {
     return (
       <div className="h-screen w-screen flex items-center justify-center gap-4">
         <span>Loading profile...</span>{" "}
         <Loader size="lg" variant="bars" color="green" />
       </div>
     );
+  }
+
+  const disableProfileFields = Boolean(
+    basicProfile?.data?.business_legal_name &&
+      (basicProfile?.data.status === "pending" ||
+        basicProfile?.data?.status === "approved")
+  );
+
+  const disableDocumentNextButton = function () {
+    const {
+      certificate_of_registration,
+      utility_bill,
+      article_of_association,
+      document_directors,
+      document_shareholders,
+    } = documents?.data || {};
+    if (
+      [
+        certificate_of_registration,
+        utility_bill,
+        article_of_association,
+        document_directors,
+        document_shareholders,
+      ].every((doc) => Boolean(doc))
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const disableGatewayNextButton = userSelectedGateways?.data.length === 0;
+
+  function handleTabChange(tab: string) {
+    if (tab === "basic-profile") setActiveTab(tab);
+    else if (tab === "id-verification" && disableProfileFields)
+      setActiveTab(tab);
+    else if (tab === "document-upload" && disableProfileFields)
+      setActiveTab(tab);
+    else if (tab === "gateway-options" && !disableDocumentNextButton())
+      setActiveTab(tab);
+    else if (tab === "status" && !disableGatewayNextButton) setActiveTab(tab);
   }
 
   return (
@@ -35,7 +86,15 @@ export default function Onboarding() {
         </span>
       </div>
       <section className="rounded-lg bg-gray-30 border text-gray-90 p-5 flex-grow">
-        <Tabs defaultValue="basic-profile">
+        <Tabs
+          defaultValue="basic-profile"
+          value={activeTab}
+          onTabChange={handleTabChange}
+          classNames={{
+            root: "h-[95%]",
+            panel: "h-full flex-grow",
+          }}
+        >
           <Tabs.List>
             <Tabs.Tab value="basic-profile">Basic Profile</Tabs.Tab>
             <Tabs.Tab value="id-verification">ID Verification</Tabs.Tab>
@@ -45,19 +104,30 @@ export default function Onboarding() {
           </Tabs.List>
 
           <Tabs.Panel value="basic-profile" pt="lg">
-            <BasicProfileForm formData={basicProfile?.data} />
+            <BasicProfileForm
+              formData={basicProfile?.data}
+              nextTab={setActiveTab}
+              disableFields={disableProfileFields}
+            />
           </Tabs.Panel>
           <Tabs.Panel value="id-verification" pt="lg">
             <IdVerification />
           </Tabs.Panel>
           <Tabs.Panel value="document-upload" pt="lg">
-            <DocumentUpload />
+            <DocumentUpload
+              formData={documents?.data}
+              disableDocumentNextButton={disableDocumentNextButton()}
+              nextTab={setActiveTab}
+            />
           </Tabs.Panel>
           <Tabs.Panel value="gateway-options" pt="lg">
-            <GatewayOptions />
+            <GatewayOptions
+              userSelectedGateways={userSelectedGateways?.data}
+              nextTab={setActiveTab}
+            />
           </Tabs.Panel>
           <Tabs.Panel value="status" pt="lg">
-            Status
+            <OnboardingStatus />
           </Tabs.Panel>
         </Tabs>
       </section>

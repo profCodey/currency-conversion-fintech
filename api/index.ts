@@ -1,3 +1,4 @@
+import { queryClient } from "@/pages/_app";
 import { APP_TOKENS } from "@/utils/constants";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
@@ -25,6 +26,8 @@ axiosInstance.interceptors.response.use(
       Cookies.remove(APP_TOKENS.CATEGORY);
       Cookies.remove(APP_TOKENS.REFRESH_TOKEN);
       window.location.href = "/login";
+      queryClient.clear();
+
       return;
     } else return response;
   },
@@ -35,6 +38,7 @@ axiosInstance.interceptors.response.use(
       Cookies.remove(APP_TOKENS.REFRESH_TOKEN);
 
       window.location.href = "/login";
+      queryClient.clear();
     } else {
       return Promise.reject(error);
     }

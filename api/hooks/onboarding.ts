@@ -5,6 +5,7 @@ import { basicProfileFormValidator } from "@/utils/validators";
 import { showNotification } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import { ErrorItem } from "./auth";
+import { queryClient } from "@/pages/_app";
 
 export function useGetBasicProfile(userId: string) {
   return useQuery({
@@ -39,6 +40,9 @@ export function useUpdateBasicProfile(userId: string) {
           color: "red",
         });
       },
+      onSettled: function () {
+        queryClient.invalidateQueries(["apiclient", "profile"]);
+      },
     }
   );
 }
@@ -71,6 +75,42 @@ export function useUpdateOnboardingDocuments(userId: string) {
           message: response.detail || "Unable to update document",
           color: "red",
         });
+      },
+    }
+  );
+}
+
+export function usePatchOnboardingDocuments(userId: string) {
+  return useMutation(
+    function (payload: any) {
+      return axiosInstance.patch(
+        `/apiclient/onboarding/document/${userId}/`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation successful",
+          message: "Document updated successfully",
+          color: "green",
+        });
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        showNotification({
+          title: "Operation successful",
+          message: response.detail || "Unable to update document",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["apiclient", "documents"]);
       },
     }
   );

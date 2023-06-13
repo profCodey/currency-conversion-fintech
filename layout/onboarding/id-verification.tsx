@@ -1,8 +1,8 @@
-import { Button } from "@mantine/core";
+import { Button, Loader } from "@mantine/core";
 import SumsubWebSdk from "@sumsub/websdk-react";
 import { showNotification } from "@mantine/notifications";
 import { useActivateSubmsub } from "@/api/hooks/onboarding";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function IdVerification() {
   const [token, setToken] = useState<null | string>(null);
@@ -20,9 +20,19 @@ export function IdVerification() {
         });
       });
   }
+
+  useEffect(activateSumsub, [getToken]);
+
+  if (isLoading)
+    return (
+      <div>
+        Loading... <Loader color="green" />
+      </div>
+    );
+
   return (
     <div>
-      <Button
+      {/* <Button
         size="lg"
         className="bg-accent hover:bg-accent"
         loading={isLoading}
@@ -30,7 +40,7 @@ export function IdVerification() {
         disabled={!!token}
       >
         Proceed to ID Verification
-      </Button>
+      </Button> */}
 
       {token && (
         <SumsubWebSdk

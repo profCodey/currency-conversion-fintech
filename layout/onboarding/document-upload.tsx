@@ -6,14 +6,33 @@ import {
   useUpdateOnboardingDocuments,
 } from "@/api/hooks/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
+import { z } from "zod";
 
-export function DocumentUpload() {
+export interface DocumentsValidator {
+  certificate_of_registration: string;
+  utility_bill: string;
+  article_of_association: string;
+  document_directors: string;
+  document_shareholders: string;
+  regulatory_licenses: string;
+  status: string;
+}
+
+export function DocumentUpload({
+  formData,
+  disableDocumentNextButton,
+  nextTab,
+}: {
+  formData: DocumentsValidator;
+  disableDocumentNextButton: boolean;
+  nextTab(arg0: string): void;
+}) {
   const { data } = useGetCurrentUser();
   const { mutate: updateDocuments, isLoading } = useUpdateOnboardingDocuments(
     data?.data.id
   );
-  const { data: documents, isLoading: documentLoading } =
-    useGetBusinessDocuments(data?.data.id);
+  // const { data: documents, isLoading: documentLoading } =
+  //   useGetBusinessDocuments(data?.data.id);
 
   const [certificateOfRegistration, setCertificateOfRegistration] =
     useState<File | null>(null);
@@ -34,7 +53,7 @@ export function DocumentUpload() {
     const payload = {
       certificate_of_registration: certificateOfRegistration,
       utility_bill: utilityBill,
-      aricle_of_association: articleOfAssociation,
+      article_of_association: articleOfAssociation,
       document_directors: documentDirectors,
       document_shareholders: documentShareholders,
       regulatory_licenses: regulatoryLicenses,
@@ -68,33 +87,38 @@ export function DocumentUpload() {
             docName="Certificate of Business Registration"
             file={certificateOfRegistration}
             setFile={setCertificateOfRegistration}
-            fileUrl={documents?.data.certificate_of_registration}
+            fileUrl={formData?.certificate_of_registration}
+            fieldName="certificate_of_registration"
           />
 
           <FormFile
             docName="Utility Bill for Business Address"
             file={utilityBill}
             setFile={setUtilityBill}
-            fileUrl={documents?.data.utility_bill}
+            fileUrl={formData?.utility_bill}
+            fieldName="utility_bill"
           />
 
           <FormFile
             docName="Article of Association"
             file={articleOfAssociation}
             setFile={setArticleOfAssociation}
-            fileUrl={documents?.data.article_of_association}
+            fileUrl={formData?.article_of_association}
+            fieldName="article_of_association"
           />
           <FormFile
             docName="Document stating directors"
             file={documentDirectors}
             setFile={setDocumentDirectors}
-            fileUrl={documents?.data.document_directors}
+            fileUrl={formData?.document_directors}
+            fieldName="document_directors"
           />
           <FormFile
             docName="Document stating shareholders"
             file={documentShareholders}
             setFile={setDocumentShareholders}
-            fileUrl={documents?.data.document_shareholders}
+            fileUrl={formData?.document_shareholders}
+            fieldName="document_shareholders"
           />
         </div>
         <div className="flex flex-col gap-3">
@@ -104,13 +128,16 @@ export function DocumentUpload() {
             docName="Applicable Regulatory Licenses"
             file={regulatoryLicenses}
             setFile={setRegulatoryLicenses}
-            fileUrl={documents?.data.regulatory_licenses}
+            fileUrl={formData?.regulatory_licenses}
+            fieldName="regulatory_licenses"
           />
           <Button
             className="bg-accent font-semibold w-3/4"
             size="lg"
-            type="submit"
+            type="button"
             loading={isLoading}
+            disabled={disableDocumentNextButton}
+            onClick={() => nextTab("gateway-options")}
           >
             Next
           </Button>

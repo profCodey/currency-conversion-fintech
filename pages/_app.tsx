@@ -11,7 +11,13 @@ import { ReactElement, ReactNode } from "react";
 import { inter, sora } from "@/utils/fonts";
 import { ModalsProvider } from "@mantine/modals";
 
-export const queryClient = new QueryClient({});
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

@@ -10,21 +10,28 @@ import { basicProfileFormValidator } from "@/utils/validators";
 import { DateInput } from "@mantine/dates";
 import dayjs from "dayjs";
 import { allCountryNames } from "@/utils/countries";
+import { ArrowRight, ArrowRight2 } from "iconsax-react";
+
+// interface ProfileValidator {
+//   status: string
+// }
+interface ProfileValidator extends z.infer<typeof basicProfileFormValidator> {
+  status: string;
+}
 
 export function BasicProfileForm({
   formData,
+  nextTab,
+  disableFields,
 }: {
-  formData: z.infer<typeof basicProfileFormValidator>;
+  formData: ProfileValidator;
+  nextTab: (arg0: string) => void;
+  disableFields: boolean;
 }) {
   const { data } = useGetCurrentUser();
   const { mutate: updateProfile, isLoading } = useUpdateBasicProfile(
     data?.data.id
   );
-  //   const { data: basicProfile, isLoading: basicProfileLoading } =
-  //     useGetBasicProfile(data?.data.id);
-
-  //   const profile = formData?.;
-  //   console.log(profile);
 
   const basicProfileForm = useForm({
     initialValues: {
@@ -56,6 +63,12 @@ export function BasicProfileForm({
     updateProfile(payload);
   }
 
+  function handleNext() {
+    nextTab("id-verification");
+  }
+
+  //if the business legal name is truthy, it means that the user already submitted this form data
+
   return (
     <form
       className="max-w-[850px] flex flex-col flex-wrap gap-5 max-h-[500px]"
@@ -65,42 +78,60 @@ export function BasicProfileForm({
         placeholder="Enter Merchant Legal Name"
         size="lg"
         {...basicProfileForm.getInputProps("business_legal_name")}
+        classNames={{
+          input: "disabled:bg-white text-black",
+        }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Enter Merchant Trading Name"
         size="lg"
         {...basicProfileForm.getInputProps("business_trading_name")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Enter Tax Number"
         size="lg"
         {...basicProfileForm.getInputProps("tax_number")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Enter Zip Code"
         size="lg"
         {...basicProfileForm.getInputProps("zip_code")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Select State"
         size="lg"
         {...basicProfileForm.getInputProps("state")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Select City"
         size="lg"
         {...basicProfileForm.getInputProps("city")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Enter Business Registration Number"
         size="lg"
         {...basicProfileForm.getInputProps("business_registration_number")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <DateInput
         placeholder="Select Registration Date:"
         size="lg"
         {...basicProfileForm.getInputProps("business_registration_date")}
+        classNames={{ input: "disabled:bg-white text-black" }}
         maxDate={new Date()}
+        disabled={disableFields}
       />
       <Select
         data={allCountryNames}
@@ -108,25 +139,43 @@ export function BasicProfileForm({
         placeholder="Country of Business Registration"
         size="lg"
         {...basicProfileForm.getInputProps("country_of_registration")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="Primary Business Activity"
         size="lg"
         {...basicProfileForm.getInputProps("primary_business_activity")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
       <TextInput
         placeholder="BVN"
         size="lg"
         {...basicProfileForm.getInputProps("bvn")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
       />
-      <Button
-        type="submit"
-        size="lg"
-        className="bg-[#00B0F0] hover:bg-[#00B0F0]"
-        loading={isLoading}
-      >
-        Submit
-      </Button>
+      {!disableFields ? (
+        <Button
+          type="submit"
+          size="lg"
+          className="bg-[#00B0F0] hover:bg-[#00B0F0]"
+          loading={isLoading}
+        >
+          Submit
+        </Button>
+      ) : (
+        <Button
+          type="button"
+          size="lg"
+          className="bg-[#00B0F0] hover:bg-[#00B0F0]"
+          onClick={handleNext}
+          rightIcon={<ArrowRight />}
+        >
+          Next
+        </Button>
+      )}
     </form>
   );
 }

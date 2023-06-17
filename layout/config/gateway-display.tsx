@@ -4,6 +4,7 @@ import { Button, Loader, Modal } from "@mantine/core";
 import { ReactNode, useState } from "react";
 import { AddNewGateway } from "./new-gateway";
 import { MakeDefaultGateway } from "./default-gateway";
+import { useIsVerified } from "@/api/hooks/user";
 
 export default function GatewaysDisplay({
   selectedGateways,
@@ -13,8 +14,9 @@ export default function GatewaysDisplay({
   unSelectedGateways: ReactNode;
 }) {
   const [modalState, setModalState] = useState<ISelectedGateway | null>(null);
-  const { mutate: makeDefaultGateway, isLoading } = useMakeDefaultGateway(()=>setModalState(null));
-
+  const { mutate: makeDefaultGateway, isLoading } = useMakeDefaultGateway(() =>
+    setModalState(null)
+  );
 
   function handleDefaultGatewaySelect(gateway: ISelectedGateway) {
     setModalState(gateway);
@@ -66,6 +68,7 @@ function Gateway({
   gateway: ISelectedGateway;
   handleSelect: (arg0: ISelectedGateway) => void;
 }) {
+  const { isVerified } = useIsVerified();
   return (
     <div
       key={gateway.id}
@@ -80,7 +83,8 @@ function Gateway({
       ) : (
         <Button
           className="bg-[#132144] hover:bg-[#132144] py-2 px-3 text-gray-200 rounded-[4px]"
-          onClick={() => handleSelect(gateway)}
+          onClick={() => isVerified && handleSelect(gateway)}
+          disabled={!isVerified}
         >
           Make Default
         </Button>
@@ -94,10 +98,15 @@ export function UnSelectedGateways({ gateways }: { gateways: IGateway[] }) {
   const { mutate: addGateway, isLoading } = useAddGateway(() =>
     setModalState(null)
   );
+  const { isVerified } = useIsVerified();
   if (gateways.length < 1) {
     return <span>You have selected all available gateways</span>;
   }
 
+  function handleAddGateway(gateway: IGateway) {
+    if (!isVerified) return;
+    setModalState(gateway);
+  }
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-4">
@@ -112,9 +121,9 @@ export function UnSelectedGateways({ gateways }: { gateways: IGateway[] }) {
         >
           <span className="text-sm">{gateway.description}</span>
           <Button
-            disabled={isLoading}
             className="bg-white hover:bg-white border-[#132144] py-2 px-3 text-[#132144] rounded-[4px]"
-            onClick={() => setModalState(gateway)}
+            onClick={() => handleAddGateway(gateway)}
+            disabled={isLoading || !isVerified}
           >
             Add Gateway
           </Button>

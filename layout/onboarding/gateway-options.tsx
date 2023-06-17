@@ -86,9 +86,7 @@ export function GatewayOptions({
             <Button
               className="bg-accent hover:bg-accent mt-4"
               size="lg"
-              onClick={() =>
-                console.log(data?.data.length, alreadySelectedGateways?.length)
-              }
+              onClick={()=>nextTab("status")}
             >
               Next
             </Button>

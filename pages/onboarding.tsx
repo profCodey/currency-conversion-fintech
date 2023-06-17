@@ -1,6 +1,6 @@
 import { AppLayout } from "@/layout/common/app-layout";
 import { ReactElement, useState } from "react";
-import { Tabs, Loader } from "@mantine/core";
+import { Tabs, Loader, Skeleton } from "@mantine/core";
 import {
   BasicProfileForm,
   DocumentUpload,
@@ -26,9 +26,9 @@ export default function Onboarding() {
 
   if (isLoading || documentLoading || userSelectedGatewaysLoading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center gap-4">
-        <span>Loading profile...</span>{" "}
-        <Loader size="lg" variant="bars" color="green" />
+      <div className="h-full w-full flex flex-col items-center justify-center gap-4">
+        <Skeleton height={100} />
+        <Skeleton className="flex-grow" />
       </div>
     );
   }

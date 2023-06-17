@@ -50,3 +50,21 @@ export const basicProfileFormValidator = z.object({
     .string()
     .min(1, "Enter business registration number"),
 });
+
+export const addRecipientFormValidator = z.object({
+  currency: z.string(),
+  bank: z.string(),
+  account_number: z
+    .string()
+    .min(10, "Enter valid account number")
+    .max(10, "Enter valid account number"),
+  account_name: z.string(),
+  user: z.number(),
+});
+
+export const fundManualAccount = z.object({
+  amount: z.number().gte(1, { message: "Enter valid amount" }),
+  account_name: z.string().min(1, { message: "Enter account name" }),
+  gateway: z.string().min(1, { message: "Select gateway" }),
+  narration: z.string(),
+});

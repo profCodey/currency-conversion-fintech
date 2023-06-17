@@ -23,7 +23,8 @@ export function middleware(request: NextRequest) {
   }
 
   if (userCategory === USER_CATEGORIES.API_CLIENT) {
-    if (apiClientPaths.includes(nextUrl.pathname)) {
+    if (apiClientPaths.some((path) => nextUrl.pathname.startsWith(path))) {
+      // if (apiClientPaths.includes(nextUrl.pathname)) {
       return NextResponse.rewrite(new URL(nextUrl.pathname, request.url));
     } else {
       return NextResponse.redirect(new URL("/dashboard", request.url));

@@ -32,7 +32,7 @@ export function FormFile({
     updateDocuments(payload);
   }
 
-  function handleMouseEnter() {}
+  const disableEdit = data?.data.is_approved;
 
   return (
     <div className="border rounded-lg px-[18px] py-3 bg-white flex items-center gap-4 border-primary-30">
@@ -44,7 +44,7 @@ export function FormFile({
         </span>
       ) : fileUrl ? (
         <div
-          onMouseEnter={() => setShowViewIcon(true)}
+          onMouseEnter={() => !disableEdit && setShowViewIcon(true)}
           onMouseLeave={() => setShowViewIcon(false)}
         >
           {showViewIcon ? (

@@ -2,8 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { queryClient } from "@/pages/_app";
 import { AxiosResponse } from "axios";
-import { IGateway, ISelectedGateway } from "@/utils/validators/interfaces";
+import {
+  IGateway,
+  IPayoutHistory,
+  ISelectedGateway,
+} from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
+import { useMemo } from "react";
 
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
@@ -91,4 +96,38 @@ export function useMakeDefaultGateway(cb?: () => void) {
       },
     }
   );
+}
+
+export function useDefaultGateway() {
+  const { data, isLoading } = useGetSelectedGateways();
+
+  const defaultGateway = useMemo(
+    function () {
+      return data?.data.find((gateway) => gateway.is_default);
+    },
+    [data?.data]
+  );
+
+  return { isLoading, defaultGateway };
+}
+
+interface IPayoutPayload {
+  gateway_id: number | undefined;
+  begin_date: string;
+  end_date: string;
+}
+
+export function useGetPayouts(payload: IPayoutPayload) {
+  const { gateway_id, begin_date, end_date } = payload;
+  return useQuery({
+    queryKey: ["payouts", gateway_id, begin_date, end_date],
+    queryFn: function (): Promise<AxiosResponse<IPayoutHistory>> {
+      return axiosInstance.get(
+        `/local/payouts/${gateway_id}/${begin_date}/${end_date}/`,
+        {
+          baseURL: APICLIENT_BASE_URL,
+        }
+      );
+    },
+  });
 }

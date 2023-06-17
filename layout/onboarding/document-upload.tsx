@@ -1,12 +1,10 @@
-import { Button, FileButton, FileInput, Loader } from "@mantine/core";
+import { Button, Loader } from "@mantine/core";
 import { useState } from "react";
 import { FormFile } from "./form-file";
 import {
-  useGetBusinessDocuments,
   useUpdateOnboardingDocuments,
 } from "@/api/hooks/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
-import { z } from "zod";
 
 export interface DocumentsValidator {
   certificate_of_registration: string;
@@ -31,8 +29,6 @@ export function DocumentUpload({
   const { mutate: updateDocuments, isLoading } = useUpdateOnboardingDocuments(
     data?.data.id
   );
-  // const { data: documents, isLoading: documentLoading } =
-  //   useGetBusinessDocuments(data?.data.id);
 
   const [certificateOfRegistration, setCertificateOfRegistration] =
     useState<File | null>(null);

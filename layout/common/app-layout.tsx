@@ -1,8 +1,8 @@
 import { ErrorItem, useGetRefreshToken, useLogout } from "@/api/hooks/auth";
-import { useGetCurrentUser } from "@/api/hooks/user";
+import { useGetClientDetails, useGetCurrentUser } from "@/api/hooks/user";
 import { DashboardItems } from "@/components/dashboard-items";
 import { LogoutIcon } from "@/components/icons";
-import { AppShell, Aside, Navbar } from "@mantine/core";
+import { AppShell, Aside, Navbar, Notification, Skeleton } from "@mantine/core";
 import { Text, Loader } from "@mantine/core";
 import { modals, closeAllModals } from "@mantine/modals";
 import { ReactNode, useEffect } from "react";
@@ -13,7 +13,12 @@ interface AppLayoutProps {
   children: ReactNode;
 }
 export function AppLayout({ children }: AppLayoutProps) {
-  const { isLoading, data, isError } = useGetCurrentUser();
+  const { isLoading, data } = useGetCurrentUser();
+  const {
+    data: clientDetails,
+    isLoading: clientDetailsLoading,
+    isError,
+  } = useGetClientDetails(data?.data.id);
   // const { isLoading: basicProfileLoading } = useGetBasicProfile(data?.data.id);
   const logout = useLogout();
 
@@ -28,14 +33,25 @@ export function AppLayout({ children }: AppLayoutProps) {
     });
   }
 
-  if (isLoading) {
-    return (
-      <div className="h-screen w-screen flex items-center justify-center gap-4">
-        <span>Loading application...</span>{" "}
-        <Loader size="lg" variant="bars" color="green" />
+  // if (isLoading || clientDetailsLoading) {
+  //   return (
+  //     <div className="h-screen w-screen flex items-center justify-center gap-4">
+  //       <span>Loading application...</span>{" "}
+  //       <Loader size="lg" variant="bars" color="green" />
+  //     </div>
+  //   );
+  // }
+
+  const content =
+    isLoading || clientDetailsLoading ? (
+      <div className="h-full w-full flex flex-col items-center justify-center gap-4">
+        <Skeleton height={100} />
+        <Skeleton height={200} />
+        <Skeleton className="flex-grow" />
       </div>
+    ) : (
+      children
     );
-  }
 
   return (
     <AppShell
@@ -61,7 +77,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         </Navbar>
       }
     >
-      <section className="order-2 h-full w-full px-2 pt-5">{children}</section>
+      <section className="order-2 h-full w-full px-2 pt-5">{content}</section>
     </AppShell>
   );
 }

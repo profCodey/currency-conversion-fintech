@@ -11,11 +11,11 @@ import { ApiKeyDisplay } from "@/layout/config/api-key-display";
 import { useGetClientDetails, useGetCurrentUser } from "@/api/hooks/user";
 
 export default function Settings() {
-  const { data: currentUser } = useGetCurrentUser();
+  // const { data: currentUser } = useGetCurrentUser();
   const { data: gateways, isLoading: gatewaysLoading } = useGetGateways();
   const { data: selectedGateways, isLoading: selectedGatewaysLoading } =
     useGetSelectedGateways();
-  const {} = useGetClientDetails(currentUser?.data.id);
+  // const {} = useGetClientDetails(currentUser?.data.id);
 
   if (gatewaysLoading || selectedGatewaysLoading) {
     return (

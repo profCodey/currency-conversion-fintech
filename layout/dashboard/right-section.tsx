@@ -59,6 +59,22 @@ export function RightSection() {
       currency: "NGN",
       narration: "",
     });
+
+    setShowRecipientsModal(false);
+  }
+
+  function handleNewRecipientSend() {
+    setShowSelectRecipientModal(false);
+    setRecipientDetails({
+      bank: "",
+      currency: "NGN",
+      amount: 1000,
+      account_name: "",
+      account_number: "",
+      narration: "",
+    });
+
+    setShowModal(true);
   }
 
   return (
@@ -170,6 +186,7 @@ export function RightSection() {
             className="bg-primary-100 hover:bg-primary-100 font-normal"
             fullWidth
             size="lg"
+            onClick={handleNewRecipientSend}
           >
             New Recipient
           </Button>
@@ -210,7 +227,9 @@ export function RightSection() {
                   <Button
                     variant="white"
                     className="text-accent"
-                    onClick={() => handleSend(recipient)}
+                    onClick={() => {
+                      handleSend(recipient);
+                    }}
                   >
                     Send
                   </Button>

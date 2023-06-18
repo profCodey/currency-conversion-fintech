@@ -5,6 +5,7 @@ import {
   CircleNigerianFlag,
   CircleUsFlag,
 } from "@/components/icons";
+import { currencyFormatter } from "@/utils/currency";
 import { ActionIcon, Popover, Skeleton } from "@mantine/core";
 import { ArrowDown2 } from "iconsax-react";
 import { ReactNode } from "react";
@@ -40,7 +41,10 @@ export function Wallets({ userId }: { userId: string }) {
       </div>
       <div className="px-4 py-3 bg-white flex items-center gap-4 justify-between rounded-md border">
         <span className="mr-auto">
-          ₦ {clientDetails?.data.result?.walletBalance ?? "0.00"}
+          ₦{" "}
+          {clientDetails?.data.result?.walletBalance
+            ? currencyFormatter(clientDetails?.data.result?.walletBalance)
+            : "0.00"}
         </span>
         <CircleNigerianFlag />
 
@@ -59,7 +63,7 @@ export function Wallets({ userId }: { userId: string }) {
                     className="text-gray-90 flex gap-10 justify-between font-normal text-sm"
                   >
                     <span>{gateway.gatewaydescription}</span>
-                    <span>₦ {gateway.balance}</span>
+                    <span>₦ {currencyFormatter(gateway.balance)}</span>
                   </div>
                 ))}
               </section>

@@ -19,6 +19,7 @@ import { z } from "zod";
 import { addRecipientFormValidator } from "@/utils/validators";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { RecipientList } from "@/layout/recipients/recipient-list";
+import { queryClient } from "./_app";
 
 export default function Recipients() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -65,6 +66,7 @@ export default function Recipients() {
         if (name) {
           addRecipientForm.setFieldValue("account_name", name);
         } else {
+          addRecipientForm.setFieldValue("account_name", "");
           addRecipientForm.setFieldError("account_name", "Name enquiry failed");
         }
       }
@@ -131,6 +133,7 @@ export default function Recipients() {
         withCloseButton={false}
         opened={modalOpen}
         onClose={() => {
+          queryClient.removeQueries(["name-enquiry"]);
           setModalOpen(false);
           addRecipientForm.reset();
         }}

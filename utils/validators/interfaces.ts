@@ -133,3 +133,15 @@ export interface IManualPayment {
   status: string;
   narration: string;
 }
+
+// FX
+
+export interface IFxAccount {
+  id: number;
+  currency: "EUR" | "GBP" | "USD";
+  account_number: string;
+  account_name: string;
+  bank_name: string;
+  balance: string;
+  is_active: boolean;
+}

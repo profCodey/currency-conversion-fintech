@@ -1,3 +1,4 @@
+import { useGetFxAccounts } from "@/api/hooks/fx";
 import { useGetClientDetails } from "@/api/hooks/user";
 import {
   CircleBritishFlag,
@@ -13,8 +14,9 @@ import { ReactNode } from "react";
 export function Wallets({ userId }: { userId: string }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
+  const { isLoading: walletsLoading, data: wallets } = useGetFxAccounts();
 
-  if (clientDetailsLoading) {
+  if (clientDetailsLoading || walletsLoading) {
     return (
       <WalletsContainer>
         <Skeleton />
@@ -25,23 +27,49 @@ export function Wallets({ userId }: { userId: string }) {
     );
   }
 
+  function getIcon(code: string) {
+    switch (code) {
+      case "GBP":
+        return <CircleBritishFlag />;
+      case "USD":
+        return <CircleUsFlag />;
+      case "EUR":
+        return <CircleEuropeFlag />;
+      default:
+        return <CircleNigerianFlag />;
+    }
+  }
+
+  function getCurrency(code: string) {
+    switch (code) {
+      case "GBP":
+        return "£";
+      case "USD":
+        return "$";
+      case "EUR":
+        return "€";
+      default:
+        return "₦";
+    }
+  }
+
   return (
     <WalletsContainer>
-      <div className="px-4 py-3 bg-white flex items-center justify-between rounded-md border">
-        <span>£0.00</span>
-        <CircleBritishFlag />
-      </div>
-      <div className="px-4 py-3 bg-white flex items-center justify-between rounded-md border">
-        <span>€0.00</span>
-        <CircleEuropeFlag />
-      </div>
-      <div className="px-4 py-3 bg-white flex items-center justify-between rounded-md border">
-        <span>$0.00</span>
-        <CircleUsFlag />
-      </div>
+      {wallets?.data.map((wallet) => (
+        <div
+          key={wallet.id}
+          className="px-4 py-3 bg-white flex items-center justify-between rounded-md border"
+        >
+          <span>
+            {getCurrency(wallet.currency)}
+            {currencyFormatter(Number(wallet.balance))}
+          </span>
+          {getIcon(wallet.currency)}
+        </div>
+      ))}
       <div className="px-4 py-3 bg-white flex items-center gap-4 justify-between rounded-md border">
         <span className="mr-auto">
-          ₦{" "}
+          {getCurrency("NGN")}
           {clientDetails?.data.result?.walletBalance
             ? currencyFormatter(clientDetails?.data.result?.walletBalance)
             : "0.00"}

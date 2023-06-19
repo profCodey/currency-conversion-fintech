@@ -11,6 +11,7 @@ export function middleware(request: NextRequest) {
     "/recipients",
     "/converter",
     "/fund-account",
+    "/transactions",
   ];
   const publicPaths = ["/", "/login", "/sign-up", "/forgot-password"];
   const isAuthenticated = request.cookies.has(APP_TOKENS.ACCESS_TOKEN);

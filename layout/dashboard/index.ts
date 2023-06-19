@@ -1,2 +1,2 @@
 export { Wallets } from "./wallets";
-export { TransactionHistory } from "./transaction-history";
+export { TransactionHistory } from "../transactions/transaction-history";

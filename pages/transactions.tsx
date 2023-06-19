@@ -1,9 +1,30 @@
 import { AppLayout } from "@/layout/common/app-layout";
+import { TransactionHistory } from "@/layout/dashboard";
+import { ManualFundingHistory } from "@/layout/transactions/manual-funding";
+import { Tabs } from "@mantine/core";
 import { ReactElement } from "react";
 
 export default function Transactions() {
   return (
-    <h2 className={"text-primary-100 text-2xl font-secondary"}>Transactions</h2>
+    <div className="flex flex-col gap-6 h-full">
+      <div className="text-primary-100">
+        <h2 className={"text-2xl font-secondary mt-2"}>Transactions</h2>
+        <span>View Different Transaction Histories</span>
+      </div>
+
+      <Tabs defaultValue="payouts">
+        <Tabs.List>
+          <Tabs.Tab value="payouts">Payouts</Tabs.Tab>
+          <Tabs.Tab value="manual-funding">Manual Funding</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="payouts" className="py-2">
+          <TransactionHistory />
+        </Tabs.Panel>
+        <Tabs.Panel value="manual-funding" className="py-2">
+          <ManualFundingHistory />
+        </Tabs.Panel>
+      </Tabs>
+    </div>
   );
 }
 

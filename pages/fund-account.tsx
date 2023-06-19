@@ -1,13 +1,12 @@
 import {
-  useGetManualFundings,
   useGetPaycelerBankDetails,
   usePostManualFunding,
 } from "@/api/hooks/banks";
 import { useGetSelectedGateways } from "@/api/hooks/gateways";
 import { AppLayout } from "@/layout/common/app-layout";
+import { ManualFundingHistory } from "@/layout/transactions/manual-funding";
 import { fundManualAccount } from "@/utils/validators";
 import {
-  Box,
   Button,
   Grid,
   Group,
@@ -15,7 +14,6 @@ import {
   NumberInput,
   Select,
   Stack,
-  Table,
   Tabs,
   Text,
   TextInput,
@@ -23,15 +21,13 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { closeAllModals, modals } from "@mantine/modals";
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement, useMemo } from "react";
 import { z } from "zod";
 
 export default function FundAccount() {
   const { data: bankDetails, isLoading } = useGetPaycelerBankDetails();
   const { data: selectedGateways, isLoading: selectedGatewaysLoading } =
     useGetSelectedGateways();
-  const { data: manualFundings, isLoading: manualFundingsLoading } =
-    useGetManualFundings();
 
   const { mutate: postManualFunding, isLoading: postManualFundingLoading } =
     usePostManualFunding(closeAllModals);
@@ -47,8 +43,6 @@ export default function FundAccount() {
   });
 
   function handleLocalFormSubmit(values: z.infer<typeof fundManualAccount>) {
-    console.log(values);
-
     modals.openConfirmModal({
       title: "Please confirm the following details",
       children: <Text>{`Have you paid into the account displayed?`}</Text>,
@@ -81,23 +75,6 @@ export default function FundAccount() {
     [selectedGateways?.data]
   );
 
-  const rows = useMemo(
-    function () {
-      return manualFundings?.data.map(function (funding) {
-        return (
-          <tr key={funding.id}>
-            <td>{funding.status}</td>
-            <td>{funding.account_name}</td>
-            <td>{funding.amount}</td>
-            <td>{funding.reference}</td>
-            <td>{funding.gateway_name}</td>
-          </tr>
-        );
-      });
-    },
-    [manualFundings?.data]
-  );
-
   return (
     <div className="flex flex-col gap-6 h-full">
       <div className="text-primary-100">
@@ -117,9 +94,10 @@ export default function FundAccount() {
         <Tabs.Panel value="local">
           <Group spacing="xl" py={0} className="h-full">
             <form
-              className="w-[400px]"
+              className="w-[400px] relative"
               onSubmit={fundManualAccountForm.onSubmit(handleLocalFormSubmit)}
             >
+              <LoadingOverlay visible={isLoading || selectedGatewaysLoading} />
               <Stack spacing="xs">
                 <NumberInput
                   size="md"
@@ -204,25 +182,11 @@ export default function FundAccount() {
               </Stack>
             </form>
 
-            <Box className="flex-grow border h-full relative">
-              <LoadingOverlay visible={manualFundingsLoading} />
-              <Table verticalSpacing="md">
-                <thead>
-                  <tr>
-                    <th>Status</th>
-                    <th>Account Name</th>
-                    <th>Amount</th>
-                    <th>Reference</th>
-                    <th>Gateway name</th>
-                  </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-              </Table>
-            </Box>
+            <ManualFundingHistory />
           </Group>
         </Tabs.Panel>
         <Tabs.Panel value="foreign" pt="lg">
-          Hello world
+          FX Funding History
         </Tabs.Panel>
       </Tabs>
     </div>

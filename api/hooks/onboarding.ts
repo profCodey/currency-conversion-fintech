@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import { ErrorItem } from "./auth";
 import { queryClient } from "@/pages/_app";
 
-export function useGetBasicProfile(userId: string) {
+export function useGetBasicProfile(userId: number | undefined) {
   return useQuery({
     queryKey: ["apiclient", "profile"],
     queryFn: function () {
@@ -16,7 +16,7 @@ export function useGetBasicProfile(userId: string) {
   });
 }
 
-export function useUpdateBasicProfile(userId: string) {
+export function useUpdateBasicProfile(userId: number | undefined) {
   return useMutation(
     function (payload: z.infer<typeof basicProfileFormValidator>) {
       return axiosInstance.put(
@@ -47,7 +47,7 @@ export function useUpdateBasicProfile(userId: string) {
   );
 }
 
-export function useUpdateOnboardingDocuments(userId: string) {
+export function useUpdateOnboardingDocuments(userId: number | undefined) {
   return useMutation(
     function (payload: any) {
       return axiosInstance.put(
@@ -80,7 +80,7 @@ export function useUpdateOnboardingDocuments(userId: string) {
   );
 }
 
-export function usePatchOnboardingDocuments(userId: string) {
+export function usePatchOnboardingDocuments(userId: number | undefined) {
   return useMutation(
     function (payload: any) {
       return axiosInstance.patch(
@@ -116,7 +116,7 @@ export function usePatchOnboardingDocuments(userId: string) {
   );
 }
 
-export function useGetBusinessDocuments(userId: string) {
+export function useGetBusinessDocuments(userId: number | undefined) {
   return useQuery({
     queryKey: ["apiclient", "documents"],
     queryFn: function () {

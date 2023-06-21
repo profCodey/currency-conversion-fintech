@@ -54,7 +54,7 @@ export default function Recipients() {
       bank: "",
       account_number: "",
       account_name: "",
-      user: currentUser?.data.id,
+      user: currentUser?.data.id as number,
     },
     validate: zodResolver(addRecipientFormValidator),
   });

@@ -1,18 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
-import { IClientDetail } from "@/utils/validators/interfaces";
+import { IClientDetail, ICurrentUser } from "@/utils/validators/interfaces";
 import { useMemo } from "react";
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
 export function useGetCurrentUser() {
   return useQuery({
     queryKey: ["user", "details"],
-    queryFn: () => axiosInstance.get("/user/current-user/"),
+    queryFn: (): Promise<AxiosResponse<ICurrentUser>> =>
+      axiosInstance.get("/user/current-user/"),
   });
 }
 
-export function useGetClientDetails(userId: string) {
+export function useGetClientDetails(userId: number | undefined) {
   return useQuery({
     queryKey: ["client", "details", userId],
     queryFn: (): Promise<AxiosResponse<IClientDetail>> =>

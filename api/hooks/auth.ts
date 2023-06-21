@@ -5,9 +5,10 @@ import { AxiosError, AxiosResponse } from "axios";
 import { z } from "zod";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { APP_TOKENS } from "@/utils/constants";
+import { APP_TOKENS, USER_CATEGORIES } from "@/utils/constants";
 import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
+import { LoginResponse } from "@/utils/validators/interfaces";
 
 export function useRegister() {
   const { mutate: login } = useLogin();
@@ -41,15 +42,31 @@ export interface ErrorItem {
 
 export function useLogin() {
   const router = useRouter();
-  function handleLoginSuccess(data: AxiosResponse) {
+  const logout = useLogout();
+  function handleLoginSuccess(data: AxiosResponse<LoginResponse>) {
     showNotification({
       title: "Login successful",
       message: "Signing you in",
       color: "green",
     });
 
-    if (data.data.is_approved) router.push("/dashboard");
-    else router.push("/onboarding");
+    console.log(data.data.category);
+
+    switch (data.data.category) {
+      case USER_CATEGORIES.API_CLIENT:
+        if (data.data.is_approved) {
+          router.push("/dashboard");
+        } else {
+          router.push("/onboarding");
+        }
+        return;
+      case USER_CATEGORIES.ADMIN:
+        router.push("/admin");
+        return;
+      default:
+        logout();
+        break;
+    }
   }
 
   function handleLoginError(error: string) {
@@ -66,11 +83,11 @@ export function useLogin() {
       return axiosInstance.post("/login/token/", payload);
     },
     onSuccess: function (data: AxiosResponse) {
-      handleLoginSuccess(data);
       const { access, refresh, category } = data.data;
       Cookies.set(APP_TOKENS.ACCESS_TOKEN, access);
       Cookies.set(APP_TOKENS.REFRESH_TOKEN, refresh);
       Cookies.set(APP_TOKENS.CATEGORY, category);
+      handleLoginSuccess(data);
     },
     onError: function (data: AxiosError) {
       const response = data.response?.data as ErrorItem;

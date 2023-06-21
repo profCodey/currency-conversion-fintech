@@ -13,6 +13,9 @@ export function middleware(request: NextRequest) {
     "/fund-account",
     "/transactions",
   ];
+
+  const adminPaths = ["/admin"];
+
   const publicPaths = ["/", "/login", "/sign-up", "/forgot-password"];
   const isAuthenticated = request.cookies.has(APP_TOKENS.ACCESS_TOKEN);
   const userCategory = request.cookies.get(APP_TOKENS.CATEGORY)?.value;
@@ -29,6 +32,14 @@ export function middleware(request: NextRequest) {
       return NextResponse.rewrite(new URL(nextUrl.pathname, request.url));
     } else {
       return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
+  if (userCategory === USER_CATEGORIES.ADMIN) {
+    if (adminPaths.some((path) => nextUrl.pathname === path)) {
+      return NextResponse.rewrite(new URL(nextUrl.pathname, request.url));
+    } else {
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
 }

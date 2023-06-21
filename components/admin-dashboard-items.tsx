@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export function DashboardItems() {
+export function AdminDashboardItems() {
   const router = useRouter();
   const [currentUrl, setCurrentUrl] = useState(() => router.pathname);
   const currentPath = router.pathname;
@@ -36,37 +36,16 @@ export function DashboardItems() {
   return (
     <Stack spacing="xl" className="mt-24 mb-auto text-lg text-slate-400 ">
       <Link
-        href="/onboarding"
+        href="/admin"
         className={`flex gap-4 items-center group ${getTextColorFromPath(
-          "/onboarding"
+          "/admin"
         )}`}
       >
-        <Briefcase color={isCurrentPath("/onboarding")} />
-        <span className="group-hover:text-white peer-hover:text-white">
-          Onboarding
-        </span>
-      </Link>
-
-      <Link
-        href="/dashboard"
-        className={`flex gap-4 items-center group ${getTextColorFromPath(
-          "/dashboard"
-        )}`}
-      >
-        <DashboardIcon color={isCurrentPath("/dashboard")} />
+        <DashboardIcon color={isCurrentPath("/admin")} />
         <span className="group-hover:text-white peer-hover:text-white">
           Dashboard
         </span>
       </Link>
-      {/* <Link
-        href="/converter"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/converter"
-        )}`}
-      >
-        <ConverterIcon color={isCurrentPath("/converter")} />
-        <span>Converter</span>
-      </Link> */}
       <Link
         href="/recipients"
         className={`flex gap-4 items-center ${getTextColorFromPath(
@@ -92,24 +71,6 @@ export function DashboardItems() {
       >
         <SettingsIcon color={isCurrentPath("/config")} />
         <span>Config</span>
-      </Link>
-      <Link
-        href="/support"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/support"
-        )}`}
-      >
-        <SupportIcon color={isCurrentPath("/support")} />
-        <span>Support</span>
-      </Link>
-      <Link
-        href="/fund-account"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/fund-account"
-        )}`}
-      >
-        <FundAccountIcon color={isCurrentPath("/fund-account")} />
-        <span>Fund Account</span>
       </Link>
     </Stack>
   );

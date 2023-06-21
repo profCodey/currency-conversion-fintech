@@ -11,7 +11,7 @@ import { ActionIcon, Popover, Skeleton } from "@mantine/core";
 import { ArrowDown2 } from "iconsax-react";
 import { ReactNode } from "react";
 
-export function Wallets({ userId }: { userId: string }) {
+export function Wallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
   const { isLoading: walletsLoading, data: wallets } = useGetFxAccounts();

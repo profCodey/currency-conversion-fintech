@@ -1,25 +1,23 @@
-import { ErrorItem, useGetRefreshToken, useLogout } from "@/api/hooks/auth";
+import { useLogout } from "@/api/hooks/auth";
 import { useGetClientDetails, useGetCurrentUser } from "@/api/hooks/user";
 import { DashboardItems } from "@/components/dashboard-items";
 import { LogoutIcon } from "@/components/icons";
-import { AppShell, Aside, Navbar, Notification, Skeleton } from "@mantine/core";
-import { Text, Loader } from "@mantine/core";
+import { AppShell, Navbar, Skeleton, Stack } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { modals, closeAllModals } from "@mantine/modals";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import AppLogo from "@/public/logo-light.svg";
-import { useGetBasicProfile } from "@/api/hooks/onboarding";
+import { AdminDashboardItems } from "@/components/admin-dashboard-items";
+import { USER_CATEGORIES } from "@/utils/constants";
 
 interface AppLayoutProps {
   children: ReactNode;
 }
 export function AppLayout({ children }: AppLayoutProps) {
   const { isLoading, data } = useGetCurrentUser();
-  const {
-    data: clientDetails,
-    isLoading: clientDetailsLoading,
-    isError,
-  } = useGetClientDetails(data?.data.id);
-  // const { isLoading: basicProfileLoading } = useGetBasicProfile(data?.data.id);
+  const { isLoading: clientDetailsLoading } = useGetClientDetails(
+    data?.data.id
+  );
   const logout = useLogout();
 
   function handleLogout() {
@@ -33,15 +31,6 @@ export function AppLayout({ children }: AppLayoutProps) {
     });
   }
 
-  // if (isLoading || clientDetailsLoading) {
-  //   return (
-  //     <div className="h-screen w-screen flex items-center justify-center gap-4">
-  //       <span>Loading application...</span>{" "}
-  //       <Loader size="lg" variant="bars" color="green" />
-  //     </div>
-  //   );
-  // }
-
   const content =
     isLoading || clientDetailsLoading ? (
       <div className="h-full w-full flex flex-col items-center justify-center gap-4">
@@ -52,6 +41,23 @@ export function AppLayout({ children }: AppLayoutProps) {
     ) : (
       children
     );
+
+  const dashboardItems =
+    data?.data.category === USER_CATEGORIES.API_CLIENT ? (
+      <DashboardItems />
+    ) : (
+      <AdminDashboardItems />
+    );
+
+  const dashboardSkeletons = (
+    <Stack spacing="xl" className="mt-24">
+      <Skeleton height={50} />
+      <Skeleton height={50} />
+      <Skeleton height={50} />
+      <Skeleton height={50} />
+      <Skeleton height={50} />
+    </Stack>
+  );
 
   return (
     <AppShell
@@ -64,7 +70,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         >
           <section className="py-2 pt-4 h-full flex flex-col">
             <AppLogo />
-            <DashboardItems />
+            {isLoading ? dashboardSkeletons : dashboardItems}
             <div
               className="flex gap-4 items-center py-2 cursor-pointer"
               tabIndex={0}

@@ -1,6 +1,45 @@
-import { InnerNumberInputStylesNames } from "@mantine/core/lib/NumberInput/NumberInput";
-import { string } from "zod";
+type CategoryTypes = "admin" | "api_client" | "agent" | "agent_user";
+type KYCStatusTypes =
+  | "pending"
+  | "submitted"
+  | "approved"
+  | "rejected"
+  | "cancelled"
+  | "onhold";
 
+export interface LoginResponse {
+  refresh: string;
+  access: string;
+  user_id: number;
+  fullname: string;
+  is_approved: boolean;
+  category: CategoryTypes;
+}
+export interface ICurrentUser {
+  id: number;
+  uuid: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  category: CategoryTypes;
+  is_approved: string;
+  kyc: {
+    id: number;
+    created_on: string;
+    updated_on: string;
+    applicant_id: string;
+    status: KYCStatusTypes;
+    first_name: string;
+    last_name: string;
+    middle_name: string;
+    gender: string;
+    dob: string;
+    place_of_birth: string;
+    country: string;
+    user: number;
+  };
+}
 export interface IGateway {
   id: number;
   description: string;

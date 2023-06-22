@@ -47,30 +47,20 @@ export function AdminDashboardItems() {
         </span>
       </Link>
       <Link
-        href="/recipients"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/recipients"
-        )}`}
-      >
-        <RecipientsIcon color={isCurrentPath("/recipients")} />
-        <span>Recipients</span>
-      </Link>
-      <Link
         href="/transactions"
         className={`flex gap-4 items-center ${getTextColorFromPath(
           "/transactions"
         )}`}
       >
-        <TransactionsIcon color={isCurrentPath("/transactions")} />
+        <RecipientsIcon color={isCurrentPath("/transactions")} />
         <span>Transactions</span>
       </Link>
-
       <Link
-        href="/config"
-        className={`flex gap-4 items-center ${getTextColorFromPath("/config")}`}
+        href="/users"
+        className={`flex gap-4 items-center ${getTextColorFromPath("/users")}`}
       >
-        <SettingsIcon color={isCurrentPath("/config")} />
-        <span>Config</span>
+        <TransactionsIcon color={isCurrentPath("/users")} />
+        <span>Users</span>
       </Link>
     </Stack>
   );

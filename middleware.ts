@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     "/onboarding",
     "/support",
     "/recipients",
-    "/converter",
+    // "/converter",
     "/fund-account",
     "/transactions",
   ];

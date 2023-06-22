@@ -1,10 +1,15 @@
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
-import { LoadingOverlay, Table } from "@mantine/core";
+import { Group, LoadingOverlay, Stack, Table } from "@mantine/core";
 import { useDefaultGateway, useGetPayouts } from "@/api/hooks/gateways";
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { DatePickerInput } from "@mantine/dates";
 import { currencyFormatter } from "@/utils/currency";
+import { PayoutRecordStatuses } from "@/utils/validators/interfaces";
+
+import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
+import TransactionCompletedIcon from "@/public/transaction-completed.svg";
+import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 
 export function TransactionHistory() {
   const { defaultGateway, isLoading: selectedGatewaysLoading } =
@@ -29,20 +34,60 @@ export function TransactionHistory() {
   let emptyTransactionHistory =
     payoutHistory?.data && payoutHistory?.data.result.length < 1;
 
+  function getTransactionIcon(status: PayoutRecordStatuses) {
+    switch (status) {
+      case "FailedDuringSend":
+      case "Failed":
+      case "UnResolvable":
+        return <TransactionFailedIcon className="scale-75" />;
+      case "Paid":
+        return <TransactionCompletedIcon className="scale-75" />;
+      case "SentToGateway":
+        return <TransactionProcessingIcon className="scale-75" />;
+      default:
+        return null;
+    }
+  }
+
+  function getTransactionStatus(status: PayoutRecordStatuses) {
+    switch (status) {
+      case "FailedDuringSend":
+      case "Failed":
+        return "Failed";
+      case "UnResolvable":
+        return "Unresolved";
+      case "Paid":
+        return "Completed";
+      case "SentToGateway":
+        return "Processing";
+      default:
+        return status;
+    }
+  }
+
   const _rows = useMemo(
     function () {
-      return payoutHistory?.data.result.map(function (payout) {
-        return (
-          <tr key={payout.payoutId}>
-            <td>{payout.narration}</td>
-            <td>{payout.accountName}</td>
-            <td>{dayjs(payout.createdOn).format("MMM D, YYYY h:mm A")}</td>
-            <td>{currencyFormatter(Number(payout.amount))}</td>
-            <td>{payout.status}</td>
-            <td>{payout.charges}</td>
-          </tr>
-        );
-      });
+      return payoutHistory?.data.result
+        .map(function (payout) {
+          return (
+            <tr key={payout.payoutId}>
+              <td>
+                <Group>
+                  {getTransactionIcon(payout.status)}
+                  <Stack spacing={0}>
+                    <span>{payout.narration}</span>
+                    <span>{getTransactionStatus(payout.status)}</span>
+                  </Stack>
+                </Group>
+              </td>
+              <td>{payout.accountName}</td>
+              <td>{dayjs(payout.createdOn).format("MMM D, YYYY h:mm A")}</td>
+              <td>{currencyFormatter(Number(payout.amount))}</td>
+              <td>{payout.charges}</td>
+            </tr>
+          );
+        })
+        .reverse();
     },
     [payoutHistory?.data.result]
   );
@@ -60,7 +105,7 @@ export function TransactionHistory() {
           onChange={setDateRange}
         />
       </div>
-      <div className="flex-grow border overflow-y-auto relative flex flex-col">
+      <div className="flex-grow overflow-y-auto relative flex flex-col">
         <LoadingOverlay
           visible={
             payoutHistoryFetching ||
@@ -77,14 +122,13 @@ export function TransactionHistory() {
             }
           />
         ) : (
-          <Table verticalSpacing="md">
+          <Table verticalSpacing="md" withBorder>
             <thead>
               <tr className="font-primary font-light">
                 <th>Last transaction</th>
                 <th>Recipient</th>
                 <th>Date</th>
                 <th>Amount (₦)</th>
-                <th>Status</th>
                 <th>Charges</th>
               </tr>
             </thead>

@@ -126,6 +126,12 @@ export interface IPayoutHistory {
   result: IPayoutRecord[];
 }
 
+export type PayoutRecordStatuses =
+  | "SentToGateway"
+  | "Paid"
+  | "Failed"
+  | "FailedDuringSend"
+  | "UnResolvable";
 export interface IPayoutRecord {
   gatewaywalletbalanceAfter: number;
   walletbalanceAfter: number;
@@ -139,7 +145,7 @@ export interface IPayoutRecord {
   accountName: string;
   amount: number;
   transactionId: string;
-  status: string | "Failed";
+  status: PayoutRecordStatuses;
   statusRemarks: string;
   gatewayref: string | null;
   apiCallResponsePayload: string;

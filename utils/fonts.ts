@@ -1,4 +1,13 @@
-import { Inter, Sora } from "next/font/google";
+import localFont from "next/font/local";
 
-export const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-export const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
+const sora = localFont({
+  src: "../fonts/Sora/Sora-VariableFont_wght.ttf",
+  variable: "--font-sora",
+});
+
+const montserrat = localFont({
+  src: "../fonts/Montserrat/Montserrat-VariableFont_wght.ttf",
+  variable: "--font-montserrat",
+});
+
+export { sora, montserrat };

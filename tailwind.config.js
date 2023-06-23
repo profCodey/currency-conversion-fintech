@@ -14,7 +14,7 @@ module.exports = {
         accent: "#00B0F0",
       },
       fontFamily: {
-        primary: ["var(--font-inter)"],
+        primary: ["var(--font-montserrat)"],
         secondary: ["var(--font-sora)"],
       },
       backgroundImage: {

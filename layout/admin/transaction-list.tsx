@@ -1,12 +1,14 @@
 import {
   ActionIcon,
   Button,
+  Drawer,
   Group,
   Table,
   TextInput,
   clsx,
 } from "@mantine/core";
 import { SearchNormal } from "iconsax-react";
+import { useState } from "react";
 
 const transactions: {
   sN: number;
@@ -88,6 +90,7 @@ const transactions: {
 ];
 
 export function TransactionsList() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const rows = transactions.map((transaction) => (
     <tr key={transaction.sN}>
       <td>{transaction.sN}</td>
@@ -106,7 +109,11 @@ export function TransactionsList() {
         </span>
       </td>
       <td>
-        <Button variant="white" className="text-accent">
+        <Button
+          variant="white"
+          className="text-accent"
+          onClick={() => setDrawerOpen(true)}
+        >
           Open
         </Button>
       </td>
@@ -143,6 +150,14 @@ export function TransactionsList() {
         </thead>
         <tbody>{rows}</tbody>
       </Table>
+
+      <Drawer
+        opened={drawerOpen}
+        title="View Transaction"
+        onClose={() => setDrawerOpen(false)}
+        position="right"
+        // size="sm"
+      ></Drawer>
     </section>
   );
 }

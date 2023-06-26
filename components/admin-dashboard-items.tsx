@@ -1,22 +1,72 @@
 import {
-  Briefcase,
-  ConverterIcon,
   DashboardIcon,
-  FundAccountIcon,
-  RecipientsIcon,
   SettingsIcon,
-  SupportIcon,
   TransactionsIcon,
 } from "@/components/icons";
-import { Stack } from "@mantine/core";
+import UsersIcon from "@/components/icons/user-icon.svg";
+import { Stack, createStyles } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { NavLink } from "@mantine/core";
+import { ArrowRight2 } from "iconsax-react";
+
+export const useNavStyles = createStyles(() => ({
+  navLink: {
+    color: "#ddd",
+    "&:hover": {
+      backgroundColor: "transparent",
+      color: "#00B0F0",
+    },
+    "&[data-active='true']": {
+      backgroundColor: "transparent",
+      color: "#00B0F0",
+      "&:hover": {
+        backgroundColor: "transparent",
+        color: "#00B0F0",
+      },
+    },
+  },
+}));
+
+const routes = [
+  {
+    route: "/admin",
+    label: "Dashboard",
+    icon: <DashboardIcon />,
+  },
+  {
+    route: "/admin/transactions",
+    label: "Transactions",
+    icon: <TransactionsIcon />,
+  },
+  {
+    route: "/admin/users",
+    label: "Users",
+    icon: <UsersIcon />,
+  },
+  {
+    route: "/admin/settings",
+    label: "Settings",
+    icon: <SettingsIcon />,
+    children: [
+      {
+        route: "/admin/banks",
+        label: "Banks",
+      },
+      {
+        route: "/admin/rates",
+        label: "Rates",
+      },
+    ],
+  },
+];
 
 export function AdminDashboardItems() {
   const router = useRouter();
   const [currentUrl, setCurrentUrl] = useState(() => router.pathname);
   const currentPath = router.pathname;
+  const { classes } = useNavStyles();
 
   useEffect(
     function () {
@@ -29,39 +79,31 @@ export function AdminDashboardItems() {
     return currentUrl === path ? "#00B0F0" : "";
   }
 
-  function getTextColorFromPath(path: string) {
-    return isCurrentPath(path) ? "text-[#00B0F0]" : "text-slate-400";
-  }
-
   return (
-    <Stack spacing="xl" className="mt-24 mb-auto text-lg text-slate-400 ">
-      <Link
-        href="/admin"
-        className={`flex gap-4 items-center group ${getTextColorFromPath(
-          "/admin"
-        )}`}
-      >
-        <DashboardIcon color={isCurrentPath("/admin")} />
-        <span className="group-hover:text-white peer-hover:text-white">
-          Dashboard
-        </span>
-      </Link>
-      <Link
-        href="/transactions"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/transactions"
-        )}`}
-      >
-        <RecipientsIcon color={isCurrentPath("/transactions")} />
-        <span>Transactions</span>
-      </Link>
-      <Link
-        href="/users"
-        className={`flex gap-4 items-center ${getTextColorFromPath("/users")}`}
-      >
-        <TransactionsIcon color={isCurrentPath("/users")} />
-        <span>Users</span>
-      </Link>
+    <Stack spacing="xs" className="mt-24 mb-auto text-lg text-slate-400 ">
+      {routes.map((route) => (
+        <NavLink
+          key={route.label}
+          active={!!isCurrentPath(route.route)}
+          variant="light"
+          label={<span className="text-lg">{route.label}</span>}
+          icon={route.icon}
+          component={Link}
+          href={route.route}
+          className={classes.navLink}
+          rightSection={route.children && <ArrowRight2 />}
+        >
+          {route.children?.map((route) => (
+            <NavLink
+              key={route.label}
+              href={route.route}
+              component={Link}
+              label={<span className="text-base">{route.label}</span>}
+              className={classes.navLink}
+            />
+          ))}
+        </NavLink>
+      ))}
     </Stack>
   );
 }

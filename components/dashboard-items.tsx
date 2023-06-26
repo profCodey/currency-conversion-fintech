@@ -1,6 +1,4 @@
 import {
-  Briefcase,
-  ConverterIcon,
   DashboardIcon,
   FundAccountIcon,
   RecipientsIcon,
@@ -8,15 +6,50 @@ import {
   SupportIcon,
   TransactionsIcon,
 } from "@/components/icons";
-import { Stack } from "@mantine/core";
+import { NavLink, Stack } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useNavStyles } from "./admin-dashboard-items";
+
+const routes = [
+  {
+    route: "/dashboard",
+    label: "Dashboard",
+    icon: <DashboardIcon />,
+  },
+  {
+    route: "/recipients",
+    label: "Recipient",
+    icon: <RecipientsIcon />,
+  },
+  {
+    route: "/transactions",
+    label: "Transactions",
+    icon: <TransactionsIcon />,
+  },
+  {
+    route: "/config",
+    label: "Config",
+    icon: <SettingsIcon />,
+  },
+  {
+    route: "/support",
+    label: "Support",
+    icon: <SupportIcon />,
+  },
+  {
+    route: "/fund-account",
+    label: "Account",
+    icon: <FundAccountIcon />,
+  },
+];
 
 export function DashboardItems() {
   const router = useRouter();
   const [currentUrl, setCurrentUrl] = useState(() => router.pathname);
   const currentPath = router.pathname;
+  const { classes } = useNavStyles();
 
   useEffect(
     function () {
@@ -29,88 +62,20 @@ export function DashboardItems() {
     return currentUrl === path ? "#00B0F0" : "";
   }
 
-  function getTextColorFromPath(path: string) {
-    return isCurrentPath(path) ? "text-[#00B0F0]" : "text-slate-400";
-  }
-
   return (
-    <Stack spacing="xl" className="mt-24 mb-auto text-lg text-slate-400 ">
-      <Link
-        href="/onboarding"
-        className={`flex gap-4 items-center group ${getTextColorFromPath(
-          "/onboarding"
-        )}`}
-      >
-        <Briefcase color={isCurrentPath("/onboarding")} />
-        <span className="group-hover:text-white peer-hover:text-white">
-          Onboarding
-        </span>
-      </Link>
-
-      <Link
-        href="/dashboard"
-        className={`flex gap-4 items-center group ${getTextColorFromPath(
-          "/dashboard"
-        )}`}
-      >
-        <DashboardIcon color={isCurrentPath("/dashboard")} />
-        <span className="group-hover:text-white peer-hover:text-white">
-          Dashboard
-        </span>
-      </Link>
-      {/* <Link
-        href="/converter"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/converter"
-        )}`}
-      >
-        <ConverterIcon color={isCurrentPath("/converter")} />
-        <span>Converter</span>
-      </Link> */}
-      <Link
-        href="/recipients"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/recipients"
-        )}`}
-      >
-        <RecipientsIcon color={isCurrentPath("/recipients")} />
-        <span>Recipients</span>
-      </Link>
-      <Link
-        href="/transactions"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/transactions"
-        )}`}
-      >
-        <TransactionsIcon color={isCurrentPath("/transactions")} />
-        <span>Transactions</span>
-      </Link>
-
-      <Link
-        href="/config"
-        className={`flex gap-4 items-center ${getTextColorFromPath("/config")}`}
-      >
-        <SettingsIcon color={isCurrentPath("/config")} />
-        <span>Config</span>
-      </Link>
-      <Link
-        href="/support"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/support"
-        )}`}
-      >
-        <SupportIcon color={isCurrentPath("/support")} />
-        <span>Support</span>
-      </Link>
-      <Link
-        href="/fund-account"
-        className={`flex gap-4 items-center ${getTextColorFromPath(
-          "/fund-account"
-        )}`}
-      >
-        <FundAccountIcon color={isCurrentPath("/fund-account")} />
-        <span>Fund Account</span>
-      </Link>
+    <Stack spacing="xs" className="mt-24 mb-auto text-lg text-slate-400 ">
+      {routes.map((route) => (
+        <NavLink
+          key={route.label}
+          active={!!isCurrentPath(route.route)}
+          variant="light"
+          label={<span className="text-lg">{route.label}</span>}
+          icon={route.icon}
+          component={Link}
+          href={route.route}
+          className={classes.navLink}
+        />
+      ))}
     </Stack>
   );
 }

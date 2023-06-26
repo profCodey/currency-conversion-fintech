@@ -8,13 +8,13 @@ export const TransactionsIcon = (props) => (
     {...props}
   >
     <path
-      stroke={props.color || "#fff"}
+      stroke="currentColor"
       strokeLinejoin="round"
       strokeWidth={2}
       d="M18.5 4h-13a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1Z"
     />
     <path
-      stroke={props.color || "#fff"}
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

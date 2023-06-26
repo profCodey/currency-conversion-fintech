@@ -6,7 +6,7 @@ export const RecipientsIcon = (props) => (
     fill="none"
     {...props}
   >
-    <g fill={props.color || "#fff"} clipPath="url(#a)">
+    <g fill="currentColor" clipPath="url(#a)">
       <path d="M10.5 21S9 21 9 19.5s1.5-6 7.5-6 7.5 4.5 7.5 6-1.5 1.5-1.5 1.5h-12Zm6-9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z" />
       <path
         fillRule="evenodd"
@@ -17,7 +17,7 @@ export const RecipientsIcon = (props) => (
     </g>
     <defs>
       <clipPath id="a">
-        <path fill={props.color || "#fff"} d="M0 0h24v24H0z" />
+        <path fill="currentColor" d="M0 0h24v24H0z" />
       </clipPath>
     </defs>
   </svg>

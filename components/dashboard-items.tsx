@@ -5,6 +5,7 @@ import {
   SettingsIcon,
   SupportIcon,
   TransactionsIcon,
+  Briefcase,
 } from "@/components/icons";
 import { NavLink, Stack } from "@mantine/core";
 import Link from "next/link";
@@ -13,6 +14,11 @@ import { useEffect, useState } from "react";
 import { useNavStyles } from "./admin-dashboard-items";
 
 const routes = [
+  {
+    route: "/onboarding",
+    label: "Onboarding",
+    icon: <Briefcase />,
+  },
   {
     route: "/dashboard",
     label: "Dashboard",
@@ -63,13 +69,16 @@ export function DashboardItems() {
   }
 
   return (
-    <Stack spacing="xs" className="mt-24 mb-auto text-lg text-slate-400 ">
+    <Stack
+      spacing={4}
+      className="mt-24 mb-auto text-lg text-slate-400 font-secondary"
+    >
       {routes.map((route) => (
         <NavLink
           key={route.label}
           active={!!isCurrentPath(route.route)}
           variant="light"
-          label={<span className="text-lg">{route.label}</span>}
+          label={<span className="text-base font-secondary">{route.label}</span>}
           icon={route.icon}
           component={Link}
           href={route.route}

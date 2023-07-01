@@ -190,3 +190,21 @@ export interface IFxAccount {
   balance: string;
   is_active: boolean;
 }
+
+//ADMIN
+
+export interface INewBank {
+  name: string;
+  is_active: boolean;
+  category: "fx" | "local";
+}
+
+export interface IRate {
+  id: number;
+  created_on: string;
+  updated_on: string;
+  rate: string;
+  is_active: boolean;
+  source_currency: number;
+  destination_currency: number;
+}

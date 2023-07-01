@@ -65,6 +65,9 @@ const routes = [
 export function AdminDashboardItems() {
   const router = useRouter();
   const [currentUrl, setCurrentUrl] = useState(() => router.pathname);
+  const [settingsOpen, setSettingsOpen] = useState(
+    router.pathname === "/admin/banks" || router.pathname === "/admin/rates"
+  );
   const currentPath = router.pathname;
   const { classes } = useNavStyles();
 
@@ -80,25 +83,36 @@ export function AdminDashboardItems() {
   }
 
   return (
-    <Stack spacing="xs" className="mt-24 mb-auto text-lg text-slate-400 ">
+    <Stack
+      spacing={4}
+      className="mt-24 mb-auto text-lg text-slate-400 font-secondary"
+    >
       {routes.map((route) => (
         <NavLink
           key={route.label}
           active={!!isCurrentPath(route.route)}
           variant="light"
-          label={<span className="text-lg">{route.label}</span>}
+          label={
+            <span className="text-base font-secondary">{route.label}</span>
+          }
           icon={route.icon}
           component={Link}
           href={route.route}
           className={classes.navLink}
           rightSection={route.children && <ArrowRight2 />}
+          opened={settingsOpen}
+          onClick={() => route.children && setSettingsOpen(!settingsOpen)}
         >
           {route.children?.map((route) => (
             <NavLink
+              variant="light"
+              active={!!isCurrentPath(route.route)}
               key={route.label}
               href={route.route}
               component={Link}
-              label={<span className="text-base">{route.label}</span>}
+              label={
+                <span className="text-base font-secondary">{route.label}</span>
+              }
               className={classes.navLink}
             />
           ))}

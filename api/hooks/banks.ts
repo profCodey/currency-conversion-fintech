@@ -92,6 +92,9 @@ export function useCreatePayout(cb?: () => void) {
     {
       onSuccess: function (data: AxiosResponse) {
         if (data?.data.status) {
+
+          
+
           showNotification({
             message: "Operation successful",
             color: "green",

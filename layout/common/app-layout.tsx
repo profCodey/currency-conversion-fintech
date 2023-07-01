@@ -72,7 +72,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             <AppLogo />
             {isLoading ? dashboardSkeletons : dashboardItems}
             <div
-              className="flex gap-4 items-center py-2 cursor-pointer"
+              className="flex gap-4 items-center py-2 cursor-pointer mt-auto"
               tabIndex={0}
               onClick={handleLogout}
             >

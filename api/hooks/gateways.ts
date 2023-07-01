@@ -23,6 +23,24 @@ export function useGetGateways() {
   });
 }
 
+export function useGatewayOptions() {
+  const { data, isLoading } = useGetGateways();
+
+  const gatewayOptions = useMemo(
+    function () {
+      return (
+        data?.data.map((gateway) => ({
+          label: gateway.description,
+          value: gateway.id.toString(),
+        })) ?? []
+      );
+    },
+    [data?.data]
+  );
+
+  return { gatewayOptions, isLoading };
+}
+
 export function useGetSelectedGateways() {
   return useQuery({
     queryKey: ["apiclient", "gateways", "selected"],

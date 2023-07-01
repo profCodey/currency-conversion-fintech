@@ -30,5 +30,29 @@ export function useCurrencyOptions() {
     [data?.data]
   );
 
-  return { isLoading, currencyOptions };
+  const currencyOptionsWithId = useMemo(
+    function () {
+      return (
+        data?.data.map((currency) => ({
+          label: currency.name,
+          value: currency.id.toString(),
+        })) ?? []
+      );
+    },
+    [data?.data]
+  );
+
+  function getCurrencyNameFromId(id: number) {
+    const currency = currencyOptionsWithId.find(
+      (currency) => currency.value === id.toString()
+    );
+    return currency?.label || "Currency not found";
+  }
+
+  return {
+    isLoading,
+    currencyOptions,
+    currencyOptionsWithId,
+    getCurrencyNameFromId,
+  };
 }

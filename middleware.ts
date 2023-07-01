@@ -9,12 +9,17 @@ export function middleware(request: NextRequest) {
     "/onboarding",
     "/support",
     "/recipients",
-    // "/converter",
     "/fund-account",
     "/transactions",
   ];
 
-  const adminPaths = ["/admin"];
+  const adminPaths = [
+    "/admin",
+    "/admin/banks",
+    "/admin/rates",
+    "/admin/users",
+    "/admin/transactions",
+  ];
 
   const publicPaths = ["/", "/login", "/sign-up", "/forgot-password"];
   const isAuthenticated = request.cookies.has(APP_TOKENS.ACCESS_TOKEN);

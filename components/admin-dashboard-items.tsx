@@ -79,7 +79,8 @@ export function AdminDashboardItems() {
   );
 
   function isCurrentPath(path: string) {
-    return currentUrl === path ? "#00B0F0" : "";
+    if (path === "/admin") return currentUrl === path ? "#00B0F0" : "";
+    return currentUrl.startsWith(path) ? "#00B0F0" : "";
   }
 
   return (

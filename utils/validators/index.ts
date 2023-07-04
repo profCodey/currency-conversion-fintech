@@ -63,8 +63,9 @@ export const addRecipientFormValidator = z.object({
 });
 
 export const fundManualAccount = z.object({
+  target_account: z.string().min(1, { message: "Select target account" }),
   amount: z.number().gte(1, { message: "Enter valid amount" }),
-  account_name: z.string().min(1, { message: "Enter account name" }),
-  gateway: z.string().min(1, { message: "Select gateway" }),
-  narration: z.string(),
+  sender_name: z.string().min(1, { message: "Enter account name" }),
+  sender_narration: z.string().min(1, { message: "Enter narration" }),
+  category: z.string(),
 });

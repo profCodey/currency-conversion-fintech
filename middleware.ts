@@ -41,7 +41,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (userCategory === USER_CATEGORIES.ADMIN) {
-    if (adminPaths.some((path) => nextUrl.pathname === path)) {
+    if (
+      adminPaths.some((path) => nextUrl.pathname === path) ||
+      nextUrl.pathname.startsWith("/admin/users/")
+    ) {
       return NextResponse.rewrite(new URL(nextUrl.pathname, request.url));
     } else {
       return NextResponse.redirect(new URL("/admin", request.url));

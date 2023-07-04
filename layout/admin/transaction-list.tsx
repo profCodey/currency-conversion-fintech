@@ -7,7 +7,7 @@ import {
   TextInput,
   clsx,
 } from "@mantine/core";
-import { SearchNormal } from "iconsax-react";
+import SearchIcon from "@/public/search.svg";
 import { useState } from "react";
 
 const transactions: {
@@ -131,7 +131,7 @@ export function TransactionsList() {
               className="bg-accent hover:bg-accent"
               size="xl"
             >
-              <SearchNormal size={16} />
+              <SearchIcon />
             </ActionIcon>
           </Group>
         </form>

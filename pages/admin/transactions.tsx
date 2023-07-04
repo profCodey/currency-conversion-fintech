@@ -15,11 +15,6 @@ export default function Transactions() {
       <PageHeader
         header="Transactions"
         subheader="View Exchange, Local and Foreign Transactions"
-        meta={
-          <Button className="bg-primary-100 hover:bg-primary-100" size="md">
-            Create Rate
-          </Button>
-        }
       />
 
       <section>

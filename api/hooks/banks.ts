@@ -92,9 +92,6 @@ export function useCreatePayout(cb?: () => void) {
     {
       onSuccess: function (data: AxiosResponse) {
         if (data?.data.status) {
-
-          
-
           showNotification({
             message: "Operation successful",
             color: "green",
@@ -135,7 +132,7 @@ export function useGetManualFundings() {
   return useQuery({
     queryKey: ["manual-fundings"],
     queryFn: function (): Promise<AxiosResponse<IManualPayment[]>> {
-      return axiosInstance.get(`/local/manual-funding/`, {
+      return axiosInstance.get(`/manual-funding/`, {
         baseURL: APICLIENT_BASE_URL,
       });
     },
@@ -145,7 +142,7 @@ export function useGetManualFundings() {
 export function usePostManualFunding(cb?: () => void) {
   return useMutation(
     function (payload: z.infer<typeof fundManualAccount>) {
-      return axiosInstance.post("/local/manual-funding/", payload, {
+      return axiosInstance.post("/manual-funding/", payload, {
         baseURL: APICLIENT_BASE_URL,
       });
     },
@@ -167,7 +164,7 @@ export function usePostManualFunding(cb?: () => void) {
       onError: function (data: AxiosError) {
         const response = data.response?.data as ErrorItem;
         showNotification({
-          message: response?.detail || "Registration unsuccessful",
+          message: response?.detail || "Request failed",
           color: "red",
         });
       },

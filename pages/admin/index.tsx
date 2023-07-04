@@ -1,8 +1,6 @@
 import { AppLayout } from "@/layout/common/app-layout";
 import { ReactElement } from "react";
 import { useGetCurrentUser } from "@/api/hooks/user";
-import { ActionIcon } from "@mantine/core";
-import NotificationAlert from "@/public/notification-alert.svg";
 import { Stats } from "@/layout/admin/stats";
 import { TransactionsList } from "@/layout/admin/transaction-list";
 import { PageHeader } from "@/components/admin/page-header";

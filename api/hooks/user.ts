@@ -41,3 +41,15 @@ export function useIsVerified() {
     isVerified,
   };
 }
+
+export function useRole() {
+  const { data, ...rest } = useGetCurrentUser();
+  const role = useMemo(
+    function () {
+      return data?.data.category;
+    },
+    [data?.data]
+  );
+
+  return { role, ...rest };
+}

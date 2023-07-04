@@ -170,28 +170,41 @@ export interface IPaycelerAccount {
 export interface IManualPayment {
   id: number;
   user: number;
+  target_account: number;
+  target_account_label: string;
   amount: string;
-  account_name: string;
-  gateway: 0;
-  gateway_name: string;
-  reference: string;
-  status: string;
-  narration: string;
+  sender_name: string;
+  sender_narration: string;
+  category: "fx" | "local";
+  status: "approved" | "pending" | "rejected" | "cancelled";
+  admin_remarks: string;
 }
 
 // FX
 
-export interface IFxAccount {
+export interface IAccount {
   id: number;
-  currency: "EUR" | "GBP" | "USD";
+  currency: string;
+  label: string;
   account_number: string;
   account_name: string;
   bank_name: string;
   balance: string;
+  category: "fx" | "local";
   is_active: boolean;
 }
 
 //ADMIN
+
+export interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  category: CategoryTypes;
+  is_approved: boolean;
+}
 
 export interface INewBank {
   name: string;

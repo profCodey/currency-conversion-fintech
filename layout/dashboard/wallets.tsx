@@ -1,4 +1,4 @@
-import { useGetFxAccounts } from "@/api/hooks/fx";
+import { useGetAccounts } from "@/api/hooks/accounts";
 import { useGetClientDetails } from "@/api/hooks/user";
 import {
   CircleBritishFlag,
@@ -6,7 +6,7 @@ import {
   CircleNigerianFlag,
   CircleUsFlag,
 } from "@/components/icons";
-import { currencyFormatter } from "@/utils/currency";
+import { currencyFormatter, getCurrency } from "@/utils/currency";
 import { ActionIcon, Popover, Skeleton } from "@mantine/core";
 import { ArrowDown2 } from "iconsax-react";
 import { ReactNode } from "react";
@@ -14,7 +14,7 @@ import { ReactNode } from "react";
 export function Wallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
-  const { isLoading: walletsLoading, data: wallets } = useGetFxAccounts();
+  const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
 
   if (clientDetailsLoading || walletsLoading) {
     return (
@@ -40,33 +40,22 @@ export function Wallets({ userId }: { userId: number | undefined }) {
     }
   }
 
-  function getCurrency(code: string) {
-    switch (code) {
-      case "GBP":
-        return "£";
-      case "USD":
-        return "$";
-      case "EUR":
-        return "€";
-      default:
-        return "₦";
-    }
-  }
-
   return (
     <WalletsContainer>
-      {wallets?.data.map((wallet) => (
-        <div
-          key={wallet.id}
-          className="px-4 py-3 bg-white flex items-center justify-between rounded-md border"
-        >
-          <span>
-            {getCurrency(wallet.currency)}
-            {currencyFormatter(Number(wallet.balance))}
-          </span>
-          {getIcon(wallet.currency)}
-        </div>
-      ))}
+      {wallets?.data
+        .filter((wallet) => wallet.category !== "local")
+        .map((wallet) => (
+          <div
+            key={wallet.id}
+            className="px-4 py-3 bg-white flex items-center justify-between rounded-md border"
+          >
+            <span>
+              {getCurrency(wallet.currency)}
+              {currencyFormatter(Number(wallet.balance))}
+            </span>
+            {getIcon(wallet.currency)}
+          </div>
+        ))}
       <div className="px-4 py-3 bg-white flex items-center gap-4 justify-between rounded-md border">
         <span className="mr-auto">
           {getCurrency("NGN")}

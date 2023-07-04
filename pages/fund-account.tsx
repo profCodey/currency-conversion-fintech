@@ -1,8 +1,8 @@
+import { useAccountOptions } from "@/api/hooks/accounts";
 import {
   useGetPaycelerBankDetails,
   usePostManualFunding,
 } from "@/api/hooks/banks";
-import { useGetSelectedGateways } from "@/api/hooks/gateways";
 import { AppLayout } from "@/layout/common/app-layout";
 import { ManualFundingHistory } from "@/layout/transactions/manual-funding";
 import { fundManualAccount } from "@/utils/validators";
@@ -26,18 +26,17 @@ import { z } from "zod";
 
 export default function FundAccount() {
   const { data: bankDetails, isLoading } = useGetPaycelerBankDetails();
-  const { data: selectedGateways, isLoading: selectedGatewaysLoading } =
-    useGetSelectedGateways();
-
+  const { accountOptions, isLoading: accountsLoading } = useAccountOptions();
   const { mutate: postManualFunding, isLoading: postManualFundingLoading } =
-    usePostManualFunding(closeAllModals);
+    usePostManualFunding(closeForm);
 
   const fundManualAccountForm = useForm({
     initialValues: {
+      target_account: "",
       amount: 1000,
-      account_name: "",
-      gateway: "",
-      narration: "",
+      sender_name: "",
+      sender_narration: "",
+      category: "local",
     },
     validate: zodResolver(fundManualAccount),
   });
@@ -63,17 +62,10 @@ export default function FundAccount() {
     [bankDetails?.data]
   );
 
-  const gatewayOptions = useMemo(
-    function () {
-      return (
-        selectedGateways?.data.map((gateway) => ({
-          label: gateway.gateway_name,
-          value: gateway.gateway.toString(),
-        })) ?? []
-      );
-    },
-    [selectedGateways?.data]
-  );
+  function closeForm() {
+    closeAllModals();
+    fundManualAccountForm.reset();
+  }
 
   return (
     <div className="flex flex-col gap-6 h-full">
@@ -97,8 +89,16 @@ export default function FundAccount() {
               className="w-[400px] relative"
               onSubmit={fundManualAccountForm.onSubmit(handleLocalFormSubmit)}
             >
-              <LoadingOverlay visible={isLoading || selectedGatewaysLoading} />
+              <LoadingOverlay visible={isLoading || accountsLoading} />
               <Stack spacing="xs">
+                <Select
+                  label="Account"
+                  placeholder="Select Account"
+                  size="md"
+                  data={accountOptions}
+                  nothingFound={<span>No gateway found</span>}
+                  {...fundManualAccountForm.getInputProps("target_account")}
+                />
                 <NumberInput
                   size="md"
                   label="Enter amount"
@@ -114,25 +114,27 @@ export default function FundAccount() {
                   {...fundManualAccountForm.getInputProps("amount")}
                 />
                 <TextInput
-                  label="Account name"
-                  placeholder="Enter account name"
+                  label="Sender name"
+                  placeholder="Enter sender name"
                   size="md"
-                  {...fundManualAccountForm.getInputProps("account_name")}
+                  {...fundManualAccountForm.getInputProps("sender_name")}
                 />
                 <Select
-                  label="Select Gateway"
-                  placeholder="Select Gateway"
+                  label="Category"
+                  placeholder="Select Category"
                   size="md"
-                  defaultValue={gatewayOptions[0]?.value}
-                  data={gatewayOptions}
+                  data={[
+                    { label: "FX", value: "fx" },
+                    { label: "Local", value: "local" },
+                  ]}
                   nothingFound={<span>No gateway found</span>}
-                  {...fundManualAccountForm.getInputProps("gateway")}
+                  {...fundManualAccountForm.getInputProps("category")}
                 />
                 <Textarea
                   label="Narration"
                   placeholder="Enter Narration"
                   size="md"
-                  {...fundManualAccountForm.getInputProps("narration")}
+                  {...fundManualAccountForm.getInputProps("sender_narration")}
                 />
 
                 {localBanks?.map(function (bank) {

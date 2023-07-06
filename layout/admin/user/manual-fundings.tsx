@@ -5,18 +5,26 @@ import { currencyFormatter, getCurrency } from "@/utils/currency";
 import { IManualPayment } from "@/utils/validators/interfaces";
 import { Box, Button, LoadingOverlay, Table } from "@mantine/core";
 import { useMemo, useState } from "react";
-import { FundingStatuses, ManualFundingDrawer } from "./manual-funding-drawer";
+// import { FundingStatuses, ManualFundingDrawer } from "./manual-funding-drawer";
 
 import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
+import { useGetClientManualFundings } from "@/api/hooks/admin/funding";
+import { useRouter } from "next/router";
+import {
+  FundingStatuses,
+  ManualFundingDrawer,
+} from "@/layout/transactions/manual-funding-drawer";
 
 // TODO: Use one code instance of manual funding history table
 
-export function ManualFundingHistory() {
+export function UserManualFundingHistory() {
+  const router = useRouter();
+  const userId = router?.query.id as string;
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
   const { data: manualFundings, isLoading: manualFundingsLoading } =
-    useGetManualFundings();
+    useGetClientManualFundings(userId);
   const { role, isLoading } = useRole();
   const isAdmin = role === USER_CATEGORIES.ADMIN;
 

@@ -1,19 +1,24 @@
-import { useGatewayOptions, useGetAllPayouts } from "@/api/hooks/gateways";
+import {
+  useGatewayOptions,
+  useGetAllPayouts,
+  useGetPayouts,
+} from "@/api/hooks/gateways";
 import { TransactionHistory as PayoutsHistory } from "@/layout/transactions/transaction-history";
 import { Select, Tabs } from "@mantine/core";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
-export function Payouts() {
+export function UserPayouts({ id }: { id: number }) {
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(() => {
     const startDate = dayjs(new Date()).subtract(30, "days").toDate();
     const endDate = new Date();
 
     return [startDate, endDate];
   });
-  const [currentGateway, setCurrentGateway] = useState<string | null>(null);
-
   const { gatewayOptions, isLoading: gatewaysLoading } = useGatewayOptions();
+  const [currentGateway, setCurrentGateway] = useState<string | null>(
+    gatewayOptions[0]?.value || null
+  );
 
   const { data: payoutHistory, isFetching: payoutHistoryFetching } =
     useGetAllPayouts({
@@ -24,11 +29,11 @@ export function Payouts() {
 
   useEffect(
     function () {
-      if (gatewayOptions) {
-        setCurrentGateway(gatewayOptions[0]?.value);
+      if (currentGateway) {
+        setCurrentGateway(currentGateway);
       }
     },
-    [gatewayOptions]
+    [currentGateway]
   );
 
   return (
@@ -38,10 +43,10 @@ export function Payouts() {
           dateRange={dateRange}
           setDateRange={setDateRange}
           payoutHistory={payoutHistory}
-          payoutHistoryFetching={payoutHistoryFetching || gatewaysLoading}
+          payoutHistoryFetching={payoutHistoryFetching}
           meta={
             <Select
-              value={currentGateway}
+              defaultValue={gatewayOptions[0].value}
               data={gatewayOptions}
               placeholder="Select gateway"
               onChange={(value) => setCurrentGateway(value)}

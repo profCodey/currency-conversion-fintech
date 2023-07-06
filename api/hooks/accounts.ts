@@ -16,6 +16,16 @@ export function useGetAccounts() {
   });
 }
 
+export function useGetClientAccounts(userId: string) {
+  return useQuery({
+    queryKey: ["accounts", userId],
+    queryFn: (): Promise<AxiosResponse<IAccount[]>> =>
+      axiosInstance.get(`/accounts/${userId}`, {
+        baseURL: APICLIENT_BASE_URL,
+      }),
+  });
+}
+
 export function useAccountOptions() {
   const { data, ...rest } = useGetAccounts();
 

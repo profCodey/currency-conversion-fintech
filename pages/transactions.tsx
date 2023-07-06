@@ -1,10 +1,15 @@
+import { useDefaultGateway } from "@/api/hooks/gateways";
+import { useGetCurrentUser } from "@/api/hooks/user";
 import { AppLayout } from "@/layout/common/app-layout";
-import { TransactionHistory } from "@/layout/dashboard";
+// import { TransactionHistory } from "@/layout/dashboard";
 import { ManualFundingHistory } from "@/layout/transactions/manual-funding";
+import { UserPayoutHistory } from "@/layout/transactions/payout-history";
 import { Tabs } from "@mantine/core";
 import { ReactElement } from "react";
 
 export default function Transactions() {
+  const { data } = useGetCurrentUser();
+  const { defaultGateway, isLoading } = useDefaultGateway();
   return (
     <div className="flex flex-col gap-6 h-full">
       <div className="text-primary-100">
@@ -18,7 +23,10 @@ export default function Transactions() {
           <Tabs.Tab value="manual-funding">Manual Funding</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="payouts" className="py-2">
-          <TransactionHistory />
+          <UserPayoutHistory
+            userId={data!.data.id}
+            gateway={String(defaultGateway?.gateway)}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="manual-funding" className="py-2">
           <ManualFundingHistory />

@@ -1,17 +1,17 @@
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { useGetClientDetails } from "@/api/hooks/user";
+import { CircleNigerianFlag } from "@/components/icons";
 import {
-  CircleBritishFlag,
-  CircleEuropeFlag,
-  CircleNigerianFlag,
-  CircleUsFlag,
-} from "@/components/icons";
-import { currencyFormatter, getCurrency } from "@/utils/currency";
+  currencyFormatter,
+  getCurrency,
+  useCurrencyFlags,
+} from "@/utils/currency";
 import { ActionIcon, Popover, Skeleton } from "@mantine/core";
 import { ArrowDown2 } from "iconsax-react";
 import { ReactNode } from "react";
 
 export function Wallets({ userId }: { userId: number | undefined }) {
+  const getIcon = useCurrencyFlags();
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
@@ -26,20 +26,6 @@ export function Wallets({ userId }: { userId: number | undefined }) {
       </WalletsContainer>
     );
   }
-
-  function getIcon(code: string) {
-    switch (code) {
-      case "GBP":
-        return <CircleBritishFlag />;
-      case "USD":
-        return <CircleUsFlag />;
-      case "EUR":
-        return <CircleEuropeFlag />;
-      default:
-        return <CircleNigerianFlag />;
-    }
-  }
-
   return (
     <WalletsContainer>
       {wallets?.data
@@ -97,7 +83,7 @@ function WalletsContainer({ children }: { children: ReactNode }) {
     <div className="py-6 px-5 bg-gray-30 rounded-lg border font-semibold flex flex-col gap-4">
       <section className="flex justify-between text-primary-70 text-sm">
         <span>Wallet Balance</span>
-        <span>Hide balance</span>
+        {/* <span>Hide balance</span> */}
       </section>
 
       <section className="grid grid-cols-2 grid-rows-[repeat(2,_minmax(4rem,_auto))] gap-4">

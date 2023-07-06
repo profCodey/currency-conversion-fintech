@@ -1,5 +1,5 @@
 import { useApproveRejectFunding } from "@/api/hooks/admin/funding";
-import { currencyFormatter } from "@/utils/currency";
+import { currencyFormatter, getCurrency } from "@/utils/currency";
 import { IManualPayment } from "@/utils/validators/interfaces";
 import {
   Box,
@@ -76,6 +76,7 @@ export function ManualFundingDrawer({
         <Stack spacing="sm">
           <Group position="apart">
             <span className="font-secondary text-xl font-semibold">
+              {getCurrency(fundingData?.currency || "")}
               {currencyFormatter(Number(fundingData?.amount))}
             </span>
             <span>{fundingData?.category} transaction</span>

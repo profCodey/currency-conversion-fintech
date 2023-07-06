@@ -17,8 +17,17 @@ export default function Transactions() {
         subheader="View Exchange, Local and Foreign Transactions"
       />
 
-      <section>
-        <Tabs defaultValue="payouts" variant="pills">
+      <section className="flex-grow">
+        <Tabs
+          defaultValue="payouts"
+          variant="pills"
+          className="h-full"
+          classNames={{
+            panel: "flex-grow",
+            tabsList: "shrink-0",
+            root: "flex flex-col",
+          }}
+        >
           <Tabs.List>
             <Tabs.Tab value="payouts">Payouts</Tabs.Tab>
             <Tabs.Tab value="fundings">Fundings</Tabs.Tab>

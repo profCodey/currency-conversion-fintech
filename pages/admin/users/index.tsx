@@ -69,7 +69,7 @@ export default function Users() {
         </form>
       </div>
 
-      <Table withBorder verticalSpacing="sm" className="mt-5">
+      <Table withBorder verticalSpacing="sm" className="mt-5 relative">
         <LoadingOverlay visible={isLoading} />
         <thead>
           <tr className="shadow">

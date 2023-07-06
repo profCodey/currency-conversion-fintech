@@ -8,7 +8,7 @@ export function PageHeader({
   meta,
 }: {
   header: ReactNode;
-  subheader?: string;
+  subheader?: ReactNode;
   meta?: ReactNode;
 }) {
   return (

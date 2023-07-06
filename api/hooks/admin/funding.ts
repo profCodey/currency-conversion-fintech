@@ -1,10 +1,11 @@
 import { queryClient } from "@/pages/_app";
 import { showNotification } from "@mantine/notifications";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorItem } from "../auth";
 import { axiosInstance } from "@/api";
 import { ApproveRejectFundingPayload } from "@/layout/transactions/manual-funding-drawer";
+import { IManualPayment } from "@/utils/validators/interfaces";
 
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
@@ -42,4 +43,15 @@ export function useApproveRejectFunding(cb?: () => void) {
       },
     }
   );
+}
+
+export function useGetClientManualFundings(userId: string) {
+  return useQuery({
+    queryKey: ["manual-fundings", userId],
+    queryFn: function (): Promise<AxiosResponse<IManualPayment[]>> {
+      return axiosInstance.get(`/manual-funding/user/${userId}`, {
+        baseURL: APICLIENT_BASE_URL,
+      });
+    },
+  });
 }

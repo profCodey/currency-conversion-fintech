@@ -178,6 +178,7 @@ export interface IManualPayment {
   category: "fx" | "local";
   status: "approved" | "pending" | "rejected" | "cancelled";
   admin_remarks: string;
+  currency: string;
 }
 
 // FX
@@ -220,4 +221,31 @@ export interface IRate {
   is_active: boolean;
   source_currency: number;
   destination_currency: number;
+}
+
+export interface IOnboardingDocuments {
+  user: number;
+  certificate_of_registration: string;
+  utility_bill: string;
+  article_of_association: string;
+  document_directors: string;
+  document_shareholders: string;
+  regulatory_licenses: string;
+  status: "pending" | "approved" | "rejected" | "cancelled";
+}
+
+export interface IOnboardingProfile {
+  user: 0;
+  business_legal_name: string;
+  business_trading_name: string;
+  primary_business_activity: string;
+  business_registration_number: string;
+  business_registration_date: string;
+  country_of_registration: string;
+  tax_number: string;
+  zip_code: string;
+  state: string;
+  city: string;
+  status: "pending" | "approved" | "rejected" | "cancelled";
+  bvn: string;
 }

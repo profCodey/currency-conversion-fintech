@@ -9,6 +9,9 @@ import {
 } from "@mantine/core";
 import SearchIcon from "@/public/search.svg";
 import { useState } from "react";
+import { Fundings } from "./transactions";
+import { UserManualFundingHistory } from "./user/manual-fundings";
+import { ManualFundingHistory } from "../transactions/manual-funding";
 
 const transactions: {
   sN: number;
@@ -136,8 +139,9 @@ export function TransactionsList() {
           </Group>
         </form>
       </div>
-
-      <Table withBorder verticalSpacing="sm" className="mt-5">
+      {/* <Fundings /> */}
+      <ManualFundingHistory />
+      {/* <Table withBorder verticalSpacing="sm" className="mt-5">
         <thead>
           <tr className="shadow">
             <th>S/N</th>
@@ -157,7 +161,7 @@ export function TransactionsList() {
         onClose={() => setDrawerOpen(false)}
         position="right"
         // size="sm"
-      ></Drawer>
+      ></Drawer> */}
     </section>
   );
 }

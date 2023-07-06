@@ -38,6 +38,18 @@ export function useGatewayOptions() {
     [data?.data]
   );
 
+  // const gatewayOptionsFromGateway = useMemo(
+  //   function () {
+  //     return (
+  //       data?.data.map((gateway) => ({
+  //         label: gateway.description,
+  //         value: gateway.,
+  //       })) ?? []
+  //     );
+  //   },
+  //   [data?.data]
+  // );
+
   return { gatewayOptions, isLoading };
 }
 
@@ -130,12 +142,29 @@ export function useDefaultGateway() {
 }
 
 interface IPayoutPayload {
-  gateway_id: number | undefined;
+  gateway_id: string | null;
   begin_date: string;
   end_date: string;
+  user_id?: string;
 }
 
 export function useGetPayouts(payload: IPayoutPayload) {
+  const { gateway_id, begin_date, end_date, user_id } = payload;
+  return useQuery({
+    queryKey: ["payouts", gateway_id, user_id, begin_date, end_date],
+    queryFn: function (): Promise<AxiosResponse<IPayoutHistory>> {
+      return axiosInstance.get(
+        `/local/payouts/${gateway_id}/${user_id}/${begin_date}/${end_date}/`,
+        {
+          baseURL: APICLIENT_BASE_URL,
+        }
+      );
+    },
+    enabled: !!gateway_id,
+  });
+}
+
+export function useGetAllPayouts(payload: IPayoutPayload) {
   const { gateway_id, begin_date, end_date } = payload;
   return useQuery({
     queryKey: ["payouts", gateway_id, begin_date, end_date],
@@ -147,5 +176,6 @@ export function useGetPayouts(payload: IPayoutPayload) {
         }
       );
     },
+    enabled: !!gateway_id,
   });
 }

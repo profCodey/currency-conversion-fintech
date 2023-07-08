@@ -1,5 +1,5 @@
 import { AppLayout } from "@/layout/common/app-layout";
-import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
+import { ArrowRight2 } from "iconsax-react";
 import Link from "next/link";
 import { ReactElement } from "react";
 
@@ -8,8 +8,6 @@ import { ClientWalletBalances } from "@/layout/admin/user/wallet-balances";
 import { Breadcrumbs, Button, Tabs } from "@mantine/core";
 import { ClientGateways } from "@/layout/admin/user/gateways";
 import { ClientDocuments } from "@/layout/admin/user/documents";
-import Transactions from "@/pages/transactions";
-import { ClientTransactions } from "@/layout/admin/user/transactions";
 import { useRouter } from "next/router";
 import { PageHeader } from "@/components/admin/page-header";
 export default function UserProfile() {
@@ -42,29 +40,18 @@ export default function UserProfile() {
           </Link>
         }
       />
-      {/* <div className="flex justify-between">
-        <Link href="/admin/users" className="flex gap-4">
-          <ArrowLeft2 />
-          <span>Back</span>
-        </Link>
-      </div> */}
 
-      <section className="flex gap-6 justify-between relative">
+      <section className="flex gap-6 justify-between relative z-10">
         <BusinessDetails />
         <ClientWalletBalances />
       </section>
 
-      <section className="rounded-md bg-white shadow border flex-grow">
+      <section className="rounded-md bg-white shadow border flex-grow relative">
         <Tabs variant="pills" defaultValue="documents">
           <Tabs.List>
-            {/* <Tabs.Tab value="transactions">Transactions</Tabs.Tab> */}
             <Tabs.Tab value="documents">Documents</Tabs.Tab>
             <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
           </Tabs.List>
-
-          {/* <Tabs.Panel value="transactions">
-            <ClientTransactions />
-          </Tabs.Panel> */}
           <Tabs.Panel value="documents">
             <ClientDocuments />
           </Tabs.Panel>

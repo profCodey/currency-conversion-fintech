@@ -131,7 +131,8 @@ export type PayoutRecordStatuses =
   | "Paid"
   | "Failed"
   | "FailedDuringSend"
-  | "UnResolvable";
+  | "UnResolvable"
+  | "Pending";
 export interface IPayoutRecord {
   gatewaywalletbalanceAfter: number;
   walletbalanceAfter: number;
@@ -179,6 +180,8 @@ export interface IManualPayment {
   status: "approved" | "pending" | "rejected" | "cancelled";
   admin_remarks: string;
   currency: string;
+  created_on: string;
+  updated_on: string;
 }
 
 // FX
@@ -190,7 +193,7 @@ export interface IAccount {
   account_number: string;
   account_name: string;
   bank_name: string;
-  balance: string;
+  true_balance: string;
   category: "fx" | "local";
   is_active: boolean;
 }
@@ -235,7 +238,7 @@ export interface IOnboardingDocuments {
 }
 
 export interface IOnboardingProfile {
-  user: 0;
+  user: number;
   business_legal_name: string;
   business_trading_name: string;
   primary_business_activity: string;
@@ -248,4 +251,15 @@ export interface IOnboardingProfile {
   city: string;
   status: "pending" | "approved" | "rejected" | "cancelled";
   bvn: string;
+}
+
+export interface ILog {
+  id: number;
+  created_on: string;
+  updated_on: string;
+  message: string;
+  created_by: number;
+  updated_by: number;
+  created_by_name: string;
+  updated_by_name: string;
 }

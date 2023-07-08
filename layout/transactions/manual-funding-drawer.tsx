@@ -11,6 +11,7 @@ import {
   Text,
 } from "@mantine/core";
 import { closeAllModals, modals } from "@mantine/modals";
+import dayjs from "dayjs";
 import { useState } from "react";
 
 export type FundingStatuses = "pending" | "approved" | "rejected" | "cancelled";
@@ -86,6 +87,9 @@ export function ManualFundingDrawer({
             <div>
               Status: <span className="text-accent">{fundingData?.status}</span>
             </div>
+            <span>
+              {dayjs(fundingData?.created_on).format("MMM D, YYYY h:mm A")}
+            </span>
           </Group>
         </Stack>
       </Box>

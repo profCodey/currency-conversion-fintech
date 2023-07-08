@@ -37,7 +37,7 @@ export function ClientWalletBalances() {
               >
                 <span>
                   {getCurrency(wallet.currency)}
-                  {currencyFormatter(Number(wallet.balance))}
+                  {currencyFormatter(Number(wallet.true_balance))}
                 </span>
                 {getIcon(wallet.currency)}
               </div>

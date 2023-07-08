@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
 
   const adminPaths = [
     "/admin",
+    "/admin/logs",
     "/admin/banks",
     "/admin/rates",
     "/admin/users",

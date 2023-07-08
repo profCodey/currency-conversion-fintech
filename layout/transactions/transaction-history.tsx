@@ -71,6 +71,7 @@ export function TransactionHistory({
       case "Paid":
         return <TransactionCompletedIcon className="scale-75" />;
       case "SentToGateway":
+      case "Pending":
         return <TransactionProcessingIcon className="scale-75" />;
       default:
         return null;

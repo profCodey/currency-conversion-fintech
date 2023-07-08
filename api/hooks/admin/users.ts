@@ -6,8 +6,11 @@ import {
   ISelectedGateway,
   User,
 } from "@/utils/validators/interfaces";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import { showNotification } from "@mantine/notifications";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
+import { ErrorItem } from "../auth";
+import { queryClient } from "@/pages/_app";
 
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
@@ -43,4 +46,43 @@ export function useClientSelectedGateways(userId: string) {
       baseURL: APICLIENT_BASE_URL,
     });
   });
+}
+
+interface DocumentApproveReject {
+  comment: string;
+  status: string;
+}
+export function useApproveRejectOnboardingDocuments(
+  userId: string,
+  successCb: () => void
+) {
+  return useMutation(
+    (payload: DocumentApproveReject) => {
+      return axiosInstance.patch(
+        `/apiclient/onboarding/profile/${userId}/approval/`,
+        payload
+      );
+    },
+    {
+      onSuccess: function (data: AxiosResponse) {
+        showNotification({
+          title: "Operation successful",
+          message: data?.data.message || "Document approval status updated",
+          color: "green",
+        });
+
+        successCb();
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        showNotification({
+          message: response?.detail || "Unable to update document status",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["client-documents", userId]);
+      },
+    }
+  );
 }

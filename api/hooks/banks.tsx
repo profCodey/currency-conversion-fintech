@@ -12,7 +12,8 @@ import { ErrorItem } from "./auth";
 import { fundManualAccount } from "@/utils/validators";
 import { z } from "zod";
 import { queryClient } from "@/pages/_app";
-import { useCallback, useMemo } from "react";
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import { TransferOperationStage } from "@/layout/common/send-money-modal";
 
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 export function useGetBanks() {
@@ -82,7 +83,9 @@ interface LocalPayout {
   bank: string;
   narration: string;
 }
-export function useCreatePayout(cb?: () => void) {
+export function useCreatePayout(
+  cb: Dispatch<SetStateAction<TransferOperationStage>>
+) {
   return useMutation(
     function (payload: LocalPayout) {
       return axiosInstance.post("/local/payouts/create/", payload, {
@@ -92,25 +95,18 @@ export function useCreatePayout(cb?: () => void) {
     {
       onSuccess: function (data: AxiosResponse) {
         if (data?.data.status) {
-          showNotification({
-            message: "Operation successful",
-            color: "green",
-          });
-        } else
-          showNotification({
-            message: data?.data.message,
-            color: "red",
-          });
+          cb("transaction-success");
+        } else {
+          cb("transaction-failed");
+        }
       },
       onError: function (data: AxiosError) {
         const response = data.response?.data as ErrorItem;
-        showNotification({
-          message: response?.detail || "Registration unsuccessful",
-          color: "red",
-        });
-      },
-      onSettled: function () {
-        cb && cb();
+        cb("transaction-failed");
+        // showNotification({
+        //   message: response?.detail || "Registration unsuccessful",
+        //   color: "red",
+        // });
       },
     }
   );

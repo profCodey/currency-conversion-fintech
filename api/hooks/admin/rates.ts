@@ -6,6 +6,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { ErrorItem } from "../auth";
 import { z } from "zod";
 import { IRate } from "@/utils/validators/interfaces";
+import { queryClient } from "@/pages/_app";
 
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
@@ -40,6 +41,7 @@ export function useAddNewRate(cb?: () => void) {
       },
       onSettled: function () {
         cb && cb();
+        queryClient.invalidateQueries(["rates"]);
       },
     }
   );

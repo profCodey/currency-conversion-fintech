@@ -1,12 +1,12 @@
 import { PageHeader } from "@/components/admin/page-header";
 import {
   Exchange,
-  ForeignTransactions,
   Fundings,
   Payouts,
 } from "@/layout/admin/transactions";
 import { AppLayout } from "@/layout/common/app-layout";
-import { Button, Tabs } from "@mantine/core";
+import { FxPayoutHistory } from "@/layout/transactions/fx-payout-history";
+import { Tabs } from "@mantine/core";
 import { ReactElement } from "react";
 
 export default function Transactions() {
@@ -29,16 +29,19 @@ export default function Transactions() {
           }}
         >
           <Tabs.List>
-            <Tabs.Tab value="payouts">Payouts</Tabs.Tab>
+            <Tabs.Tab value="payouts">Local Payouts</Tabs.Tab>
+            <Tabs.Tab value="fx-payouts">Foreign Payouts</Tabs.Tab>
             <Tabs.Tab value="fundings">Fundings</Tabs.Tab>
             <Tabs.Tab value="exchange">Exchange</Tabs.Tab>
-            <Tabs.Tab value="fx">Foreign Transactions</Tabs.Tab>
+            {/* <Tabs.Tab value="fx">Foreign Transactions</Tabs.Tab> */}
           </Tabs.List>
-
+          <Tabs.Panel value="fx-payouts" className="pt-5">
+            <FxPayoutHistory />
+          </Tabs.Panel>
           <Payouts />
           <Fundings />
           <Exchange />
-          <ForeignTransactions />
+          {/* <ForeignTransactions /> */}
         </Tabs>
       </section>
     </section>

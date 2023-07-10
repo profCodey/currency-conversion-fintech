@@ -10,12 +10,11 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { ConvertIcon } from "@/components/icons";
 import styles from "@/styles/dashboard.module.css";
-import { useCurrencyOptions, useGetCurrencies } from "@/api/hooks/currencies";
-import { useMemo, useState } from "react";
+import { useCurrencyOptions } from "@/api/hooks/currencies";
+import { useState } from "react";
 import { useGetRecipients } from "@/api/hooks/recipients";
-import { useBankOptions, useGetBanks } from "@/api/hooks/banks";
+import { useBankOptions } from "@/api/hooks/banks";
 import { z } from "zod";
 import { PayRecipient } from "../recipients/recipient-list";
 import { IRecipient } from "@/utils/validators/interfaces";
@@ -23,6 +22,7 @@ import { useDefaultGateway } from "@/api/hooks/gateways";
 import { SendMoneyModal } from "../common/send-money-modal";
 import { useIsVerified } from "@/api/hooks/user";
 import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
+import { ExchangeBox } from "./exchange-box";
 export function RightSection() {
   const { isLoading: currenciesLoading, currencyOptions } =
     useCurrencyOptions();
@@ -126,59 +126,7 @@ export function RightSection() {
           Send money
         </Button>
       </div>
-      <div className="bg-gray-30 border rounded-lg p-4">
-        <section className="bg-white p-4 rounded border flex gap-4">
-          <Select
-            className="flex-grow"
-            label="Currency"
-            defaultValue="NGN"
-            data={currencyOptions}
-            nothingFound={"No currencies found"}
-          />
-          <NumberInput
-            className="flex-grow"
-            label="You send"
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            formatter={(value) =>
-              !Number.isNaN(parseFloat(value))
-                ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-                : "$ "
-            }
-          />
-        </section>
-        <section className="h-24 flex items-center justify-center relative">
-          <div className="absolute h-full w-5 bg-white mx-auto"></div>
-          <div className="relative h-10 aspect-square rounded-full bg-white flex items-center justify-center">
-            <ConvertIcon />
-          </div>
-        </section>
-        <section className="bg-white p-4 rounded border flex gap-4">
-          <Select
-            className="flex-grow"
-            label="Currency"
-            defaultValue="GBP"
-            data={currencyOptions}
-          />
-          <NumberInput
-            className="flex-grow"
-            label="You receive"
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            formatter={(value) =>
-              !Number.isNaN(parseFloat(value))
-                ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
-                : "$ "
-            }
-          />
-        </section>
-
-        <div className="text-primary-70 text-center my-5">
-          Market Rate: 1 USD = 1.2 GBP
-        </div>
-
-        <Button className="bg-accent hover:bg-accent" size="md" fullWidth>
-          Exchange
-        </Button>
-      </div>
+      <ExchangeBox />
       <div className={`${styles.worldBackground}`}>
         <span className="text-white">Link your account</span>
         <span className="text-accent">to Amazon, Paypal and more.</span>

@@ -1,6 +1,7 @@
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { AppLayout } from "@/layout/common/app-layout";
+import { ExchangeHistory } from "@/layout/transactions/exchange-history";
 import { FxPayoutHistory } from "@/layout/transactions/fx-payout-history";
 // import { TransactionHistory } from "@/layout/dashboard";
 import { ManualFundingHistory } from "@/layout/transactions/manual-funding";
@@ -23,6 +24,7 @@ export default function Transactions() {
           <Tabs.Tab value="local-payouts">Local Payouts</Tabs.Tab>
           <Tabs.Tab value="fx-payouts">Fx Payouts</Tabs.Tab>
           <Tabs.Tab value="manual-funding">Manual Funding</Tabs.Tab>
+          <Tabs.Tab value="exchange">Exchange</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="local-payouts" className="py-2">
           <UserPayoutHistory
@@ -35,6 +37,9 @@ export default function Transactions() {
         </Tabs.Panel>
         <Tabs.Panel value="manual-funding" className="py-2">
           <ManualFundingHistory />
+        </Tabs.Panel>
+        <Tabs.Panel value="exchange" className="py-2">
+          <ExchangeHistory />
         </Tabs.Panel>
       </Tabs>
     </div>

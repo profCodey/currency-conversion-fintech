@@ -24,11 +24,11 @@ export function ManualFundingHistory() {
     switch (status) {
       case "cancelled":
       case "rejected":
-        return <TransactionFailedIcon className="scale-75" />;
+        return <TransactionFailedIcon className="scale-50" />;
       case "approved":
-        return <TransactionCompletedIcon className="scale-75" />;
+        return <TransactionCompletedIcon className="scale-50" />;
       case "pending":
-        return <TransactionProcessingIcon className="scale-75" />;
+        return <TransactionProcessingIcon className="scale-50" />;
       default:
         return null;
     }
@@ -39,7 +39,7 @@ export function ManualFundingHistory() {
       return manualFundings?.data.map(function (funding) {
         return (
           <tr key={funding.id}>
-            <td className="flex gap-2 items-center">
+            <td className="flex gap-1 items-center">
               {getTransactionIcon(funding.status)} <span>{funding.status}</span>
             </td>
             <td>{funding.target_account_label}</td>

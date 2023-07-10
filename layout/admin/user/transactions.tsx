@@ -21,8 +21,8 @@ export function ClientTransactions() {
         <Tabs.List>
           <Tabs.Tab value="payouts">Payouts</Tabs.Tab>
           <Tabs.Tab value="fundings">Fundings</Tabs.Tab>
-          <Tabs.Tab value="exchange">Exchange</Tabs.Tab>
-          <Tabs.Tab value="fx">Foreign Transactions</Tabs.Tab>
+          {/* <Tabs.Tab value="exchange">Exchange</Tabs.Tab>
+          <Tabs.Tab value="fx">Foreign Transactions</Tabs.Tab> */}
         </Tabs.List>
         <Tabs.Panel value="payouts" className="flex-grow pt-4">
           <UserPayoutHistory userId={Number(id)} />

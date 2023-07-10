@@ -1,6 +1,6 @@
 import { useRole } from "@/api/hooks/user";
 import { USER_CATEGORIES } from "@/utils/constants";
-import { IFxPayout } from "@/utils/validators/interfaces";
+import { IExchangeDetailed } from "@/utils/validators/interfaces";
 import {
   Box,
   Button,
@@ -14,17 +14,17 @@ import {
 import { FundingStatuses } from "./manual-funding-drawer";
 import { useState } from "react";
 import { closeAllModals, modals } from "@mantine/modals";
-import { useApproveRejectFxPayout } from "@/api/hooks/admin/fx";
-import dayjs from "dayjs";
+import { useApproveRejectExchange } from "@/api/hooks/exchange";
 import { currencyFormatter } from "@/utils/currency";
+import dayjs from "dayjs";
 
-export function FxPayoutDetail({
+export function FxExchangeDetail({
   open,
-  payout,
+  exchange,
   closeDrawer,
 }: {
   open: boolean;
-  payout: IFxPayout | null;
+  exchange: IExchangeDetailed | null;
   closeDrawer(): void;
 }) {
   const [remark, setRemark] = useState("");
@@ -32,11 +32,11 @@ export function FxPayoutDetail({
   const isAdmin = role === USER_CATEGORIES.ADMIN;
 
   const { mutate: approveReject, isLoading } =
-    useApproveRejectFxPayout(closeDrawer);
+    useApproveRejectExchange(closeDrawer);
 
   function handleApproveReject(status: FundingStatuses) {
     approveReject({
-      id: payout!.id,
+      id: exchange!.id,
       status,
       admin_remark: remark,
     });
@@ -58,6 +58,8 @@ export function FxPayoutDetail({
         loading: isLoading,
       },
       zIndex: 500,
+      closeOnConfirm: false,
+      closeOnCancel: false,
       onCancel: closeAllModals,
       onConfirm: () => handleApproveReject(status),
     });
@@ -65,7 +67,8 @@ export function FxPayoutDetail({
 
   return (
     <Drawer
-      title="Payout detail"
+      title="Exchange details"
+      withCloseButton={false}
       position="right"
       opened={open}
       onClose={closeDrawer}
@@ -74,38 +77,63 @@ export function FxPayoutDetail({
         body: "p-0",
       }}
     >
-      <Box p={20} className="border-b-2">
-        <Stack spacing="sm">
-          <Group position="apart">
-            <span className="font-secondary text-xl font-semibold">
-              {currencyFormatter(Number(payout?.amount))}
-            </span>
-            <span>{payout?.account_name} transaction</span>
-          </Group>
+      <Stack spacing="sm" p={20} className="border-b">
+        <Group position="apart">
+          <span className="font-secondary text-xl font-semibold">
+            {currencyFormatter(Number(exchange?.amount))}
+          </span>
+          <span>{exchange?.created_by_name}</span>
+        </Group>
 
-          <Group position="apart">
-            <div>
-              Status: <span className="text-accent">{payout?.status}</span>
-            </div>
-            <span>
-              {dayjs(payout?.created_on).format("MMM D, YYYY h:mm A")}
-            </span>
-          </Group>
-        </Stack>
-      </Box>
-      <Stack spacing="md" p={20} className="bg-gray-30">
-        <Detail title="Account number" content={payout?.account_number} />
-        <Detail title="BIC" content={payout?.bic} />
-        <Detail title="IBAN" content={payout?.iban} />
-        <Detail title="Created by" content={payout?.created_by_name} />
-        <Detail title="Sort code" content={payout?.sort_code} />
-        <Detail title="Zip code" content={payout?.zipcode} />
-        <Detail title="Narration" content={payout?.narration} />
-        <Detail title="Admin remarks" content={payout?.admin_remarks} />
-        <Detail title="Recipient address" content={payout?.recipient_address} />
-        <Detail title="State" content={payout?.state} />
-        <Detail title="City" content={payout?.city} />
-        <Detail title="Reference" content={payout?.reference} />
+        <Group position="apart">
+          <div>
+            Status: <span className="text-accent">{exchange?.status}</span>
+          </div>
+          <span>
+            {dayjs(exchange?.created_on).format("MMM D, YYYY h:mm A")}
+          </span>
+        </Group>
+      </Stack>
+
+      <Stack p={20} spacing="md" className="bg-gray-30">
+        <Box>
+          <Text>Source account</Text>
+          <Detail
+            title="Account"
+            content={exchange?.source_account_detail.label}
+          />
+          <Detail
+            title="Category"
+            content={exchange?.source_account_detail.category}
+          />
+          <Detail
+            title="Currency"
+            content={exchange?.source_account_detail.currency}
+          />
+          <Detail
+            title="Balance"
+            content={exchange?.source_account_detail.true_balance}
+          />
+        </Box>
+        <Box className="border-t" py={20}>
+          <Text>Destination account</Text>
+          <Detail
+            title="Account"
+            content={exchange?.destination_account_detail.label}
+          />
+          <Detail
+            title="Category"
+            content={exchange?.destination_account_detail.category}
+          />
+          <Detail
+            title="Currency"
+            content={exchange?.destination_account_detail.currency}
+          />
+          <Detail
+            title="Balance"
+            content={exchange?.destination_account_detail.true_balance}
+          />
+        </Box>
       </Stack>
 
       {isAdmin && (
@@ -116,7 +144,7 @@ export function FxPayoutDetail({
                 placeholder="Enter remark"
                 value={remark}
                 onChange={(e) => setRemark(e.target.value)}
-                disabled={payout?.status !== "pending"}
+                disabled={exchange?.status !== "pending"}
               />
             </Box>
             <Group p={20} spacing="xs" position="apart" grow>
@@ -125,7 +153,7 @@ export function FxPayoutDetail({
                 size="lg"
                 loaderPosition="right"
                 onClick={() => confirmApproveReject("approved")}
-                disabled={payout?.status !== "pending"}
+                disabled={exchange?.status !== "pending"}
               >
                 Approve
               </Button>
@@ -133,7 +161,7 @@ export function FxPayoutDetail({
                 className="bg-gray-30 hover:bg-gray-30 text-[#BA0000]"
                 size="lg"
                 onClick={() => confirmApproveReject("rejected")}
-                disabled={payout?.status !== "pending"}
+                disabled={exchange?.status !== "pending"}
               >
                 Reject
               </Button>
@@ -152,7 +180,6 @@ function Detail({
   title: string;
   content: string | number | undefined;
 }) {
-  if (!content) return null;
   return (
     <div className="flex w-full">
       <span className="font-semibold flex-shrink-0">{title}:</span>

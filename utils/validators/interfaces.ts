@@ -160,6 +160,34 @@ export interface IPayoutRecord {
   createdOn: string;
 }
 
+export interface IExchange {
+  amount: string;
+  reference?: string;
+  remark?: string;
+  source_account: number;
+  destination_account: number;
+}
+
+export interface IExchangeDetailed {
+  id: number;
+  created_by_name: string;
+  updated_by_name: string;
+  source_account_detail: IAccount;
+  destination_account_detail: IAccount;
+  created_on: string;
+  updated_on: string;
+  rate: string;
+  amount: string;
+  status: "pending" | "approved" | "rejected" | "cancelled";
+  reference: string;
+  remark: string;
+  admin_remarks: string;
+  created_by: number;
+  updated_by: number;
+  source_account: number;
+  destination_account: number;
+}
+
 export interface IPaycelerAccount {
   id: number;
   account_number: string;

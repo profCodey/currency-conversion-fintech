@@ -1,18 +1,18 @@
-import { useGetFxPayouts } from "@/api/hooks/fx";
-import { Button, Skeleton, Table } from "@mantine/core";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
-import { FxPayoutDetail } from "./fx-payout-detail";
-import { IFxPayout } from "@/utils/validators/interfaces";
+import { useGetExchanges } from "@/api/hooks/exchange";
+import { Button, Skeleton, Table } from "@mantine/core";
+import { FxExchangeDetail } from "./fx-exchange-detail";
+import { IExchangeDetailed } from "@/utils/validators/interfaces";
 
 import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FundingStatuses } from "./manual-funding-drawer";
 
-export function FxPayoutHistory() {
-  const [payout, setPayout] = useState<IFxPayout | null>(null);
-  const { data: fxPayouts, isLoading } = useGetFxPayouts();
+export function ExchangeHistory() {
+  const [exchange, setExchange] = useState<IExchangeDetailed | null>(null);
+  const { data: exchanges, isLoading } = useGetExchanges();
 
   function getTransactionIcon(status: FundingStatuses) {
     switch (status) {
@@ -29,23 +29,24 @@ export function FxPayoutHistory() {
   }
   const rows = useMemo(
     function () {
-      return fxPayouts?.data?.map(function (payout) {
+      return exchanges?.data?.map(function (exchange) {
         return (
-          <tr key={payout.id}>
+          <tr key={exchange.id}>
             <td className="flex gap-1 items-center">
-              {getTransactionIcon(payout.status)} <span>{payout.status}</span>
+              {getTransactionIcon(exchange.status)}{" "}
+              <span>{exchange.status}</span>
             </td>
-            <td>{payout.account_name}</td>
-            <td>{payout.amount}</td>
-            <td>{dayjs(payout.created_on).format("MMM D, YYYY h:mm A")}</td>
-            <td>{payout.created_by_name}</td>
-            <td>{payout.bank_name}</td>
-            <td>{payout.narration}</td>
+            <td>{exchange.created_by_name}</td>
+            <td>{exchange.amount}</td>
+            <td>{dayjs(exchange.created_on).format("MMM D, YYYY h:mm A")}</td>
+            <td>{exchange.rate}</td>
+            <td>{exchange.source_account_detail?.label}</td>
+            <td>{exchange.destination_account_detail?.label}</td>
             <td>
               <Button
                 size="xs"
                 variant="white"
-                onClick={() => setPayout(payout)}
+                onClick={() => setExchange(exchange)}
               >
                 Details
               </Button>
@@ -54,7 +55,7 @@ export function FxPayoutHistory() {
         );
       });
     },
-    [fxPayouts?.data]
+    [exchanges?.data]
   );
 
   return (
@@ -64,22 +65,22 @@ export function FxPayoutHistory() {
           <thead>
             <tr className="font-primary font-light">
               <th>Status</th>
-              <th>Account name</th>
+              <th>Created By</th>
               <th>Amount</th>
               <th>Date</th>
-              <th>Created by</th>
-              <th>Bank name</th>
-              <th>Narration</th>
+              <th>Rate</th>
+              <th>Source account</th>
+              <th>Destination account</th>
               <th>View Details</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
         </Table>
 
-        <FxPayoutDetail
-          open={!!payout}
-          payout={payout}
-          closeDrawer={() => setPayout(null)}
+        <FxExchangeDetail
+          open={!!exchange}
+          exchange={exchange}
+          closeDrawer={() => setExchange(null)}
         />
       </div>
     </Skeleton>

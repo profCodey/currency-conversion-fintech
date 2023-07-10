@@ -1,6 +1,7 @@
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { AppLayout } from "@/layout/common/app-layout";
+import { FxPayoutHistory } from "@/layout/transactions/fx-payout-history";
 // import { TransactionHistory } from "@/layout/dashboard";
 import { ManualFundingHistory } from "@/layout/transactions/manual-funding";
 import { UserPayoutHistory } from "@/layout/transactions/payout-history";
@@ -17,16 +18,20 @@ export default function Transactions() {
         <span>View Different Transaction Histories</span>
       </div>
 
-      <Tabs defaultValue="payouts">
+      <Tabs defaultValue="local-payouts">
         <Tabs.List>
-          <Tabs.Tab value="payouts">Payouts</Tabs.Tab>
+          <Tabs.Tab value="local-payouts">Local Payouts</Tabs.Tab>
+          <Tabs.Tab value="fx-payouts">Fx Payouts</Tabs.Tab>
           <Tabs.Tab value="manual-funding">Manual Funding</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value="payouts" className="py-2">
+        <Tabs.Panel value="local-payouts" className="py-2">
           <UserPayoutHistory
             userId={data!.data.id}
             gateway={String(defaultGateway?.gateway)}
           />
+        </Tabs.Panel>
+        <Tabs.Panel value="fx-payouts" className="py-2">
+          <FxPayoutHistory />
         </Tabs.Panel>
         <Tabs.Panel value="manual-funding" className="py-2">
           <ManualFundingHistory />

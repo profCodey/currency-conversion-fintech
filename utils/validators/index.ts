@@ -60,6 +60,15 @@ export const addRecipientFormValidator = z.object({
     .max(10, "Enter valid account number"),
   account_name: z.string(),
   user: z.number(),
+  category: z.string(),
+  sort_code: z.string(),
+  bic: z.string(),
+  iban: z.string(),
+  recipient_address: z.string(),
+  city: z.string(),
+  state: z.string(),
+  zipcode: z.string(),
+  fx_bank_name: z.string(),
 });
 
 export const fundManualAccount = z.object({

@@ -109,8 +109,8 @@ export interface IRecipient {
   account_number?: string;
   account_name: string;
   sort_code?: string;
-  bank: string;
-  category: string;
+  bank?: string;
+  category?: string;
   bank_code?: string;
   bic?: string;
   iban?: string;
@@ -118,7 +118,9 @@ export interface IRecipient {
   city?: string;
   state?: string;
   zipcode?: string;
-  user: number;
+  user?: number;
+  narration?: string;
+  fx_bank_name?: string;
 }
 
 export interface IPayoutHistory {
@@ -185,6 +187,32 @@ export interface IManualPayment {
 }
 
 // FX
+
+export interface IFxPayout {
+  id: number;
+  created_by_name: string;
+  updated_by_name: null | string;
+  created_on: string;
+  updated_on: string;
+  amount: number;
+  reference: string;
+  account_name: string;
+  account_number: string;
+  bank_name: string;
+  sort_code: string;
+  bic: string;
+  iban: string;
+  recipient_address: string;
+  city: string;
+  state: string;
+  zipcode: string;
+  status: "pending";
+  narration: string;
+  admin_remarks: string;
+  created_by: number | null;
+  updated_by: number | null;
+  source_account: number;
+}
 
 export interface IAccount {
   id: number;

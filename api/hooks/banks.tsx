@@ -14,6 +14,8 @@ import { z } from "zod";
 import { queryClient } from "@/pages/_app";
 import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { TransferOperationStage } from "@/layout/common/send-money-modal";
+import { PayFxRecipient } from "@/layout/common/send-fx-modal";
+import { FxTransferOperationStage } from "@/layout/common/fx-forms/dollar-form";
 
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 export function useGetBanks() {
@@ -89,6 +91,37 @@ export function useCreatePayout(
   return useMutation(
     function (payload: LocalPayout) {
       return axiosInstance.post("/local/payouts/create/", payload, {
+        baseURL: APICLIENT_BASE_URL,
+      });
+    },
+    {
+      onSuccess: function (data: AxiosResponse) {
+        if (data?.data.status) {
+          cb("transaction-success");
+        } else {
+          cb("transaction-failed");
+        }
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        cb("transaction-failed");
+        // showNotification({
+        //   message: response?.detail || "Registration unsuccessful",
+        //   color: "red",
+        // });
+      },
+    }
+  );
+}
+
+// useCreateDollarPayout
+
+export function useCreateFxPayout(
+  cb: Dispatch<SetStateAction<FxTransferOperationStage | null>>
+) {
+  return useMutation(
+    function (payload: z.infer<typeof PayFxRecipient>) {
+      return axiosInstance.post("/fx/payout/", payload, {
         baseURL: APICLIENT_BASE_URL,
       });
     },

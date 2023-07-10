@@ -53,8 +53,17 @@ export default function Recipients() {
       currency: "NGN",
       bank: "",
       account_number: "",
+      fx_bank_name: "",
       account_name: "",
       user: currentUser?.data.id as number,
+      sort_code: "",
+      category: "local",
+      bic: "",
+      iban: "",
+      recipient_address: "",
+      city: "",
+      state: "",
+      zipcode: "",
     },
     validate: zodResolver(addRecipientFormValidator),
   });
@@ -86,6 +95,7 @@ export default function Recipients() {
 
   function handleAccountNumberChange(number: string) {
     addRecipientForm.setFieldValue("account_number", number);
+    if (addRecipientForm.values.currency !== "NGN") return;
     if (number.toString().length === 10) {
       setNameEnquiryDetails({
         account_number: number,
@@ -98,19 +108,32 @@ export default function Recipients() {
   }
 
   function handleSubmit(values: z.infer<typeof addRecipientFormValidator>) {
+    const { currency, ...rest } = values;
+    console.log({ values });
     const payload = {
-      account_number: values.account_number,
-      account_name: values.account_name,
-      bank: values.bank,
-      user: values.user,
-      category: "local",
+      ...rest,
+      category: currency === "NGN" ? "local" : "fx",
     };
+
+    console.log(payload);
+    // const payload = {
+    //   account_number: values.account_number,
+    //   account_name: values.account_name,
+    //   bank: values.bank,
+    //   user: values.user,
+    //   category: "local",
+    // };
 
     addRecipient(payload);
   }
 
   if (currenciesLoading || defaultGatewayLoading || loadingGatewayBanks)
     return <Loader color="green" />;
+
+  const showEuroFields = addRecipientForm.values.currency === "EUR";
+  const showUsdFields = addRecipientForm.values.currency === "USD";
+  const showGbpFields = addRecipientForm.values.currency === "GBP";
+  const showNairaFields = addRecipientForm.values.currency === "NGN";
 
   return (
     <section className="flex flex-col gap-8">
@@ -122,7 +145,7 @@ export default function Recipients() {
       <Button
         leftIcon={<UserPlus />}
         className="bg-primary-100 hover:bg-primary-100 text-white w-fit"
-        size="lg"
+        size="md"
         onClick={handleAddRecipient}
       >
         Add Recipient
@@ -152,27 +175,107 @@ export default function Recipients() {
             data={currencyOptions}
             size="md"
             {...addRecipientForm.getInputProps("currency")}
+            onChange={(value) => {
+              addRecipientForm.reset();
+              addRecipientForm.setFieldValue("currency", value || "");
+            }}
           />
-          <Select
-            aria-label="Banks"
-            placeholder="Select Bank"
-            searchable
-            data={bankOptions}
-            {...addRecipientForm.getInputProps("bank")}
-          />
-          <TextInput
-            placeholder="Account number"
-            size="md"
-            {...addRecipientForm.getInputProps("account_number")}
-            onChange={(e) => handleAccountNumberChange(e.target.value)}
-          />
+
+          {/* For naira, select bank name from list */}
+          {showNairaFields && (
+            <Select
+              aria-label="Banks"
+              placeholder="Select Bank"
+              searchable
+              size="md"
+              data={bankOptions}
+              {...addRecipientForm.getInputProps("bank")}
+            />
+          )}
+
+          {/* For currency that isn't naira, you'd have to collect the bank name */}
+          {!showNairaFields && (
+            <TextInput
+              placeholder="Bank name"
+              size="md"
+              {...addRecipientForm.getInputProps("fx_bank_name")}
+            />
+          )}
+
+          {!showEuroFields && (
+            <TextInput
+              placeholder="Account number"
+              size="md"
+              {...addRecipientForm.getInputProps("account_number")}
+              onChange={(e) => handleAccountNumberChange(e.target.value)}
+            />
+          )}
+
           <TextInput
             aria-label="Account name"
             placeholder="Account name"
             size="md"
-            disabled
+            disabled={addRecipientForm.values.currency === "NGN"}
             {...addRecipientForm.getInputProps("account_name")}
           />
+
+          {showEuroFields && (
+            <TextInput
+              aria-label="iban"
+              placeholder="IBAN"
+              size="md"
+              {...addRecipientForm.getInputProps("iban")}
+            />
+          )}
+
+          {showGbpFields && (
+            <TextInput
+              aria-label="sort code"
+              placeholder="Sort code"
+              size="md"
+              {...addRecipientForm.getInputProps("sort_code")}
+            />
+          )}
+
+          {(showUsdFields || showEuroFields) && (
+            <>
+              <TextInput
+                aria-label="bic"
+                placeholder="BIC"
+                size="md"
+                {...addRecipientForm.getInputProps("bic")}
+              />
+
+              <TextInput
+                aria-label="recipient_address"
+                placeholder="Recipient Address"
+                size="md"
+                {...addRecipientForm.getInputProps("recipient_address")}
+              />
+
+              <TextInput
+                aria-label="city"
+                placeholder="City"
+                size="md"
+                {...addRecipientForm.getInputProps("city")}
+              />
+
+              <TextInput
+                aria-label="state"
+                placeholder="State"
+                size="md"
+                {...addRecipientForm.getInputProps("state")}
+              />
+
+              <TextInput
+                aria-label="zip-code"
+                placeholder="Zip code"
+                size="md"
+                {...addRecipientForm.getInputProps("zipcode")}
+              />
+            </>
+          )}
+
           <Button
             type="submit"
             size="md"

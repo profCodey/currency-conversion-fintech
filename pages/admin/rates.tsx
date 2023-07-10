@@ -53,7 +53,7 @@ export default function Rates() {
   );
 
   return (
-    <section className="flex flex-col gap-6 h-full">
+    <section className="flex flex-col gap-6 h-full relative">
       <PageHeader
         header="Rates"
         subheader="View and set rates for different currencies"

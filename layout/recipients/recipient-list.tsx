@@ -9,9 +9,11 @@ import { z } from "zod";
 import { SendMoneyModal } from "../common/send-money-modal";
 import { closeAllModals, modals } from "@mantine/modals";
 import { useBankOptions } from "@/api/hooks/banks";
+import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
+import { useGetCurrentUser } from "@/api/hooks/user";
 
 export const PayRecipient = z.object({
-  bank: z.string().min(1, { message: "Bank name is required" }),
+  bank: z.string().min(1, { message: "Bank name is required" }).optional(),
   currency: z.string().min(1, { message: "Currency is required" }),
   amount: z.number().gte(10),
   account_name: z.string().min(1, { message: "Account name is required" }),
@@ -28,6 +30,7 @@ export function RecipientList({
   currencies: { label: string; value: string }[];
   gateway: number | undefined;
 }) {
+  const { data } = useGetCurrentUser();
   const [recipientDetails, setRecipientDetails] = useState<
     z.infer<typeof PayRecipient>
   >({
@@ -38,25 +41,61 @@ export function RecipientList({
     account_number: "",
     narration: "",
   });
+
+  const [fxRecipientDetails, setFxRecipientDetails] = useState<IRecipient>({
+    account_name: "",
+    account_number: "",
+    fx_bank_name: "",
+    sort_code: "",
+    bic: "",
+    iban: "",
+    recipient_address: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    narration: "",
+    bank: "",
+    category: "",
+    user: data?.data.id as number,
+  });
+
   const { getBankName } = useBankOptions();
   const { isLoading: recipientsLoading, data: recipients } = useGetRecipients();
   const { mutate: deleteRecipient, isLoading: deleteRecipientLoading } =
     useDeleteRecipient();
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<"local" | "fx" | null>(null);
 
   if (recipientsLoading) return <Loader color="green" />;
 
   function handleSend(recipient: IRecipient) {
-    setShowModal(true);
-    setRecipientDetails({
-      account_name: recipient.account_name,
-      bank: recipient.bank,
-      amount: 1000,
-      account_number: recipient.account_number ?? "",
-      currency: "NGN",
-      narration: "",
-    });
+    if (recipient.fx_bank_name) {
+      setShowModal("fx");
+      setFxRecipientDetails({
+        account_name: recipient.account_name,
+        account_number: recipient.account_number,
+        fx_bank_name: recipient.fx_bank_name,
+        sort_code: recipient.sort_code,
+        bic: recipient.bic,
+        iban: recipient.iban,
+        recipient_address: recipient.recipient_address,
+        city: recipient.city,
+        state: recipient.state,
+        zipcode: recipient.zipcode,
+        narration: recipient.narration || "",
+        bank: "",
+      });
+    } else {
+      setShowModal("local");
+      setRecipientDetails({
+        account_name: recipient.account_name,
+        bank: recipient!.bank,
+        amount: 1000,
+        account_number: recipient.account_number ?? "",
+        currency: "NGN",
+        narration: "",
+      });
+    }
   }
 
   function handeDeleteRecipient(recipient: IRecipient) {
@@ -88,11 +127,13 @@ export function RecipientList({
             <div className="p-4 border bg-gray-30 flex items-center gap-4 rounded-t text-gray-90 font-semibold text-sm">
               <BankIcon />
               <span className="mr-auto">
-                {getBankName(Number(recipient.bank))?.name ||
-                  "Bank name not added"}
+                {recipient.fx_bank_name
+                  ? recipient.fx_bank_name
+                  : getBankName(Number(recipient.bank))?.name ||
+                    "Bank name not added"}
               </span>
 
-              <NigeriaFlag />
+              {recipient.fx_bank_name ? "FX" : <NigeriaFlag />}
             </div>
             <div className="p-4 flex flex-col gap-4 text-sm text-gray-90">
               <div>Account Name: {recipient.account_name}</div>
@@ -118,17 +159,22 @@ export function RecipientList({
           </div>
         ))}
       </section>
-
-      {showModal && (
+      {showModal === "local" ? (
         <SendMoneyModal
-          modalOpen={showModal}
-          close={() => setShowModal(false)}
+          modalOpen={!!showModal}
+          close={() => setShowModal(null)}
           banks={banks}
           currencies={currencies}
           gateway={gateway}
           recipientDetails={recipientDetails}
         />
-      )}
+      ) : showModal === "fx" ? (
+        <SendFxMoneyModal
+          modalOpen={!!showModal}
+          close={() => setShowModal(null)}
+          recipientDetails={fxRecipientDetails}
+        />
+      ) : null}
     </>
   );
 }

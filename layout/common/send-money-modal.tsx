@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const PayRecipient = z.object({
-  bank: z.string().min(1, { message: "Bank name is required" }),
+  bank: z.string().min(1, { message: "Bank name is required" }).optional(),
   currency: z.string().min(1, { message: "Currency is required" }),
   amount: z.number().gte(1),
   account_name: z.string().min(1, { message: "Account name is required" }),
@@ -101,7 +101,7 @@ export function SendMoneyModal({
 
   const payRecipientForm = useForm({
     initialValues: {
-      bank: recipientDetails?.bank.toString(),
+      bank: recipientDetails?.bank ? recipientDetails?.bank.toString() : "",
       currency: recipientDetails?.currency,
       amount: 1000,
       account_name: recipientDetails?.account_name,

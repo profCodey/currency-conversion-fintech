@@ -22,6 +22,7 @@ import { IRecipient } from "@/utils/validators/interfaces";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { SendMoneyModal } from "../common/send-money-modal";
 import { useIsVerified } from "@/api/hooks/user";
+import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
 export function RightSection() {
   const { isLoading: currenciesLoading, currencyOptions } =
     useCurrencyOptions();
@@ -45,22 +46,56 @@ export function RightSection() {
     narration: "",
   });
 
+  const initialState = {
+    amount: 1000,
+    account_name: "",
+    account_number: "",
+    bank_name: "",
+    sort_code: "",
+    bic: "",
+    iban: "",
+    recipient_address: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    narration: "",
+    // bank: ""
+    // currency: "",
+  };
+  const [fxRecipientDetails, setFxRecipientDetails] =
+    useState<z.infer<typeof PayFxRecipient>>(initialState);
+
+  const [showFxModal, setShowFxModal] = useState(false);
   const [showSelectRecipientModal, setShowSelectRecipientModal] =
     useState(false);
   const [showRecipientsModal, setShowRecipientsModal] = useState(false);
 
   function handleSend(recipient: IRecipient) {
-    setShowModal(true);
-    setRecipientDetails({
-      account_name: recipient.account_name,
-      bank: recipient.bank,
-      amount: 1000,
-      account_number: recipient.account_number ?? "",
-      currency: "NGN",
-      narration: "",
-    });
+    if (recipient.fx_bank_name) {
+      setFxRecipientDetails({
+        amount: 1000,
+        bank_name: recipient.fx_bank_name,
+        ...recipient,
+      });
+      setShowFxModal(true);
+    } else {
+      setShowModal(true);
+      setRecipientDetails({
+        account_name: recipient.account_name,
+        bank: recipient.bank ?? "",
+        amount: 1000,
+        account_number: recipient.account_number ?? "",
+        currency: "NGN",
+        narration: "",
+      });
+    }
 
     setShowRecipientsModal(false);
+  }
+
+  function handleNewFxRecipientSend() {
+    setShowSelectRecipientModal(false);
+    setShowFxModal(true);
   }
 
   function handleNewRecipientSend() {
@@ -188,7 +223,15 @@ export function RightSection() {
             size="lg"
             onClick={handleNewRecipientSend}
           >
-            New Recipient
+            Unsaved Local Recipient
+          </Button>
+          <Button
+            className="bg-primary-100 hover:bg-primary-100 font-normal"
+            fullWidth
+            size="lg"
+            onClick={handleNewFxRecipientSend}
+          >
+            Unsaved Fx Recipient
           </Button>
         </Stack>
       </Modal>
@@ -250,6 +293,17 @@ export function RightSection() {
           currencies={currencyOptions}
           gateway={defaultGateway?.gateway}
           recipientDetails={recipientDetails}
+        />
+      )}
+
+      {showFxModal && (
+        <SendFxMoneyModal
+          close={() => {
+            setShowFxModal(false);
+            setFxRecipientDetails(initialState);
+          }}
+          modalOpen={showFxModal}
+          recipientDetails={fxRecipientDetails}
         />
       )}
     </div>

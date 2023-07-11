@@ -10,4 +10,9 @@ const montserrat = localFont({
   variable: "--font-montserrat",
 });
 
-export { sora, montserrat };
+const openSans = localFont({
+  src: "../fonts/OpenSans/OpenSans-VariableFont.ttf",
+  variable: "--font-opensans",
+});
+
+export { sora, montserrat, openSans };

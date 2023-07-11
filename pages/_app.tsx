@@ -8,7 +8,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
-import { montserrat, sora } from "@/utils/fonts";
+import { montserrat, sora, openSans } from "@/utils/fonts";
 import { ModalsProvider } from "@mantine/modals";
 
 export const queryClient = new QueryClient({
@@ -53,7 +53,7 @@ export default function App(props: AppPropsWithLayout) {
           <Notifications position="top-right" />
           <ModalsProvider>
             <section
-              className={`${montserrat.variable} ${sora.variable} font-primary`}
+              className={`${montserrat.variable} ${sora.variable} ${openSans.variable} font-primary`}
             >
               {getLayout(<Component {...pageProps} />)}
             </section>

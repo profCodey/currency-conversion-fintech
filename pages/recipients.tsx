@@ -109,20 +109,10 @@ export default function Recipients() {
 
   function handleSubmit(values: z.infer<typeof addRecipientFormValidator>) {
     const { currency, ...rest } = values;
-    console.log({ values });
     const payload = {
       ...rest,
       category: currency === "NGN" ? "local" : "fx",
     };
-
-    console.log(payload);
-    // const payload = {
-    //   account_number: values.account_number,
-    //   account_name: values.account_name,
-    //   bank: values.bank,
-    //   user: values.user,
-    //   category: "local",
-    // };
 
     addRecipient(payload);
   }

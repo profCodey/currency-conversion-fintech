@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
 import { IAccount } from "@/utils/validators/interfaces";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getCurrency } from "@/utils/currency";
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
@@ -68,5 +68,19 @@ export function useAccountOptions() {
     [data?.data]
   );
 
-  return { accountOptions, localAccountOptions, fxAccountOptions, ...rest };
+  const getAccountCurrency = useCallback(
+    function (id: string) {
+      const account = data?.data.find((account) => account.id.toString() === id);
+      return account?.currency;
+    },
+    [data?.data]
+  );
+
+  return {
+    accountOptions,
+    localAccountOptions,
+    fxAccountOptions,
+    getAccountCurrency,
+    ...rest,
+  };
 }

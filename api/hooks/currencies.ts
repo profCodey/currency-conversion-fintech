@@ -2,17 +2,26 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
 import { ICurrency } from "@/utils/validators/interfaces";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
 export function useGetCurrencies() {
-  return useQuery(["currencies"], function (): Promise<
+  const { data, ...rest } = useQuery(["currencies"], function (): Promise<
     AxiosResponse<ICurrency[]>
   > {
     return axiosInstance.get("/currencies/", {
       baseURL: APICLIENT_BASE_URL,
     });
   });
+
+  const getCurrencyCodeFromId = useCallback(
+    (code: number) => {
+      return data?.data.find((currency) => currency.id === code)?.code;
+    },
+    [data?.data]
+  );
+
+  return { data, getCurrencyCodeFromId, ...rest };
 }
 
 export function useCurrencyOptions() {

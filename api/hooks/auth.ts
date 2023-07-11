@@ -50,8 +50,6 @@ export function useLogin() {
       color: "green",
     });
 
-    console.log(data.data.category);
-
     switch (data.data.category) {
       case USER_CATEGORIES.API_CLIENT:
         if (data.data.is_approved) {

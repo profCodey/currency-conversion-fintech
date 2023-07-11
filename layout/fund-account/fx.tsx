@@ -21,10 +21,17 @@ import { closeAllModals, modals } from "@mantine/modals";
 import { useMemo } from "react";
 import { z } from "zod";
 import { ManualFundingHistory } from "../transactions/manual-funding";
+import { useGetCurrencies } from "@/api/hooks/currencies";
 
 export function FxManualFunding() {
   const { data: bankDetails, isLoading } = useGetPaycelerBankDetails();
-  const { fxAccountOptions, isLoading: accountsLoading } = useAccountOptions();
+  const {
+    fxAccountOptions,
+    getAccountCurrency,
+    isLoading: accountsLoading,
+  } = useAccountOptions();
+  const { getCurrencyCodeFromId, isLoading: currenciesLoading } =
+    useGetCurrencies();
   const { mutate: postManualFunding, isLoading: postManualFundingLoading } =
     usePostManualFunding(closeForm);
   function handleLocalFormSubmit(values: z.infer<typeof fundManualAccount>) {
@@ -45,22 +52,36 @@ export function FxManualFunding() {
     closeAllModals();
     fundManualAccountForm.reset();
   }
-  const localBanks = useMemo(
-    function () {
-      return bankDetails?.data.filter((bank) => bank.category === "fx");
-    },
-    [bankDetails?.data]
-  );
+
   const fundManualAccountForm = useForm({
     initialValues: {
       target_account: "",
       amount: 1000,
       sender_name: "",
       sender_narration: "",
-      category: "local",
+      category: "fx",
     },
     validate: zodResolver(fundManualAccount),
   });
+
+  const fxBanks = useMemo(
+    function () {
+      const currency = getAccountCurrency(
+        fundManualAccountForm.values.target_account
+      );
+      return bankDetails?.data.filter(
+        (bank) =>
+          bank.category === "fx" &&
+          getCurrencyCodeFromId(bank.currency) === currency
+      );
+    },
+    [
+      bankDetails?.data,
+      fundManualAccountForm.values.target_account,
+      getAccountCurrency,
+      getCurrencyCodeFromId,
+    ]
+  );
 
   return (
     <Group spacing="xl" py={0} className="h-full">
@@ -68,14 +89,15 @@ export function FxManualFunding() {
         className="w-[400px] relative"
         onSubmit={fundManualAccountForm.onSubmit(handleLocalFormSubmit)}
       >
-        <LoadingOverlay visible={isLoading || accountsLoading} />
+        <LoadingOverlay
+          visible={isLoading || accountsLoading || currenciesLoading}
+        />
         <Stack spacing="xs">
           <Select
             label="Account"
             placeholder="Select Account"
             size="md"
             data={fxAccountOptions}
-            nothingFound={<span>No gateway found</span>}
             {...fundManualAccountForm.getInputProps("target_account")}
           />
           <NumberInput
@@ -105,7 +127,7 @@ export function FxManualFunding() {
             {...fundManualAccountForm.getInputProps("sender_narration")}
           />
 
-          {localBanks?.map(function (bank) {
+          {fxBanks?.map(function (bank) {
             return (
               <Stack key={bank.id} p="sm" className="bg-gray-30 border">
                 <Grid>

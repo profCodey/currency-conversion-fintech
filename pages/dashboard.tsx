@@ -11,17 +11,20 @@ export default function Dashboard() {
   const { data } = useGetCurrentUser();
   const { defaultGateway, isLoading } = useDefaultGateway();
   return (
-    <div className="flex flex-col gap-6 h-full">
+    <div className="flex flex-col gap-6 max-h-full">
       <h2 className={"text-primary-100 text-2xl font-secondary"}>
         Thank you for choosing us,{" "}
         <span className="font-semibold">{data?.data.last_name}</span>
       </h2>
-      <section className="flex-grow flex gap-6">
-        <section className="flex-grow flex flex-col gap-8">
+      <section className="flex-grow flex gap-6 h-full over-flow-auto overflow-y-auto">
+        <section className="flex-grow flex flex-col gap-8 max-h-full overflow-y-auto">
           <Wallets userId={data?.data.id} />
           {/* <TransactionHistory /> */}
 
-          <Skeleton visible={isLoading} className="flex-grow">
+          <Skeleton
+            visible={isLoading}
+            className="flex-grow max-h-full overflow-y-auto"
+          >
             <UserPayoutHistory
               userId={data!.data.id}
               gateway={String(defaultGateway?.gateway)}

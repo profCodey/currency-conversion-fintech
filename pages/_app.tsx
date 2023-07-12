@@ -10,6 +10,7 @@ import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 import { montserrat, sora, openSans } from "@/utils/fonts";
 import { ModalsProvider } from "@mantine/modals";
+import { RouterTransition } from "@/components/router-transitions";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,6 +52,7 @@ export default function App(props: AppPropsWithLayout) {
           }}
         >
           <Notifications position="top-right" />
+          <RouterTransition />
           <ModalsProvider>
             <section
               className={`${montserrat.variable} ${sora.variable} ${openSans.variable} font-primary`}

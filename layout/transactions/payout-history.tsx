@@ -41,12 +41,14 @@ export function UserPayoutHistory({
 
   return (
     // Payout transaction history will not show options to select a gateway if a gateway is passed to it
-    <TransactionHistory
-      dateRange={dateRange}
-      setDateRange={setDateRange}
-      payoutHistory={payoutHistory}
-      payoutHistoryFetching={payoutHistoryFetching || gatewaysLoading}
-      meta={GatewayOptions}
-    />
+    <div className="flex-grow max-h-full overflow-y-auto">
+      <TransactionHistory
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        payoutHistory={payoutHistory}
+        payoutHistoryFetching={payoutHistoryFetching || gatewaysLoading}
+        meta={GatewayOptions}
+      />
+    </div>
   );
 }

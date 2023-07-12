@@ -61,7 +61,8 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   return (
     <AppShell
-      padding="md"
+      padding={0}
+      className="max-h-screen"
       aside={
         <Navbar
           p={32}
@@ -83,7 +84,9 @@ export function AppLayout({ children }: AppLayoutProps) {
         </Navbar>
       }
     >
-      <section className="order-2 h-full w-full px-2 pt-5">{content}</section>
+      <section className="order-2 h-full max-h-screen w-full px-5 py-5 overflow-y-auto">
+        {content}
+      </section>
     </AppShell>
   );
 }

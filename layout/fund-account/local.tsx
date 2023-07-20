@@ -66,7 +66,7 @@ export function LocalManualFunding() {
   return (
     <Group spacing="xl" py={0} className="h-full">
       <form
-        className="w-[400px] relative"
+        className="w-full sm:w-[400px] relative"
         onSubmit={fundManualAccountForm.onSubmit(handleLocalFormSubmit)}
       >
         <LoadingOverlay visible={isLoading || accountsLoading} />
@@ -99,17 +99,6 @@ export function LocalManualFunding() {
             size="md"
             {...fundManualAccountForm.getInputProps("sender_name")}
           />
-          {/* <Select
-            label="Category"
-            placeholder="Select Category"
-            size="md"
-            data={[
-              { label: "FX", value: "fx" },
-              { label: "Local", value: "local" },
-            ]}
-            nothingFound={<span>No gateway found</span>}
-            {...fundManualAccountForm.getInputProps("category")}
-          /> */}
           <Textarea
             label="Narration"
             placeholder="Enter Narration"

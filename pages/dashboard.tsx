@@ -16,8 +16,8 @@ export default function Dashboard() {
         Thank you for choosing us,{" "}
         <span className="font-semibold">{data?.data.last_name}</span>
       </h2>
-      <section className="flex-grow flex gap-6 h-full over-flow-auto overflow-y-auto">
-        <section className="flex-grow flex flex-col gap-8 max-h-full overflow-y-auto">
+      <section className="flex-grow flex flex-col lg:flex-row gap-6 h-full over-flow-auto overflow-y-auto">
+        <section className="flex-grow flex flex-col gap-8 max-h-full lg:overflow-y-auto">
           <Wallets userId={data?.data.id} />
           {/* <TransactionHistory /> */}
 

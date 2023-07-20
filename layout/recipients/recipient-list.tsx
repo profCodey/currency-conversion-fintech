@@ -121,7 +121,7 @@ export function RecipientList({
 
   return (
     <>
-      <section className="grid grid-cols-3 gap-5">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {recipients?.data.map((recipient) => (
           <div key={recipient.id} className="border rounded font-secondary">
             <div className="p-4 border bg-gray-30 flex items-center gap-4 rounded-t text-gray-90 font-semibold text-sm">

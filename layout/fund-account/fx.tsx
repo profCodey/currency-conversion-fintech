@@ -86,7 +86,7 @@ export function FxManualFunding() {
   return (
     <Group spacing="xl" py={0} className="h-full">
       <form
-        className="w-[400px] relative"
+        className="w-full sm:w-[400px] relative"
         onSubmit={fundManualAccountForm.onSubmit(handleLocalFormSubmit)}
       >
         <LoadingOverlay

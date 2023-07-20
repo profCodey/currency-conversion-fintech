@@ -6,10 +6,7 @@ import {
   FilterFn,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import {
-  RankingInfo,
-  rankItem,
-} from "@tanstack/match-sorter-utils";
+import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -75,7 +72,7 @@ export default function Table({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="text-left py-4 px-4 font-secondary font-medium"
+                    className="text-left py-4 px-4 text-xs sm:text-base font-secondary font-medium"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -90,7 +87,10 @@ export default function Table({
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="border-b">
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2 font-primary">
+                  <td
+                    key={cell.id}
+                    className="text-xs sm:text-base px-4 py-2 font-primary"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

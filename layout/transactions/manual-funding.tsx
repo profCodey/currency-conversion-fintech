@@ -44,7 +44,9 @@ export function ManualFundingHistory() {
         id: "status",
         cell: (props) => (
           <div className="flex gap-1 items-center">
-            {getTransactionIcon(props.cell.getValue())}{" "}
+            <span className="hidden sm:visible">
+              {getTransactionIcon(props.cell.getValue())}
+            </span>
             <span>{props.cell.getValue()}</span>
           </div>
         ),

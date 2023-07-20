@@ -113,7 +113,7 @@ export function RightSection() {
   }
 
   return (
-    <div className="w-[350px] flex flex-col gap-6">
+    <div className="w-full md:w-[350px] flex flex-col gap-6">
       <div className="relative">
         <LoadingOverlay visible={isVerifyLoading} />
         <Button

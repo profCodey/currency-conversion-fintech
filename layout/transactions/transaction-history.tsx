@@ -100,9 +100,11 @@ export function TransactionHistory({
         ?.map(function (payout) {
           return (
             <tr key={payout.payoutId}>
-              <td>
+              <td className="text-xs sm:text-base">
                 <Group>
-                  {getTransactionIcon(payout.status)}
+                  <span className="hidden sm:block">
+                    {getTransactionIcon(payout.status)}
+                  </span>
                   <Stack spacing={0}>
                     <span>{payout.narration}</span>
                     <span>{getTransactionStatus(payout.status)}</span>
@@ -183,7 +185,11 @@ export function TransactionHistory({
       >
         <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
           <LoadingOverlay visible={payoutHistoryFetching} />
-          <Table verticalSpacing="md" withBorder>
+          <Table
+            verticalSpacing="md"
+            withBorder
+            className="min-w-[600px] overflow-x-auto"
+          >
             <thead>
               <tr className="font-primary font-light">
                 <th>Last transaction</th>

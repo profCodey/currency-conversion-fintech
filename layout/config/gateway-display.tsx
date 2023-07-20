@@ -24,7 +24,7 @@ export default function GatewaysDisplay({
 
   return (
     <section className="max-w-[900px] rounded-lg bg-gray-30 border text-gray-90">
-      <section className="grid grid-cols-2">
+      <section className="grid grid-cols-1 md:grid-cols-2">
         <section className="flex flex-col gap-2 p-5 border-r">
           <div className="flex gap-4">
             <h3 className="text-secondary mb-2">Select Default Gateway</h3>

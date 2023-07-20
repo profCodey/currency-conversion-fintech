@@ -40,32 +40,80 @@ export function ApiKeyDisplay() {
       {isVerified ? (
         <section className="mt-6 flex flex-col gap-4">
           <Stack>
-            <Group>
-              <div className="min-w-80 bg-white rounded-[4px] h-11 flex items-center px-4">
-                {showKey ? (
-                  clientDetails?.data.result.awsSecret ?? ""
-                ) : (
-                  <Dots count={40} />
-                )}
+            <Group noWrap>
+              <section className="flex-grow overflow-hidden min-w-80 items-center">
+                <span>Client ID</span>
+                <div className="bg-white rounded-[4px] h-11 flex items-center px-4">
+                  {showKey ? (
+                    clientDetails?.data.result.awsClientId ?? ""
+                  ) : (
+                    <Dots count={40} />
+                  )}
+                </div>
+              </section>
+              <div className="shrink-0 self-end">
+                <CopyButton
+                  value={clientDetails?.data.result.awsClientId ?? ""}
+                  timeout={2000}
+                >
+                  {({ copied, copy }) => (
+                    <Tooltip
+                      label={copied ? "Copied" : "Copy"}
+                      withArrow
+                      position="right"
+                    >
+                      <ActionIcon
+                        color={copied ? "teal" : "gray"}
+                        onClick={copy}
+                      >
+                        {copied ? (
+                          <CopySuccess size="28" />
+                        ) : (
+                          <Copy size="28" />
+                        )}
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+                </CopyButton>
               </div>
-              <CopyButton
-                value={clientDetails?.data.result.awsSecret ?? ""}
-                timeout={2000}
-              >
-                {({ copied, copy }) => (
-                  <Tooltip
-                    label={copied ? "Copied" : "Copy"}
-                    withArrow
-                    position="right"
-                  >
-                    <ActionIcon color={copied ? "teal" : "gray"} onClick={copy}>
-                      {copied ? <CopySuccess size="28" /> : <Copy size="28" />}
-                    </ActionIcon>
-                  </Tooltip>
-                )}
-              </CopyButton>
             </Group>
-
+            <Group noWrap>
+              <section className="flex-grow overflow-hidden min-w-80 items-center">
+                <span>Client Secret</span>
+                <div className="flex-grow overflow-hidden min-w-80 bg-white rounded-[4px] h-11 flex items-center px-4">
+                  {showKey ? (
+                    clientDetails?.data.result.awsSecret ?? ""
+                  ) : (
+                    <Dots count={40} />
+                  )}
+                </div>
+              </section>
+              <div className="shrink-0 self-end">
+                <CopyButton
+                  value={clientDetails?.data.result.awsSecret ?? ""}
+                  timeout={2000}
+                >
+                  {({ copied, copy }) => (
+                    <Tooltip
+                      label={copied ? "Copied" : "Copy"}
+                      withArrow
+                      position="right"
+                    >
+                      <ActionIcon
+                        color={copied ? "teal" : "gray"}
+                        onClick={copy}
+                      >
+                        {copied ? (
+                          <CopySuccess size="28" />
+                        ) : (
+                          <Copy size="28" />
+                        )}
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+                </CopyButton>
+              </div>
+            </Group>
             <Group grow>
               <Button
                 className="bg-accent"

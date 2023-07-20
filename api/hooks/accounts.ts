@@ -35,7 +35,7 @@ export function useAccountOptions() {
         data?.data
           .filter((account) => account.category === "local")
           .map((account) => ({
-            label: `${account.label} (${getCurrency(account.currency)})`,
+            label: `${account.label} (${getCurrency(account.currency.code)})`,
             value: account.id.toString(),
           })) ?? []
       );
@@ -49,7 +49,7 @@ export function useAccountOptions() {
         data?.data
           .filter((account) => account.category === "fx")
           .map((account) => ({
-            label: `${account.label} (${getCurrency(account.currency)})`,
+            label: `${account.label} (${getCurrency(account.currency.code)})`,
             value: account.id.toString(),
           })) ?? []
       );
@@ -60,7 +60,7 @@ export function useAccountOptions() {
     function () {
       return (
         data?.data.map((account) => ({
-          label: `${account.label} (${getCurrency(account.currency)})`,
+          label: `${account.label} (${getCurrency(account.currency.code)})`,
           value: account.id.toString(),
         })) ?? []
       );

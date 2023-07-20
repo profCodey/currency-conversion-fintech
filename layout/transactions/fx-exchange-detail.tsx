@@ -108,7 +108,7 @@ export function FxExchangeDetail({
           />
           <Detail
             title="Currency"
-            content={exchange?.source_account_detail.currency}
+            content={exchange?.source_account_detail.currency.name}
           />
           <Detail
             title="Balance"
@@ -127,7 +127,7 @@ export function FxExchangeDetail({
           />
           <Detail
             title="Currency"
-            content={exchange?.destination_account_detail.currency}
+            content={exchange?.destination_account_detail.currency.name}
           />
           <Detail
             title="Balance"

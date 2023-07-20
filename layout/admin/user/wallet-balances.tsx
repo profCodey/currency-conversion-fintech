@@ -36,10 +36,10 @@ export function ClientWalletBalances() {
                 className="px-4 py-3 bg-white flex items-center justify-between rounded-md border"
               >
                 <span>
-                  {getCurrency(wallet.currency)}
+                  {getCurrency(wallet.currency.code)}
                   {currencyFormatter(Number(wallet.true_balance))}
                 </span>
-                {getIcon(wallet.currency)}
+                {getIcon(wallet.currency.code)}
               </div>
             ))}
           <div className="px-4 py-3 bg-white flex items-center gap-4 justify-between rounded-md border">

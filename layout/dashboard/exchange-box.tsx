@@ -15,11 +15,18 @@ import { useGetRates } from "@/api/hooks/admin/rates";
 import { Warning2 } from "iconsax-react";
 import { currencyFormatter } from "@/utils/currency";
 import { useExchange } from "@/api/hooks/exchange";
+import { useFxBalance } from "@/api/hooks/balance";
+import { showNotification } from "@mantine/notifications";
 
 export function ExchangeBox() {
-  const { isLoading: currenciesLoading, currencyOptionsWithId } =
-    useCurrencyOptions();
+  const {
+    isLoading: currenciesLoading,
+    currencyOptionsWithId,
+    currencyOptions,
+  } = useCurrencyOptions();
   const { data: rates, isLoading: ratesLoading } = useGetRates();
+  const { getBalanceFromCurrency, isLoading: fxAccountsLoading } =
+    useFxBalance();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const { mutate: exchange, isLoading: exchangeLoading } = useExchange(() =>
     setShowConfirmationModal(false)
@@ -71,6 +78,27 @@ export function ExchangeBox() {
     return currency?.label;
   }
 
+  function handleExchangeClick() {
+    if (sourceAmount < 1) {
+      return showNotification({
+        title: "Error",
+        message: `You have entered an invalid amount`,
+        color: "red",
+      });
+    }
+    const balance = Number(
+      getBalanceFromCurrency(currentCurrency.source as string)?.true_balance
+    );
+    if (sourceAmount > balance) {
+      return showNotification({
+        title: "You do not have enough money",
+        message: `Your account balance for the selected currency is ${balance}`,
+        color: "red",
+      });
+    }
+    setShowConfirmationModal(true);
+  }
+
   function handleExchange() {
     exchange({
       amount: sourceAmount.toString(),
@@ -109,6 +137,7 @@ export function ExchangeBox() {
                 ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
                 : ""
             }
+            min={1}
           />
         </section>
         <section className="h-24 flex items-center justify-center relative">
@@ -155,7 +184,7 @@ export function ExchangeBox() {
           className="bg-accent hover:bg-accent"
           size="md"
           fullWidth
-          onClick={() => setShowConfirmationModal(true)}
+          onClick={handleExchangeClick}
         >
           Exchange
         </Button>

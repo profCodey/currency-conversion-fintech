@@ -13,6 +13,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { ReactNode, useState } from "react";
 import { z } from "zod";
 import { ConfirmationForm, FailureForm, SuccessForm } from "../send-fx-modal";
+import { showNotification } from "@mantine/notifications";
 
 export const EuroFormValidator = z.object({
   amount: z.number().gte(1, "Enter valid amount"),
@@ -65,6 +66,13 @@ export function EuroForm({
   });
 
   function handleSubmit() {
+    if (EuroForm.values.amount > Number(account?.true_balance)) {
+      return showNotification({
+        title: "Unable to perform transaction",
+        message: `Amount cannot be greater than €${account?.true_balance}`,
+        color: "red"
+      });
+    }
     setForm("confirm-details");
   }
 
@@ -82,13 +90,14 @@ export function EuroForm({
         <NumberInput
           size="md"
           label={
-            <Group position="apart" className="w-full">
+            <Group position="apart" className="w-full font-normal">
               <span>Enter ammount</span>{" "}
-              <span className="text-accent font-semibold">
+              <span className="text-sm text-red-600 font-semibold">
                 Balance: €{account?.true_balance}
               </span>
             </Group>
           }
+          labelProps={{ className: "w-full" }}
           placeholder="Enter amount"
           hideControls={false}
           withAsterisk={false}
@@ -99,6 +108,7 @@ export function EuroForm({
               : `€ `
           }
           {...EuroForm.getInputProps("amount")}
+          min={1}
         />
 
         <TextInput

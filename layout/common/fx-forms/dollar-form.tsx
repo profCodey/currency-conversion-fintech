@@ -14,6 +14,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { ConfirmationForm, FailureForm, SuccessForm } from "../send-fx-modal";
 import { useGetFxAccounts } from "@/api/hooks/fx";
+import { useFxBalance } from "@/api/hooks/balance";
+import { showNotification } from "@mantine/notifications";
 
 export const DollarFormValidator = z.object({
   amount: z.number().gte(1, "Enter valid amount"),
@@ -66,13 +68,20 @@ export function DollarForm({
   });
 
   function handleSubmit() {
+    if (DollarForm.values.amount > Number(account?.true_balance)) {
+      return showNotification({
+        title: "Unable to perform transaction",
+        message: `Amount cannot be greater than $${account?.true_balance}`,
+        color: "red",
+      });
+    }
     setForm("confirm-details");
   }
 
-  function handleSuccess() {
-    setForm(null);
-    handleFormClose();
-  }
+  // function handleSuccess() {
+  //   setForm(null);
+  //   handleFormClose();
+  // }
 
   return (
     <>
@@ -83,13 +92,14 @@ export function DollarForm({
         <NumberInput
           size="md"
           label={
-            <Group position="apart" className="w-full">
+            <Group position="apart" className="w-full font-normal">
               <span>Enter ammount</span>{" "}
-              <span className="text-accent font-semibold">
+              <span className="text-sm text-red-600 font-semibold">
                 Balance: ${account?.true_balance}
               </span>
             </Group>
           }
+          labelProps={{ className: "w-full" }}
           placeholder="Enter amount"
           hideControls={false}
           withAsterisk={false}
@@ -100,6 +110,7 @@ export function DollarForm({
               : `$ `
           }
           {...DollarForm.getInputProps("amount")}
+          min={1}
         />
 
         <TextInput

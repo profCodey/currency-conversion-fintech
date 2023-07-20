@@ -1,13 +1,6 @@
 import { currencyFormatter } from "@/utils/currency";
 import { IRecipient } from "@/utils/validators/interfaces";
-import {
-  Button,
-  Drawer,
-  Group,
-  Select,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Button, Drawer, Group, Select, Stack, Text } from "@mantine/core";
 import { Danger, DirectboxSend, Warning2 } from "iconsax-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -62,14 +55,17 @@ export function SendFxMoneyModal({
   const [currentForm, setCurrentForm] = useState<"USD" | "GBP" | "EUR">("USD");
 
   const dollarAccount = fxAccounts?.find(
-    (account) => account.currency === "USD"
+    (account) => account.currency.code === "USD"
   );
-  const gbpAccount = fxAccounts?.find((account) => account.currency === "GBP");
-  const euroAccount = fxAccounts?.find((account) => account.currency === "EUR");
+  const gbpAccount = fxAccounts?.find(
+    (account) => account.currency.code === "GBP"
+  );
+  const euroAccount = fxAccounts?.find(
+    (account) => account.currency.code === "EUR"
+  );
 
   function handleModalClose() {
     close();
-    
   }
 
   return (

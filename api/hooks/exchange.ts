@@ -44,6 +44,7 @@ export function useExchange(cb?: () => void) {
       onSettled: function () {
         cb && cb();
         queryClient.invalidateQueries(["exchange"]);
+        queryClient.invalidateQueries(["accounts"]);
       },
     }
   );

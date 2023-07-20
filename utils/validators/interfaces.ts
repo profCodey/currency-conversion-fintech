@@ -51,6 +51,7 @@ export interface ISelectedGateway {
   gateway_name: string;
   is_approved: boolean;
   is_default: boolean;
+  gateway_reference: string;
 }
 
 export interface ICurrency {
@@ -244,7 +245,7 @@ export interface IFxPayout {
 
 export interface IAccount {
   id: number;
-  currency: string;
+  currency: ICurrency;
   label: string;
   account_number: string;
   account_name: string;

@@ -141,6 +141,9 @@ export function useCreateFxPayout(
         //   color: "red",
         // });
       },
+      onSettled: function () {
+        queryClient.invalidateQueries(["accounts"]);
+      },
     }
   );
 }

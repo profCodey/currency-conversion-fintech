@@ -42,20 +42,22 @@ export function useCurrencyOptions() {
   const currencyOptionsWithId = useMemo(
     function () {
       return (
-        data?.data.map((currency) => ({
-          label: currency.name,
-          value: currency.id.toString(),
-        })) ?? []
+        data?.data
+          .filter((currency) => currency.code !== "NGN")
+          .map((currency) => ({
+            label: currency.name,
+            value: currency.id.toString(),
+          })) ?? []
       );
     },
     [data?.data]
   );
 
+  // function getCurrency
+
   function getCurrencyNameFromId(id: number) {
-    const currency = currencyOptionsWithId.find(
-      (currency) => currency.value === id.toString()
-    );
-    return currency?.label || "Currency not found";
+    const currency = data?.data.find((currency) => currency.id === id);
+    return currency?.name || "Currency not found";
   }
 
   return {

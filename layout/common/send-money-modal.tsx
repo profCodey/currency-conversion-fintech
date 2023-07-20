@@ -1,3 +1,4 @@
+import { useLocalBalance } from "@/api/hooks/balance";
 import { useCreatePayout, useNameEnquiry } from "@/api/hooks/banks";
 import { queryClient } from "@/pages/_app";
 import { currencyFormatter } from "@/utils/currency";
@@ -14,6 +15,7 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
 import { ArrowRight, Danger, DirectboxSend, Warning2 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -59,6 +61,8 @@ export function SendMoneyModal({
   } | null>(null);
   const { mutate: createPayout, isLoading: createPayoutLoading } =
     useCreatePayout(setForm);
+  const { defaultGatewayBalance, isLoading: defaultGatewayLoading } =
+    useLocalBalance();
 
   function getModalContent(
     state:
@@ -128,6 +132,13 @@ export function SendMoneyModal({
   );
 
   function handleSubmit(values: z.infer<typeof PayRecipient>) {
+    if (values.amount > defaultGatewayBalance) {
+      return showNotification({
+        title: "Unable to perform transaction",
+        message: `Please Enter an amount less than ${defaultGatewayBalance}`,
+        color: "red",
+      });
+    }
     setConfirmationDetails(values);
     setForm("confirm-details");
   }
@@ -212,10 +223,19 @@ export function SendMoneyModal({
       />
       <NumberInput
         size="md"
-        label="Enter amount"
+        label={
+          <div className="w-full flex justify-between font-normal">
+            <span>Enter amount</span>{" "}
+            <span className="text-sm text-red-600">
+              Balance: ₦{defaultGatewayBalance}
+            </span>
+          </div>
+        }
+        labelProps={{
+          className: "w-full",
+        }}
         placeholder="Enter amount"
         hideControls={false}
-        withAsterisk
         parser={(value: string) => value.replace(/\₦\s?|(,*)/g, "")}
         formatter={(value: string) =>
           !Number.isNaN(parseFloat(value))

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NavLink } from "@mantine/core";
-import { ArrowRight2, DocumentText } from "iconsax-react";
+import { ArrowRight2, DocumentText, I24Support } from "iconsax-react";
 
 export const useNavStyles = createStyles(() => ({
   navLink: {
@@ -64,6 +64,11 @@ const routes = [
     route: "/admin/logs",
     label: "Logs",
     icon: <DocumentText />,
+  },
+  {
+    route: "/admin/support",
+    label: "Support",
+    icon: <I24Support />,
   },
 ];
 

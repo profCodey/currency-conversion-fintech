@@ -320,3 +320,19 @@ export interface ILog {
   created_by_name: string;
   updated_by_name: string;
 }
+
+export interface ISupport {
+  id: number;
+  created_on: string;
+  updated_on: string;
+  full_name: string;
+  business_name: string;
+  email: string;
+  phone_number: string;
+  job_title: string;
+  subject: string;
+  message: string;
+  is_closed: true;
+  created_by: number;
+  updated_by: number;
+}

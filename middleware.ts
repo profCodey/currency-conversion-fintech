@@ -20,6 +20,7 @@ export function middleware(request: NextRequest) {
     "/admin/rates",
     "/admin/users",
     "/admin/transactions",
+    "/admin/support",
   ];
 
   const publicPaths = ["/", "/login", "/sign-up", "/forgot-password"];

@@ -1,14 +1,18 @@
 import { queryClient } from "@/pages/_app";
-import { APP_TOKENS } from "@/utils/constants";
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import {
+  APICLIENT_BASE_URL,
+  APP_TOKENS,
+  IDENTITY_BASE_URL,
+} from "@/utils/constants";
+import axios from "axios";
 import Cookies from "js-cookie";
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_IDENTITY_BASE_URL,
+  baseURL: IDENTITY_BASE_URL,
 });
 
 export const apiClientInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_APICLIENT_BASE_URL,
+  baseURL: APICLIENT_BASE_URL,
 });
 
 const addTokenToRequest = (request: any) => {

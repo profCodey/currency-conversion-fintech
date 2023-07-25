@@ -7,8 +7,7 @@ import { ErrorItem } from "../auth";
 import { z } from "zod";
 import { IRate } from "@/utils/validators/interfaces";
 import { queryClient } from "@/pages/_app";
-
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetRates() {
   return useQuery(["rates"], function (): Promise<AxiosResponse<IRate[]>> {

@@ -10,3 +10,14 @@ export const APP_TOKENS = {
   REFRESH_TOKEN: "pycl_refresh_token",
   CATEGORY: "pycl_category",
 };
+
+export const IDENTITY_BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://mabillagroupappslb-1683373620.eu-west-1.elb.amazonaws.com:8000/api"
+    : "http://mabillagroupappslb-1683373620.eu-west-1.elb.amazonaws.com:8000/api";
+
+    
+export const APICLIENT_BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://mabillagroupappslb-1683373620.eu-west-1.elb.amazonaws.com:8080/"
+    : "http://mabillagroupappslb-1683373620.eu-west-1.elb.amazonaws.com:8080/";

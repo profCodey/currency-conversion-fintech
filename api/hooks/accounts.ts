@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 import { IAccount } from "@/utils/validators/interfaces";
 import { useCallback, useMemo } from "react";
 import { getCurrency } from "@/utils/currency";
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetAccounts() {
   return useQuery({
@@ -70,7 +70,9 @@ export function useAccountOptions() {
 
   const getAccountCurrency = useCallback(
     function (id: string) {
-      const account = data?.data.find((account) => account.id.toString() === id);
+      const account = data?.data.find(
+        (account) => account.id.toString() === id
+      );
       return account?.currency;
     },
     [data?.data]

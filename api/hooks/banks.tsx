@@ -16,8 +16,8 @@ import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { TransferOperationStage } from "@/layout/common/send-money-modal";
 import { PayFxRecipient } from "@/layout/common/send-fx-modal";
 import { FxTransferOperationStage } from "@/layout/common/fx-forms/dollar-form";
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 export function useGetBanks() {
   return useQuery(["banks"], function (): Promise<AxiosResponse<IBank[]>> {
     return axiosInstance.get(`/banks/?category=local&is_active=true`, {

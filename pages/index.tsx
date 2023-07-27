@@ -1,7 +1,3 @@
-import Image from "next/image";
-import { Button } from "@mantine/core";
-import Link from "next/link";
-import { ArrowRight } from "iconsax-react";
 import Banner from "@/layout/home/banner";
 import { Benefits } from "@/layout/home/benefits";
 import { Advantages } from "@/layout/home/advantages";

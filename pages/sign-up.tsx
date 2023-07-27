@@ -48,15 +48,15 @@ export default function Signup() {
       confirm_password: "",
       phone_number: "",
       phone_code: "+234",
-      category: USER_CATEGORIES.API_CLIENT
+      category: USER_CATEGORIES.API_CLIENT,
     },
     validate: zodResolver(signupFormValidator),
   });
 
   function handleSignup(values: z.infer<typeof signupFormValidator>) {
     // console.log({ values });
-    const {phone_code, ...payload} = values
-    payload.phone_number = phone_code + payload.phone_number
+    const { phone_code, ...payload } = values;
+    payload.phone_number = phone_code + payload.phone_number;
 
     register(payload);
   }
@@ -134,7 +134,7 @@ export default function Signup() {
 
         <div>
           By Clicking the Sign Up button, you agree to our{" "}
-          <Link className="text-blue-700" href="/sign-up">
+          <Link className="text-blue-700" href="/privacy-policy">
             Privacy Policy
           </Link>
         </div>

@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
     "/admin/support",
   ];
 
-  const publicPaths = ["/", "/login", "/sign-up", "/forgot-password"];
+  const publicPaths = ["/", "/login", "/sign-up", "/forgot-password", "/privacy-policy"];
   const isAuthenticated = request.cookies.has(APP_TOKENS.ACCESS_TOKEN);
   const userCategory = request.cookies.get(APP_TOKENS.CATEGORY)?.value;
   const nextUrl = request.nextUrl;

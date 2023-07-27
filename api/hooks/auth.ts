@@ -43,6 +43,7 @@ export interface ErrorItem {
 export function useLogin() {
   const router = useRouter();
   const logout = useLogout();
+
   function handleLoginSuccess(data: AxiosResponse<LoginResponse>) {
     showNotification({
       title: "Login successful",
@@ -67,15 +68,6 @@ export function useLogin() {
     }
   }
 
-  function handleLoginError(error: string) {
-    const message = error || "We were unable to log you in";
-    showNotification({
-      title: "An error occured",
-      message,
-      color: "red",
-    });
-  }
-
   return useMutation({
     mutationFn: function (payload: z.infer<typeof loginFormValidator>) {
       return axiosInstance.post("/login/token/", payload);
@@ -89,10 +81,13 @@ export function useLogin() {
     },
     onError: function (data: AxiosError) {
       const response = data.response?.data as ErrorItem;
-      if (response?.detail) {
-        return handleLoginError(response?.detail);
-      }
-      handleLoginError("Unable to log you in");
+      const message = response?.detail || "Unable to log you in";
+
+      return showNotification({
+        title: "An error occured",
+        message,
+        color: "red",
+      });
     },
   });
 }

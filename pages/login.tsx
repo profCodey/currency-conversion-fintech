@@ -3,15 +3,11 @@ import AuthLayout from "@/layout/auth/auth-layout";
 import { loginFormValidator } from "@/utils/validators";
 import { TextInput, PasswordInput, Stack, Button } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import { AxiosResponse } from "axios";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { z } from "zod";
 
 export default function Login() {
-  const router = useRouter();
   const { mutate: login, isLoading } = useLogin();
   const loginForm = useForm({
     initialValues: {

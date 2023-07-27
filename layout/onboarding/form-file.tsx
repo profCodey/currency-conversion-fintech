@@ -59,7 +59,7 @@ export function FormFile({
               <ActionIcon>
                 <FileButton
                   onChange={handleFileSelect}
-                  accept="image/png,image/jpeg"
+                  accept="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 >
                   {(props) => (
                     <Edit2 size="16" color="gray" variant="Bold" {...props} />

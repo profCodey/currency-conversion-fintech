@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/api";
-import { USER_CATEGORIES } from "@/utils/constants";
+import { APICLIENT_BASE_URL, USER_CATEGORIES } from "@/utils/constants";
 import {
   IOnboardingDocuments,
   IOnboardingProfile,
@@ -11,8 +11,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorItem } from "../auth";
 import { queryClient } from "@/pages/_app";
-
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
 export function useUsersList() {
   return useQuery(["users"], function (): Promise<AxiosResponse<User[]>> {

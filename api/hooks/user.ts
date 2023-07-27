@@ -11,7 +11,7 @@ import { z } from "zod";
 import { supportFormValidator } from "@/pages/support";
 import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetCurrentUser() {
   return useQuery({

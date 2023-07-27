@@ -6,8 +6,7 @@ import { ErrorItem } from "../auth";
 import { axiosInstance } from "@/api";
 import { ApproveRejectFundingPayload } from "@/layout/transactions/manual-funding-drawer";
 import { IManualPayment } from "@/utils/validators/interfaces";
-
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useApproveRejectFunding(cb?: () => void) {
   return useMutation(

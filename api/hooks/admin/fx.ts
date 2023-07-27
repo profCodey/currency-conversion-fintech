@@ -5,8 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorItem } from "../auth";
 import { queryClient } from "@/pages/_app";
-
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetFxSummary() {
   return useQuery(["fx", "summary"], function (): Promise<

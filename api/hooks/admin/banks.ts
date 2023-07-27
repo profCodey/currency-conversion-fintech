@@ -2,13 +2,13 @@ import { axiosInstance } from "@/api";
 import { AddNewBankValidator } from "@/layout/admin/banks/add-bank";
 import { MapBankValidator } from "@/layout/admin/banks/map-bank";
 import { queryClient } from "@/pages/_app";
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 import { IBank, INewBank } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { useMemo } from "react";
 import { z } from "zod";
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
 
 export interface ErrorItem {
   detail?: string;

@@ -6,8 +6,7 @@ import { queryClient } from "@/pages/_app";
 import { AxiosError, AxiosResponse } from "axios";
 import { ApproveRejectFundingPayload } from "@/layout/transactions/manual-funding-drawer";
 import { ErrorItem } from "./auth";
-
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetExchanges() {
   return useQuery({

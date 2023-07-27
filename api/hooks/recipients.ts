@@ -6,7 +6,7 @@ import { addRecipientFormValidator } from "@/utils/validators";
 import { z } from "zod";
 import { AxiosResponse } from "axios";
 import { IRecipient } from "@/utils/validators/interfaces";
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetRecipients() {
   return useQuery(["recipients"], function (): Promise<

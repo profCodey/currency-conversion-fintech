@@ -9,8 +9,7 @@ import {
 } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { useMemo } from "react";
-
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetGateways() {
   return useQuery({

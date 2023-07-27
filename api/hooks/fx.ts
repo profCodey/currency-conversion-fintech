@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
 import { IAccount, IFxPayout } from "@/utils/validators/interfaces";
-const APICLIENT_BASE_URL = process.env.NEXT_PUBLIC_APICLIENT_BASE_URL;
+import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetFxAccounts() {
   const { data, ...rest } = useQuery({
@@ -13,11 +13,9 @@ export function useGetFxAccounts() {
       }),
   });
 
-  const fxAccounts = data?.data.filter(
-    (account) => account.category === "fx"
-  );
+  const fxAccounts = data?.data.filter((account) => account.category === "fx");
 
-  return {data, fxAccounts, ...rest}
+  return { data, fxAccounts, ...rest };
 }
 
 export function useGetFxPayouts() {

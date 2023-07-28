@@ -24,7 +24,7 @@ export function useClientProfileDetails(userId: string) {
   return useQuery(["users", userId], function (): Promise<
     AxiosResponse<IOnboardingProfile>
   > {
-    return axiosInstance.get(`/apiclient/onboarding/profile/${userId}`);
+    return axiosInstance.get(`/apiclient/onboarding/profile/${userId}/`);
   });
 }
 

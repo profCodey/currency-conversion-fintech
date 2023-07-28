@@ -72,7 +72,7 @@ export function FxManualFunding() {
       return bankDetails?.data.filter(
         (bank) =>
           bank.category === "fx" &&
-          getCurrencyCodeFromId(bank.currency) === currency
+          getCurrencyCodeFromId(bank.currency) === currency?.code
       );
     },
     [
@@ -159,7 +159,8 @@ export function FxManualFunding() {
           })}
 
           <Text color="#0DC300">
-            Kindly ensure that you have paid into the account number above before submitting this form
+            Kindly ensure that you have paid into the account number above
+            before submitting this form
           </Text>
 
           <Button

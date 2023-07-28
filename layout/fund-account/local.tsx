@@ -138,8 +138,8 @@ export function LocalManualFunding() {
           })}
 
           <Text color="#0DC300">
-            Pay Into The Account Above and wait for 2 minutes before clicking
-            the Confirm payment Button
+            Kindly ensure that you have paid into the account number above
+            before submitting this form
           </Text>
 
           <Button

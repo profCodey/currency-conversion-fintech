@@ -17,8 +17,11 @@ import { currencyFormatter } from "@/utils/currency";
 import { useExchange } from "@/api/hooks/exchange";
 import { useFxBalance } from "@/api/hooks/balance";
 import { showNotification } from "@mantine/notifications";
+import { useGetFxAccounts } from "@/api/hooks/fx";
 
 export function ExchangeBox() {
+  const { data: fxAccounts, isLoading: _fxAccountsLoading } =
+    useGetFxAccounts();
   const {
     isLoading: currenciesLoading,
     currencyOptionsWithId,
@@ -51,6 +54,14 @@ export function ExchangeBox() {
     },
     [currencyOptionsWithId, currencyOptionsWithId.length]
   );
+
+  const accountOptions =
+    fxAccounts?.data
+      .filter((account) => account.category === "fx")
+      .map((fxAccount) => ({
+        label: fxAccount.currency.name,
+        value: fxAccount.currency.id.toString(),
+      })) ?? [];
 
   const matchedRate = useCallback(
     function () {
@@ -102,9 +113,16 @@ export function ExchangeBox() {
   function handleExchange() {
     exchange({
       amount: sourceAmount.toString(),
-      destination_account: Number(currentCurrency.destination),
-      source_account: Number(currentCurrency.source),
+      destination_account: getAccountFromCurrencyId(currentCurrency.destination) as number,
+      source_account: getAccountFromCurrencyId(currentCurrency.source) as number,
     });
+  }
+
+  function getAccountFromCurrencyId(currency: string | null) {
+    const fxAcc =
+      fxAccounts?.data.find((acc) => acc.currency.id === Number(currency)) ??
+      null;
+    return fxAcc?.id;
   }
 
   const rate = matchedRate()?.rate;
@@ -122,7 +140,7 @@ export function ExchangeBox() {
                 source: value,
               });
             }}
-            data={currencyOptionsWithId}
+            data={accountOptions}
             nothingFound={"No currencies found"}
           />
           <NumberInput
@@ -157,7 +175,7 @@ export function ExchangeBox() {
                 destination: value,
               });
             }}
-            data={currencyOptionsWithId}
+            data={accountOptions}
           />
           <NumberInput
             className="flex-grow"

@@ -135,7 +135,7 @@ export function SendMoneyModal({
     if (values.amount > defaultGatewayBalance) {
       return showNotification({
         title: "Unable to perform transaction",
-        message: `Please Enter an amount less than ${defaultGatewayBalance}`,
+        message: `Insufficient balance`,
         color: "red",
       });
     }
@@ -302,7 +302,7 @@ const SuccessForm = (
       Operation Successful
     </Text>
     <Text className="text-center">
-      Please wait, your logs will be updated with the status of your transaction
+      Kindly check the transactions page for the status of your transaction
     </Text>
   </Stack>
 );

@@ -2,6 +2,7 @@ import { useGetAppLogs } from "@/api/hooks/admin/logs";
 import { PageHeader } from "@/components/admin/page-header";
 import { AppLayout } from "@/layout/common/app-layout";
 import { Skeleton, Table } from "@mantine/core";
+import dayjs from "dayjs";
 import { ReactElement, useMemo } from "react";
 
 export default function Logs() {
@@ -9,13 +10,13 @@ export default function Logs() {
 
   const rows = useMemo(
     function () {
-      return data?.data.map((log, idx) => (
+      return data?.data.results.map((log, idx) => (
         <tr key={log.id}>
           <td>{idx + 1}</td>
-          <td>{log.created_on}</td>
+          <td>{dayjs(log.created_on).format("MMM D, YYYY h:mm A")}</td>
           <td>{log.message}</td>
-          <td>{log.created_by_name}</td>
-          <td>{log.updated_by_name}</td>
+          {/* <td>{log.created_by_name}</td>
+          <td>{log.updated_by_name}</td> */}
         </tr>
       ));
     },
@@ -32,8 +33,8 @@ export default function Logs() {
                 <th>S/N</th>
                 <th>Date created</th>
                 <th>Message</th>
-                <th>Created by</th>
-                <th>Updated by</th>
+                {/* <th>Created by</th>
+                <th>Updated by</th> */}
               </tr>
             </thead>
             <tbody>{rows}</tbody>

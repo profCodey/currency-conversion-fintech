@@ -310,6 +310,13 @@ export interface IOnboardingProfile {
   bvn: string;
 }
 
+export interface ILogEntries {
+  count: number | null;
+  next: string | null;
+  previous: string | null;
+  results: ILog[];
+}
+
 export interface ILog {
   id: number;
   created_on: string;

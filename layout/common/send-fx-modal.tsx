@@ -1,6 +1,15 @@
 import { currencyFormatter } from "@/utils/currency";
 import { IRecipient } from "@/utils/validators/interfaces";
-import { Button, Drawer, Group, Select, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  Drawer,
+  Group,
+  LoadingOverlay,
+  Select,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { Danger, DirectboxSend, Warning2 } from "iconsax-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -76,43 +85,49 @@ export function SendFxMoneyModal({
         onClose={handleModalClose}
         position="right"
       >
-        <Select
-          label="Select currency  "
-          aria-label="Currency"
-          data={[
-            { label: "USD", value: "USD" },
-            { label: "Pounds", value: "GBP" },
-            { label: "Euro", value: "EUR" },
-          ]}
-          // disabled={!!recipientDetails?.id}
-          size="md"
-          value={currentForm}
-          onChange={(value) => {
-            setCurrentForm(value as "USD" | "GBP" | "EUR");
-          }}
-        />
-        {currentForm === "USD" && (
-          <DollarForm
-            recipientDetails={recipientDetails}
-            handleFormClose={handleModalClose}
-            account={dollarAccount}
-          />
-        )}
+        {isLoading ? (
+          <Skeleton className="h-full min-h-[70vh]" />
+        ) : (
+          <>
+            <Select
+              label="Select currency  "
+              aria-label="Currency"
+              data={[
+                { label: "USD", value: "USD" },
+                { label: "Pounds", value: "GBP" },
+                { label: "Euro", value: "EUR" },
+              ]}
+              // disabled={!!recipientDetails?.id}
+              size="md"
+              value={currentForm}
+              onChange={(value) => {
+                setCurrentForm(value as "USD" | "GBP" | "EUR");
+              }}
+            />
+            {currentForm === "USD" && (
+              <DollarForm
+                recipientDetails={recipientDetails}
+                handleFormClose={handleModalClose}
+                account={dollarAccount}
+              />
+            )}
 
-        {currentForm === "GBP" && (
-          <PoundForm
-            recipientDetails={recipientDetails}
-            handleFormClose={handleModalClose}
-            account={gbpAccount}
-          />
-        )}
+            {currentForm === "GBP" && (
+              <PoundForm
+                recipientDetails={recipientDetails}
+                handleFormClose={handleModalClose}
+                account={gbpAccount}
+              />
+            )}
 
-        {currentForm === "EUR" && (
-          <EuroForm
-            recipientDetails={recipientDetails}
-            handleFormClose={handleModalClose}
-            account={euroAccount}
-          />
+            {currentForm === "EUR" && (
+              <EuroForm
+                recipientDetails={recipientDetails}
+                handleFormClose={handleModalClose}
+                account={euroAccount}
+              />
+            )}
+          </>
         )}
       </Drawer>
     </section>
@@ -126,7 +141,7 @@ export const SuccessForm = () => (
       Operation Successful
     </Text>
     <Text className="text-center">
-      Please wait, your logs will be updated with the status of your transaction
+      Kindly check the transactions page for the status of your transaction
     </Text>
   </Stack>
 );

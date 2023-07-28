@@ -71,7 +71,7 @@ export function DollarForm({
     if (DollarForm.values.amount > Number(account?.true_balance)) {
       return showNotification({
         title: "Unable to perform transaction",
-        message: `Amount cannot be greater than $${account?.true_balance}`,
+        message: `Insufficient balance`,
         color: "red",
       });
     }

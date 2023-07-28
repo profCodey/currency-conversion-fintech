@@ -138,7 +138,16 @@ export function TransactionHistory({
             onChange={setDateRange}
           />
         </div>
-        <EmptyTransactionHistory message="Select a default gateway from config" />
+        <EmptyTransactionHistory
+          message={
+            <Stack align="center">
+              <h3>Select a default gateway from config</h3>
+              <p className="text-red-600">
+                Click on config from the sidebar and make a gateway as default
+              </p>
+            </Stack>
+          }
+        />
       </div>
     );
   }
@@ -207,7 +216,7 @@ export function TransactionHistory({
   );
 }
 
-export function EmptyTransactionHistory({ message }: { message: string }) {
+export function EmptyTransactionHistory({ message }: { message: ReactNode }) {
   return (
     <div className="flex-grow bg-gray-30 rounded-lg border flex flex-col items-center justify-center gap-8 p-8 h-full">
       <span className="text-primary-100 text-xl font-secondary">{message}</span>

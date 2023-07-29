@@ -46,6 +46,41 @@ export function useClientSelectedGateways(userId: string) {
   });
 }
 
+export function useApproveGateway() {
+  return useMutation(
+    ({ status, id }: { id: number; status: string }) => {
+      return axiosInstance.patch(
+        `/local/selected-gateway/approve/${id}/`,
+        {
+          status,
+        },
+        {
+          baseURL: APICLIENT_BASE_URL,
+        }
+      );
+    },
+    {
+      onSuccess: function (data: AxiosResponse) {
+        showNotification({
+          title: "Operation successful",
+          message: data?.data.message || "Gateway status changed",
+          color: "green",
+        });
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        showNotification({
+          message: response?.detail || "Unable to change gateway status",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["client-gateways"]);
+      },
+    }
+  );
+}
+
 interface DocumentApproveReject {
   comment: string;
   status: string;

@@ -51,6 +51,7 @@ export interface ISelectedGateway {
   gateway_name: string;
   is_approved: boolean;
   is_default: boolean;
+  status: "approved" | "pending" | "rejected";
   gateway_reference: string;
 }
 

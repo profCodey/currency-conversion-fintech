@@ -76,7 +76,11 @@ function Gateway({
     >
       <span className="text-sm">{gateway.gateway_name}</span>
 
-      {gateway.is_default ? (
+      {gateway.status !== "approved" ? (
+        <Button variant="subtle" color="red">
+          Not approved
+        </Button>
+      ) : gateway.is_default ? (
         <Button className="bg-white hover:bg-white border-[#132144] py-2 px-3 text-[#132144] rounded-[4px]">
           Default
         </Button>

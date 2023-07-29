@@ -64,56 +64,10 @@ export default function Users() {
     [ColumnHelper]
   );
 
-  const rows = useMemo(
-    function () {
-      return users?.data.map((user, idx) => (
-        <tr key={user.id}>
-          <td>{idx + 1}</td>
-          <td>
-            {user.first_name} {user.last_name}
-          </td>
-          <td>{user.email}</td>
-          <td>{user.phone_number}</td>
-          <td>
-            <span
-              className={clsx(
-                user.is_approved ? "text-[#13A500]" : "text-gray-70"
-              )}
-            >
-              {user.is_approved ? "Approved" : "Unapproved"}
-            </span>
-          </td>
-          <td>
-            <Link href={`/admin/users/${user.id}`}>
-              <Button variant="white" className="px-0 text-accent">
-                Open
-              </Button>
-            </Link>
-          </td>
-        </tr>
-      ));
-    },
-    [users?.data]
-  );
-
   return (
     <section className="flex flex-col gap-6 h-full">
       <PageHeader header="Users" subheader="View and manage user details" />
       <Table columns={columns} data={users?.data || []} />
-      {/* <Table withBorder verticalSpacing="sm" className="mt-5 relative">
-        <LoadingOverlay visible={isLoading} />
-        <thead>
-          <tr className="shadow">
-            <th>S/N</th>
-            <th>Name</th>
-            <th>E-mail</th>
-            <th>Phone number</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table> */}
     </section>
   );
 }

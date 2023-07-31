@@ -20,6 +20,7 @@ export default function Support() {
           <td>{dayjs(support.created_on).format("MMMM D, YYYY h:mm A")}</td>
           <td>{support.full_name}</td>
           <td>{support.business_name}</td>
+          <td>{support.email}</td>
           <td>
             {support.is_closed ? (
               <span className="text-accent">Closed</span>
@@ -27,7 +28,6 @@ export default function Support() {
               <span className="text-gray-90">Open</span>
             )}
           </td>
-          <td>{support.email}</td>
           <td>
             <Button
               variant="white"

@@ -53,6 +53,18 @@ export function useCurrencyOptions() {
     [data?.data]
   );
 
+  const allCurrencyOptionsWithId = useMemo(
+    function () {
+      return (
+        data?.data.map((currency) => ({
+          label: currency.name,
+          value: currency.id.toString(),
+        })) ?? []
+      );
+    },
+    [data?.data]
+  );
+
   // function getCurrency
 
   function getCurrencyNameFromId(id: number) {
@@ -65,5 +77,6 @@ export function useCurrencyOptions() {
     currencyOptions,
     currencyOptionsWithId,
     getCurrencyNameFromId,
+    allCurrencyOptionsWithId,
   };
 }

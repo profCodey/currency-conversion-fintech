@@ -58,6 +58,10 @@ const routes = [
         route: "/admin/rates",
         label: "Rates",
       },
+      {
+        route: "/admin/accounts",
+        label: "Accounts",
+      },
     ],
   },
   {

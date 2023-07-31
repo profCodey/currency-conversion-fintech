@@ -17,6 +17,7 @@ import { TransferOperationStage } from "@/layout/common/send-money-modal";
 import { PayFxRecipient } from "@/layout/common/send-fx-modal";
 import { FxTransferOperationStage } from "@/layout/common/fx-forms/dollar-form";
 import { APICLIENT_BASE_URL } from "@/utils/constants";
+import { AddNewAccountValidator } from "@/layout/admin/accounts";
 
 export function useGetBanks() {
   return useQuery(["banks"], function (): Promise<AxiosResponse<IBank[]>> {
@@ -158,6 +159,96 @@ export function useGetPaycelerBankDetails() {
       });
     },
   });
+}
+
+export function useAddNewAccount(cb?: () => void) {
+  return useMutation(
+    (payload: z.infer<typeof AddNewAccountValidator>) =>
+      axiosInstance.post("/payceler_accounts/", payload, {
+        baseURL: APICLIENT_BASE_URL,
+      }),
+    {
+      onSuccess: function (data: AxiosResponse) {
+        showNotification({
+          title: "Operation successful",
+          message: data?.data.message || "Account created successfully",
+          color: "green",
+        });
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        showNotification({
+          message: response?.detail || "Unable to create account",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        cb && cb();
+        queryClient.invalidateQueries(["payceler-banks"]);
+      },
+    }
+  );
+}
+
+export function useDeactivateAccount(cb?: () => void) {
+  return useMutation(
+    ({ id, ...payload }: any) =>
+      axiosInstance.patch(`/payceler_accounts/${id}/`, payload, {
+        baseURL: APICLIENT_BASE_URL,
+      }),
+    {
+      onSuccess: function (data: AxiosResponse, variables) {
+        showNotification({
+          title: "Operation successful",
+          message:
+            data?.data.message || variables.is_active
+              ? "Account activated successfully"
+              : "Account de-activated successfully",
+          color: "green",
+        });
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        showNotification({
+          message: response?.detail || "Unable to change Account status",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        cb && cb();
+        queryClient.invalidateQueries(["payceler-banks"]);
+      },
+    }
+  );
+}
+
+export function useDeleteAccount(cb?: () => void) {
+  return useMutation(
+    (id: number) =>
+      axiosInstance.delete(`/payceler_accounts/${id}/`, {
+        baseURL: APICLIENT_BASE_URL,
+      }),
+    {
+      onSuccess: function (data: AxiosResponse) {
+        showNotification({
+          title: "Operation successful",
+          message: "Account deleted successfully",
+          color: "green",
+        });
+      },
+      onError: function (data: AxiosError) {
+        const response = data.response?.data as ErrorItem;
+        showNotification({
+          message: response?.detail || "Unable to delete Account",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        cb && cb();
+        queryClient.invalidateQueries(["payceler-banks"]);
+      },
+    }
+  );
 }
 
 export function useGetManualFundings() {

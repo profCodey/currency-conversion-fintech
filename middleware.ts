@@ -21,9 +21,16 @@ export function middleware(request: NextRequest) {
     "/admin/users",
     "/admin/transactions",
     "/admin/support",
+    "/admin/accounts",
   ];
 
-  const publicPaths = ["/", "/login", "/sign-up", "/forgot-password", "/privacy-policy"];
+  const publicPaths = [
+    "/",
+    "/login",
+    "/sign-up",
+    "/forgot-password",
+    "/privacy-policy",
+  ];
   const isAuthenticated = request.cookies.has(APP_TOKENS.ACCESS_TOKEN);
   const userCategory = request.cookies.get(APP_TOKENS.CATEGORY)?.value;
   const nextUrl = request.nextUrl;

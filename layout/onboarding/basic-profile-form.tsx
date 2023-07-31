@@ -3,14 +3,13 @@ import { TextInput, Button, Select } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import {
-  useGetBasicProfile,
   useUpdateBasicProfile,
 } from "@/api/hooks/onboarding";
 import { basicProfileFormValidator } from "@/utils/validators";
 import { DateInput } from "@mantine/dates";
 import dayjs from "dayjs";
 import { allCountryNames } from "@/utils/countries";
-import { ArrowRight, ArrowRight2 } from "iconsax-react";
+import { ArrowRight } from "iconsax-react";
 
 // interface ProfileValidator {
 //   status: string

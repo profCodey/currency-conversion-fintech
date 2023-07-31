@@ -31,10 +31,7 @@ export type signupPayload = Omit<
 //ONBOARDING
 
 export const basicProfileFormValidator = z.object({
-  bvn: z
-    .string()
-    .min(11, "Your BVN should contain at least 11 digits")
-    .max(11, "Your BVN should not contain more than 11 digits"),
+  bvn: z.string().optional(),
   city: z.string().min(1, "Enter city"),
   state: z.string().min(1, "Enter state"),
   zip_code: z.string().min(1, "Enter zip code"),

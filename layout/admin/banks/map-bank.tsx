@@ -1,7 +1,9 @@
 import { useBankOptions, useMapNewBank } from "@/api/hooks/admin/banks";
+import { useGetBanks, useGetBanksForGateway } from "@/api/hooks/banks";
 import { useGatewayOptions } from "@/api/hooks/gateways";
 import {
   Button,
+  Drawer,
   LoadingOverlay,
   Modal,
   Select,
@@ -9,7 +11,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 export const MapBankValidator = z.object({
@@ -21,11 +23,25 @@ export const MapBankValidator = z.object({
 
 export function MapBankButton() {
   const [mapBankModalOpen, setMapBankModalOpen] = useState(false);
+  const [currentGateway, setCurrentGateway] = useState<string | null>(null);
   const { bankOptions, isLoading: banksLoading } = useBankOptions();
   const { gatewayOptions, isLoading: gatewaysLoading } = useGatewayOptions();
+  const { data: gatewayBanks, isLoading: gatewayBanksLoading } =
+    useGetBanksForGateway(currentGateway);
+  const {} = useGetBanks();
+
+  useEffect(
+    function () {
+      if (gatewayOptions) {
+        setCurrentGateway(gatewayOptions[0]?.value);
+      }
+    },
+    [gatewayOptions]
+  );
 
   const { mutate: mapNewBank, isLoading: mapNewBankLoading } =
     useMapNewBank(closeAddBankModal);
+
   const mapNewBankForm = useForm({
     initialValues: {
       bank: "",
@@ -45,6 +61,11 @@ export function MapBankButton() {
     mapNewBankForm.reset();
   }
 
+  function handleGatewayChange(gateway: string) {
+    mapNewBankForm.setFieldValue("code", "");
+    mapNewBankForm.setFieldValue("gateway", gateway);
+    setCurrentGateway(gateway);
+  }
   return (
     <>
       <Button
@@ -55,15 +76,17 @@ export function MapBankButton() {
         Map Bank
       </Button>
 
-      <Modal
+      <Drawer
         title="Map new bank"
         opened={mapBankModalOpen}
         onClose={closeAddBankModal}
         size="md"
-        centered
         className="relative"
+        position="right"
       >
-        <LoadingOverlay visible={banksLoading || gatewaysLoading} />
+        <LoadingOverlay
+          visible={banksLoading || gatewaysLoading || gatewayBanksLoading}
+        />
         <form onSubmit={mapNewBankForm.onSubmit(handleNewBankSubmit)}>
           <Stack>
             <Select
@@ -81,17 +104,30 @@ export function MapBankButton() {
               placeholder="Select gateway"
               size="md"
               {...mapNewBankForm.getInputProps("gateway")}
+              onChange={handleGatewayChange}
             />
-            <TextInput
-              label="Code"
-              placeholder="Enter code"
+
+            <Select
+              label="Select bank from gateway"
+              data={
+                gatewayBanks?.data.result?.map((bank) => ({
+                  label: bank.bankName,
+                  value: bank.bankCode,
+                })) ?? []
+              }
+              placeholder="Select bank from gateway"
               size="md"
               {...mapNewBankForm.getInputProps("code")}
+              disabled={!mapNewBankForm.values.gateway}
+              // onChange={handleGatewayChange}
+              searchable
+              dropdownPosition="bottom"
             />
             <TextInput
-              label="Bank name"
+              label="Bank Display name"
               placeholder="Enter bank name"
               size="md"
+              disabled={!mapNewBankForm.values.gateway}
               {...mapNewBankForm.getInputProps("bank_name")}
             />
             <Button
@@ -105,7 +141,7 @@ export function MapBankButton() {
             </Button>
           </Stack>
         </form>
-      </Modal>
+      </Drawer>
     </>
   );
 }

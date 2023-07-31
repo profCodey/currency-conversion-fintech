@@ -3,6 +3,7 @@ import { axiosInstance } from "..";
 import { AxiosError, AxiosResponse } from "axios";
 import {
   IBank,
+  IGatewayBank,
   IManualPayment,
   INameEnquiry,
   IPaycelerAccount,
@@ -25,6 +26,20 @@ export function useGetBanks() {
       baseURL: APICLIENT_BASE_URL,
     });
   });
+}
+
+export function useGetBanksForGateway(gatewayId: string | null) {
+  return useQuery(
+    ["banks", gatewayId],
+    function (): Promise<AxiosResponse<IGatewayBank>> {
+      return axiosInstance.get(`/local/banks/${gatewayId}/`, {
+        baseURL: APICLIENT_BASE_URL,
+      });
+    },
+    {
+      enabled: !!gatewayId,
+    }
+  );
 }
 
 export function useBankOptions() {

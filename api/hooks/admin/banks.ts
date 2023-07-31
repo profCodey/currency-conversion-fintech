@@ -37,6 +37,7 @@ export function useAddNewBank(cb?: () => void) {
         });
       },
       onSettled: function () {
+        queryClient.invalidateQueries(["banks"]);
         cb && cb();
       },
     }

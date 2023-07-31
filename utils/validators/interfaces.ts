@@ -99,6 +99,15 @@ export interface IBank {
   category: "fx" | "local";
 }
 
+export interface IGatewayBank {
+  status: boolean;
+  result: {
+    bankCode: string;
+    bankName: string;
+    createdOn: string;
+  }[];
+}
+
 export interface INameEnquiry {
   status: boolean;
   result: string;

@@ -46,7 +46,7 @@ export function useClientSelectedGateways(userId: string) {
   });
 }
 
-export function useApproveGateway() {
+export function useApproveGateway(cb: () => void) {
   return useMutation(
     ({ status, id }: { id: number; status: string }) => {
       return axiosInstance.patch(
@@ -75,6 +75,7 @@ export function useApproveGateway() {
         });
       },
       onSettled: function () {
+        cb && cb();
         queryClient.invalidateQueries(["client-gateways"]);
       },
     }

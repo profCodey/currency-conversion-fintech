@@ -5,11 +5,23 @@ import { ReactElement } from "react";
 
 import { BusinessDetails } from "@/layout/admin/user/business-details";
 import { ClientWalletBalances } from "@/layout/admin/user/wallet-balances";
-import { Breadcrumbs, Button, Tabs } from "@mantine/core";
+import {
+  Badge,
+  Breadcrumbs,
+  Button,
+  Group,
+  Skeleton,
+  Tabs,
+  Text,
+} from "@mantine/core";
 import { ClientGateways } from "@/layout/admin/user/gateways";
 import { ClientDocuments } from "@/layout/admin/user/documents";
 import { useRouter } from "next/router";
 import { PageHeader } from "@/components/admin/page-header";
+import {
+  useApproveClient,
+  useGetClientDetails,
+} from "@/api/hooks/user";
 export default function UserProfile() {
   const router = useRouter();
   const id = router?.query.id as string;
@@ -28,16 +40,19 @@ export default function UserProfile() {
       <PageHeader
         header={<Breadcrumbs>{items}</Breadcrumbs>}
         meta={
-          <Link href={`/admin/users/${id}/transactions`}>
-            <Button
-              variant="white"
-              className="font-primary flex items-center"
-              rightIcon={<ArrowRight2 size={16} />}
-              size="md"
-            >
-              View Transactions
-            </Button>
-          </Link>
+          <Group>
+            <ClientApprovalStatus />
+            <Link href={`/admin/users/${id}/transactions`}>
+              <Button
+                variant="white"
+                className="font-primary flex items-center"
+                rightIcon={<ArrowRight2 size={16} />}
+                size="md"
+              >
+                View Transactions
+              </Button>
+            </Link>
+          </Group>
         }
       />
 
@@ -61,6 +76,37 @@ export default function UserProfile() {
         </Tabs>
       </section>
     </section>
+  );
+}
+
+function ClientApprovalStatus() {
+  const router = useRouter();
+  const userId = router.query.id as string;
+
+  const { data, isLoading } = useGetClientDetails(Number(userId));
+  const { mutate: approveClient, isLoading: approveClientLoading } =
+    useApproveClient(userId);
+
+  if (isLoading) {
+    return <Skeleton height={50} width={200} />;
+  }
+  const isUserApproved = data?.data.status;
+  return (
+    <Group>
+      {!isUserApproved && (
+        <Button
+          size="sm"
+          className="bg-primary-100"
+          loading={approveClientLoading}
+          onClick={() => approveClient()}
+        >
+          Approve
+        </Button>
+      )}
+      <Badge size="lg" variant="dot" color={isUserApproved ? "green" : "red"}>
+        {isUserApproved ? "Approved" : "Not approved"}
+      </Badge>
+    </Group>
   );
 }
 

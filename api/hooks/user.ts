@@ -5,6 +5,7 @@ import {
   IClientDetail,
   ICurrentUser,
   ISupport,
+  IUserDetail,
 } from "@/utils/validators/interfaces";
 import { useMemo } from "react";
 import { z } from "zod";
@@ -13,12 +14,59 @@ import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
 import { APICLIENT_BASE_URL } from "@/utils/constants";
 
+
 export function useGetCurrentUser() {
   return useQuery({
     queryKey: ["user", "details"],
     queryFn: (): Promise<AxiosResponse<ICurrentUser>> =>
       axiosInstance.get("/user/current-user/"),
   });
+}
+
+export function useGetUserDetails(userId: number | undefined) {
+  return useQuery({
+    queryKey: ["user", "details", userId],
+    queryFn: (): Promise<AxiosResponse<IUserDetail>> =>
+      axiosInstance.get(`/user/${userId}/detail/`, {
+        // baseURL: APICLIENT_BASE_URL,
+      }),
+    enabled: !!userId,
+  });
+}
+
+export function useApproveClient(userId: string | number) {
+  return useMutation(
+    function () {
+      return axiosInstance.post(
+        `/local/admin/approve-client/`,
+        {
+          client_id: userId,
+        },
+        {
+          baseURL: APICLIENT_BASE_URL,
+        }
+      );
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation successful",
+          message: "Client was successfully approved",
+          color: "green",
+        });
+      },
+      onError: function () {
+        showNotification({
+          title: "Operation failed",
+          message: "Unable to approve client",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["client", "details", userId]);
+      },
+    }
+  );
 }
 
 export function useGetClientDetails(userId: number | undefined) {

@@ -35,7 +35,7 @@ export function useUpdateBasicProfile(userId: number | undefined) {
       onError: function (data: AxiosError) {
         const response = data.response?.data as ErrorItem;
         showNotification({
-          title: "Operation successful",
+          title: "Operation failed",
           message: response.detail || "Unable to update profile",
           color: "red",
         });

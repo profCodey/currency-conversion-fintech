@@ -60,7 +60,7 @@ const routes = [
       },
       {
         route: "/admin/accounts",
-        label: "Accounts",
+        label: "Merchant Accounts",
       },
     ],
   },

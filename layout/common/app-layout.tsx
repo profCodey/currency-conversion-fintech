@@ -18,6 +18,7 @@ import AppLogo from "@/public/logo-light.svg";
 import MobileLogo from "@/public/payceler-logo.svg";
 import { AdminDashboardItems } from "@/components/admin-dashboard-items";
 import { USER_CATEGORIES } from "@/utils/constants";
+import Link from "next/link";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -62,13 +63,17 @@ export function AppLayout({ children }: AppLayoutProps) {
   const dashboardSkeletons = (
     <Stack spacing="xl" className="mt-24">
       <Skeleton height={50} />
-      <Skeleton height={50} />
+      <Skeleton height={50} /> 
       <Skeleton height={50} />
       <Skeleton height={50} />
       <Skeleton height={50} />
     </Stack>
   );
 
+  const homePageRoute =
+    data?.data.category === USER_CATEGORIES.API_CLIENT
+      ? "/dashboard"
+      : "/admin";
   return (
     <AppShell
       padding={0}
@@ -99,7 +104,9 @@ export function AppLayout({ children }: AppLayoutProps) {
         >
           <section className="py-2 pt-4 h-full flex flex-col">
             <div className="w-full flex justify-between items-center">
-              <AppLogo />
+              <Link href={homePageRoute}>
+                <AppLogo />
+              </Link>
 
               <MediaQuery styles={{ display: "none" }} largerThan="sm">
                 <Burger

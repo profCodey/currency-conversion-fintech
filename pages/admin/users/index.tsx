@@ -1,14 +1,6 @@
 import { PageHeader } from "@/components/admin/page-header";
 import { AppLayout } from "@/layout/common/app-layout";
-import {
-  ActionIcon,
-  Button,
-  Group,
-  LoadingOverlay,
-  Table as MTable,
-  TextInput,
-  clsx,
-} from "@mantine/core";
+import { Button, clsx } from "@mantine/core";
 import { ReactElement, useMemo } from "react";
 import { useUsersList } from "@/api/hooks/admin/users";
 import Link from "next/link";

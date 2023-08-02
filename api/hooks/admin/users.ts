@@ -20,6 +20,14 @@ export function useUsersList() {
   });
 }
 
+export function useAdminsList() {
+  return useQuery(["users", "admin"], function (): Promise<AxiosResponse<User[]>> {
+    return axiosInstance.get(
+      `/user/list/?category=${USER_CATEGORIES.ADMIN}`
+    );
+  });
+}
+
 export function useClientProfileDetails(userId: string) {
   return useQuery(["users", userId], function (): Promise<
     AxiosResponse<IOnboardingProfile>

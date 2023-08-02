@@ -44,6 +44,10 @@ const routes = [
     route: "/admin/users",
     label: "Users",
     icon: <UsersIcon />,
+    children: [
+      { route: "/admin/users", label: "Api clients" },
+      { route: "/admin/admins", label: "Admins" },
+    ],
   },
   {
     route: "/admin/settings",
@@ -82,6 +86,11 @@ export function AdminDashboardItems() {
   const [settingsOpen, setSettingsOpen] = useState(
     router.pathname === "/admin/banks" || router.pathname === "/admin/rates"
   );
+
+  const [usersOpen, setUsersOpen] = useState(
+    router.pathname === "/admin/users" || router.pathname === "/admin/admins"
+  );
+
   const currentPath = router.pathname;
   const { classes } = useNavStyles();
 
@@ -95,6 +104,17 @@ export function AdminDashboardItems() {
   function isCurrentPath(path: string) {
     if (path === "/admin") return currentUrl === path ? "#00B0F0" : "";
     return currentUrl.startsWith(path) ? "#00B0F0" : "";
+  }
+
+  function handleCollapse(route: string) {
+    switch (route) {
+      case "/admin/settings":
+        return setSettingsOpen(!settingsOpen);
+      case "/admin/users":
+        return setUsersOpen(!usersOpen);
+      default:
+        return;
+    }
   }
 
   return (
@@ -115,8 +135,8 @@ export function AdminDashboardItems() {
           href={route.route}
           className={classes.navLink}
           rightSection={route.children && <ArrowRight2 />}
-          opened={settingsOpen}
-          onClick={() => route.children && setSettingsOpen(!settingsOpen)}
+          opened={route.route === "/admin/users" ? usersOpen : settingsOpen}
+          onClick={() => route.children && handleCollapse(route.route)}
         >
           {route.children?.map((route) => (
             <NavLink

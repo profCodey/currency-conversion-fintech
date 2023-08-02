@@ -35,6 +35,32 @@ export function useRegister() {
     },
   });
 }
+
+export function useRegisterAdmin(cb: () => void) {
+  return useMutation({
+    mutationFn: function (payload: signupPayload) {
+      return axiosInstance.post("/admin/register/admin/", payload);
+    },
+    onSuccess: function () {
+      showNotification({
+        title: "Operation successful",
+        message: "Admin successfully created",
+        color: "green",
+      });
+      cb();
+    },
+    onError: function (data: AxiosError) {
+      const response = data.response?.data as ErrorItem;
+      showNotification({
+        message: response?.detail || "Registration failed",
+        color: "red",
+      });
+    },
+    onSettled: function () {
+      queryClient.invalidateQueries(["users", "admin"]);
+    },
+  });
+}
 export interface ErrorItem {
   detail?: string;
   code?: string;

@@ -24,7 +24,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
 }
 
 // eslint-disable-next-line react/display-name
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   ({ flag, label, description, ...others }: ItemProps, ref) => (
     <div ref={ref} {...others} key={label}>
       <Group noWrap>

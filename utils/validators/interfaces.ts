@@ -61,6 +61,15 @@ export interface ICurrency {
   name: string;
 }
 
+export interface IUserDetail {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  category: CategoryTypes;
+  is_approved: string;
+}
 export interface IClientDetail {
   status: boolean;
   result: {

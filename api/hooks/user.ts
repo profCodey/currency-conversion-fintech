@@ -14,7 +14,6 @@ import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
 import { APICLIENT_BASE_URL } from "@/utils/constants";
 
-
 export function useGetCurrentUser() {
   return useQuery({
     queryKey: ["user", "details"],
@@ -48,17 +47,20 @@ export function useApproveClient(userId: string | number) {
       );
     },
     {
-      onSuccess: function () {
+      onSuccess: function (data: AxiosResponse<{ message: string }>) {
+        console.log({ data });
         showNotification({
           title: "Operation successful",
-          message: "Client was successfully approved",
+          message: data?.data.message || "Client was successfully approved",
           color: "green",
         });
       },
-      onError: function () {
+      onError: function (
+        error: AxiosError<{ message: string; status: boolean }>
+      ) {
         showNotification({
           title: "Operation failed",
-          message: "Unable to approve client",
+          message: error.response?.data.message || "Unable to approve client",
           color: "red",
         });
       },

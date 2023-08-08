@@ -63,6 +63,10 @@ const routes = [
         label: "Rates",
       },
       {
+        route: "/admin/gateways",
+        label: "Gateways",
+      },
+      {
         route: "/admin/accounts",
         label: "Merchant Accounts",
       },
@@ -84,7 +88,10 @@ export function AdminDashboardItems() {
   const router = useRouter();
   const [currentUrl, setCurrentUrl] = useState(() => router.pathname);
   const [settingsOpen, setSettingsOpen] = useState(
-    router.pathname === "/admin/banks" || router.pathname === "/admin/rates"
+    router.pathname === "/admin/banks" ||
+      router.pathname === "/admin/rates" ||
+      router.pathname === "/admin/gateways" ||
+      router.pathname === "/admin/accounts"
   );
 
   const [usersOpen, setUsersOpen] = useState(

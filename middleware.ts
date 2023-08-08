@@ -23,6 +23,7 @@ export function middleware(request: NextRequest) {
     "/admin/transactions",
     "/admin/support",
     "/admin/accounts",
+    "/admin/gateways",
   ];
 
   const publicPaths = [

@@ -22,6 +22,35 @@ export function useGetGateways() {
   });
 }
 
+export function useFetchGateways() {
+  return useMutation(
+    function (payload: {}) {
+      return axiosInstance.post("/local/admin/fetch-gateways/", null, {
+        baseURL: APICLIENT_BASE_URL,
+      });
+    },
+    {
+      onSuccess: function (response) {
+        showNotification({
+          title: "Operation Successful",
+          message: response.data.result || `Successfully fetched gateways`,
+          color: "green",
+        });
+      },
+      onError: function (error) {
+        return showNotification({
+          title: "An error occured",
+          message: "Unable to fetch gateways",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["apiclient", "gateways"]);
+      },
+    }
+  );
+}
+
 export function useGatewayOptions() {
   const { data, isLoading } = useGetGateways();
 

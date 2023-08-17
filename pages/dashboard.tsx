@@ -11,7 +11,7 @@ export default function Dashboard() {
   const { data } = useGetCurrentUser();
   const { defaultGateway, isLoading } = useDefaultGateway();
   return (
-    <div className="flex flex-col gap-6 max-h-full">
+    <div className="flex flex-col gap-6 min-h-full">
       <h2 className={"text-primary-100 text-2xl font-secondary"}>
         Thank you for choosing us,{" "}
         <span className="font-semibold">{data?.data.last_name}</span>

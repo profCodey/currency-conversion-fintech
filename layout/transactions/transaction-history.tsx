@@ -1,25 +1,7 @@
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
-import {
-  Group,
-  LoadingOverlay,
-  Select,
-  Skeleton,
-  Stack,
-  Table,
-} from "@mantine/core";
-import {
-  useDefaultGateway,
-  useGatewayOptions,
-  useGetPayouts,
-} from "@/api/hooks/gateways";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Group, LoadingOverlay, Skeleton, Stack, Table } from "@mantine/core";
+import { useDefaultGateway } from "@/api/hooks/gateways";
+import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
 import dayjs from "dayjs";
 import { DatePickerInput } from "@mantine/dates";
 import { currencyFormatter } from "@/utils/currency";
@@ -27,18 +9,15 @@ import {
   IPayoutHistory,
   PayoutRecordStatuses,
 } from "@/utils/validators/interfaces";
-
-import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
-import TransactionCompletedIcon from "@/public/transaction-completed.svg";
-import TransactionProcessingIcon from "@/public/transaction-processing.svg";
-// import { useGetCurrentUser, useRole } from "@/api/hooks/user";
-// import { USER_CATEGORIES } from "@/utils/constants";
 import { AxiosResponse } from "axios";
 import { useRole } from "@/api/hooks/user";
 import { USER_CATEGORIES } from "@/utils/constants";
 
+import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
+import TransactionCompletedIcon from "@/public/transaction-completed.svg";
+import TransactionProcessingIcon from "@/public/transaction-processing.svg";
+
 export function TransactionHistory({
-  // isAdmin,
   payoutHistory,
   payoutHistoryFetching,
   dateRange,
@@ -55,7 +34,6 @@ export function TransactionHistory({
   const { defaultGateway, isLoading: selectedGatewaysLoading } =
     useDefaultGateway();
   const { role } = useRole();
-  // const [currentGateway, setCurrentGateway] = useState<string | null>(null);
   const isAdmin = role === USER_CATEGORIES.ADMIN;
   let emptyTransactionHistory =
     payoutHistory?.data &&
@@ -72,7 +50,7 @@ export function TransactionHistory({
         return <TransactionCompletedIcon className="scale-75" />;
       case "SentToGateway":
       case "Pending":
-        return <TransactionProcessingIcon className="scale-75" />;
+        return <TransactionProcessingIcon />;
       default:
         return null;
     }
@@ -99,15 +77,19 @@ export function TransactionHistory({
       return payoutHistory?.data.result
         ?.map(function (payout) {
           return (
-            <tr key={payout.payoutId}>
+            <tr key={payout.payoutId} className="text-primary-100 font-medium">
               <td className="text-xs sm:text-base">
-                <Group>
+                <Group spacing="xs">
                   <span className="hidden sm:block">
                     {getTransactionIcon(payout.status)}
                   </span>
                   <Stack spacing={0}>
-                    <span>{payout.narration}</span>
-                    <span>{getTransactionStatus(payout.status)}</span>
+                    <span className="font-medium text-primary-100">
+                      {payout.narration}
+                    </span>
+                    <span className="text-primary-70">
+                      {getTransactionStatus(payout.status)}
+                    </span>
                   </Stack>
                 </Group>
               </td>
@@ -173,7 +155,7 @@ export function TransactionHistory({
   }
 
   return (
-    <div className="flex-grow flex flex-col gap-2">
+    <div className="flex-grow flex flex-col gap-2 border border-red-500">
       <div className="bg-gray-30 rounded-lg border p-5 py-2 flex gap-4 items-center justify-between">
         <span className="text-primary-100 font-semibold mr-auto">
           Recent Payouts
@@ -192,10 +174,10 @@ export function TransactionHistory({
         visible={isAdmin ? payoutHistoryFetching : selectedGatewaysLoading}
         className="flex-grow"
       >
-        <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
+        <div className="flex-grow overflow-y-auto relative flex flex-col h-full border">
           <LoadingOverlay visible={payoutHistoryFetching} />
           <Table
-            verticalSpacing="md"
+            verticalSpacing="xs"
             withBorder
             className="min-w-[600px] overflow-x-auto"
           >

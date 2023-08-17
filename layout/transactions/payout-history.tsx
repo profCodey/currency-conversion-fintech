@@ -41,7 +41,7 @@ export function UserPayoutHistory({
 
   return (
     // Payout transaction history will not show options to select a gateway if a gateway is passed to it
-    <div className="flex-grow max-h-full overflow-y-auto">
+    <div className="flex-grow max-h-full h-full overflow-y-auto">
       <TransactionHistory
         dateRange={dateRange}
         setDateRange={setDateRange}

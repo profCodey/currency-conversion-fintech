@@ -5,7 +5,6 @@ import {
   BasicProfileForm,
   DocumentUpload,
   GatewayOptions,
-  IdVerification,
   OnboardingStatus,
 } from "@/layout/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
@@ -65,8 +64,8 @@ export default function Onboarding() {
 
   function handleTabChange(tab: string) {
     if (tab === "basic-profile") setActiveTab(tab);
-    else if (tab === "id-verification" && disableProfileFields)
-      setActiveTab(tab);
+    // else if (tab === "id-verification" && disableProfileFields)
+    //   setActiveTab(tab);
     else if (tab === "document-upload" && disableProfileFields)
       setActiveTab(tab);
     else if (tab === "gateway-options" && !disableDocumentNextButton())
@@ -97,7 +96,7 @@ export default function Onboarding() {
         >
           <Tabs.List>
             <Tabs.Tab value="basic-profile">Basic Profile</Tabs.Tab>
-            <Tabs.Tab value="id-verification">ID Verification</Tabs.Tab>
+            {/* <Tabs.Tab value="id-verification">ID Verification</Tabs.Tab> */}
             <Tabs.Tab value="document-upload">Document Upload</Tabs.Tab>
             <Tabs.Tab value="gateway-options">Gateway Options</Tabs.Tab>
             <Tabs.Tab value="status">Status</Tabs.Tab>
@@ -110,9 +109,9 @@ export default function Onboarding() {
               disableFields={disableProfileFields}
             />
           </Tabs.Panel>
-          <Tabs.Panel value="id-verification" pt="lg">
+          {/* <Tabs.Panel value="id-verification" pt="lg">
             <IdVerification />
-          </Tabs.Panel>
+          </Tabs.Panel> */}
           <Tabs.Panel value="document-upload" pt="lg">
             <DocumentUpload
               formData={documents?.data}

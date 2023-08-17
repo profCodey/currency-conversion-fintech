@@ -155,7 +155,7 @@ export function TransactionHistory({
   }
 
   return (
-    <div className="flex-grow flex flex-col gap-2 border border-red-500">
+    <div className="flex-grow flex flex-col gap-2">
       <div className="bg-gray-30 rounded-lg border p-5 py-2 flex gap-4 items-center justify-between">
         <span className="text-primary-100 font-semibold mr-auto">
           Recent Payouts
@@ -174,7 +174,7 @@ export function TransactionHistory({
         visible={isAdmin ? payoutHistoryFetching : selectedGatewaysLoading}
         className="flex-grow"
       >
-        <div className="flex-grow overflow-y-auto relative flex flex-col h-full border">
+        <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
           <LoadingOverlay visible={payoutHistoryFetching} />
           <Table
             verticalSpacing="xs"

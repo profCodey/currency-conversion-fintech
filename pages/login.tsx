@@ -18,7 +18,6 @@ export default function Login() {
   });
 
   function handleSubmit(values: z.infer<typeof loginFormValidator>) {
-    // console.log({ values });
     login(values);
   }
 

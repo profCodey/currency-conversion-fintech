@@ -17,8 +17,7 @@ export default function AuthLayout({
     <main className="flex h-screen">
       <div
         className={
-          "hidden md:flex sm:w-[450px] h-full bg-primary-100 flex-col justify-between py-14 px-10 " +
-          styles.sidebarBackground
+          "hidden md:flex sm:w-[450px] h-full bg-primary-100 flex-col justify-between py-14 px-10 "
         }
       >
         <Link href="/">

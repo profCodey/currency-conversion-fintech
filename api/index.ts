@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(addTokenToRequest);
 
 axiosInstance.interceptors.response.use(
   function (response: any) {
-    if (response.status === 401) {
+    if (response.status === 401 && window.location.pathname !== "/login") {
       Cookies.remove(APP_TOKENS.ACCESS_TOKEN);
       Cookies.remove(APP_TOKENS.CATEGORY);
       Cookies.remove(APP_TOKENS.REFRESH_TOKEN);
@@ -36,7 +36,10 @@ axiosInstance.interceptors.response.use(
     } else return response;
   },
   function (error) {
-    if (error.response.status === 401) {
+    if (
+      error.response.status === 401 &&
+      window.location.pathname !== "/login"
+    ) {
       Cookies.remove(APP_TOKENS.ACCESS_TOKEN);
       Cookies.remove(APP_TOKENS.CATEGORY);
       Cookies.remove(APP_TOKENS.REFRESH_TOKEN);

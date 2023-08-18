@@ -26,9 +26,9 @@ export default function Users() {
         ColumnHelper.accessor("email", {
           header: "Email",
         }),
-        ColumnHelper.accessor("phone_number", {
-          header: "Phone number",
-        }),
+        // ColumnHelper.accessor("phone_number", {
+        //   header: "Phone number",
+        // }),
         ColumnHelper.accessor("is_approved", {
           header: "Status",
           cell: (props) => (

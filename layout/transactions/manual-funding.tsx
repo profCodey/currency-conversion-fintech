@@ -3,7 +3,13 @@ import { useRole } from "@/api/hooks/user";
 import { USER_CATEGORIES } from "@/utils/constants";
 import { currencyFormatter, getCurrency } from "@/utils/currency";
 import { IManualPayment } from "@/utils/validators/interfaces";
-import { Box, Button, LoadingOverlay, Table as MTable } from "@mantine/core";
+import {
+  Badge,
+  Box,
+  Button,
+  LoadingOverlay,
+  Table as MTable,
+} from "@mantine/core";
 import { useMemo, useState } from "react";
 import { FundingStatuses, ManualFundingDrawer } from "./manual-funding-drawer";
 import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
@@ -42,14 +48,30 @@ export function ManualFundingHistory() {
       ColumnHelper.accessor("status", {
         header: "Status",
         id: "status",
-        cell: (props) => (
-          <div className="flex gap-1 items-center">
-            <span className="hidden sm:visible">
-              {getTransactionIcon(props.cell.getValue())}
-            </span>
-            <span>{props.cell.getValue()}</span>
-          </div>
-        ),
+        cell: (props) => {
+          const status = props.cell.getValue();
+          return (
+            <div className="flex gap-1 items-center">
+              {/* <span className="hidden sm:visible">
+                {getTransactionIcon(props.cell.getValue())}
+              </span> */}
+              <span>
+                <Badge
+                  variant="dot"
+                  color={
+                    status === "approved"
+                      ? "green"
+                      : status === "cancelled" || status === "rejected"
+                      ? "red"
+                      : "grape"
+                  }
+                >
+                  {props.cell.getValue()}
+                </Badge>
+              </span>
+            </div>
+          );
+        },
       }),
       ColumnHelper.accessor("target_account_label", { header: "Account" }),
       ColumnHelper.accessor("amount", {

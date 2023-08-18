@@ -5,6 +5,7 @@ import {
 import { useGetBusinessDocuments } from "@/api/hooks/onboarding";
 import {
   Anchor,
+  Badge,
   Box,
   Button,
   Group,
@@ -54,6 +55,8 @@ export function ClientDocuments() {
     setRejectionReason("");
   }
 
+  const status = clientDocuments?.data.status;
+
   return (
     <section>
       <Box p={20}>
@@ -96,24 +99,41 @@ export function ClientDocuments() {
       </Box>
 
       <Group position="apart" grow>
-        <Group p={20}>
-          <Button
-            className="bg-primary-100 hover:bg-primary-100"
-            onClick={() => setApproveModalOpen(true)}
-          >
-            Approve documents
-          </Button>
-          <Button
-            className="bg-white hover:bg-white text-red-600 border-1 border-red-600"
-            onClick={() => setRejectModalOpen(true)}
-          >
-            Reject documents
-          </Button>
-        </Group>
+        {status !== "approved" && (
+          <Group p={20}>
+            <Button
+              className="bg-primary-100 hover:bg-primary-100"
+              onClick={() => setApproveModalOpen(true)}
+            >
+              Approve documents
+            </Button>
+
+            {/* {status === "pending" && ( */}
+            <Button
+              className="bg-white hover:bg-white text-red-600 border-1 border-red-600"
+              onClick={() => setRejectModalOpen(true)}
+              disabled={status !== "pending"}
+            >
+              Reject documents
+            </Button>
+            {/* // )} */}
+          </Group>
+        )}
 
         <Group p={20}>
           <Text>Current status:</Text>
-          <Text>{clientDocuments?.data.status}</Text>
+          <Badge
+            variant="dot"
+            color={
+              status === "approved"
+                ? "green"
+                : status === "cancelled" || status === "rejected"
+                ? "red"
+                : "grape"
+            }
+          >
+            {status}
+          </Badge>
         </Group>
       </Group>
 

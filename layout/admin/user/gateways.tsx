@@ -3,7 +3,15 @@ import {
   useClientSelectedGateways,
 } from "@/api/hooks/admin/users";
 import { ISelectedGateway } from "@/utils/validators/interfaces";
-import { Button, Group, Modal, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Group,
+  Modal,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -174,7 +182,13 @@ function GatewayOption({
             </Button>
           </>
         ) : (
-          <span>{gateway.status}</span>
+          <Badge
+            size="lg"
+            variant="dot"
+            color={gateway.status === "approved" ? "green" : "red"}
+          >
+            {gateway.status === "approved" ? "Approved" : "Not approved"}
+          </Badge>
         )}
       </Group>
     </Group>

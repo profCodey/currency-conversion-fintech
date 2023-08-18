@@ -3,15 +3,7 @@ import { PageHeader } from "@/components/admin/page-header";
 import { GatewayEditModal } from "@/layout/admin/gateway";
 import { AppLayout } from "@/layout/common/app-layout";
 import { IGateway } from "@/utils/validators/interfaces";
-import {
-  Button,
-  LoadingOverlay,
-  Modal,
-  Stack,
-  Table,
-  TextInput,
-  Textarea,
-} from "@mantine/core";
+import { Button, LoadingOverlay, Modal, Table } from "@mantine/core";
 import { ReactElement, useMemo, useState } from "react";
 
 export default function Gateways() {

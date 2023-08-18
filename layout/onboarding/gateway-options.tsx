@@ -1,8 +1,4 @@
-import {
-  useAddGateway,
-  useGetGateways,
-  useGetSelectedGateways,
-} from "@/api/hooks/gateways";
+import { useAddGateway, useGetGateways } from "@/api/hooks/gateways";
 import { Button, Group, Loader, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useState } from "react";

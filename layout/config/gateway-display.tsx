@@ -1,6 +1,6 @@
 import { useAddGateway, useMakeDefaultGateway } from "@/api/hooks/gateways";
 import { IGateway, ISelectedGateway } from "@/utils/validators/interfaces";
-import { Button, Loader, Modal } from "@mantine/core";
+import { Button, Loader, Modal, Stack } from "@mantine/core";
 import { ReactNode, useState } from "react";
 import { AddNewGateway } from "./new-gateway";
 import { MakeDefaultGateway } from "./default-gateway";
@@ -23,9 +23,9 @@ export default function GatewaysDisplay({
   }
 
   return (
-    <section className="max-w-[900px] rounded-lg bg-gray-30 border text-gray-90">
-      <section className="grid grid-cols-1 md:grid-cols-2">
-        <section className="flex flex-col gap-2 p-5 border-r">
+    <section className="text-gray-90">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-[50vh]">
+        <section className="flex flex-col gap-2 p-5 border-r  rounded-lg bg-gray-30 border ">
           <div className="flex gap-4">
             <h3 className="text-secondary mb-2">Select Default Gateway</h3>
             {isLoading && <Loader size="xs" color="green" />}
@@ -38,7 +38,9 @@ export default function GatewaysDisplay({
             />
           ))}
         </section>
-        <section className="p-5">{unSelectedGateways}</section>
+        <section className="p-5 rounded-lg bg-gray-30 border ">
+          {unSelectedGateways}
+        </section>
       </section>
 
       <Modal
@@ -72,9 +74,9 @@ function Gateway({
   return (
     <div
       key={gateway.id}
-      className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px]"
+      className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px] border"
     >
-      <span className="text-sm">{gateway.gateway_name}</span>
+      <span className="text-sm font-semibold">{gateway.gateway_name}</span>
 
       {gateway.status !== "approved" ? (
         <Button variant="subtle" color="red">
@@ -104,7 +106,13 @@ export function UnSelectedGateways({ gateways }: { gateways: IGateway[] }) {
   );
   const { isVerified } = useIsVerified();
   if (gateways.length < 1) {
-    return <span>You have selected all available gateways</span>;
+    return (
+      <section className="border-2 h-full flex items-center justify-center">
+        <span className="text-xl font-secondary">
+          You have selected all available gateways
+        </span>
+      </section>
+    );
   }
 
   function handleAddGateway(gateway: IGateway) {
@@ -121,11 +129,14 @@ export function UnSelectedGateways({ gateways }: { gateways: IGateway[] }) {
       {gateways.map((gateway) => (
         <div
           key={gateway.id}
-          className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px]"
+          className="bg-white flex items-center justify-between px-4 py-2 rounded-[4px] border"
         >
-          <span className="text-sm">{gateway.description}</span>
+          <Stack spacing="xs">
+            <span className="text-sm font-semibold">{gateway.label}</span>
+            <span className="text-sm">{gateway.description}</span>
+          </Stack>
           <Button
-            className="bg-white hover:bg-white border-[#132144] py-2 px-3 text-[#132144] rounded-[4px]"
+            className="self-start shrink-0 bg-white hover:bg-white border-[#132144] py-2 px-3 text-[#132144] rounded-[4px]"
             onClick={() => handleAddGateway(gateway)}
             disabled={isLoading || !isVerified}
           >

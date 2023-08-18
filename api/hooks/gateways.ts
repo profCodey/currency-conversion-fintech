@@ -66,19 +66,37 @@ export function useGatewayOptions() {
     [data?.data]
   );
 
-  // const gatewayOptionsFromGateway = useMemo(
-  //   function () {
-  //     return (
-  //       data?.data.map((gateway) => ({
-  //         label: gateway.description,
-  //         value: gateway.,
-  //       })) ?? []
-  //     );
-  //   },
-  //   [data?.data]
-  // );
-
   return { gatewayOptions, isLoading };
+}
+
+export function useEditGateway(gatewayId: number, cb: () => void) {
+  return useMutation(
+    function (payload: IGateway) {
+      return axiosInstance.patch(`/local/gateways/${gatewayId}/`, payload, {
+        baseURL: APICLIENT_BASE_URL,
+      });
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation Successful",
+          message: `Successfully edited gateway`,
+          color: "green",
+        });
+      },
+      onError: function () {
+        return showNotification({
+          title: "An error occured",
+          message: "Unable to edit gateway",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        cb && cb();
+        queryClient.invalidateQueries(["apiclient", "gateways"]);
+      },
+    }
+  );
 }
 
 export function useGetSelectedGateways() {

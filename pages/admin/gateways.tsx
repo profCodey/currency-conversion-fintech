@@ -1,22 +1,42 @@
 import { useFetchGateways, useGetGateways } from "@/api/hooks/gateways";
 import { PageHeader } from "@/components/admin/page-header";
+import { GatewayEditModal } from "@/layout/admin/gateway";
 import { AppLayout } from "@/layout/common/app-layout";
-import { Button, LoadingOverlay, Table } from "@mantine/core";
-import { ReactElement, useMemo } from "react";
+import { IGateway } from "@/utils/validators/interfaces";
+import {
+  Button,
+  LoadingOverlay,
+  Modal,
+  Stack,
+  Table,
+  TextInput,
+  Textarea,
+} from "@mantine/core";
+import { ReactElement, useMemo, useState } from "react";
 
 export default function Gateways() {
   const { data: gateways, isLoading: gatewaysLoading } = useGetGateways();
   const { mutate: fetchGateways, isLoading: fetchGatewaysLoading } =
     useFetchGateways();
 
+  const [currentGateway, setCurrentGateway] = useState<IGateway | null>(null);
+
   const _rows = useMemo(
     function () {
       return gateways?.data.map(function (gateway, idx) {
         return (
           <tr key={gateway.id}>
-            <td>{idx + 1}</td>
             <td>{gateway.id}</td>
-            <td>{gateway.description}</td>
+            <td>{gateway.label}</td>
+            <td>
+              <Button
+                size="sm"
+                className="bg-primary-100"
+                onClick={() => setCurrentGateway(gateway)}
+              >
+                Edit
+              </Button>
+            </td>
           </tr>
         );
       });
@@ -52,14 +72,27 @@ export default function Gateways() {
           <LoadingOverlay visible={gatewaysLoading} />
           <thead>
             <tr className="font-primary font-light">
-              <th>S/N</th>
               <th>Gateway ID</th>
               <th>Name</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>{_rows}</tbody>
         </Table>
       </section>
+
+      <Modal
+        title="Edit gateway details"
+        onClose={() => setCurrentGateway(null)}
+        opened={!!currentGateway}
+      >
+        {!!currentGateway && (
+          <GatewayEditModal
+            formValues={currentGateway}
+            closeModal={() => setCurrentGateway(null)}
+          />
+        )}
+      </Modal>
     </section>
   );
 }

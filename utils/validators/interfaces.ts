@@ -43,6 +43,8 @@ export interface ICurrentUser {
 export interface IGateway {
   id: number;
   description: string;
+  label: string;
+  is_active: boolean;
 }
 
 export interface ISelectedGateway {

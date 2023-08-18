@@ -30,7 +30,7 @@ export function ApiKeyDisplay() {
 
   return (
     <section className="max-w-[700px] rounded-lg bg-gray-30 border text-gray-90 p-5">
-      <h3 className="font-semibold">API Key</h3>
+      {/* <h3 className="font-semibold">API Key</h3> */}
       <span className="text-sm leading-3">
         This is your API key. You can use this key to integrate with other
         platforms enabling your application or service to effortlessly

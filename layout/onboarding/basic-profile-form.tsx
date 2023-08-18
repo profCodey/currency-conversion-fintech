@@ -2,9 +2,7 @@ import { z } from "zod";
 import { TextInput, Button, Select } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useGetCurrentUser } from "@/api/hooks/user";
-import {
-  useUpdateBasicProfile,
-} from "@/api/hooks/onboarding";
+import { useUpdateBasicProfile } from "@/api/hooks/onboarding";
 import { basicProfileFormValidator } from "@/utils/validators";
 import { DateInput } from "@mantine/dates";
 import dayjs from "dayjs";
@@ -40,6 +38,7 @@ export function BasicProfileForm({
       zip_code: formData?.zip_code || "",
       tax_number: formData?.tax_number || "",
       business_legal_name: formData?.business_legal_name || "",
+      business_code: formData?.business_code || "",
       business_trading_name: formData?.business_trading_name || "",
       country_of_registration: formData?.country_of_registration || "",
       primary_business_activity: formData?.primary_business_activity || "",
@@ -63,10 +62,8 @@ export function BasicProfileForm({
   }
 
   function handleNext() {
-    nextTab("id-verification");
+    nextTab("document-upload");
   }
-
-  //if the business legal name is truthy, it means that the user already submitted this form data
 
   return (
     <form
@@ -76,11 +73,18 @@ export function BasicProfileForm({
       <TextInput
         placeholder="Enter Merchant Legal Name"
         size="lg"
-        {...basicProfileForm.getInputProps("business_legal_name")}
         classNames={{
           input: "disabled:bg-white text-black",
         }}
         disabled={disableFields}
+        {...basicProfileForm.getInputProps("business_legal_name")}
+        onChange={(e) => {
+          basicProfileForm.setFieldValue("business_legal_name", e.target.value);
+          basicProfileForm.setFieldValue(
+            "business_code",
+            e.target.value.toLowerCase()
+          );
+        }}
       />
       <TextInput
         placeholder="Enter Merchant Trading Name"
@@ -90,11 +94,24 @@ export function BasicProfileForm({
         disabled={disableFields}
       />
       <TextInput
-        placeholder="Enter Tax Number"
+        placeholder="Enter Tax Number (optional)"
         size="lg"
         {...basicProfileForm.getInputProps("tax_number")}
         classNames={{ input: "disabled:bg-white text-black" }}
         disabled={disableFields}
+      />
+      <TextInput
+        placeholder="Enter Business Code"
+        size="lg"
+        {...basicProfileForm.getInputProps("business_code")}
+        classNames={{ input: "disabled:bg-white text-black" }}
+        disabled={disableFields}
+        onChange={(e) =>
+          basicProfileForm.setFieldValue(
+            "business_code",
+            e.target.value.toLocaleLowerCase()
+          )
+        }
       />
       <TextInput
         placeholder="Enter Zip Code"

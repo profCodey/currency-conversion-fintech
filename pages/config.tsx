@@ -1,21 +1,19 @@
 import { ReactElement, useState } from "react";
-import { Loader, Modal } from "@mantine/core";
+import { Button, Loader, Modal } from "@mantine/core";
 import { AppLayout } from "@/layout/common/app-layout";
-import { AddNewGateway, MakeDefaultGateway } from "@/layout/config";
 import { useGetGateways, useGetSelectedGateways } from "@/api/hooks/gateways";
 import GatewaysDisplay, {
   UnSelectedGateways,
 } from "@/layout/config/gateway-display";
 import { IGateway } from "@/utils/validators/interfaces";
 import { ApiKeyDisplay } from "@/layout/config/api-key-display";
-import { useGetClientDetails, useGetCurrentUser } from "@/api/hooks/user";
+import { PageHeader } from "@/components/admin/page-header";
 
 export default function Settings() {
-  // const { data: currentUser } = useGetCurrentUser();
+  const [showApiCreds, setShowApiCreds] = useState(false);
   const { data: gateways, isLoading: gatewaysLoading } = useGetGateways();
   const { data: selectedGateways, isLoading: selectedGatewaysLoading } =
     useGetSelectedGateways();
-  // const {} = useGetClientDetails(currentUser?.data.id);
 
   if (gatewaysLoading || selectedGatewaysLoading) {
     return (
@@ -32,15 +30,23 @@ export default function Settings() {
 
   const unSelectedGateways: IGateway[] =
     gateways?.data.filter(
-      (gateway) => !selectedGatewayIds.includes(gateway.id)
+      (gateway) => !selectedGatewayIds.includes(gateway.id) && gateway.is_active
     ) ?? [];
 
   return (
     <div className="flex flex-col gap-6 h-full">
-      <div className="text-primary-100">
-        <h2 className={"text-2xl font-secondary mt-2"}>Configurations</h2>
-        <span>Request and manage gateway here</span>
-      </div>
+      <PageHeader
+        header="Configurations"
+        subheader="Request and manage gateway here"
+        meta={
+          <Button
+            className="bg-primary-100 hover:bg-primary-100 text-white"
+            onClick={() => setShowApiCreds(true)}
+          >
+            View API credentials
+          </Button>
+        }
+      />
 
       <GatewaysDisplay
         selectedGateways={selectedGatewayData ?? []}
@@ -48,8 +54,14 @@ export default function Settings() {
           <UnSelectedGateways gateways={unSelectedGateways} />
         }
       />
-
-      <ApiKeyDisplay />
+      <Modal
+        size="lg"
+        opened={showApiCreds}
+        onClose={() => setShowApiCreds(false)}
+        title="API Credentials"
+      >
+        <ApiKeyDisplay />
+      </Modal>
     </div>
   );
 }

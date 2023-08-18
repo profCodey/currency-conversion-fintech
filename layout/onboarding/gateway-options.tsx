@@ -3,7 +3,7 @@ import {
   useGetGateways,
   useGetSelectedGateways,
 } from "@/api/hooks/gateways";
-import { Button, Group, Loader } from "@mantine/core";
+import { Button, Group, Loader, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useState } from "react";
 import GreenCheck from "@/public/green-check.svg";
@@ -56,8 +56,8 @@ export function GatewayOptions({
     userSelectedGateways?.map((gateway) => gateway.gateway) || [];
 
   return (
-    <section>
-      <section className="flex flex-col gap-2">
+    <section className="py-5">
+      <section className="flex flex-col gap-2 w-fit mx-auto ">
         {data?.data.map((gateway) => (
           <GatewayOption
             key={gateway.id}
@@ -86,7 +86,7 @@ export function GatewayOptions({
             <Button
               className="bg-accent hover:bg-accent mt-4"
               size="lg"
-              onClick={()=>nextTab("status")}
+              onClick={() => nextTab("status")}
             >
               Next
             </Button>
@@ -115,11 +115,18 @@ function GatewayOption({
 
   return (
     <div
-      className="bg-white w-[400px] py-2 flex justify-between items-center px-5 border rounded"
+      className="bg-white max-w-[500px] w-full py-2 flex justify-between items-center px-5 border rounded"
       key={gateway.id}
       tabIndex={1}
     >
-      <span className="text-gray-90 text-sm">{gateway.description}</span>
+      <Stack spacing="xs">
+        <span className="text-gray-90 text-sm font-semibold font-secondary">
+          {gateway.label}
+        </span>
+        <span className="text-gray-90 text-xs font-primary">
+          {gateway.description}
+        </span>
+      </Stack>
 
       {userSelected ? (
         <GreenCheck />

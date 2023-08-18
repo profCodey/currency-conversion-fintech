@@ -35,10 +35,13 @@ export const basicProfileFormValidator = z.object({
   city: z.string().min(1, "Enter city"),
   state: z.string().min(1, "Enter state"),
   zip_code: z.string().min(1, "Enter zip code"),
-  tax_number: z.string().min(1, "Enter tax number"),
+  tax_number: z.string().optional(),
   business_legal_name: z.string().min(1, "Enter legal name of business"),
   business_trading_name: z.string().min(1, "Enter trading name of business"),
   country_of_registration: z.string().min(1, "Select country of registration"),
+  business_code: z
+    .string()
+    .max(10, "Business code cannot be more than 10 characters"),
   primary_business_activity: z
     .string()
     .min(1, "Enter primary business activity"),

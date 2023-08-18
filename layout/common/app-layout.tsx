@@ -3,9 +3,12 @@ import { useGetClientDetails, useGetCurrentUser } from "@/api/hooks/user";
 import { DashboardItems } from "@/components/dashboard-items";
 import { LogoutIcon } from "@/components/icons";
 import {
+  ActionIcon,
   AppShell,
   Burger,
+  Group,
   Header,
+  HoverCard,
   MediaQuery,
   Navbar,
   Skeleton,
@@ -19,6 +22,8 @@ import MobileLogo from "@/public/payceler-logo.svg";
 import { AdminDashboardItems } from "@/components/admin-dashboard-items";
 import { USER_CATEGORIES } from "@/utils/constants";
 import Link from "next/link";
+import { useGetSelectedGateways } from "@/api/hooks/gateways";
+import { InfoCircle } from "iconsax-react";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -29,6 +34,8 @@ export function AppLayout({ children }: AppLayoutProps) {
   const { isLoading: clientDetailsLoading } = useGetClientDetails(
     data?.data.id
   );
+  const { data: selectedGateways, isLoading: gatewaysLoading } =
+    useGetSelectedGateways();
   const logout = useLogout();
 
   function handleLogout() {
@@ -53,6 +60,13 @@ export function AppLayout({ children }: AppLayoutProps) {
       children
     );
 
+  const isApiClient = data?.data.category === USER_CATEGORIES.API_CLIENT;
+  const homePageRoute = isApiClient ? "/dashboard" : "/admin";
+
+  const defaultGateway = selectedGateways?.data.find(
+    (gateway) => gateway.is_default
+  );
+
   const dashboardItems =
     data?.data.category === USER_CATEGORIES.API_CLIENT ? (
       <DashboardItems />
@@ -63,17 +77,13 @@ export function AppLayout({ children }: AppLayoutProps) {
   const dashboardSkeletons = (
     <Stack spacing="xl" className="mt-24">
       <Skeleton height={50} />
-      <Skeleton height={50} /> 
+      <Skeleton height={50} />
       <Skeleton height={50} />
       <Skeleton height={50} />
       <Skeleton height={50} />
     </Stack>
   );
 
-  const homePageRoute =
-    data?.data.category === USER_CATEGORIES.API_CLIENT
-      ? "/dashboard"
-      : "/admin";
   return (
     <AppShell
       padding={0}
@@ -104,9 +114,36 @@ export function AppLayout({ children }: AppLayoutProps) {
         >
           <section className="py-2 pt-4 h-full flex flex-col">
             <div className="w-full flex justify-between items-center">
-              <Link href={homePageRoute}>
-                <AppLogo />
-              </Link>
+              <Stack spacing="xs" className="w-full">
+                <Link href={homePageRoute}>
+                  <AppLogo />
+                </Link>
+                {isApiClient && (
+                  <Skeleton visible={gatewaysLoading}>
+                    <Group position="apart" className="w-full">
+                      <small className="text-white">
+                        {defaultGateway
+                          ? defaultGateway.gateway_name
+                          : "Default not set"}
+                      </small>
+
+                      <HoverCard
+                        width={200}
+                        classNames={{ dropdown: "text-xs p-2" }}
+                      >
+                        <HoverCard.Target>
+                          <InfoCircle size={16} color="white" />
+                        </HoverCard.Target>
+                        <HoverCard.Dropdown>
+                          This is the default gateway through which transactions
+                          are performed, you can set this up or change it the
+                          config section
+                        </HoverCard.Dropdown>
+                      </HoverCard>
+                    </Group>
+                  </Skeleton>
+                )}
+              </Stack>
 
               <MediaQuery styles={{ display: "none" }} largerThan="sm">
                 <Burger

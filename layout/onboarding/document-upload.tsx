@@ -1,9 +1,7 @@
 import { Button, Loader } from "@mantine/core";
 import { useState } from "react";
 import { FormFile } from "./form-file";
-import {
-  useUpdateOnboardingDocuments,
-} from "@/api/hooks/onboarding";
+import { useUpdateOnboardingDocuments } from "@/api/hooks/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
 
 export interface DocumentsValidator {

@@ -182,3 +182,33 @@ export function useCloseSupportRequest(successCb: () => void) {
     }
   );
 }
+
+// /local/synchronize-deposit-transaction/
+export function useSyncDeposits() {
+  return useMutation(
+    () =>
+      axiosInstance.post(
+        "/local/synchronize-deposit-transaction/",
+        {},
+        {
+          baseURL: APICLIENT_BASE_URL,
+        }
+      ),
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Successful",
+          message: "Deposits synced successfully",
+          color: "green",
+        });
+      },
+      onError: function () {
+        showNotification({
+          title: "Unable to sync deposits",
+          message: "Please try again later",
+          color: "red",
+        });
+      },
+    }
+  );
+}

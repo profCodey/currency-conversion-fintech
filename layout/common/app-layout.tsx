@@ -1,5 +1,9 @@
 import { useLogout } from "@/api/hooks/auth";
-import { useGetClientDetails, useGetCurrentUser } from "@/api/hooks/user";
+import {
+  useGetClientDetails,
+  useGetCurrentUser,
+  useSyncDeposits,
+} from "@/api/hooks/user";
 import { DashboardItems } from "@/components/dashboard-items";
 import { LogoutIcon } from "@/components/icons";
 import {
@@ -13,6 +17,8 @@ import {
   Navbar,
   Skeleton,
   Stack,
+  Tooltip,
+  clsx,
 } from "@mantine/core";
 import { Text } from "@mantine/core";
 import { modals, closeAllModals } from "@mantine/modals";
@@ -23,7 +29,7 @@ import { AdminDashboardItems } from "@/components/admin-dashboard-items";
 import { USER_CATEGORIES } from "@/utils/constants";
 import Link from "next/link";
 import { useGetSelectedGateways } from "@/api/hooks/gateways";
-import { InfoCircle } from "iconsax-react";
+import { InfoCircle, Refresh } from "iconsax-react";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -36,6 +42,8 @@ export function AppLayout({ children }: AppLayoutProps) {
   );
   const { data: selectedGateways, isLoading: gatewaysLoading } =
     useGetSelectedGateways();
+  const { mutate: syncDeposits, isLoading: syncDepositsLoading } =
+    useSyncDeposits();
   const logout = useLogout();
 
   function handleLogout() {
@@ -120,12 +128,34 @@ export function AppLayout({ children }: AppLayoutProps) {
                 </Link>
                 {isApiClient && (
                   <Skeleton visible={gatewaysLoading}>
-                    <Group position="apart" className="w-full">
+                    <Group className="w-full">
                       <small className="text-white">
                         {defaultGateway
                           ? defaultGateway.gateway_name
                           : "Default not set"}
                       </small>
+
+                      <ActionIcon
+                        ml="auto"
+                        className="hover:bg-transparent"
+                        onClick={() => syncDeposits()}
+                      >
+                        <Tooltip
+                          label="Synchronise deposits"
+                          color="white"
+                          classNames={{ tooltip: "text-black" }}
+                          position="bottom"
+                        >
+                          <Refresh
+                            variant="Broken"
+                            size={16}
+                            color="white"
+                            className={clsx(
+                              syncDepositsLoading && "animate-spin"
+                            )}
+                          />
+                        </Tooltip>
+                      </ActionIcon>
 
                       <HoverCard
                         width={200}

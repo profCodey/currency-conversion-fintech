@@ -6,6 +6,7 @@ import {
   IGateway,
   IPayoutHistory,
   ISelectedGateway,
+  IStatementHistory,
 } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { useMemo } from "react";
@@ -192,6 +193,22 @@ interface IPayoutPayload {
   begin_date: string;
   end_date: string;
   user_id?: string;
+}
+
+export function useGetStatements(payload: IPayoutPayload) {
+  const { gateway_id, begin_date, end_date, user_id } = payload;
+  return useQuery({
+    queryKey: ["statements", gateway_id, user_id, begin_date, end_date],
+    queryFn: function (): Promise<AxiosResponse<IStatementHistory>> {
+      return axiosInstance.get(
+        `/local/statements/${user_id}/${gateway_id}/${begin_date}/${end_date}/`,
+        {
+          baseURL: APICLIENT_BASE_URL,
+        }
+      );
+    },
+    enabled: !!gateway_id,
+  });
 }
 
 export function useGetPayouts(payload: IPayoutPayload) {

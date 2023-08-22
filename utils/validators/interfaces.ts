@@ -150,6 +150,11 @@ export interface IPayoutHistory {
   result: IPayoutRecord[];
 }
 
+export interface IStatementHistory {
+  status: boolean;
+  result: IStatementRecord[];
+}
+
 export type PayoutRecordStatuses =
   | "SentToGateway"
   | "Paid"
@@ -157,6 +162,15 @@ export type PayoutRecordStatuses =
   | "FailedDuringSend"
   | "UnResolvable"
   | "Pending";
+
+export interface IStatementRecord {
+  transactionId: string;
+  transDate: string;
+  debit: string;
+  credit: string;
+  balance: string;
+  narration: string;
+}
 export interface IPayoutRecord {
   gatewaywalletbalanceAfter: number;
   walletbalanceAfter: number;

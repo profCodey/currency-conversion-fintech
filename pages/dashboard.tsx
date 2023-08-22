@@ -3,9 +3,9 @@ import { ReactElement } from "react";
 import { Wallets } from "@/layout/dashboard";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { RightSection } from "@/layout/dashboard/right-section";
-import { UserPayoutHistory } from "@/layout/transactions/payout-history";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { Skeleton } from "@mantine/core";
+import { Statements } from "@/layout/transactions/statements";
 
 export default function Dashboard() {
   const { data } = useGetCurrentUser();
@@ -25,7 +25,7 @@ export default function Dashboard() {
             visible={isLoading}
             className="flex-grow max-h-full overflow-y-auto"
           >
-            <UserPayoutHistory
+            <Statements
               userId={data!.data.id}
               gateway={String(defaultGateway?.gateway)}
             />

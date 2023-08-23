@@ -1,14 +1,28 @@
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
-import { LoadingOverlay, Skeleton, Stack, Table } from "@mantine/core";
+import {
+  Button,
+  LoadingOverlay,
+  Modal,
+  Skeleton,
+  Stack,
+  Table,
+} from "@mantine/core";
 import { useDefaultGateway } from "@/api/hooks/gateways";
-import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
+import { Dispatch, ReactNode, SetStateAction, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { DatePickerInput } from "@mantine/dates";
 import { currencyFormatter } from "@/utils/currency";
-import { IStatementHistory } from "@/utils/validators/interfaces";
+import {
+  IStatementHistory,
+  IStatementRecord,
+} from "@/utils/validators/interfaces";
 import { AxiosResponse } from "axios";
 import { useRole } from "@/api/hooks/user";
 import { USER_CATEGORIES } from "@/utils/constants";
+import AppLogo from "@/public/logo.svg";
+
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 export function StatementsHistory({
   statementsHistory,
@@ -24,6 +38,8 @@ export function StatementsHistory({
   setDateRange: Dispatch<SetStateAction<[Date | null, Date | null]>>;
   meta?: ReactNode;
 }) {
+  const [currentTransaction, setCurrentTransaction] =
+    useState<IStatementRecord | null>(null);
   const { defaultGateway, isLoading: selectedGatewaysLoading } =
     useDefaultGateway();
   const { role } = useRole();
@@ -33,9 +49,34 @@ export function StatementsHistory({
     (statementsHistory?.data.result === null ||
       statementsHistory?.data.result?.length < 1);
 
+  // const tempData: IStatementRecord[] = [
+  //   {
+  //     balance: "1000",
+  //     credit: "1000",
+  //     debit: "2000",
+  //     narration: "Hello, World.",
+  //     transactionId: "5432167",
+  //     transDate: Date.now(),
+  //   },
+  // ];
+
+  const createPDF = async () => {
+    const pdf = new jsPDF("portrait", "pt", "a4");
+    const data = await html2canvas(
+      document.querySelector("#pdf") as HTMLElement
+    );
+    const img = data.toDataURL("image/png");
+    const imgProperties = pdf.getImageProperties(img);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
+    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("transaction_receipt.pdf");
+  };
+
   const rows = useMemo(
     function () {
       return statementsHistory?.data.result?.map(function (statement) {
+        // return tempData.map(function (statement) {
         return (
           <tr
             key={statement.transactionId}
@@ -46,6 +87,14 @@ export function StatementsHistory({
             <td>{currencyFormatter(Number(statement.credit))}</td>
             <td>{currencyFormatter(Number(statement.balance))}</td>
             <td>{statement.narration}</td>
+            <td>
+              <Button
+                variant="white"
+                onClick={() => setCurrentTransaction(statement)}
+              >
+                Download
+              </Button>
+            </td>
           </tr>
         );
       });
@@ -142,6 +191,51 @@ export function StatementsHistory({
           </Table>
         </div>
       </Skeleton>
+
+      <Modal
+        size="lg"
+        title="Transaction details"
+        opened={!!currentTransaction}
+        onClose={() => setCurrentTransaction(null)}
+      >
+        <div className="flex flex-col p-5 border" id="pdf">
+          <AppLogo />
+          <div className="py-4 flex justify-between text-base font-semibold border-b-2">
+            <span>Balance</span>
+            <span>
+              {currencyFormatter(Number(currentTransaction?.balance))}
+            </span>
+          </div>
+          <div className="py-4 flex justify-between text-base font-semibold border-b-2">
+            <span>Credit</span>
+            <span>{currencyFormatter(Number(currentTransaction?.credit))}</span>
+          </div>
+          <div className="py-4 flex justify-between text-base font-semibold border-b-2">
+            <span>Debit</span>
+            <span>{currencyFormatter(Number(currentTransaction?.debit))}</span>
+          </div>
+          <div className="py-4 flex justify-between text-base font-semibold border-b-2">
+            <span>Transaction Date</span>
+            <span>
+              {dayjs(currentTransaction?.transDate).format(
+                "MMM D, YYYY h:mm A"
+              )}
+            </span>
+          </div>
+          <div className="py-4 flex justify-between text-base font-semibold border-b-2">
+            <span>Narration</span>
+            <span>{currentTransaction?.narration}</span>
+          </div>
+        </div>
+        <Button
+          fullWidth
+          size="md"
+          className="bg-primary-100 print:hidden mt-4"
+          onClick={createPDF}
+        >
+          Download
+        </Button>
+      </Modal>
     </div>
   );
 }

@@ -83,9 +83,9 @@ export function StatementsHistory({
             className="text-primary-100 font-medium font-secondary"
           >
             <td>{dayjs(statement.transDate).format("MMM D, YYYY h:mm A")}</td>
-            <td>{currencyFormatter(Number(statement.debit))}</td>
-            <td>{currencyFormatter(Number(statement.credit))}</td>
-            <td>{currencyFormatter(Number(statement.balance))}</td>
+            <td>{statement.debit ?? 0}</td>
+            <td>{statement.credit ?? 0}</td>
+            <td>{statement.balance ?? 0}</td>
             <td>{statement.narration}</td>
             <td>
               <Button
@@ -201,21 +201,19 @@ export function StatementsHistory({
         <div className="flex flex-col p-5 border" id="pdf">
           <AppLogo />
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
-            <span>Balance</span>
-            <span>
-              {currencyFormatter(Number(currentTransaction?.balance))}
-            </span>
+            <span>Balance:</span>
+            <span>₦{currentTransaction?.balance ?? 0}</span>
           </div>
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
-            <span>Credit</span>
-            <span>{currencyFormatter(Number(currentTransaction?.credit))}</span>
+            <span>Credit:</span>
+            <span>₦{currentTransaction?.credit ?? 0}</span>
           </div>
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
-            <span>Debit</span>
-            <span>{currencyFormatter(Number(currentTransaction?.debit))}</span>
+            <span>Debit:</span>
+            <span>₦{currentTransaction?.debit ?? 0}</span>
           </div>
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
-            <span>Transaction Date</span>
+            <span>Transaction Date:</span>
             <span>
               {dayjs(currentTransaction?.transDate).format(
                 "MMM D, YYYY h:mm A"

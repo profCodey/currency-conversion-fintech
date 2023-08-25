@@ -6,6 +6,7 @@ import {
 } from "@/components/icons";
 
 export function currencyFormatter(amount: number) {
+  if (!amount) return 0;
   return new Intl.NumberFormat().format(Number(amount));
 }
 

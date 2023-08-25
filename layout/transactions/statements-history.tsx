@@ -86,13 +86,12 @@ export function StatementsHistory({
             <td>{statement.debit || 0}</td>
             <td>{statement.credit || 0}</td>
             <td>{statement.balance || 0}</td>
-            <td>{statement.narration}</td>
             <td>
               <Button
                 variant="white"
                 onClick={() => setCurrentTransaction(statement)}
               >
-                Download
+                View details
               </Button>
             </td>
           </tr>
@@ -184,7 +183,6 @@ export function StatementsHistory({
                 <th>Debit (₦)</th>
                 <th>Credit (₦)</th>
                 <th>Balance (₦)</th>
-                <th>Narration</th>
               </tr>
             </thead>
             <tbody>{rows}</tbody>

@@ -83,9 +83,9 @@ export function StatementsHistory({
             className="text-primary-100 font-medium font-secondary"
           >
             <td>{dayjs(statement.transDate).format("MMM D, YYYY h:mm A")}</td>
-            <td>{statement.debit ?? 0}</td>
-            <td>{statement.credit ?? 0}</td>
-            <td>{statement.balance ?? 0}</td>
+            <td>{statement.debit || 0}</td>
+            <td>{statement.credit || 0}</td>
+            <td>{statement.balance || 0}</td>
             <td>{statement.narration}</td>
             <td>
               <Button
@@ -199,18 +199,18 @@ export function StatementsHistory({
         onClose={() => setCurrentTransaction(null)}
       >
         <div className="flex flex-col p-5 border" id="pdf">
-          <AppLogo />
+          {/* <AppLogo /> */}
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
             <span>Balance:</span>
-            <span>₦{currentTransaction?.balance ?? 0}</span>
+            <span>₦{currentTransaction?.balance || 0}</span>
           </div>
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
             <span>Credit:</span>
-            <span>₦{currentTransaction?.credit ?? 0}</span>
+            <span>₦{currentTransaction?.credit || 0}</span>
           </div>
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
             <span>Debit:</span>
-            <span>₦{currentTransaction?.debit ?? 0}</span>
+            <span>₦{currentTransaction?.debit || 0}</span>
           </div>
           <div className="py-4 flex justify-between text-base font-semibold border-b-2">
             <span>Transaction Date:</span>

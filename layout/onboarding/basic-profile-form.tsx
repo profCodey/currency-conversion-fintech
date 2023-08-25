@@ -62,7 +62,7 @@ export function BasicProfileForm({
   }
 
   function handleNext() {
-    nextTab("document-upload");
+    nextTab("id-verification");
   }
 
   return (

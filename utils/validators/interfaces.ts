@@ -326,6 +326,7 @@ export interface IOnboardingDocuments {
   document_directors: string;
   document_shareholders: string;
   regulatory_licenses: string;
+  logo: string;
   status: "pending" | "approved" | "rejected" | "cancelled";
 }
 

@@ -11,6 +11,7 @@ export interface DocumentsValidator {
   document_directors: string;
   document_shareholders: string;
   regulatory_licenses: string;
+  logo: string;
   status: string;
 }
 
@@ -41,6 +42,7 @@ export function DocumentUpload({
   const [regulatoryLicenses, setRegulatoryLicenses] = useState<File | null>(
     null
   );
+  const [companyLogo, setCompanyLogo] = useState<File | null>(null);
 
   function handleSubmit(e: any) {
     e.preventDefault();
@@ -124,6 +126,15 @@ export function DocumentUpload({
             setFile={setRegulatoryLicenses}
             fileUrl={formData?.regulatory_licenses}
             fieldName="regulatory_licenses"
+          />
+
+          <FormFile
+            docName="Company logo"
+            file={companyLogo}
+            setFile={setCompanyLogo}
+            fileUrl={formData?.logo}
+            fieldName="logo"
+            acceptFormat="image/png,image/jpeg"
           />
           <Button
             className="bg-accent font-semibold w-3/4"

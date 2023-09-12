@@ -93,6 +93,10 @@ export function ClientDocuments() {
                 title="Applicable Regulatory licences"
                 link={clientDocuments?.data.regulatory_licenses}
               />
+              <DocumentRow
+                title="Company Logo"
+                link={clientDocuments?.data.logo}
+              />
             </tbody>
           </Table>
         </Skeleton>

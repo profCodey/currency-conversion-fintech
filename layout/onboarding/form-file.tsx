@@ -12,12 +12,14 @@ export function FormFile({
   setFile,
   fileUrl,
   fieldName,
+  acceptFormat,
 }: {
   docName: string;
   file: File | null;
   setFile: Dispatch<SetStateAction<File | null>>;
   fileUrl?: string;
   fieldName: string;
+  acceptFormat?: string;
 }) {
   const { data } = useGetCurrentUser();
   const { mutate: updateDocuments, isLoading } = usePatchOnboardingDocuments(
@@ -33,7 +35,9 @@ export function FormFile({
   }
 
   const disableEdit = data?.data.is_approved;
-
+  const acceptableFormat =
+    acceptFormat ||
+    "image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
   return (
     <div className="border rounded-lg px-[18px] py-3 bg-white flex items-center gap-4 border-primary-30">
       <Pin />
@@ -59,7 +63,7 @@ export function FormFile({
               <ActionIcon>
                 <FileButton
                   onChange={handleFileSelect}
-                  accept="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  accept={acceptableFormat}
                 >
                   {(props) => (
                     <Edit2 size="16" color="gray" variant="Bold" {...props} />
@@ -72,7 +76,7 @@ export function FormFile({
           )}
         </div>
       ) : (
-        <FileButton onChange={handleFileSelect} accept="image/png,image/jpeg">
+        <FileButton onChange={handleFileSelect} accept={acceptableFormat}>
           {(props) => (
             <Button
               className="bg-transparent hover:bg-transparent text-accent font-semibold ml-auto"

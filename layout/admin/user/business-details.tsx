@@ -1,7 +1,11 @@
 import { Skeleton, Stack } from "@mantine/core";
 import PaycelerLogo from "@/public/payceler-logo.svg";
-import { useClientProfileDetails } from "@/api/hooks/admin/users";
+import {
+  useClientDocuments,
+  useClientProfileDetails,
+} from "@/api/hooks/admin/users";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export function BusinessDetails() {
   const router = useRouter();
@@ -9,12 +13,26 @@ export function BusinessDetails() {
   const { data: clientProfileDetails, isLoading } = useClientProfileDetails(
     router?.query.id as string
   );
+  const { data: clientDocuments, isLoading: clientDocumentsLoading } =
+    useClientDocuments(router?.query.id as string);
   return (
     <Skeleton visible={isLoading} className="flex-grow mr-auto">
-      <section className="p-6 h-full bg-white shadow flex gap-8 flex-grow mr-auto items-center rounded-md border">
-        <div className="px-[50px] py-[45px] bg-primary-100 rounded-md">
-          <PaycelerLogo />
-        </div>
+      <section className="p-6 h-full bg-white shadow flex gap-8 flex-grow mr-auto items-center rounded-md">
+        {clientDocuments?.data.logo ? (
+          <div className="w-fit">
+            <Image
+              src={clientDocuments?.data.logo}
+              alt=""
+              width={250}
+              height={250}
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
+          </div>
+        ) : (
+          <div className="px-[50px] py-[45px] bg-primary-100 rounded-md">
+            <PaycelerLogo />
+          </div>
+        )}
         <Stack spacing="xs" className="flex-grow">
           <BusinessDetail
             title="Business name"

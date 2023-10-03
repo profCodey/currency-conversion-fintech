@@ -41,6 +41,7 @@ export function FxPayoutHistory() {
             <td>{payout.created_by_name}</td>
             <td>{payout.bank_name}</td>
             <td>{payout.narration}</td>
+
             <td>
               <Button
                 size="xs"

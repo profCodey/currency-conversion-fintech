@@ -8,7 +8,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const axiosInstance = axios.create({
-  baseURL: IDENTITY_BASE_URL,
+  baseURL: APICLIENT_BASE_URL,
 });
 
 export const apiClientInstance = axios.create({

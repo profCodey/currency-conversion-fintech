@@ -15,7 +15,7 @@ import { queryClient } from "@/pages/_app";
 export function useUsersList() {
   return useQuery(["users"], function (): Promise<AxiosResponse<User[]>> {
     return axiosInstance.get(
-      `/user/list/?category=${USER_CATEGORIES.API_CLIENT}`
+      `/auth/list/?category=${USER_CATEGORIES.API_CLIENT}`
     );
   });
 }
@@ -23,7 +23,7 @@ export function useUsersList() {
 export function useAdminsList() {
   return useQuery(["users", "admin"], function (): Promise<AxiosResponse<User[]>> {
     return axiosInstance.get(
-      `/user/list/?category=${USER_CATEGORIES.ADMIN}`
+      `/auth/list/?category=${USER_CATEGORIES.ADMIN}`
     );
   });
 }

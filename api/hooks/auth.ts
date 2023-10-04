@@ -14,7 +14,7 @@ export function useRegister() {
   const { mutate: login } = useLogin();
   return useMutation({
     mutationFn: function (payload: signupPayload) {
-      return axiosInstance.post("/user/register/", payload);
+      return axiosInstance.post("/auth/register/", payload);
     },
     onSuccess: function (_, variables) {
       showNotification({
@@ -96,7 +96,7 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: function (payload: z.infer<typeof loginFormValidator>) {
-      return axiosInstance.post("/login/token/", payload);
+      return axiosInstance.post("/auth/token/", payload);
     },
     onSuccess: function (data: AxiosResponse) {
       const { access, refresh, category } = data.data;
@@ -122,7 +122,7 @@ export function useGetRefreshToken() {
   const logout = useLogout();
   return useMutation({
     mutationFn: function () {
-      return axiosInstance.post("/login/refresh/", {
+      return axiosInstance.post("/auth/refresh/", {
         refresh: Cookies.get(APP_TOKENS.REFRESH_TOKEN),
       });
     },

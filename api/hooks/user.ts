@@ -18,7 +18,7 @@ export function useGetCurrentUser() {
   return useQuery({
     queryKey: ["user", "details"],
     queryFn: (): Promise<AxiosResponse<ICurrentUser>> =>
-      axiosInstance.get("/auth/current-user/"),
+      axiosInstance.get("/user/current-user/"),
   });
 }
 
@@ -26,7 +26,7 @@ export function useGetUserDetails(userId: number | undefined) {
   return useQuery({
     queryKey: ["user", "details", userId],
     queryFn: (): Promise<AxiosResponse<IUserDetail>> =>
-      axiosInstance.get(`/auth/${userId}/detail/`, {
+      axiosInstance.get(`/user/${userId}/detail/`, {
         // baseURL: APICLIENT_BASE_URL,
       }),
     enabled: !!userId,

@@ -96,7 +96,7 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: function (payload: z.infer<typeof loginFormValidator>) {
-      return axiosInstance.post("/auth/token/", payload);
+      return axiosInstance.post("/auth/login/", payload);
     },
     onSuccess: function (data: AxiosResponse) {
       const { access, refresh, category } = data.data;

@@ -11,9 +11,9 @@ export const axiosInstance = axios.create({
   baseURL: APICLIENT_BASE_URL,
 });
 
-export const apiClientInstance = axios.create({
-  baseURL: APICLIENT_BASE_URL,
-});
+// export const apiClientInstance = axios.create({
+//   baseURL: APICLIENT_BASE_URL,
+// });
 
 const addTokenToRequest = (request: any) => {
   const token = Cookies.get(APP_TOKENS.ACCESS_TOKEN);

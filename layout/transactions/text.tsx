@@ -216,31 +216,25 @@ const createPDF = async (payout) => {
   pdf.addImage(
     modalCanvas.toDataURL("image/png"),
     "PNG",
-    80,  // x-coordinate
+    50,  // x-coordinate
     80,  // y-coordinate
-    modalCanvas.width * 0.4, // scaled width
-    modalCanvas.height * 0.4  // scaled height
+    modalCanvas.width * 0.5, // scaled width
+    modalCanvas.height * 0.5  // scaled height
   );
 
   // Save the PDF
   pdf.save("transaction_receipt.pdf");
 };
 
-// const handleCloseModal = (payoutId: string) => {
-//   setTransactionModalState((prevState) => ({
-//     ...prevState,
-//     [payoutId]: false,
-//   }));
-// };
-
 
 const handleDownloadModal = (payoutId: string) => {
+  console.log("Before update:", transactionModalState);
   setTransactionModalState((prevState) => ({
     ...prevState,
-    [payoutId]: !prevState[payoutId], // Toggle the state
+    [payoutId]: true,
   }));
+  console.log("After update:", transactionModalState);
 };
-
 
   // CSV data for the CSVLink component
   const csvData = useMemo(() => {
@@ -269,18 +263,13 @@ const handleDownloadModal = (payoutId: string) => {
       return payoutHistory?.data.result
         ?.map(function (payout) {
           const isModalOpen = transactionModalState[payout.payoutId];
-          console.log(isModalOpen);
-          
-          console.log('isModalOpen)', isModalOpen);
-          
           return (
             <React.Fragment key={payout.payoutId}>
-              {isModalOpen && (
+              {transactionModalState[payout.payoutId] && (
 
                 <TransactionModal
   payout={payout}
   // handleCloseModal={handleCloseModal}
-  
   createPDF={createPDF}
 >
   <div id="transaction-modal-content" className="h-80">
@@ -293,20 +282,20 @@ const handleDownloadModal = (payoutId: string) => {
         <p className="w-36">Status:</p> <p>{payout.status}</p>
       </div>
       <div className="flex">
-        <p className="w-36">Transaction <br /> ID:</p> <p>{payout.transactionId}</p>
+        <p className="w-44">Transaction <br /> ID:</p> <p>{payout.transactionId}</p>
       </div>
       <div className="flex">
-        <p className="w-36">Payment <br /> Reference:</p><p> {payout.payoutId}</p>
+        <p className="w-44">Payment <br /> Reference:</p><p> {payout.payoutId}</p>
       </div>
       <p className="mt-4 mb-2 font-bold">Recipient Details</p>
       <div className="flex">
-        <p className="w-36 flex gap-2"><p>Bank</p> <p>Name:</p></p> <p>{payout.bankname}</p>
+        <p className="w-36">Bank Name:</p> <p>{payout.bankname}</p>
       </div>
       <div className="flex">
-        <p className="w-36 flex gap-2"><p>Account</p> <p>Name:</p></p><p>{payout.accountName}</p>
+        <p className="w-36">Account Name:</p><p>{payout.accountName}</p>
       </div>
       <div className="flex mb-8">
-        <p className="w-36 flex gap-2"><p>Account</p> <p>Number:</p></p> <p>{payout.accountNumber}</p>
+        <p className="w-36">Account Number:</p> <p>{payout.accountNumber}</p>
       </div>
     </div>
   </div>
@@ -338,9 +327,8 @@ const handleDownloadModal = (payoutId: string) => {
                 <td>{payout.charges}</td>
                 <td>
                   <span
-        
+                    className=""
                     onClick={() => handleDownloadModal(payout.payoutId)}
-                    className="cursor-pointer"
                   >
                     <FaDownload />
                   </span>
@@ -390,8 +378,6 @@ const handleDownloadModal = (payoutId: string) => {
             </Stack>
           }
         />
-
-        
       </div>
     );
   }
@@ -422,8 +408,7 @@ const handleDownloadModal = (payoutId: string) => {
         <span className="text-primary-100 font-semibold mr-auto">
           Recent Payouts
         </span>
-        
-  
+
         {meta}
 
         <DatePickerInput

@@ -21,6 +21,38 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/table";
 import { FaDownload } from "react-icons/fa6";
 import TransactionModal from "./transactionModal";
+import { jsPDF } from "jspdf";
+import { CSVLink } from 'react-csv';
+
+import * as XLSX from 'xlsx';
+
+export const exportToCSV = (data, columns, filename) => {
+  console.log(columns);
+  
+  const csvData = data.map(row => columns.map(column => row[column.id])).filter(Boolean);
+  const headers = columns.map(column => column.header);
+
+  console.log('csvData', csvData);
+  console.log('headers', headers);
+
+  return (
+    <CSVLink data={[headers, ...csvData]} filename={filename}>
+      Export to CSV
+    </CSVLink>
+  );
+};
+
+
+
+export const exportToExcel = (data, columns, filename) => {
+  console.log(columns);
+  
+  const ws = XLSX.utils.json_to_sheet(data, { header: columns.map(column => column.header) });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+  XLSX.writeFile(wb, filename);
+};
+
 
 // TODO: Use one code instance of manual funding history table
 
@@ -49,9 +81,46 @@ export function ManualFundingHistory() {
   }
 
 
+  const handleDownloadCSV = () => {
+    exportToCSV(manualFundings?.data || [], columns, 'manual_fundings.csv');
+  };
+  
+  const handleDownloadExcel = () => {
+    exportToExcel(manualFundings?.data || [], columns, 'manual_fundings.xlsx');
+  };
+  
+
   const handleDownload = (rowData) => {
     // Open the TransactionModal and pass the rowData
-    setFundingData(rowData);
+    // console.log(rowData);
+    // setFundingData(rowData);
+    // setModalVisible(true);  // Set modalVisible to true
+
+    const pdf = new jsPDF();
+  
+    // Format the data for PDF content
+    const pdfContent = `
+    Manual Funding Details
+
+      Amount: ${rowData.amount}
+      Category: ${rowData.category}
+      Created On: ${rowData.created_on}
+      Currency: ${rowData.currency}
+      ID: ${rowData.id}
+      Sender Name: ${rowData.sender_name}
+      Sender Narration: ${rowData.sender_narration}
+      Status: ${rowData.status}
+      Target Account: ${rowData.target_account}
+      Target Account Label: ${rowData.target_account_label}
+      Updated On: ${rowData.updated_on}
+      User: ${rowData.user}
+    `;
+    
+    // Add the content to the PDF
+    pdf.text(pdfContent, 10, 10);
+    
+    // Download the PDF
+    pdf.save("transaction_receipt.pdf");
   };
 
 
@@ -176,8 +245,26 @@ export function ManualFundingHistory() {
   //   [manualFundings?.data, isAdmin]
   // );
 
+
   return (
+    <>
+          <div className="">
+        <button
+          onClick={handleDownloadExcel}
+          className="bg-[#132144] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
+        >
+          Download Excel
+        </button>
+        <button
+          onClick={handleDownloadCSV}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Download CSV
+        </button>
+      </div>
     <Box className="flex-grow h-full relative mt-4">
+
+
       <LoadingOverlay visible={manualFundingsLoading || isLoading} />
       <Table columns={columns} data={manualFundings?.data || []} />
       {/* <MTable verticalSpacing="md">
@@ -200,7 +287,8 @@ export function ManualFundingHistory() {
       />
 
        {/* Render the TransactionModal component with props */}
-       {modalVisible && <TransactionModal payout={fundingData} onClose={() => setModalVisible(false)} />}
+       {/* {modalVisible && <TransactionModal payout={fundingData} onClose={() => setModalVisible(false)} />} */}
     </Box>
+    </>
   );
 }

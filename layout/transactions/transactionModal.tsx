@@ -24,9 +24,9 @@ interface TransactionModalProps {
 
 
 
-const TransactionModal: React.FC<TransactionModalProps> = ({ payout, handleCloseModal, createPDF, children }) => {
+const TransactionModal: React.FC<TransactionModalProps> = ({ payout,  createPDF, children }) => {
   const [modalIsOpen, setModalIsOpen] = useState(true);
-
+console.log(payout);
 
 //   const openModal = () => {
 //     setModalIsOpen(true);
@@ -36,11 +36,11 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ payout, handleClose
     setModalIsOpen(false);
   };
 
-//   const handleDownload = () => {
-//     // Implement download logic here
-//     console.log('Downloading:', data);
-//     closeModal();
-//   };
+  const handleDownload = () => {
+    // Implement download logic here
+    console.log('Downloading:', data);
+    closeModal();
+  };
   const modalStyle = {
     content: {
       height: "500px",
@@ -50,20 +50,33 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ payout, handleClose
   };
 
   return (
-    <div>
+    <div className=''>
       {/* <h2>Transaction Details</h2>
       <button onClick={openModal}>View Details</button> */}
 
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Transaction Modal"
+        // onRequestClose={closeModal}
+        // contentLabel="Transaction Modal"
         ariaHideApp={false} // Set to false to avoid warnings in the console
-        className="fixed overflow-y-auto transform -translate-x-1/2 -translate-y-1/2  bg-white border outline-none top-1/2 left-1/2 w-11/12 md:w-1/2 py-5 px-5 max-w-md"
+        className="fixed overflow-y-auto transform -translate-x-1/2 -translate-y-1/2  bg-white border outline-none top-1/2 left-1/2 w-11/12 md:w-1/2 py-5 px-5 lg:w-2/5 flex flex-col justify-center"
         overlayClassName="modal-overlay"
+        // isOpen={isOpen}
+        onRequestClose={closeModal}
+        contentLabel="Transaction Details Modal"
+        // className="Modal"
+        // overlayClassName="Overlay"
         style={modalStyle}
 
       >
+           <div>
+             <button
+                       className="absolute top-4 right-4 text-gray-500"
+                       onClick={closeModal}
+                     >
+                       X
+                     </button>
+           </div>
         {children}
    {/* <div>
    <h2 className="text-2xl font-bold mb-4">Transaction Details</h2>
@@ -80,9 +93,14 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ payout, handleClose
 
    </div> */}
         <div className='flex mt-8'>
-          <button onClick={()=> createPDF(payout)}  className="  bg-gray-300 hover:bg-gray-400 text-white py-2 px-4 rounded mr-2 w-1/2">Download</button>
-          <button  onClick={() => handleCloseModal(payout.payoutId)}  className="bg-[#00b0f0]  hover:bg-[#00b0f0dd] text-white py-2 px-4 rounded mr-2 w-1/2">Cancel</button>
+          <button onClick={()=> createPDF(payout)}  className="text-xl w-full bg-[#132144] hover:bg-[#00b0f0dd] text-white py-2 px-4 rounded mr-2 ">Download</button>
+          {/* <button 
+           onClick={() =>
+             handleCloseModal(payout.id)
+          } 
+            className="bg-[#00b0f0]  hover:bg-[#00b0f0dd] text-white py-2 px-4 rounded mr-2 w-1/2">Cancel</button> */}
         </div>
+        
       </Modal>
     </div>
   );

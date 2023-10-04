@@ -1,3 +1,4 @@
+
 import { useGetManualFundings } from "@/api/hooks/banks";
 import { useRole } from "@/api/hooks/user";
 import { USER_CATEGORIES } from "@/utils/constants";
@@ -7,6 +8,7 @@ import {
   Badge,
   Box,
   Button,
+  Col,
   LoadingOverlay,
   Table as MTable,
 } from "@mantine/core";
@@ -17,6 +19,8 @@ import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/table";
+import { FaDownload } from "react-icons/fa6";
+import TransactionModal from "./transactionModal";
 
 // TODO: Use one code instance of manual funding history table
 
@@ -24,6 +28,9 @@ export function ManualFundingHistory() {
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
   const { data: manualFundings, isLoading: manualFundingsLoading } =
     useGetManualFundings();
+    console.log(useGetManualFundings().data?.data);
+    const [modalVisible, setModalVisible] = useState(false); 
+    
   const { role, isLoading } = useRole();
   const isAdmin = role === USER_CATEGORIES.ADMIN;
 
@@ -40,6 +47,13 @@ export function ManualFundingHistory() {
         return null;
     }
   }
+
+
+  const handleDownload = (rowData) => {
+    // Open the TransactionModal and pass the rowData
+    setFundingData(rowData);
+  };
+
 
   const ColumnHelper = createColumnHelper<IManualPayment>();
 
@@ -89,7 +103,24 @@ export function ManualFundingHistory() {
         id: "sender_narration",
       }),
       ColumnHelper.accessor("category", { header: "Category" }),
+      ColumnHelper.accessor("id", {
+        header: "Download",
+        id: "download",
+        cell: (props) => (
+          <Button
+            variant="white"
+            className="px-0 text-red-500 my-auto"
+            onClick={() => handleDownload(props.row.original)}
+          >
+            <FaDownload />
+          </Button>
+        ),
+      }),
+
+      
     ];
+
+
 
     const adminColumns = [
       ColumnHelper.accessor("sender_name", { header: "Sender" }),
@@ -167,6 +198,9 @@ export function ManualFundingHistory() {
         fundingData={fundingData}
         closeDrawer={() => setFundingData(null)}
       />
+
+       {/* Render the TransactionModal component with props */}
+       {modalVisible && <TransactionModal payout={fundingData} onClose={() => setModalVisible(false)} />}
     </Box>
   );
 }

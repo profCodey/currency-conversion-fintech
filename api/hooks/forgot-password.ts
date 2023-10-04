@@ -8,7 +8,7 @@ import { forgotPasswordValidator } from "@/pages/forgot-password";
 export function useResetPassword(cb: () => void) {
   return useMutation(
     (payload: { email: string }) =>
-      axiosInstance.post("/user/reset-password/", payload),
+      axiosInstance.post("/auth/reset-password/", payload),
     {
       onSuccess: function (data: AxiosResponse) {
         showNotification({
@@ -36,7 +36,7 @@ export function useResetPassword(cb: () => void) {
 export function useSetNewPassword(successCb: () => void) {
   return useMutation(
     (payload: z.infer<typeof forgotPasswordValidator>) =>
-      axiosInstance.post("/user/reset-password/change/", payload),
+      axiosInstance.post("/auth/reset-password/change/", payload),
     {
       onSuccess: function (data: AxiosResponse) {
         console.log({ data });

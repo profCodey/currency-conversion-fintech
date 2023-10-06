@@ -10,6 +10,9 @@ import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
 import { LoginResponse } from "@/utils/validators/interfaces";
 
+
+
+
 export function useRegister() {
   const { mutate: login } = useLogin();
   return useMutation({
@@ -67,11 +70,13 @@ export interface ErrorItem {
 }
 
 export function useLogin() {
+  
   const router = useRouter();
   const logout = useLogout();
 
   function handleLoginSuccess(data: AxiosResponse<LoginResponse>) {
     showNotification({
+    
       title: "Login successful",
       message: "Signing you in",
       color: "green",
@@ -99,16 +104,18 @@ export function useLogin() {
       return axiosInstance.post("/auth/login/", payload);
     },
     onSuccess: function (data: AxiosResponse) {
+      
       const { access, refresh, category } = data.data;
       Cookies.set(APP_TOKENS.ACCESS_TOKEN, access);
       Cookies.set(APP_TOKENS.REFRESH_TOKEN, refresh);
       Cookies.set(APP_TOKENS.CATEGORY, category);
+      Cookies.set(APP_TOKENS.USERID, data.data.user_id);
+
       handleLoginSuccess(data);
     },
     onError: function (data: AxiosError) {
       const response = data.response?.data as ErrorItem;
       const message = response?.detail || "Unable to log you in";
-
       return showNotification({
         title: "An error occured",
         message,

@@ -39,7 +39,6 @@ export function useSetNewPassword(successCb: () => void) {
       axiosInstance.post("/auth/reset-password/change/", payload),
     {
       onSuccess: function (data: AxiosResponse) {
-        console.log({ data });
         showNotification({
           title: "Password reset successful!",
           message: data?.data.success,

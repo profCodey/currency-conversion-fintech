@@ -9,6 +9,9 @@ import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FundingStatuses } from "./manual-funding-drawer";
+import * as XLSX from 'xlsx';
+import { FaDownload } from "react-icons/fa6";
+import { jsPDF } from "jspdf";
 
 export function ExchangeHistory() {
   const [exchange, setExchange] = useState<IExchangeDetailed | null>(null);
@@ -27,6 +30,79 @@ export function ExchangeHistory() {
         return null;
     }
   }
+
+function handlePDFDonwload(data){
+    const pdf = new jsPDF();
+  
+    const lineHeight = 7;
+    const marginLeft = 10;
+  
+    const formattedContent = `
+      Exchange Details
+  
+      User:                            ${data.created_by_name}
+      Id:                                 ${data.id}
+      Status:                          ${data.status}
+      Date Created:               ${data.created_on}
+
+      Source Account
+      Account:                        ${data.source_account_detail.label}
+      Category:                       ${data.source_account_detail.category}
+      Currency:                       ${data.source_account_detail.currency.name}
+      Balance:                        ${data.source_account_detail.true_balance}
+
+      Destination Account
+      Account:                        ${data.destination_account_detail.label}
+      Category:                       ${data.destination_account_detail.category}
+      Currency:                       ${data.destination_account_detail.currency.name}
+      Balance:                        ${data.destination_account_detail.true_balance}
+
+    `;
+  
+    // Split the formatted content into lines
+    const lines = formattedContent.split('\n');    
+  
+    // Add each line to the PDF
+    lines.forEach((line, index) => {
+      pdf.text(line, marginLeft, lineHeight * (index + 1));
+    });
+  
+    // Download the PDF
+    pdf.save("transaction_receipt.pdf");
+  };
+  
+  const handleDownloadExcel = () => {
+    if (!exchanges || !exchanges.data) {
+      console.warn('No data available for Excel export');
+      return null;
+    }
+    const excelData = exchanges.data.map(exchange => ({
+      Status: exchange.status,
+      'Created By': exchange.created_by_name,
+      Amount: exchange.amount,
+      Date: dayjs(exchange.created_on).format("MMM D, YYYY h:mm A"),
+      Rate: exchange.rate,
+      'Source Account': exchange.source_account_detail?.label,
+      "Source Currency": exchange.source_account_detail.currency.name,
+      "Source Category": exchange.source_account_detail.category,
+      "Source Balance": exchange.source_account_detail.true_balance,
+      'Destination Account': exchange.destination_account_detail?.label,
+      "Destination Currency": exchange.destination_account_detail?.currency.name,
+      "Destination Category": exchange.destination_account_detail?.category,
+      "Destination Balance": exchange.destination_account_detail?.true_balance,
+    }));
+
+    if (excelData.length === 0) {
+      console.warn('No data available for Excel export');
+      return null;
+    }
+
+    const ws = XLSX.utils.json_to_sheet(excelData, { header: Object.keys(excelData[0]) });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    XLSX.writeFile(wb, 'exchange_history.xlsx');
+  };
+
   const rows = useMemo(
     function () {
       return exchanges?.data?.map(function (exchange) {
@@ -51,6 +127,15 @@ export function ExchangeHistory() {
                 Details
               </Button>
             </td>
+            <td>
+              <Button
+                size="xs"
+                variant="white"
+                onClick={() => handlePDFDonwload(exchange)}
+              >
+                <FaDownload color="#132144"/>
+              </Button>
+            </td>
           </tr>
         );
       });
@@ -61,7 +146,7 @@ export function ExchangeHistory() {
   return (
     <Skeleton visible={isLoading} className="flex-grow">
       <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
-        <Table verticalSpacing="md" withBorder>
+        <Table verticalSpacing="md" withBorder className="relative  top-16">
           <thead>
             <tr className="font-primary font-light">
               <th>Status</th>
@@ -72,6 +157,7 @@ export function ExchangeHistory() {
               <th>Source account</th>
               <th>Destination account</th>
               <th>View Details</th>
+              <th>Download</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -82,6 +168,14 @@ export function ExchangeHistory() {
           exchange={exchange}
           closeDrawer={() => setExchange(null)}
         />
+            <div className="flex justify-end p-4">
+          <button
+          onClick={handleDownloadExcel}
+          className="relative top-[-120px] bg-primary-100 hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
+        >
+          Download Excel
+        </button>
+        </div>
       </div>
     </Skeleton>
   );

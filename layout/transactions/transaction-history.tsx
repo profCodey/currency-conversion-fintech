@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
 import { Group, LoadingOverlay, Skeleton, Stack, Table } from "@mantine/core";
 import { useDefaultGateway } from "@/api/hooks/gateways";
@@ -16,6 +17,14 @@ import { USER_CATEGORIES } from "@/utils/constants";
 import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
+import { FaDownload } from "react-icons/fa6";
+import TransactionModal from "./transactionModal";
+import { jsPDF } from "jspdf";
+import Cookies from "js-cookie";
+
+import * as XLSX from "xlsx";
+import html2canvas from "html2canvas";
+import { useGetBasicProfile } from "@/api/hooks/onboarding";
 
 export function TransactionHistory({
   payoutHistory,
@@ -34,6 +43,11 @@ export function TransactionHistory({
   const { defaultGateway, isLoading: selectedGatewaysLoading } =
     useDefaultGateway();
   const { role } = useRole();
+  const [companyName, setCompanyName] = useState<string>("");
+  const [transactionModalState, setTransactionModalState] = useState<{
+    [payoutId: string]: boolean;
+  }>({});
+
   const isAdmin = role === USER_CATEGORIES.ADMIN;
   let emptyTransactionHistory =
     payoutHistory?.data &&
@@ -71,38 +85,226 @@ export function TransactionHistory({
         return status;
     }
   }
+  // Variable to store the modal content
+  const transactionModalContent = Object.entries(transactionModalState).map(
+    ([payoutId, showModal]) =>
+      showModal && (
+        <TransactionModal
+          key={payoutId}
+          payout={payoutHistory?.data.result?.find(
+            (payout) => payout.payoutId === payoutId
+          )}
+        />
+      )
+  );
+
+  const userId = Cookies.get("pycl_user_id");
+  const companyInfo = useGetBasicProfile(userId);
+  const company = companyInfo.data?.data.business_trading_name;
+
+  // Function to capture HTML content using html2canvas
+  const captureHTML = async () => {
+    const element = document.getElementById("pdf-content");
+    const canvas = await html2canvas(element);
+    return canvas.toDataURL("image/png");
+  };
+
+  const createPDF = async (payout) => {
+    const pdf = new jsPDF("landscape", "pt", "a4");
+
+    // Set font size for better readability
+    pdf.setFontSize(16); 
+    pdf.setFontSize(10);
+
+    // Use html2canvas to capture the content of the TransactionModal
+    const modalElement = document.getElementById("transaction-modal-content");
+
+    const modalCanvas = await html2canvas(modalElement);
+
+    const scaleFactor = 0.4; // Adjust this value as needed
+    const scaledWidth = modalCanvas.width * scaleFactor;
+    const scaledHeight = modalCanvas.height * scaleFactor;
+
+    // Add the captured image to the PDF
+    pdf.addImage(
+      modalCanvas.toDataURL("image/png"),
+      "PNG",
+      80,
+      80,
+      scaledWidth,
+      scaledHeight
+    );
+
+    // Save the PDF
+    pdf.save("transaction_receipt.pdf");
+  };
+
+  const handleDownloadModal = (payoutId: string) => {
+    setTransactionModalState((prevState) => ({
+      ...prevState,
+      [payoutId]: !prevState[payoutId], // Toggle the state
+    }));
+  };
+
+  // CSV data for the CSVLink component
+  const csvData = useMemo(() => {
+    if (!payoutHistory?.data?.result) return [];
+
+    return payoutHistory.data.result.map((payout) => ({
+      "Last transaction": payout.narration,
+      "Transfer Id": payout.transactionId,
+      Recipient: payout.accountName,
+      Date: dayjs(payout.createdOn).format("MMM D, YYYY h:mm A"),
+      "Amount (₦)": currencyFormatter(Number(payout.amount)),
+      Charges: payout.charges,
+    }));
+  }, [payoutHistory?.data?.result]);
+
+  const TransactionDetailsContent = ({ payout }) => (
+    <div id="transaction-modal-content" className="h-[600px] w-full">
+      <div className="flex gap-72 w-full">
+        <div className="flex mb-1 ">
+          <p className="text-4xl font-bold">{company}</p>
+        </div>
+        <div className="text-right ">
+          <div className="text-right w-full">
+            <h2 className="text-2xl font-bold mb-6 ">Transaction Details</h2>
+          </div>
+          <div className="flex text-right mr-2">
+            <p className="text-sm mt-[-10px] mb-8 ml-24">
+              {new Date(payout.createdOn).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+          </div>
+          <div className="flex bg-[#ebebeb] w-full pl-2 h-8 mt-[-15px] mb-8 text-sm">
+            <p className="ml-36">Status:&nbsp;</p> <p>{payout.status}</p>
+          </div>
+        </div>
+      </div>
+      <div className="text-l mt-6">
+        <div className="flex mb-1">
+          <p className="w-52 font-bold">Amount:</p> <p>{payout.amount}</p>
+        </div>
+
+        <div className="flex mb-1">
+          <p className="w-52 font-bold">Transaction ID:</p>{" "}
+          <p>{payout.transactionId}</p>
+        </div>
+        <div className="flex mb-1">
+          <p className="w-52 font-bold">Payment Reference:</p>
+          <p> {payout.payoutId}</p>
+        </div>
+        <p className="mt-8 mb-2 font-bold text-xl">Recipient Details</p>
+        <div className="flex mb-2">
+          <p className="w-52 flex gap-2 font-bold">
+            <p>Bank</p> <p className="font-bold">Name:</p>
+          </p>{" "}
+          <p>{payout.bankname}</p>
+        </div>
+        <div className="flex mb-2">
+          <p className="w-52 flex gap-2 font-bold">
+            <p>Account</p> <p className="font-bold">Name:</p>
+          </p>
+          <p>{payout.accountName}</p>
+        </div>
+        <div className="flex mb-8">
+          <p className="w-52 flex gap-2 font-bold">
+            <p>Account</p> <p className="font-bold">Number:</p>
+          </p>{" "}
+          <p>{payout.accountNumber}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Function to handle exporting table data to Excel
+  const exportToExcel = () => {
+    const info = payoutHistory?.data.result.map((info) => {
+      return {
+        gatewaywalletbalanceAfter: info.gatewaywalletbalanceAfter,
+        "Wallet Balance After": info.walletbalanceAfter,
+        "Status Date": info.statusDate,
+        "Gateway Id": info.gatewayid,
+        "Client Id": info.clientId,
+        "Payout Id": info.payoutId,
+        "Bank Code": info.bankcode,
+        bankname: info.bankname,
+        accountNumber: info.accountNumber,
+        accountName: info.accountName,
+        amount: info.amount,
+        transactionId: info.transactionId,
+        status: info.status,
+        statusRemarks: info.statusRemarks,
+        gatewayref: info.gatewayref,
+        charges: info.charges,
+        narration: info.narration,
+        createdOn: info.createdOn,
+      };
+    });
+
+    const ws = XLSX.utils.json_to_sheet(info);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Payout History");
+    XLSX.writeFile(wb, "payout_history.xlsx");
+  };
 
   const _rows = useMemo(
     function () {
+      html2canvas;
       return payoutHistory?.data.result
         ?.map(function (payout) {
+          const isModalOpen = transactionModalState[payout.payoutId];
           return (
-            <tr key={payout.payoutId} className="text-primary-100 font-medium">
-              <td className="text-xs sm:text-base">
-                <Group spacing="xs">
-                  <span className="hidden sm:block">
-                    {getTransactionIcon(payout.status)}
+            <React.Fragment key={payout.payoutId}>
+              <div className="absolute top-96">
+                <TransactionDetailsContent payout={payout} />
+              </div>
+              {isModalOpen && (
+                <>
+                  <TransactionDetailsContent payout={payout} />
+                </>
+              )}
+              <tr className="text-primary-100 font-medium">
+                <td className="text-xs sm:text-base">
+                  <Group spacing="xs">
+                    <span className="hidden sm:block">
+                      {getTransactionIcon(payout.status)}
+                    </span>
+                    <Stack spacing={0}>
+                      <span className="font-medium text-primary-100">
+                        {payout.narration}
+                      </span>
+                      <span className="text-primary-70">
+                        {getTransactionStatus(payout.status)}
+                      </span>
+                    </Stack>
+                  </Group>
+                </td>
+                <td>{payout.transactionId}</td>
+                <td>{payout.accountName}</td>
+                <td>{dayjs(payout.createdOn).format("MMM D, YYYY h:mm A")}</td>
+                <td>{currencyFormatter(Number(payout.amount))}</td>
+                <td>{payout.charges}</td>
+                <td>
+                  <span
+                    onClick={() =>
+                      createPDF(payout)
+                    }
+                    className="cursor-pointer"
+                  >
+                    <FaDownload />
                   </span>
-                  <Stack spacing={0}>
-                    <span className="font-medium text-primary-100">
-                      {payout.narration}
-                    </span>
-                    <span className="text-primary-70">
-                      {getTransactionStatus(payout.status)}
-                    </span>
-                  </Stack>
-                </Group>
-              </td>
-              <td>{payout.accountName}</td>
-              <td>{dayjs(payout.createdOn).format("MMM D, YYYY h:mm A")}</td>
-              <td>{currencyFormatter(Number(payout.amount))}</td>
-              <td>{payout.charges}</td>
-            </tr>
+                </td>
+              </tr>
+            </React.Fragment>
           );
         })
         .reverse();
     },
-    [payoutHistory?.data.result]
+    [payoutHistory?.data.result, transactionModalState]
   );
 
   if (!isAdmin && !defaultGateway) {
@@ -119,6 +321,14 @@ export function TransactionHistory({
             value={dateRange}
             onChange={setDateRange}
           />
+
+          {/* Button to download table in Excel format */}
+          <button
+            className="text-white bg-primary-100 p-2 rounded"
+            onClick={exportToExcel}
+          >
+            Download Excel
+          </button>
         </div>
         <EmptyTransactionHistory
           message={
@@ -169,6 +379,14 @@ export function TransactionHistory({
           value={dateRange}
           onChange={setDateRange}
         />
+
+        {/* Button to download table in Excel format */}
+        <button
+          className="bg-primary-100 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={exportToExcel}
+        >
+          Download Excel
+        </button>
       </div>
       <Skeleton
         visible={isAdmin ? payoutHistoryFetching : selectedGatewaysLoading}
@@ -184,10 +402,12 @@ export function TransactionHistory({
             <thead>
               <tr className="font-primary font-light">
                 <th>Last transaction</th>
+                <th>Transfer Id</th>
                 <th>Recipient</th>
                 <th>Date</th>
                 <th>Amount (₦)</th>
                 <th>Charges</th>
+                <th>Download</th>
               </tr>
             </thead>
             <tbody>{_rows}</tbody>

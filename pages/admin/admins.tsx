@@ -80,7 +80,6 @@ export default function Admins() {
   });
 
   function handleSignup(values: z.infer<typeof signupFormValidator>) {
-    // console.log({ values });
     const { phone_code, ...payload } = values;
     payload.phone_number = phone_code + payload.phone_number;
 

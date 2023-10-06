@@ -9,6 +9,9 @@ import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FundingStatuses } from "./manual-funding-drawer";
+import { FaDownload } from "react-icons/fa6";
+// import { CSVLink } from 'react-csv';
+import * as XLSX from 'xlsx';
 
 export function FxPayoutHistory() {
   const [payout, setPayout] = useState<IFxPayout | null>(null);
@@ -27,6 +30,25 @@ export function FxPayoutHistory() {
         return null;
     }
   }
+
+  const handleDownloadExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(fxPayouts?.data?.map(payout => ({
+      Status: payout.status,
+      'Account Name': payout.account_name,
+      Amount: payout.amount,
+      Date: dayjs(payout.created_on).format("MMM D, YYYY h:mm A"),
+      'Created by': payout.created_by_name,
+      'Bank Name': payout.bank_name,
+      Narration: payout.narration
+    })) || []);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+    XLSX.writeFile(wb, 'fx_payouts.xlsx');
+  };
+
+
+
   const rows = useMemo(
     function () {
       return fxPayouts?.data?.map(function (payout) {
@@ -41,6 +63,9 @@ export function FxPayoutHistory() {
             <td>{payout.created_by_name}</td>
             <td>{payout.bank_name}</td>
             <td>{payout.narration}</td>
+            <td><FaDownload /></td>
+
+
             <td>
               <Button
                 size="xs"
@@ -60,6 +85,11 @@ export function FxPayoutHistory() {
   return (
     <Skeleton visible={isLoading} className="flex-grow">
       <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
+      <div className="flex justify-end mb-4">
+    
+          <button    className="text-white bg-primary-100 p-2 rounded"   onClick={handleDownloadExcel}>Download Excel</button>
+        </div>
+        
         <Table verticalSpacing="md" withBorder>
           <thead>
             <tr className="font-primary font-light">
@@ -71,6 +101,7 @@ export function FxPayoutHistory() {
               <th>Bank name</th>
               <th>Narration</th>
               <th>View Details</th>
+              <th>Download</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>

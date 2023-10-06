@@ -9,6 +9,7 @@ export const APP_TOKENS = {
   ACCESS_TOKEN: "pycl_access_token",
   REFRESH_TOKEN: "pycl_refresh_token",
   CATEGORY: "pycl_category",
+  USERID : "pycl_user_id",
 };
 
 export const IDENTITY_BASE_URL =

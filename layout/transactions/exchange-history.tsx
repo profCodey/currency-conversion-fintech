@@ -32,11 +32,8 @@ export function ExchangeHistory() {
   }
 
 function handlePDFDonwload(data){
-console.log(data);
-
     const pdf = new jsPDF();
   
-
     const lineHeight = 7;
     const marginLeft = 10;
   
@@ -74,21 +71,11 @@ console.log(data);
     pdf.save("transaction_receipt.pdf");
   };
   
-
-
-
   const handleDownloadExcel = () => {
-    console.log('dddd');
-    
     if (!exchanges || !exchanges.data) {
       console.warn('No data available for Excel export');
       return null;
     }
-
-    console.log('dd');
-    
-console.log(exchanges.data);
-
     const excelData = exchanges.data.map(exchange => ({
       Status: exchange.status,
       'Created By': exchange.created_by_name,
@@ -115,7 +102,6 @@ console.log(exchanges.data);
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
     XLSX.writeFile(wb, 'exchange_history.xlsx');
   };
-
 
   const rows = useMemo(
     function () {

@@ -60,9 +60,6 @@ export function StatementsHistory({
         return null;
       }
 
-      console.log(data);
-      
-
       const excelData = data.map(exchange => ({
 
         'Tansaction Id': exchange.transactionId,
@@ -86,14 +83,10 @@ export function StatementsHistory({
 
   const handleDownloadPDF = (rowData) => {
     const pdf = new jsPDF();
-  console.log(rowData);
   
-
     const lineHeight = 10;
     const marginLeft = 10;
     const textWidth = (pdf.internal.pageSize.getWidth() - 2 * marginLeft) ; // Adjust the width
-console.log(textWidth);
-
   
     const formattedContent = `
       Manual Funding Details
@@ -109,9 +102,7 @@ console.log(textWidth);
   
     // Split the formatted content into lines
     const lines = formattedContent.split('\n');    
-  console.log(lines);
   
-
     lines.forEach((line, index) => {
       pdf.text(line, marginLeft, lineHeight * (index + 1));
     });

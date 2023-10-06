@@ -35,19 +35,14 @@ const modalBG = {
 
 const TransactionModal: React.FC<TransactionModalProps> = ({ payout,  createPDF, children }) => {
   const [modalIsOpen, setModalIsOpen] = useState(true);
-console.log(payout);
-
-//   const openModal = () => {
-//     setModalIsOpen(true);
-//   };
 
   const closeModal = () => {
     setModalIsOpen(false);
   };
 
+  //Download Logic For Modal
   const handleDownload = () => {
     // Implement download logic here
-    console.log('Downloading:', data);
     closeModal();
   };
   // const modalStyle = {

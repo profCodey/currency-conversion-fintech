@@ -29,9 +29,7 @@ import * as XLSX from 'xlsx';
 
 export const exportToExcel = (data, columns, filename) => {
   const ws = XLSX.utils.json_to_sheet(data);
-  console.log(ws);
   const wb = XLSX.utils.book_new();
-  console.log(wb);
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
   XLSX.writeFile(wb, filename);
 };
@@ -71,8 +69,6 @@ export function ManualFundingHistory() {
   
   const handleDownload = (rowData) => {
     const pdf = new jsPDF();
-  console.log(rowData);
-  
 
     const lineHeight = 10;
     const marginLeft = 10;

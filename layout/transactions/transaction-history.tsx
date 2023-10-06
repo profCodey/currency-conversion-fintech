@@ -119,8 +119,6 @@ export function TransactionHistory({
     // Use html2canvas to capture the content of the TransactionModal
     const modalElement = document.getElementById("transaction-modal-content");
 
-    console.log(modalElement);
-
     const modalCanvas = await html2canvas(modalElement);
 
     const scaleFactor = 0.4; // Adjust this value as needed
@@ -224,8 +222,6 @@ export function TransactionHistory({
 
   // Function to handle exporting table data to Excel
   const exportToExcel = () => {
-    console.log(payoutHistory?.data.result);
-
     const info = payoutHistory?.data.result.map((info) => {
       return {
         gatewaywalletbalanceAfter: info.gatewaywalletbalanceAfter,
@@ -248,8 +244,6 @@ export function TransactionHistory({
         createdOn: info.createdOn,
       };
     });
-
-    console.log(info);
 
     const ws = XLSX.utils.json_to_sheet(info);
     const wb = XLSX.utils.book_new();

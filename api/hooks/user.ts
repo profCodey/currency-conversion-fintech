@@ -48,7 +48,6 @@ export function useApproveClient(userId: string | number) {
     },
     {
       onSuccess: function (data: AxiosResponse<{ message: string }>) {
-        console.log({ data });
         showNotification({
           title: "Operation successful",
           message: data?.data.message || "Client was successfully approved",

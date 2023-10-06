@@ -22,33 +22,16 @@ import Table from "@/components/table";
 import { FaDownload } from "react-icons/fa6";
 import TransactionModal from "./transactionModal";
 import { jsPDF } from "jspdf";
-import { CSVLink } from 'react-csv';
+// import { CSVLink } from 'react-csv';
 
 import * as XLSX from 'xlsx';
 
-export const exportToCSV = (data, columns, filename) => {
-  console.log(columns);
-  
-  const csvData = data.map(row => columns.map(column => row[column.id])).filter(Boolean);
-  const headers = columns.map(column => column.header);
-
-  console.log('csvData', csvData);
-  console.log('headers', headers);
-
-  return (
-    <CSVLink data={[headers, ...csvData]} filename={filename}>
-      Export to CSV
-    </CSVLink>
-  );
-};
-
-
 
 export const exportToExcel = (data, columns, filename) => {
-  console.log(columns);
-  
-  const ws = XLSX.utils.json_to_sheet(data, { header: columns.map(column => column.header) });
+  const ws = XLSX.utils.json_to_sheet(data);
+  console.log(ws);
   const wb = XLSX.utils.book_new();
+  console.log(wb);
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
   XLSX.writeFile(wb, filename);
 };
@@ -60,7 +43,6 @@ export function ManualFundingHistory() {
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
   const { data: manualFundings, isLoading: manualFundingsLoading } =
     useGetManualFundings();
-    console.log(useGetManualFundings().data?.data);
     const [modalVisible, setModalVisible] = useState(false); 
     
   const { role, isLoading } = useRole();
@@ -80,50 +62,50 @@ export function ManualFundingHistory() {
     }
   }
 
-
-  const handleDownloadCSV = () => {
-    exportToCSV(manualFundings?.data || [], columns, 'manual_fundings.csv');
-  };
   
   const handleDownloadExcel = () => {
     exportToExcel(manualFundings?.data || [], columns, 'manual_fundings.xlsx');
   };
   
 
-  const handleDownload = (rowData) => {
-    // Open the TransactionModal and pass the rowData
-    // console.log(rowData);
-    // setFundingData(rowData);
-    // setModalVisible(true);  // Set modalVisible to true
-
-    const pdf = new jsPDF();
   
-    // Format the data for PDF content
-    const pdfContent = `
-    Manual Funding Details
+  const handleDownload = (rowData) => {
+    const pdf = new jsPDF();
+  console.log(rowData);
+  
 
-      Amount: ${rowData.amount}
-      Category: ${rowData.category}
-      Created On: ${rowData.created_on}
-      Currency: ${rowData.currency}
-      ID: ${rowData.id}
-      Sender Name: ${rowData.sender_name}
-      Sender Narration: ${rowData.sender_narration}
-      Status: ${rowData.status}
-      Target Account: ${rowData.target_account}
-      Target Account Label: ${rowData.target_account_label}
-      Updated On: ${rowData.updated_on}
-      User: ${rowData.user}
+    const lineHeight = 10;
+    const marginLeft = 10;
+  
+    const formattedContent = `
+      Manual Funding Details
+  
+      Amount:                        ${rowData.amount}
+      Category:                      ${rowData.category}
+      Created On:                  ${rowData.created_on}
+      Currency:                      ${rowData.currency}
+      ID:                                 ${rowData.id}
+      Sender Name:              ${rowData.sender_name}
+      Sender Narration:         ${rowData.sender_narration}
+      Status:                          ${rowData.status}
+      Target Account:             ${rowData.target_account}
+      Target Account Label:   ${rowData.target_account_label}
+      Updated On:                  ${rowData.updated_on}
+      User:                              ${rowData.user}
     `;
-    
-    // Add the content to the PDF
-    pdf.text(pdfContent, 10, 10);
-    
+  
+    // Split the formatted content into lines
+    const lines = formattedContent.split('\n');    
+  
+    // Add each line to the PDF
+    lines.forEach((line, index) => {
+      pdf.text(line, marginLeft, lineHeight * (index + 1));
+    });
+  
     // Download the PDF
     pdf.save("transaction_receipt.pdf");
   };
-
-
+  
   const ColumnHelper = createColumnHelper<IManualPayment>();
 
   const columns = useMemo(function () {
@@ -172,6 +154,7 @@ export function ManualFundingHistory() {
         id: "sender_narration",
       }),
       ColumnHelper.accessor("category", { header: "Category" }),
+
       ColumnHelper.accessor("id", {
         header: "Download",
         id: "download",
@@ -180,15 +163,15 @@ export function ManualFundingHistory() {
             variant="white"
             className="px-0 text-red-500 my-auto"
             onClick={() => handleDownload(props.row.original)}
+            onKeyDown={handleDownload}
           >
             <FaDownload />
           </Button>
         ),
       }),
 
-      
-    ];
 
+    ];
 
 
     const adminColumns = [
@@ -249,24 +232,12 @@ export function ManualFundingHistory() {
   return (
     <>
           <div className="">
-        <button
-          onClick={handleDownloadExcel}
-          className="bg-[#132144] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
-        >
-          Download Excel
-        </button>
-        <button
-          onClick={handleDownloadCSV}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Download CSV
-        </button>
       </div>
     <Box className="flex-grow h-full relative mt-4">
 
 
       <LoadingOverlay visible={manualFundingsLoading || isLoading} />
-      <Table columns={columns} data={manualFundings?.data || []} />
+      <Table columns={columns} data={manualFundings?.data || []} handleDownloadCSV={handleDownloadExcel} />
       {/* <MTable verticalSpacing="md">
         <thead>
           <tr>

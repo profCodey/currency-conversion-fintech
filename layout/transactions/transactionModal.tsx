@@ -23,6 +23,15 @@ interface TransactionModalProps {
 }
 
 
+const modalBG = {
+  // height: "100vh",
+  // backgroundColor: "black",
+  // width: "1000px",
+  // // marginTop: "-150px"
+  // position: "fixed",
+  // top: "-800px"
+}
+
 
 const TransactionModal: React.FC<TransactionModalProps> = ({ payout,  createPDF, children }) => {
   const [modalIsOpen, setModalIsOpen] = useState(true);
@@ -41,18 +50,21 @@ console.log(payout);
     console.log('Downloading:', data);
     closeModal();
   };
-  const modalStyle = {
-    content: {
-      height: "500px",
-      borderRadius: "5px",
-      paddingTop: "30px",
-    },
-  };
+  // const modalStyle = {
+  //   content: {
+  //     top: '50%',
+  //     left: '60%',
+  //     right: 'auto',
+  //     bottom: 'auto',
+  //     marginRight: '-50%',
+  //     transform: 'translate(-50%, -50%)',
+  //   },
+  // };
 
   return (
-    <div className=''>
+    <div style = {modalBG}>
       {/* <h2>Transaction Details</h2>
-      <button onClick={openModal}>View Details</button> */}
+      <button>View Details</button> */}
 
       <Modal
         isOpen={modalIsOpen}
@@ -60,13 +72,13 @@ console.log(payout);
         // contentLabel="Transaction Modal"
         ariaHideApp={false} // Set to false to avoid warnings in the console
         className="fixed overflow-y-auto transform -translate-x-1/2 -translate-y-1/2  bg-white border outline-none top-1/2 left-1/2 w-11/12 md:w-1/2 py-5 px-5 lg:w-2/5 flex flex-col justify-center"
-        overlayClassName="modal-overlay"
+        // overlayClassName="modal-overlay"
         // isOpen={isOpen}
         onRequestClose={closeModal}
         contentLabel="Transaction Details Modal"
         // className="Modal"
-        // overlayClassName="Overlay"
-        style={modalStyle}
+        overlayClassName="Overlay"
+        // style={modalStyle}
 
       >
            <div>

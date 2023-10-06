@@ -20,7 +20,7 @@ import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FaDownload } from "react-icons/fa6";
 import TransactionModal from "./transactionModal";
 import { jsPDF } from "jspdf";
-import { CSVLink } from "react-csv";
+// import { CSVLink } from "react-csv";
 import * as XLSX from "xlsx";
 import html2canvas from "html2canvas";
 export function TransactionHistory({
@@ -360,13 +360,13 @@ const handleDownloadModal = (payoutId: string) => {
           {/* Button to download table in Excel format */}
           <button    className="text-white bg-[#132144] p-2 rounded" onClick={exportToExcel}>Download Excel</button>
           {/* CSVLink component for downloading table in CSV format */}
-          <CSVLink
+          {/* <CSVLink
             data={csvData}
             filename={"payout_history.csv"}
          
           >
             Download CSV
-          </CSVLink>
+          </CSVLink> */}
         </div>
         <EmptyTransactionHistory
           message={
@@ -421,13 +421,13 @@ const handleDownloadModal = (payoutId: string) => {
         {/* Button to download table in Excel format */}
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={exportToExcel}>Download Excel</button>
         {/* CSVLink component for downloading table in CSV format */}
-        <CSVLink
+        {/* <CSVLink
           data={csvData}
           filename={"payout_history.csv"}
           className="text-white bg-blue-500 p-2 rounded"
         >
           Download CSV
-        </CSVLink>
+        </CSVLink> */}
       </div>
       <Skeleton
         visible={isAdmin ? payoutHistoryFetching : selectedGatewaysLoading}

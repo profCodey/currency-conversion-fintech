@@ -104,10 +104,14 @@ export function useLogin() {
       return axiosInstance.post("/auth/login/", payload);
     },
     onSuccess: function (data: AxiosResponse) {
+      console.log(data.data);
+      
       const { access, refresh, category } = data.data;
       Cookies.set(APP_TOKENS.ACCESS_TOKEN, access);
       Cookies.set(APP_TOKENS.REFRESH_TOKEN, refresh);
       Cookies.set(APP_TOKENS.CATEGORY, category);
+      Cookies.set(APP_TOKENS.USERID, data.data.user_id);
+
       handleLoginSuccess(data);
     },
     onError: function (data: AxiosError) {
@@ -132,6 +136,7 @@ export function useGetRefreshToken() {
     },
     onSuccess: function (data: AxiosResponse) {
       const { access, refresh } = data.data;
+      console.log(data.data);
       Cookies.set(APP_TOKENS.ACCESS_TOKEN, access);
       Cookies.set(APP_TOKENS.REFRESH_TOKEN, refresh);
     },

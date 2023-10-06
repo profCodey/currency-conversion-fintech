@@ -23,12 +23,15 @@ export function UserPayoutHistory({
   );
 
   const { data: payoutHistory, isFetching: payoutHistoryFetching } =
+  
     useGetPayouts({
       begin_date: dayjs(dateRange[0]).format("YYYY-MM-DD"),
       end_date: dayjs(dateRange[1]).format("YYYY-MM-DD"),
       gateway_id: gateway || currentGateway,
       user_id: userId.toString(),
     });
+
+
 
   const GatewayOptions = gateway ? null : (
     <Select

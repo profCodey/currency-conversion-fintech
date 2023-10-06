@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
 import { Group, LoadingOverlay, Skeleton, Stack, Table } from "@mantine/core";
 import { useDefaultGateway } from "@/api/hooks/gateways";
@@ -20,9 +20,12 @@ import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FaDownload } from "react-icons/fa6";
 import TransactionModal from "./transactionModal";
 import { jsPDF } from "jspdf";
-import { CSVLink } from "react-csv";
+import Cookies from "js-cookie";
+
 import * as XLSX from "xlsx";
 import html2canvas from "html2canvas";
+import { useGetBasicProfile } from "@/api/hooks/onboarding";
+
 export function TransactionHistory({
   payoutHistory,
   payoutHistoryFetching,
@@ -40,7 +43,7 @@ export function TransactionHistory({
   const { defaultGateway, isLoading: selectedGatewaysLoading } =
     useDefaultGateway();
   const { role } = useRole();
-  // const [transactionModalState, setTransactionModalState] = useState(false);
+  const [companyName, setCompanyName] = useState<string>("");
   const [transactionModalState, setTransactionModalState] = useState<{
     [payoutId: string]: boolean;
   }>({});
@@ -82,165 +85,68 @@ export function TransactionHistory({
         return status;
     }
   }
-
-//   const createPDF = async (payout) => {
-//     const pdf = new jsPDF("portrait", "pt", "a4");
-
-//     // Set font size for better readability
-//     pdf.setFontSize(16); // Increase font size for the page title
-
-//     // Add page title
-//     pdf.text("TRANSFER CONFIRMATION", 50, 50);
-
-//     // Set font size for other content
-//     pdf.setFontSize(12);
-
-//     // Add payout details
-//     pdf.text(`Date: ${payout.createdOn}`, 50, 80);
-//     pdf.text(`Status: ${payout.status}`, 50, 100);
-
-//     // Add a line break before the next section
-//     pdf.text("", 50, 120);
-
-//     // Add content to the PDF
-//     pdf.text(`Amount: ${payout.amount}`, 50, 140);
-//     pdf.text(`Transaction ID: ${payout.transactionId}`, 50, 160);
-//     pdf.text(`Payment Reference: ${payout.payoutId}`, 50, 180);
-
-//     // Add a line break before recipient details
-//     pdf.text("", 50, 200);
-//     pdf.text("Recipient Details", 50, 220);
-
-//     // Recipient details
-//     pdf.text(`Bank Name: ${payout.bankname}`, 50, 240);
-//     pdf.text(`Account Name: ${payout.accountName}`, 50, 260);
-//     pdf.text(`Account Number: ${payout.accountNumber}`, 50, 280);
-
-//     // Save the PDF
-//     pdf.save("transaction_receipt.pdf");
-//   };
-
-
-
-
-// const createPDF = async (payout) => {
-//   const pdf = new jsPDF("portrait", "pt", "a4");
-
-//   // Set font size for better readability
-//   pdf.setFontSize(16); // Increase font size for the page title
-
-//   // Add page title
-//   pdf.text("TRANSFER CONFIRMATION", 50, 50);
-
-//   // Set font size for other content
-//   pdf.setFontSize(12);
-
-//   // Add payout details
-//   pdf.text(`Date:`, 50, 80);
-//   pdf.text(`${payout.createdOn}`, 150, 80, { align: "left" });
-
-//   pdf.text(`Status:`, 50, 100);
-//   pdf.text(`${payout.status}`, 150, 100, { align: "left" });
-
-//   // Add a line break before the next section
-//   pdf.text("", 50, 120);
-
-//   // Add content to the PDF
-//   pdf.text(`Amount:`, 50, 140);
-//   pdf.text(`${payout.amount}`, 150, 140, { align: "left" });
-
-//   pdf.text(`Transaction ID:`, 50, 160);
-//   pdf.text(`${payout.transactionId}`, 150, 160, { align: "left" });
-
-//   pdf.text(`Payment Reference:`, 50, 180);
-//   pdf.text(`${payout.payoutId}`, 150, 180, { align: "left" });
-
-//   // Add a line break before recipient details
-//   pdf.text("", 50, 200);
-//   pdf.text("Recipient Details", 50, 220);
-
-//   // Recipient details
-//   pdf.text(`Bank Name:`, 50, 240);
-//   pdf.text(`${payout.bankname}`, 150, 240, { align: "left" });
-
-//   pdf.text(`Account Name:`, 50, 260);
-//   pdf.text(`${payout.accountName}`, 150, 260, { align: "left" });
-
-//   pdf.text(`Account Number:`, 50, 280);
-//   pdf.text(`${payout.accountNumber}`, 150, 280, { align: "left" });
-
-//   // Save the PDF
-//   pdf.save("transaction_receipt.pdf");
-// };
-
-// Function to capture HTML content using html2canvas
-const captureHTML = async () => {
-  const element = document.getElementById("pdf-content");
-  const canvas = await html2canvas(element);
-  return canvas.toDataURL("image/png");
-};
-
-// Example of how to use captureHTML
-// captureHTML().then((imageData) => {
-//   // Add image to PDF at desired position
-//   createPDF({
-//     createdOn: "25/01/2023",
-//     status: "Some Status",
-//     amount: "$100.00",
-//     transactionId: "123456",
-//     payoutId: "789012",
-//     bankname: "Some Bank",
-//     accountName: "Demilade",
-//     accountNumber: "123456789",
-//   });
-// });
-
-const createPDF = async (payout) => {
-  // Create a new jsPDF instance
-  const pdf = new jsPDF("portrait", "pt", "a4");
-
-  // Set font size for better readability
-  pdf.setFontSize(16); // Increase font size for the page title
-
-  // Add page title
-  // pdf.text("TRANSFER CONFIRMATION", 50, 50);
-
-  // Set font size for other content
-  pdf.setFontSize(10);
-
-  // Use html2canvas to capture the content of the TransactionModal
-  const modalElement = document.getElementById("transaction-modal-content");
-  const modalCanvas = await html2canvas(modalElement);
-
-  // Add the captured image to the PDF
-  pdf.addImage(
-    modalCanvas.toDataURL("image/png"),
-    "PNG",
-    80,  // x-coordinate
-    80,  // y-coordinate
-    modalCanvas.width * 0.4, // scaled width
-    modalCanvas.height * 0.4  // scaled height
+  // Variable to store the modal content
+  const transactionModalContent = Object.entries(transactionModalState).map(
+    ([payoutId, showModal]) =>
+      showModal && (
+        <TransactionModal
+          key={payoutId}
+          payout={payoutHistory?.data.result?.find(
+            (payout) => payout.payoutId === payoutId
+          )}
+        />
+      )
   );
 
-  // Save the PDF
-  pdf.save("transaction_receipt.pdf");
-};
+  const userId = Cookies.get("pycl_user_id");
+  const companyInfo = useGetBasicProfile(userId);
+  const company = companyInfo.data?.data.business_trading_name;
 
-// const handleCloseModal = (payoutId: string) => {
-//   setTransactionModalState((prevState) => ({
-//     ...prevState,
-//     [payoutId]: false,
-//   }));
-// };
+  // Function to capture HTML content using html2canvas
+  const captureHTML = async () => {
+    const element = document.getElementById("pdf-content");
+    const canvas = await html2canvas(element);
+    return canvas.toDataURL("image/png");
+  };
 
+  const createPDF = async (payout) => {
+    const pdf = new jsPDF("landscape", "pt", "a4");
 
-const handleDownloadModal = (payoutId: string) => {
-  setTransactionModalState((prevState) => ({
-    ...prevState,
-    [payoutId]: !prevState[payoutId], // Toggle the state
-  }));
-};
+    // Set font size for better readability
+    pdf.setFontSize(16); 
+    pdf.setFontSize(10);
 
+    // Use html2canvas to capture the content of the TransactionModal
+    const modalElement = document.getElementById("transaction-modal-content");
+
+    console.log(modalElement);
+
+    const modalCanvas = await html2canvas(modalElement);
+
+    const scaleFactor = 0.4; // Adjust this value as needed
+    const scaledWidth = modalCanvas.width * scaleFactor;
+    const scaledHeight = modalCanvas.height * scaleFactor;
+
+    // Add the captured image to the PDF
+    pdf.addImage(
+      modalCanvas.toDataURL("image/png"),
+      "PNG",
+      80,
+      80,
+      scaledWidth,
+      scaledHeight
+    );
+
+    // Save the PDF
+    pdf.save("transaction_receipt.pdf");
+  };
+
+  const handleDownloadModal = (payoutId: string) => {
+    setTransactionModalState((prevState) => ({
+      ...prevState,
+      [payoutId]: !prevState[payoutId], // Toggle the state
+    }));
+  };
 
   // CSV data for the CSVLink component
   const csvData = useMemo(() => {
@@ -256,9 +162,96 @@ const handleDownloadModal = (payoutId: string) => {
     }));
   }, [payoutHistory?.data?.result]);
 
+  const TransactionDetailsContent = ({ payout }) => (
+    <div id="transaction-modal-content" className="h-[600px] w-full">
+      <div className="flex gap-72 w-full">
+        <div className="flex mb-1 ">
+          <p className="text-4xl font-bold">{company}</p>
+        </div>
+        <div className="text-right ">
+          <div className="text-right w-full">
+            <h2 className="text-2xl font-bold mb-6 ">Transaction Details</h2>
+          </div>
+          <div className="flex text-right mr-2">
+            <p className="text-sm mt-[-10px] mb-8 ml-24">
+              {new Date(payout.createdOn).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+          </div>
+          <div className="flex bg-[#ebebeb] w-full pl-2 h-8 mt-[-15px] mb-8 text-sm">
+            <p className="ml-36">Status:&nbsp;</p> <p>{payout.status}</p>
+          </div>
+        </div>
+      </div>
+      <div className="text-l mt-6">
+        <div className="flex mb-1">
+          <p className="w-52 font-bold">Amount:</p> <p>{payout.amount}</p>
+        </div>
+
+        <div className="flex mb-1">
+          <p className="w-52 font-bold">Transaction ID:</p>{" "}
+          <p>{payout.transactionId}</p>
+        </div>
+        <div className="flex mb-1">
+          <p className="w-52 font-bold">Payment Reference:</p>
+          <p> {payout.payoutId}</p>
+        </div>
+        <p className="mt-8 mb-2 font-bold text-xl">Recipient Details</p>
+        <div className="flex mb-2">
+          <p className="w-52 flex gap-2 font-bold">
+            <p>Bank</p> <p className="font-bold">Name:</p>
+          </p>{" "}
+          <p>{payout.bankname}</p>
+        </div>
+        <div className="flex mb-2">
+          <p className="w-52 flex gap-2 font-bold">
+            <p>Account</p> <p className="font-bold">Name:</p>
+          </p>
+          <p>{payout.accountName}</p>
+        </div>
+        <div className="flex mb-8">
+          <p className="w-52 flex gap-2 font-bold">
+            <p>Account</p> <p className="font-bold">Number:</p>
+          </p>{" "}
+          <p>{payout.accountNumber}</p>
+        </div>
+      </div>
+    </div>
+  );
+
   // Function to handle exporting table data to Excel
   const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(csvData);
+    console.log(payoutHistory?.data.result);
+
+    const info = payoutHistory?.data.result.map((info) => {
+      return {
+        gatewaywalletbalanceAfter: info.gatewaywalletbalanceAfter,
+        "Wallet Balance After": info.walletbalanceAfter,
+        "Status Date": info.statusDate,
+        "Gateway Id": info.gatewayid,
+        "Client Id": info.clientId,
+        "Payout Id": info.payoutId,
+        "Bank Code": info.bankcode,
+        bankname: info.bankname,
+        accountNumber: info.accountNumber,
+        accountName: info.accountName,
+        amount: info.amount,
+        transactionId: info.transactionId,
+        status: info.status,
+        statusRemarks: info.statusRemarks,
+        gatewayref: info.gatewayref,
+        charges: info.charges,
+        narration: info.narration,
+        createdOn: info.createdOn,
+      };
+    });
+
+    console.log(info);
+
+    const ws = XLSX.utils.json_to_sheet(info);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Payout History");
     XLSX.writeFile(wb, "payout_history.xlsx");
@@ -266,54 +259,19 @@ const handleDownloadModal = (payoutId: string) => {
 
   const _rows = useMemo(
     function () {
+      html2canvas;
       return payoutHistory?.data.result
         ?.map(function (payout) {
           const isModalOpen = transactionModalState[payout.payoutId];
-          console.log(isModalOpen);
-          
-          console.log('isModalOpen)', isModalOpen);
-          
           return (
             <React.Fragment key={payout.payoutId}>
+              <div className="absolute top-96">
+                <TransactionDetailsContent payout={payout} />
+              </div>
               {isModalOpen && (
-
-                <TransactionModal
-  payout={payout}
-  // handleCloseModal={handleCloseModal}
-  
-  createPDF={createPDF}
->
-  <div id="transaction-modal-content" className="h-80">
-    <h2 className="text-l font-bold mb-4">Transaction Details</h2>
-    <div className="text-l">
-      <div className="flex">
-        <p className="w-36">Date:</p> <p>{payout.createdOn}</p>
-      </div>
-      <div className="flex">
-        <p className="w-36">Status:</p> <p>{payout.status}</p>
-      </div>
-      <div className="flex">
-        <p className="w-36">Transaction <br /> ID:</p> <p>{payout.transactionId}</p>
-      </div>
-      <div className="flex">
-        <p className="w-36">Payment <br /> Reference:</p><p> {payout.payoutId}</p>
-      </div>
-      <p className="mt-4 mb-2 font-bold">Recipient Details</p>
-      <div className="flex">
-        <p className="w-36 flex gap-2"><p>Bank</p> <p>Name:</p></p> <p>{payout.bankname}</p>
-      </div>
-      <div className="flex">
-        <p className="w-36 flex gap-2"><p>Account</p> <p>Name:</p></p><p>{payout.accountName}</p>
-      </div>
-      <div className="flex mb-8">
-        <p className="w-36 flex gap-2"><p>Account</p> <p>Number:</p></p> <p>{payout.accountNumber}</p>
-      </div>
-    </div>
-  </div>
-</TransactionModal>
-
-
-
+                <>
+                  <TransactionDetailsContent payout={payout} />
+                </>
               )}
               <tr className="text-primary-100 font-medium">
                 <td className="text-xs sm:text-base">
@@ -338,8 +296,9 @@ const handleDownloadModal = (payoutId: string) => {
                 <td>{payout.charges}</td>
                 <td>
                   <span
-        
-                    onClick={() => handleDownloadModal(payout.payoutId)}
+                    onClick={() =>
+                      createPDF(payout)
+                    }
                     className="cursor-pointer"
                   >
                     <FaDownload />
@@ -370,15 +329,12 @@ const handleDownloadModal = (payoutId: string) => {
           />
 
           {/* Button to download table in Excel format */}
-          <button    className="text-white bg-[#132144] p-2 rounded" onClick={exportToExcel}>Download Excel</button>
-          {/* CSVLink component for downloading table in CSV format */}
-          <CSVLink
-            data={csvData}
-            filename={"payout_history.csv"}
-         
+          <button
+            className="text-white bg-[#132144] p-2 rounded"
+            onClick={exportToExcel}
           >
-            Download CSV
-          </CSVLink>
+            Download Excel
+          </button>
         </div>
         <EmptyTransactionHistory
           message={
@@ -390,8 +346,6 @@ const handleDownloadModal = (payoutId: string) => {
             </Stack>
           }
         />
-
-        
       </div>
     );
   }
@@ -422,8 +376,7 @@ const handleDownloadModal = (payoutId: string) => {
         <span className="text-primary-100 font-semibold mr-auto">
           Recent Payouts
         </span>
-        
-  
+
         {meta}
 
         <DatePickerInput
@@ -434,15 +387,12 @@ const handleDownloadModal = (payoutId: string) => {
         />
 
         {/* Button to download table in Excel format */}
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={exportToExcel}>Download Excel</button>
-        {/* CSVLink component for downloading table in CSV format */}
-        <CSVLink
-          data={csvData}
-          filename={"payout_history.csv"}
-          className="text-white bg-blue-500 p-2 rounded"
+        <button
+          className="bg-[#132144] hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={exportToExcel}
         >
-          Download CSV
-        </CSVLink>
+          Download Excel
+        </button>
       </div>
       <Skeleton
         visible={isAdmin ? payoutHistoryFetching : selectedGatewaysLoading}

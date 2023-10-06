@@ -23,6 +23,9 @@ import AppLogo from "@/public/logo.svg";
 
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { FaDownload } from "react-icons/fa6";
+import * as XLSX from "xlsx";
+
 
 export function StatementsHistory({
   statementsHistory,
@@ -49,16 +52,79 @@ export function StatementsHistory({
     (statementsHistory?.data.result === null ||
       statementsHistory?.data.result?.length < 1);
 
-  // const tempData: IStatementRecord[] = [
-  //   {
-  //     balance: "1000",
-  //     credit: "1000",
-  //     debit: "2000",
-  //     narration: "Hello, World.",
-  //     transactionId: "5432167",
-  //     transDate: Date.now(),
-  //   },
-  // ];
+    const handleDownloadExcel = () => {
+
+      let data = statementsHistory?.data.result
+      if (!data) {
+        console.warn('No data available for Excel export');
+        return null;
+      }
+
+      console.log(data);
+      
+
+      const excelData = data.map(exchange => ({
+
+        'Tansaction Id': exchange.transactionId,
+        "Transaction Date": exchange.transDate,
+        'Debit': exchange.debit,
+        "Credit": exchange.credit,
+        "Balance": exchange.balance,
+        "Narration": exchange.narration,
+      }));
+
+      if (excelData.length === 0) {
+        console.warn('No data available for Excel export');
+        return null;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(excelData, { header: Object.keys(excelData[0]) });
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+      XLSX.writeFile(wb, 'exchange_history.xlsx');
+    };
+
+  const handleDownloadPDF = (rowData) => {
+    const pdf = new jsPDF();
+  console.log(rowData);
+  
+
+    const lineHeight = 10;
+    const marginLeft = 10;
+    const textWidth = (pdf.internal.pageSize.getWidth() - 2 * marginLeft) ; // Adjust the width
+console.log(textWidth);
+
+  
+    const formattedContent = `
+      Manual Funding Details
+  
+      Transaction Id:              ${rowData.transactionId}
+      Transaction Date:          ${rowData.transDate}
+      Debit:                             ${rowData.debit}
+      Credit:                            ${rowData.credit}
+      Balance:                         ${rowData.balance}
+      Narration:                     
+    
+    `;
+  
+    // Split the formatted content into lines
+    const lines = formattedContent.split('\n');    
+  console.log(lines);
+  
+
+    lines.forEach((line, index) => {
+      pdf.text(line, marginLeft, lineHeight * (index + 1));
+    });
+  
+     // Split the narration into multiple lines
+  const narrationLines = pdf.splitTextToSize(rowData.narration, textWidth);
+  narrationLines.forEach((narrationLine, index) => {
+    pdf.text(narrationLine, 20, 8.5 * (lines.length + index + 1));
+  });
+
+    // Download the PDF
+    pdf.save("transaction_receipt.pdf");
+  };
 
   const createPDF = async () => {
     const pdf = new jsPDF("portrait", "pt", "a4");
@@ -94,6 +160,11 @@ export function StatementsHistory({
                 View details
               </Button>
             </td>
+            <td><button
+            onClick={()=>handleDownloadPDF(statement)}
+            >
+              <FaDownload />
+            </button></td>
           </tr>
         );
       });
@@ -165,13 +236,22 @@ export function StatementsHistory({
           value={dateRange}
           onChange={setDateRange}
         />
+                <button
+  onClick={handleDownloadExcel}
+  className=" bg-[#132144] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2 z-50"
+>
+  Download Excel
+</button>
       </div>
       <Skeleton
         visible={isAdmin ? statementsHistoryFetching : selectedGatewaysLoading}
         className="flex-grow"
       >
         <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
+
+        
           <LoadingOverlay visible={statementsHistoryFetching} />
+      
           <Table
             verticalSpacing="xs"
             withBorder
@@ -183,6 +263,8 @@ export function StatementsHistory({
                 <th>Debit (₦)</th>
                 <th>Credit (₦)</th>
                 <th>Balance (₦)</th>
+                <th>View Details</th>
+                <th>Download</th>
               </tr>
             </thead>
             <tbody>{rows}</tbody>

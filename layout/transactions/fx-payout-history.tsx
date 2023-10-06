@@ -10,7 +10,7 @@ import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FundingStatuses } from "./manual-funding-drawer";
 import { FaDownload } from "react-icons/fa6";
-import { CSVLink } from 'react-csv';
+// import { CSVLink } from 'react-csv';
 import * as XLSX from 'xlsx';
 
 export function FxPayoutHistory() {
@@ -30,42 +30,6 @@ export function FxPayoutHistory() {
         return null;
     }
   }
-
-
-
-  const handleDownloadCSV = () => {
-    // Check if fxPayouts and fxPayouts.data are defined
-    if (!fxPayouts || !fxPayouts.data) {
-      console.warn('No data available for CSV export');
-      return null;
-    }
-  
-    const csvData = fxPayouts.data.map(payout => ({
-      Status: payout.status,
-      'Account Name': payout.account_name,
-      Amount: payout.amount,
-      Date: dayjs(payout.created_on).format("MMM D, YYYY h:mm A"),
-      'Created by': payout.created_by_name,
-      'Bank Name': payout.bank_name,
-      Narration: payout.narration
-    }));
-  
-    // Check if csvData is not empty
-    if (csvData.length === 0) {
-      console.warn('No data available for CSV export');
-      return null;
-    }
-    
-  
-    const headers = Object.keys(csvData[0]);
-  
-    return (
-      <CSVLink data={[headers, ...csvData]} filename="fx_payouts.csv">
-        Export to CSV
-      </CSVLink>
-    );
-  };
-  
 
   const handleDownloadExcel = () => {
     const ws = XLSX.utils.json_to_sheet(fxPayouts?.data?.map(payout => ({
@@ -122,18 +86,8 @@ export function FxPayoutHistory() {
     <Skeleton visible={isLoading} className="flex-grow">
       <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
       <div className="flex justify-end mb-4">
-          <button
-            onClick={handleDownloadExcel}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-          >
-            Download Excel
-          </button>
-          <button
-            onClick={handleDownloadCSV}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Download CSV
-          </button>
+    
+          <button    className="text-white bg-[#132144] p-2 rounded"   onClick={handleDownloadExcel}>Download Excel</button>
         </div>
         
         <Table verticalSpacing="md" withBorder>

@@ -32,9 +32,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 export default function Table({
   columns,
   data,
+  handleDownloadCSV, 
 }: {
   columns: Array<any | false>;
   data: any[];
+  handleDownloadCSV: () => void; 
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -56,13 +58,22 @@ export default function Table({
 
   return (
     <section className="flex flex-col gap-4 h-full flex-grow">
-      <div>
+      <div className="flex justify-between">
         <DebouncedInput
           value={globalFilter ?? ""}
           onChange={(value) => setGlobalFilter(String(value))}
           className="py-2 px-4 text-lg border outline-primary-70 rounded-md"
           placeholder="Search all columns..."
         />
+
+        <div>
+        <button
+          onClick={handleDownloadCSV}
+          className="bg-[#132144] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
+        >
+          Download Excel
+        </button>
+        </div>
       </div>
       <div className="flex-grow max-h-full overflow-y-auto border">
         <table className="w-full">

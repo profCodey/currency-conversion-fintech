@@ -36,7 +36,7 @@ export default function Table({
 }: {
   columns: Array<any | false>;
   data: any[];
-  handleDownloadCSV: () => void; 
+  handleDownloadCSV?: () => void; 
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -134,9 +134,9 @@ function DebouncedInput({
     const timeout = setTimeout(() => {
       onChange(value);
     }, debounce);
-
+  
     return () => clearTimeout(timeout);
-  }, [value]);
+  }, [value, debounce, onChange]);
 
   return (
     <input

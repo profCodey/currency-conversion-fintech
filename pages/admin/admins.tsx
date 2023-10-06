@@ -108,6 +108,9 @@ export default function Admins() {
               (user) => user.category === USER_CATEGORIES.ADMIN
             ) || []
           }
+          handleDownloadCSV={() => {
+            // Implement the download CSV functionality here
+          }}
         />
       </Skeleton>
 

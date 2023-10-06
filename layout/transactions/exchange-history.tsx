@@ -171,7 +171,7 @@ function handlePDFDonwload(data){
             <div className="flex justify-end p-4">
           <button
           onClick={handleDownloadExcel}
-          className="relative top-[-120px] bg-[#132144] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
+          className="relative top-[-120px] bg-primary-100 hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
         >
           Download Excel
         </button>

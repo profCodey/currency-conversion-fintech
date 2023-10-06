@@ -324,7 +324,7 @@ export function TransactionHistory({
 
           {/* Button to download table in Excel format */}
           <button
-            className="text-white bg-[#132144] p-2 rounded"
+            className="text-white bg-primary-100 p-2 rounded"
             onClick={exportToExcel}
           >
             Download Excel
@@ -382,7 +382,7 @@ export function TransactionHistory({
 
         {/* Button to download table in Excel format */}
         <button
-          className="bg-[#132144] hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-primary-100 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           onClick={exportToExcel}
         >
           Download Excel

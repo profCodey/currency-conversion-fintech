@@ -229,7 +229,7 @@ export function StatementsHistory({
         />
                 <button
   onClick={handleDownloadExcel}
-  className=" bg-[#132144] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2 z-50"
+  className=" bg-primary-100 hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2 z-50"
 >
   Download Excel
 </button>

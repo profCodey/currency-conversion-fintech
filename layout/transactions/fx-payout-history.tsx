@@ -87,7 +87,7 @@ export function FxPayoutHistory() {
       <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
       <div className="flex justify-end mb-4">
     
-          <button    className="text-white bg-[#132144] p-2 rounded"   onClick={handleDownloadExcel}>Download Excel</button>
+          <button    className="text-white bg-primary-100 p-2 rounded"   onClick={handleDownloadExcel}>Download Excel</button>
         </div>
         
         <Table verticalSpacing="md" withBorder>

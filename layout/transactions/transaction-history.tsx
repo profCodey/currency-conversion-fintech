@@ -18,7 +18,7 @@ import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { FaDownload } from "react-icons/fa6";
-import TransactionModal from "./transactionModal";
+// import TransactionModal from "./transactionModal";
 import { jsPDF } from "jspdf";
 import Cookies from "js-cookie";
 
@@ -86,30 +86,33 @@ export function TransactionHistory({
     }
   }
   // Variable to store the modal content
-  const transactionModalContent = Object.entries(transactionModalState).map(
-    ([payoutId, showModal]) =>
-      showModal && (
-        <TransactionModal
-          key={payoutId}
-          payout={payoutHistory?.data.result?.find(
-            (payout) => payout.payoutId === payoutId
-          )}
-        />
-      )
-  );
+  // const transactionModalContent = Object.entries(transactionModalState).map(
+  //   ([payoutId, showModal]) =>
+  //     showModal && (
+  //       <TransactionModal
+  //         key={payoutId}
+  //         payout={payoutHistory?.data.result?.find(
+  //           (payout) => payout.payoutId === payoutId
+  //         )}
+  //       />
+  //     )
+  // );
 
-  const userId = Cookies.get("pycl_user_id");
-  const companyInfo = useGetBasicProfile(userId);
+  const userId : string | number | undefined = Cookies.get("pycl_user_id");
+  const companyInfo = useGetBasicProfile(Number(userId));
   const company = companyInfo.data?.data.business_trading_name;
 
-  // Function to capture HTML content using html2canvas
-  const captureHTML = async () => {
-    const element = document.getElementById("pdf-content");
-    const canvas = await html2canvas(element);
-    return canvas.toDataURL("image/png");
-  };
 
-  const createPDF = async (payout) => {
+  
+
+  // Function to capture HTML content using html2canvas
+  // const captureHTML = async () => {
+  //   const element = document.getElementById("pdf-content");
+  //   const canvas = await html2canvas(element);
+  //   return canvas.toDataURL("image/png");
+  // };
+
+  const createPDF = async () => {
     const pdf = new jsPDF("landscape", "pt", "a4");
 
     // Set font size for better readability
@@ -118,6 +121,10 @@ export function TransactionHistory({
 
     // Use html2canvas to capture the content of the TransactionModal
     const modalElement = document.getElementById("transaction-modal-content");
+    if (!modalElement) {
+      console.error("Modal element not found");
+      return;
+    }
 
     const modalCanvas = await html2canvas(modalElement);
 
@@ -160,7 +167,11 @@ export function TransactionHistory({
     }));
   }, [payoutHistory?.data?.result]);
 
-  const TransactionDetailsContent = ({ payout }) => (
+  interface TransactionDetailsContentProps {
+    payout: any; 
+  }
+  
+  const TransactionDetailsContent: React.FC<TransactionDetailsContentProps> = ({ payout }) => (
     <div id="transaction-modal-content" className="h-[600px] w-full">
       <div className="flex gap-72 w-full">
         <div className="flex mb-1 ">
@@ -245,6 +256,12 @@ export function TransactionHistory({
       };
     });
 
+    if (!info) {
+      console.error("No data to export.");
+      return;
+    }
+  
+
     const ws = XLSX.utils.json_to_sheet(info);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Payout History");
@@ -291,7 +308,7 @@ export function TransactionHistory({
                 <td>
                   <span
                     onClick={() =>
-                      createPDF(payout)
+                      createPDF()
                     }
                     className="cursor-pointer"
                   >

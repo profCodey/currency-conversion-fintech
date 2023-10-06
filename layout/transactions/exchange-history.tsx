@@ -31,7 +31,27 @@ export function ExchangeHistory() {
     }
   }
 
-function handlePDFDonwload(data){
+  type exchangeHistory = Record<string, string | number> & {
+    source_account_detail: {
+      label: string;
+      category: string;
+      currency: {
+        name: string;
+  };
+  true_balance: string
+
+    }
+    destination_account_detail: {
+      label: string;
+      category: string;
+      currency: {
+        name: string;
+      };
+      true_balance: string;
+    }
+  }
+
+function handlePDFDonwload(data: IExchangeDetailed){
     const pdf = new jsPDF();
   
     const lineHeight = 7;

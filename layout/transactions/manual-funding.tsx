@@ -20,14 +20,14 @@ import TransactionProcessingIcon from "@/public/transaction-processing.svg";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/table";
 import { FaDownload } from "react-icons/fa6";
-import TransactionModal from "./transactionModal";
+// import TransactionModal from "./transactionModal";
 import { jsPDF } from "jspdf";
 // import { CSVLink } from 'react-csv';
 
 import * as XLSX from 'xlsx';
 
 
-export const exportToExcel = (data, columns, filename) => {
+export const exportToExcel = (data:any, filename:string) => {
   const ws = XLSX.utils.json_to_sheet(data);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
@@ -62,12 +62,12 @@ export function ManualFundingHistory() {
 
   
   const handleDownloadExcel = () => {
-    exportToExcel(manualFundings?.data || [], columns, 'manual_fundings.xlsx');
+    exportToExcel(manualFundings?.data || [],  'manual_fundings.xlsx');
   };
   
 
   
-  const handleDownload = (rowData) => {
+  const handleDownload = (rowData:IManualPayment) => {
     const pdf = new jsPDF();
 
     const lineHeight = 10;
@@ -159,7 +159,6 @@ export function ManualFundingHistory() {
             variant="white"
             className="px-0 text-red-500 my-auto"
             onClick={() => handleDownload(props.row.original)}
-            onKeyDown={handleDownload}
           >
             <FaDownload />
           </Button>
@@ -168,7 +167,6 @@ export function ManualFundingHistory() {
 
 
     ];
-
 
     const adminColumns = [
       ColumnHelper.accessor("sender_name", { header: "Sender" }),

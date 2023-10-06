@@ -81,7 +81,7 @@ export function StatementsHistory({
       XLSX.writeFile(wb, 'exchange_history.xlsx');
     };
 
-  const handleDownloadPDF = (rowData) => {
+  const handleDownloadPDF = (rowData:any) => {
     const pdf = new jsPDF();
   
     const lineHeight = 10;
@@ -109,7 +109,7 @@ export function StatementsHistory({
   
      // Split the narration into multiple lines
   const narrationLines = pdf.splitTextToSize(rowData.narration, textWidth);
-  narrationLines.forEach((narrationLine, index) => {
+  narrationLines.forEach((narrationLine:any, index:any) => {
     pdf.text(narrationLine, 20, 8.5 * (lines.length + index + 1));
   });
 

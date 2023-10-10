@@ -6,16 +6,8 @@ import { useForm, zodResolver } from "@mantine/form";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { z } from "zod";
-// import { useEffect } from 'react';
-// import { useRouter } from 'next/router';
 
 export default function Login() {
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   // Redirect to the login page when the component mounts
-  //   router.push('/login');
-  // }, []);
 
   const { mutate: login, isLoading } = useLogin();
   const loginForm = useForm({

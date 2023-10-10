@@ -1,9 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
 import { ICurrency } from "@/utils/validators/interfaces";
 import { useCallback, useMemo } from "react";
 import { APICLIENT_BASE_URL } from "@/utils/constants";
+import { showNotification } from "@mantine/notifications";
+import { queryClient } from "@/pages/_app";
+import { z } from "zod";
+import { currencyFormValidator } from "@/layout/admin/currencies/create-currency-button";
+import { editcurrencyFormValidator } from "@/layout/admin/currencies/edit-currency-button";
 
 export function useGetCurrencies() {
   const { data, ...rest } = useQuery(["currencies"], function (): Promise<
@@ -22,6 +27,67 @@ export function useGetCurrencies() {
   );
 
   return { data, getCurrencyCodeFromId, ...rest };
+}
+
+export function useEditNewCurrency(cb?: () => void) {
+  return useMutation(
+    (payload: z.infer<typeof editcurrencyFormValidator>) =>
+     axiosInstance.patch(`/currencies/${payload.id}/`, payload, {
+        baseURL: APICLIENT_BASE_URL,
+      }),
+
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation Successful",
+          message: `Currency edited successfully!`,
+          color: "green",
+        });
+      },
+      onError: function () {
+        return showNotification({
+          title: "An error occured",
+          message: "Unable to edit currency",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["currencies"]);
+        cb && cb();
+      },
+    }
+  );
+}
+
+
+export function useAddNewCurrency(cb?: () => void) {
+  return useMutation(
+    (payload: z.infer<typeof currencyFormValidator>) =>
+     axiosInstance.post("/currencies/", payload, {
+        baseURL: APICLIENT_BASE_URL,
+      }),
+
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation Successful",
+          message: `Currency added successfully!`,
+          color: "green",
+        });
+      },
+      onError: function () {
+        return showNotification({
+          title: "An error occured",
+          message: "Unable to add currency",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["currencies"]);
+        cb && cb();
+      },
+    }
+  );
 }
 
 export function useCurrencyOptions() {

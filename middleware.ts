@@ -24,6 +24,7 @@ export function middleware(request: NextRequest) {
     "/admin/support",
     "/admin/accounts",
     "/admin/gateways",
+    "/admin/currencies"
   ];
 
   const publicPaths = [

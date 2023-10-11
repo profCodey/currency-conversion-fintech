@@ -70,6 +70,10 @@ const routes = [
         route: "/admin/accounts",
         label: "Merchant Accounts",
       },
+      {
+        route: "/admin/currencies",
+        label: "Currencies",
+      },
     ],
   },
   {
@@ -91,7 +95,8 @@ export function AdminDashboardItems() {
     router.pathname === "/admin/banks" ||
       router.pathname === "/admin/rates" ||
       router.pathname === "/admin/gateways" ||
-      router.pathname === "/admin/accounts"
+      router.pathname === "/admin/accounts" ||
+      router.pathname === "/admin/currencies" 
   );
 
   const [usersOpen, setUsersOpen] = useState(

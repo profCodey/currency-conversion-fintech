@@ -174,7 +174,7 @@ export function TransactionHistory({
   const TransactionDetailsContent: React.FC<TransactionDetailsContentProps> = ({ payout }) => (
     <div id="transaction-modal-content" className="h-[600px] w-full">
       <div className="flex gap-72 w-full">
-        <div className="flex mb-1 ">
+        <div className="flex mb-1 w-60">
           <p className="text-4xl font-bold">{company}</p>
         </div>
         <div className="text-right ">
@@ -182,7 +182,7 @@ export function TransactionHistory({
             <h2 className="text-2xl font-bold mb-6 ">Transaction Details</h2>
           </div>
           <div className="flex text-right mr-2">
-            <p className="text-sm mt-[-10px] mb-8 ml-24">
+            <p className="text-sm mt-[-10px] mb-8 ml-32">
               {new Date(payout.createdOn).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "long",
@@ -190,7 +190,7 @@ export function TransactionHistory({
               })}
             </p>
           </div>
-          <div className="flex bg-[#ebebeb] w-full pl-2 h-8 mt-[-15px] mb-8 text-sm">
+          <div className="flex bg-[#ebebeb] w-full pl-2 h-8 mt-[-15px] mb-8 text-sm mr-2">
             <p className="ml-36">Status:&nbsp;</p> <p>{payout.status}</p>
           </div>
         </div>
@@ -276,14 +276,14 @@ export function TransactionHistory({
           const isModalOpen = transactionModalState[payout.payoutId];
           return (
             <React.Fragment key={payout.payoutId}>
-              <div className="absolute top-96">
+              <div style={{ position: 'absolute', left: '-9999px' }}>
                 <TransactionDetailsContent payout={payout} />
               </div>
-              {isModalOpen && (
+              {/* {isModalOpen && (
                 <>
                   <TransactionDetailsContent payout={payout} />
                 </>
-              )}
+              )} */}
               <tr className="text-primary-100 font-medium">
                 <td className="text-xs sm:text-base">
                   <Group spacing="xs">

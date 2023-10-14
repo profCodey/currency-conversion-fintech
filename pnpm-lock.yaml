@@ -53,6 +53,9 @@ dependencies:
   '@tanstack/table-core':
     specifier: ^8.10.3
     version: 8.10.3
+  '@tawk.to/tawk-messenger-react':
+    specifier: ^2.0.2
+    version: 2.0.2(react-dom@18.2.0)(react@18.2.0)
   '@types/js-cookie':
     specifier: ^3.0.3
     version: 3.0.4
@@ -2260,6 +2263,16 @@ packages:
   /@tanstack/table-core@8.10.3:
     resolution: {integrity: sha512-hJ55YfJlWbfzRROfcyA/kC1aZr/shsLA8XNAwN8jXylhYWGLnPmiJJISrUfj4dMMWRiFi0xBlnlC7MLH+zSrcw==}
     engines: {node: '>=12'}
+    dev: false
+
+  /@tawk.to/tawk-messenger-react@2.0.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-Nl3JMMIrQiyveSSuP8qYWEu1u+coqz4WCA7TfSjOMDcpyWEiORvOdnMWTsSlhz8rae57HWsCAGLzE507fKtzXA==}
+    peerDependencies:
+      react: ^18.1.0
+      react-dom: ^18.1.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@trysound/sax@0.2.0:

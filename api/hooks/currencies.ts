@@ -109,7 +109,7 @@ export function useCurrencyOptions() {
     function () {
       return (
         data?.data
-          .filter((currency) => currency.code !== "NGN")
+          // .filter((currency) => currency.code !== "NGN")
           .map((currency) => ({
             label: currency.name,
             value: currency.id.toString(),

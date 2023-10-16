@@ -74,7 +74,7 @@ export default function Admins() {
       confirm_password: "",
       phone_number: "",
       phone_code: "+234",
-      category: USER_CATEGORIES.API_CLIENT,
+      category: USER_CATEGORIES.ADMIN,
     },
     validate: zodResolver(signupFormValidator),
   });

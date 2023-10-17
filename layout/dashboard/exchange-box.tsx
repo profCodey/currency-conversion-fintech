@@ -58,12 +58,12 @@ export function ExchangeBox() {
     },
     [currencyOptionsWithId, currencyOptionsWithId.length]
   );
-
+  
   const allAccountsData =
   allAccounts?.data
     .map((account) => ({
       label: account.label,
-      value: account.currency.id.toString(),
+      value: account.id.toString(),
     })) ?? [];
 
   const matchedRate = useCallback(

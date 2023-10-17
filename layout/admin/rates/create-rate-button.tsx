@@ -23,6 +23,7 @@ export const rateFormValidator = z.object({
   source_currency: z.string().min(1, "Select source currency"),
   destination_currency: z.string().min(1, "Select destination currency"),
 });
+
 export function CreateRateButton() {
   const [createRateModalOpen, setCreateRateModalOpen] = useState(false);
   const { mutate: addRate, isLoading: rateLoading } =

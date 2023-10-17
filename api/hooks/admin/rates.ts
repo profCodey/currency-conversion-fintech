@@ -8,6 +8,7 @@ import { z } from "zod";
 import { IRate } from "@/utils/validators/interfaces";
 import { queryClient } from "@/pages/_app";
 import { APICLIENT_BASE_URL } from "@/utils/constants";
+import { IRatePayload } from "@/utils/validators/interfaces";
 
 export function useGetRates() {
   return useQuery(["rates"], function (): Promise<AxiosResponse<IRate[]>> {
@@ -44,4 +45,20 @@ export function useAddNewRate(cb?: () => void) {
       },
     }
   );
+}
+
+export function useGetLiveRate(payload: IRatePayload) {
+  return useQuery(['liveRate', payload.source, payload.destination], async () => {
+    const response = await axiosInstance.get('/fx/rates/liverate', {
+      baseURL: APICLIENT_BASE_URL,
+      params: {
+        source_currency: payload.source,
+        destination_currency: payload.destination,
+      },
+    });
+
+    const rate = response.data;
+
+    return rate;
+  });
 }

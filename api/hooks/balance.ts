@@ -23,7 +23,7 @@ export function useLocalBalance() {
 
 export function useFxBalance() {
   const { data, ...rest } = useGetAccounts();
-
+  
   const getBalanceFromCurrency = useCallback(
     function (currency: string) {
       const account = data?.data.find(

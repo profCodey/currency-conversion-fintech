@@ -33,7 +33,17 @@ export function useExchange(cb?: () => void) {
           color: "green",
         });
       },
-      onError: function () {
+      onError: function (error:any) {
+      
+        if (error.response.data.non_field_errors[0].includes("Insufficient")) {
+        // console.log(error.response.data.non_field_errors[0]);
+        return showNotification({
+          title: "An error occured",
+          message: error.response.data.non_field_errors[0],
+          color: "red",
+        });
+      }
+        
         return showNotification({
           title: "An error occured",
           message: "Unable to send exchange request",

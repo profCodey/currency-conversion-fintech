@@ -18,6 +18,7 @@ import { useExchange } from "@/api/hooks/exchange";
 import { useFxBalance } from "@/api/hooks/balance";
 import { showNotification } from "@mantine/notifications";
 import { useGetFxAccounts } from "@/api/hooks/fx";
+import { useGetAccounts } from "@/api/hooks/accounts";
 
 export function ExchangeBox() {
   const { data: fxAccounts, isLoading: _fxAccountsLoading } =
@@ -30,6 +31,9 @@ export function ExchangeBox() {
   const { data: rates, isLoading: ratesLoading } = useGetRates();
   const { getBalanceFromCurrency, isLoading: fxAccountsLoading } =
     useFxBalance();
+    useGetFxAccounts();
+    const { data: allAccounts, isLoading: allAccountsLoading } =
+    useGetAccounts();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const { mutate: exchange, isLoading: exchangeLoading } = useExchange(() =>
     setShowConfirmationModal(false)
@@ -55,13 +59,12 @@ export function ExchangeBox() {
     [currencyOptionsWithId, currencyOptionsWithId.length]
   );
 
-  const accountOptions =
-    fxAccounts?.data
-      .filter((account) => account.category === "fx")
-      .map((fxAccount) => ({
-        label: fxAccount.currency.name,
-        value: fxAccount.currency.id.toString(),
-      })) ?? [];
+  const allAccountsData =
+  allAccounts?.data
+    .map((account) => ({
+      label: account.label,
+      value: account.currency.id.toString(),
+    })) ?? [];
 
   const matchedRate = useCallback(
     function () {
@@ -132,7 +135,7 @@ export function ExchangeBox() {
         <section className="bg-white p-4 rounded border flex gap-4">
           <Select
             className="flex-grow"
-            label="Currency"
+            label="Source"
             value={currentCurrency.source}
             onChange={(value) => {
               setCurrentCurrency({
@@ -140,7 +143,7 @@ export function ExchangeBox() {
                 source: value,
               });
             }}
-            data={accountOptions}
+            data={allAccountsData}
             nothingFound={"No currencies found"}
           />
           <NumberInput
@@ -167,7 +170,7 @@ export function ExchangeBox() {
         <section className="bg-white p-4 rounded border flex gap-4">
           <Select
             className="flex-grow"
-            label="Currency"
+            label="Destination"
             value={currentCurrency.destination}
             onChange={(value) => {
               setCurrentCurrency({
@@ -175,7 +178,7 @@ export function ExchangeBox() {
                 destination: value,
               });
             }}
-            data={accountOptions}
+            data={allAccountsData}
           />
           <NumberInput
             className="flex-grow"

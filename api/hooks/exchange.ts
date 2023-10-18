@@ -36,7 +36,6 @@ export function useExchange(cb?: () => void) {
       onError: function (error:any) {
       
         if (error.response.data.non_field_errors[0].includes("Insufficient")) {
-        // console.log(error.response.data.non_field_errors[0]);
         return showNotification({
           title: "An error occured",
           message: error.response.data.non_field_errors[0],

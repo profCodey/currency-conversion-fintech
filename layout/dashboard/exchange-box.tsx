@@ -15,26 +15,18 @@ import { useGetRates } from "@/api/hooks/admin/rates";
 import { Warning2 } from "iconsax-react";
 import { currencyFormatter } from "@/utils/currency";
 import { useExchange } from "@/api/hooks/exchange";
-import { useFxBalance } from "@/api/hooks/balance";
 import { showNotification } from "@mantine/notifications";
-import { useGetFxAccounts } from "@/api/hooks/fx";
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { useGetLiveRate } from "@/api/hooks/admin/rates";
 
 export function ExchangeBox() {
-  const { data: fxAccounts, isLoading: _fxAccountsLoading } =
-    useGetFxAccounts();
   const {
     isLoading: currenciesLoading,
     currencyOptionsWithId,
     currencyOptions,
   } = useCurrencyOptions();
   const { data: rates, isLoading: ratesLoading } = useGetRates();
-  const { getBalanceFromCurrency, isLoading: fxAccountsLoading } =
-    useFxBalance();
-    useGetFxAccounts();
-    const { data: allAccounts, isLoading: allAccountsLoading } =
-    useGetAccounts();
+  const { data: allAccounts, isLoading: allAccountsLoading } = useGetAccounts();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const { mutate: exchange, isLoading: exchangeLoading } = useExchange(() =>
     setShowConfirmationModal(false)
@@ -52,31 +44,24 @@ export function ExchangeBox() {
   const [destinationAccCurrency, setDestinationAccCurrency] = useState("");
   const [sourceCurrency, setSourceCurrency] = useState("");
   const [destinationCurrency, setDestinationCurrency] = useState("");
-  const [amountToReceive, setAmtToReceive] = useState(0);
-  const { data: liveRateValue, isLoading, isError } = useGetLiveRate({
+  const {
+    data: liveRateValue,
+    isLoading,
+    isError,
+  } = useGetLiveRate({
     source: sourceAccCurrency,
     destination: destinationAccCurrency,
   });
   let liveRate = liveRateValue?.data?.rate;
+  const [sourceAccIdValue, setSourceAccIdValue] = useState("");
+  const [destinationAccIdValue, setDestinationAccIdValue] = useState("");
 
-  useEffect(
-    function () {
-      const source = currencyOptionsWithId[0]?.value;
-      const destination = currencyOptionsWithId[1]?.value;
-      setCurrentCurrency({
-        source,
-        destination,
-      });
-    },
-    [currencyOptionsWithId, currencyOptionsWithId.length]
-  );
-  
   const allAccountsData =
-  allAccounts?.data
-    .map((account) => ({
+    allAccounts?.data.map((account) => ({
       label: account.label,
       value: account.id.toString(),
-      currencyId : account.currency.id.toString(),
+      currencyId: account.currency.id.toString(),
+      currencyName: account.currency.name,
     })) ?? [];
 
   function getCurrencyNameFromId(id: string | null) {
@@ -87,8 +72,6 @@ export function ExchangeBox() {
   }
 
   function handleExchangeClick() {
-    console.log('hello');
-    
     if (sourceAmount < 1) {
       return showNotification({
         title: "Error",
@@ -96,23 +79,16 @@ export function ExchangeBox() {
         color: "red",
       });
     }
-    
+
     setShowConfirmationModal(true);
   }
 
   function handleExchange() {
     exchange({
       amount: sourceAmount.toString(),
-      destination_account: getAccountFromCurrencyId(destinationAccCurrency) as number,
-      source_account: getAccountFromCurrencyId(sourceAccCurrency) as number,
+      destination_account: Number(destinationAccIdValue),
+      source_account: Number(sourceAccIdValue),
     });
-  }
-
-  function getAccountFromCurrencyId(currency: string | null) {
-    const fxAcc =
-      fxAccounts?.data.find((acc) => acc.currency.id === Number(currency)) ??
-      null;
-    return fxAcc?.id;
   }
 
   return (
@@ -124,9 +100,12 @@ export function ExchangeBox() {
             label="Source"
             value={currentCurrency.source}
             onChange={(value) => {
-              const selectedAcc = allAccountsData.filter(acc=> acc.value === value)      
-              setSourceCurrency(selectedAcc[0].label);
-            setSourceAccCurrency(selectedAcc[0].currencyId);
+              const selectedAcc = allAccountsData.filter(
+                (acc) => acc.value === value
+              );
+              setSourceCurrency(selectedAcc[0].currencyName);
+              setSourceAccCurrency(selectedAcc[0].currencyId);
+              setSourceAccIdValue(selectedAcc[0].value);
               setCurrentCurrency({
                 ...currentCurrency,
                 source: value,
@@ -162,17 +141,18 @@ export function ExchangeBox() {
             label="Destination"
             value={currentCurrency.destination}
             onChange={(value) => {
-              const selectedAcc = allAccountsData.filter(acc=> acc.value === value)
-              setDestinationAccCurrency(selectedAcc[0].currencyId)
-              setDestinationCurrency(selectedAcc[0].label);              
+              const selectedAcc = allAccountsData.filter(
+                (acc) => acc.value === value
+              );
+              setDestinationAccCurrency(selectedAcc[0].currencyId);
+              setDestinationCurrency(selectedAcc[0].currencyName);
+              setDestinationAccIdValue(selectedAcc[0].value);
               setCurrentCurrency({
                 ...currentCurrency,
                 destination: value,
               });
-              
             }}
             data={allAccountsData}
-       
           />
 
           <NumberInput
@@ -185,20 +165,25 @@ export function ExchangeBox() {
             //     ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
             //     : ""
             // }
-            value={sourceAmount * liveRate}
-          
+            value={destinationAccCurrency ? sourceAmount * liveRate : 0}
           />
         </section>
 
         <div className="text-primary-70 text-center my-5 text-sm">
-          <span className="font-semibold">Market Rate:</span> 1{" "}
-          {getCurrencyNameFromId(sourceAccCurrency)} ={" "}
-          {liveRate || "[Not set]"}{" "}
-          {getCurrencyNameFromId(destinationAccCurrency)}
+          {!sourceAccCurrency || !destinationAccCurrency ? (
+            <span className="font-semibold">
+              Select a source and destination currency to view market rate
+            </span>
+          ) : (
+            <>
+              <span className="font-semibold">Market Rate:</span> 1{" "}
+              {sourceCurrency} = {liveRate || "[Not set]"} {destinationCurrency}
+            </>
+          )}
         </div>
+
         <Button
-          disabled={!liveRate || 
-           !destinationAccCurrency}
+          disabled={!liveRate || !destinationAccCurrency || !sourceAccCurrency}
           className="bg-accent hover:bg-accent"
           size="md"
           fullWidth
@@ -225,11 +210,11 @@ export function ExchangeBox() {
             <span className="font-medium">
               {currencyFormatter(sourceAmount)}{" "}
             </span>
-            {getCurrencyNameFromId(sourceAccCurrency)} for{" "}
+            {sourceCurrency} for{" "}
             <span className="font-medium">
               {currencyFormatter(sourceAmount * liveRate)}{" "}
             </span>{" "}
-            {getCurrencyNameFromId(destinationAccCurrency)}
+            {destinationCurrency}
           </div>
 
           <Group grow className="w-full">

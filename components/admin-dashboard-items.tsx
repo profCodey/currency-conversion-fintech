@@ -50,6 +50,15 @@ const routes = [
     ],
   },
   {
+    route: "/admin/user-limit",
+    label: "Compliance",
+    icon: <UsersIcon />,
+    children: [
+      { route: "/admin/user-limit", label: "User limit" },
+      { route: "/admin/global-limit", label: "Global limit" },
+    ],
+  },
+  {
     route: "/admin/settings",
     label: "Settings",
     icon: <SettingsIcon />,
@@ -96,7 +105,9 @@ export function AdminDashboardItems() {
       router.pathname === "/admin/rates" ||
       router.pathname === "/admin/gateways" ||
       router.pathname === "/admin/accounts" ||
-      router.pathname === "/admin/currencies" 
+      router.pathname === "/admin/currencies" ||
+      router.pathname === "/admin/user-limit" ||
+      router.pathname === "/admin/global-limit" 
   );
 
   const [usersOpen, setUsersOpen] = useState(

@@ -50,7 +50,7 @@ const routes = [
     ],
   },
   {
-    route: "/admin/user-limit",
+    route: "/admin/users",
     label: "Compliance",
     icon: <UsersIcon />,
     children: [

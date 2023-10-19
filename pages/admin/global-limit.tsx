@@ -41,7 +41,7 @@ export default function GlobalLimit() {
                   Activate
                 </Menu.Item>
                 <Menu.Item disabled={!rate.is_active} onClick={() => {}}>
-                  De-activate
+                  Delete
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>

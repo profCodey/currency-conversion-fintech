@@ -25,8 +25,8 @@ export function middleware(request: NextRequest) {
     "/admin/accounts",
     "/admin/gateways",
     "/admin/currencies",
-    "/admin/global-list",
-    "/admin/user-list"
+    "/admin/global-limit",
+    "/admin/user-limit"
   ];
 
   const publicPaths = [

@@ -1,14 +1,14 @@
 import { useGetRates } from "@/api/hooks/admin/rates";
 import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { PageHeader } from "@/components/admin/page-header";
-import { CreateGlobalLimitButton } from "@/layout/admin/compliance/create-global-limit-button";
+import { CreateUserLimitButton } from "@/layout/admin/compliance/create-user-limit-button";
 import { AppLayout } from "@/layout/common/app-layout";
 import { ActionIcon, LoadingOverlay, Menu, Table } from "@mantine/core";
 import dayjs from "dayjs";
 import { More } from "iconsax-react";
 import { ReactElement, useMemo } from "react";
 
-export default function GlobalLimit() {
+export default function UserLimit() {
   const { getCurrencyNameFromId, isLoading } = useCurrencyOptions();
   const { data, isLoading: ratesLoading } = useGetRates();
 
@@ -55,9 +55,9 @@ export default function GlobalLimit() {
   return (
     <section className="flex flex-col gap-6 h-full relative">
       <PageHeader
-        header="Global Limit"
-        subheader="View and set global limit"
-        meta={<CreateGlobalLimitButton />}
+        header="User Limit"
+        subheader="View and set user limit"
+        meta={<CreateUserLimitButton />}
       />
 
       <section className="">
@@ -82,6 +82,6 @@ export default function GlobalLimit() {
   );
 }
 
-GlobalLimit.getLayout = function getLayout(page: ReactElement) {
+UserLimit.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };

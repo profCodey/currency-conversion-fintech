@@ -7,23 +7,18 @@ import { ErrorItem } from "../auth";
 import { z } from "zod";
 import { IRate } from "@/utils/validators/interfaces";
 import { queryClient } from "@/pages/_app";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 import { IRatePayload } from "@/utils/validators/interfaces";
 
 export function useGetRates() {
   return useQuery(["rates"], function (): Promise<AxiosResponse<IRate[]>> {
-    return axiosInstance.get(`/fx/rates/`, {
-      baseURL: APICLIENT_BASE_URL,
-    });
+    return axiosInstance.get(`/fx/rates/`);
   });
 }
 
 export function useAddNewRate(cb?: () => void) {
   return useMutation(
     (payload: z.infer<typeof rateFormValidator>) =>
-      axiosInstance.post("/fx/rates/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.post("/fx/rates/", payload),
     {
       onSuccess: function (data: AxiosResponse) {
         showNotification({
@@ -49,8 +44,8 @@ export function useAddNewRate(cb?: () => void) {
 
 export function useGetLiveRate(payload: IRatePayload) {
   return useQuery(['liveRate', payload.source, payload.destination], async () => {
+    // if(!payload.source || !payload.destination) return;
     const response = await axiosInstance.get('/fx/rates/liverate', {
-      baseURL: APICLIENT_BASE_URL,
       params: {
         source_currency: payload.source,
         destination_currency: payload.destination,

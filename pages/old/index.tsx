@@ -9,6 +9,7 @@ import { Statements } from "@/layout/transactions/statements";
 
 export default function Dashboard() {
   const { data } = useGetCurrentUser();
+  // console.log(data);
   const { defaultGateway, isLoading } = useDefaultGateway();
   return (
     <div className="flex flex-col gap-6 min-h-full">

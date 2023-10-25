@@ -11,6 +11,8 @@ export function middleware(request: NextRequest) {
     "/recipients",
     "/fund-account",
     "/transactions",
+    "/wallet",
+    "/old"
   ];
 
   const adminPaths = [
@@ -24,6 +26,7 @@ export function middleware(request: NextRequest) {
     "/admin/support",
     "/admin/accounts",
     "/admin/gateways",
+    "/admin/siteSettings",
     "/admin/currencies",
     "/admin/global-limit",
     "/admin/user-limit"

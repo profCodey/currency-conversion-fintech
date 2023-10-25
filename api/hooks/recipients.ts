@@ -6,24 +6,19 @@ import { addRecipientFormValidator } from "@/utils/validators";
 import { z } from "zod";
 import { AxiosResponse } from "axios";
 import { IRecipient } from "@/utils/validators/interfaces";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetRecipients() {
   return useQuery(["recipients"], function (): Promise<
     AxiosResponse<IRecipient[]>
   > {
-    return axiosInstance.get("/recipients/", {
-      baseURL: APICLIENT_BASE_URL,
-    });
+    return axiosInstance.get("/recipients/");
   });
 }
 
 export function useAddRecipient(cb?: () => void) {
   return useMutation(
     function (payload: IRecipient) {
-      return axiosInstance.post("/recipients/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.post("/recipients/", payload);
     },
     {
       onSuccess: function () {
@@ -51,9 +46,7 @@ export function useAddRecipient(cb?: () => void) {
 export function useDeleteRecipient(cb?: () => void) {
   return useMutation(
     function (recipientId: number | undefined) {
-      return axiosInstance.delete(`/recipients/${recipientId}`, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.delete(`/recipients/${recipientId}`);
     },
     {
       onSuccess: function () {

@@ -14,3 +14,7 @@ export { ConvertIcon } from "./converter-icon";
 export * from "./briefcase";
 export * from "./pin"
 export * from "./bin-delete"
+export * from "./eyeOpen"
+export * from "./eyeClosed" 
+export * from "./ArrowRight"
+export * from "./option"

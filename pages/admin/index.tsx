@@ -4,6 +4,7 @@ import { useGetCurrentUser } from "@/api/hooks/user";
 import { Stats } from "@/layout/admin/stats";
 import { TransactionsList } from "@/layout/admin/transaction-list";
 import { PageHeader } from "@/components/admin/page-header";
+import CookieConsentBanner from "@/components/react-cookie-consent";
 
 export default function Dashboard() {
   const { data } = useGetCurrentUser();
@@ -21,6 +22,7 @@ export default function Dashboard() {
       />
       <Stats />
       <TransactionsList />
+      <CookieConsentBanner />
     </div>
   );
 }

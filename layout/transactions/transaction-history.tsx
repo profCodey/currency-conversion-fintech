@@ -47,6 +47,7 @@ export function TransactionHistory({
   const [transactionModalState, setTransactionModalState] = useState<{
     [payoutId: string]: boolean;
   }>({});
+  const [currentPayout, setCurrentPayout] = useState({});
 
   const isAdmin = role === USER_CATEGORIES.ADMIN;
   let emptyTransactionHistory =
@@ -102,16 +103,6 @@ export function TransactionHistory({
   const companyInfo = useGetBasicProfile(Number(userId));
   const company = companyInfo.data?.data.business_trading_name;
 
-
-  
-
-  // Function to capture HTML content using html2canvas
-  // const captureHTML = async () => {
-  //   const element = document.getElementById("pdf-content");
-  //   const canvas = await html2canvas(element);
-  //   return canvas.toDataURL("image/png");
-  // };
-
   const createPDF = async () => {
     const pdf = new jsPDF("landscape", "pt", "a4");
 
@@ -120,7 +111,7 @@ export function TransactionHistory({
     pdf.setFontSize(10);
 
     // Use html2canvas to capture the content of the TransactionModal
-    const modalElement = document.getElementById("transaction-modal-content");
+    const modalElement = document.getElementById("memoPay");
     if (!modalElement) {
       console.error("Modal element not found");
       return;
@@ -146,13 +137,6 @@ export function TransactionHistory({
     pdf.save("transaction_receipt.pdf");
   };
 
-  const handleDownloadModal = (payoutId: string) => {
-    setTransactionModalState((prevState) => ({
-      ...prevState,
-      [payoutId]: !prevState[payoutId], // Toggle the state
-    }));
-  };
-
   // CSV data for the CSVLink component
   const csvData = useMemo(() => {
     if (!payoutHistory?.data?.result) return [];
@@ -167,11 +151,9 @@ export function TransactionHistory({
     }));
   }, [payoutHistory?.data?.result]);
 
-  interface TransactionDetailsContentProps {
-    payout: any; 
-  }
-  
-  const TransactionDetailsContent: React.FC<TransactionDetailsContentProps> = ({ payout }) => (
+  //@ts-ignore
+  const TransactionDetailsContent = ({payout}) => {
+    return (
     <div id="transaction-modal-content" className="h-[600px] w-full">
       <div className="flex gap-72 w-full">
         <div className="flex mb-1 w-60">
@@ -183,7 +165,7 @@ export function TransactionHistory({
           </div>
           <div className="flex text-right mr-2">
             <p className="text-sm mt-[-10px] mb-8 ml-32">
-              {new Date(payout.createdOn).toLocaleDateString("en-GB", {
+              {new Date(payout?.createdOn).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
@@ -191,45 +173,45 @@ export function TransactionHistory({
             </p>
           </div>
           <div className="flex bg-[#ebebeb] w-full pl-2 h-8 mt-[-15px] mb-8 text-sm mr-2">
-            <p className="ml-36">Status:&nbsp;</p> <p>{payout.status}</p>
+            <p className="ml-36">Status:&nbsp;</p> <p>{payout?.status}</p>
           </div>
         </div>
       </div>
       <div className="text-l mt-6">
         <div className="flex mb-1">
-          <p className="w-52 font-bold">Amount:</p> <p>{payout.amount}</p>
+          <p className="w-52 font-bold">Amount:</p> <p>{payout?.amount}</p>
         </div>
 
         <div className="flex mb-1">
           <p className="w-52 font-bold">Transaction ID:</p>{" "}
-          <p>{payout.transactionId}</p>
+          <p>{payout?.transactionId}</p>
         </div>
         <div className="flex mb-1">
           <p className="w-52 font-bold">Payment Reference:</p>
-          <p> {payout.payoutId}</p>
+          <p> {payout?.payoutId}</p>
         </div>
         <p className="mt-8 mb-2 font-bold text-xl">Recipient Details</p>
         <div className="flex mb-2">
           <p className="w-52 flex gap-2 font-bold">
             <p>Bank</p> <p className="font-bold">Name:</p>
           </p>{" "}
-          <p>{payout.bankname}</p>
+          <p>{payout?.bankname}</p>
         </div>
         <div className="flex mb-2">
           <p className="w-52 flex gap-2 font-bold">
             <p>Account</p> <p className="font-bold">Name:</p>
           </p>
-          <p>{payout.accountName}</p>
+          <p>{payout?.accountName}</p>
         </div>
         <div className="flex mb-8">
           <p className="w-52 flex gap-2 font-bold">
             <p>Account</p> <p className="font-bold">Number:</p>
           </p>{" "}
-          <p>{payout.accountNumber}</p>
+          <p>{payout?.accountNumber}</p>
         </div>
       </div>
     </div>
-  );
+  )};
 
   // Function to handle exporting table data to Excel
   const exportToExcel = () => {
@@ -268,22 +250,15 @@ export function TransactionHistory({
     XLSX.writeFile(wb, "payout_history.xlsx");
   };
 
+  const MemoizedComponent = React.memo(TransactionDetailsContent);
+
   const _rows = useMemo(
     function () {
       html2canvas;
       return payoutHistory?.data.result
         ?.map(function (payout) {
-          const isModalOpen = transactionModalState[payout.payoutId];
           return (
             <React.Fragment key={payout.payoutId}>
-              <div style={{ position: 'absolute', left: '-9999px' }}>
-                <TransactionDetailsContent payout={payout} />
-              </div>
-              {/* {isModalOpen && (
-                <>
-                  <TransactionDetailsContent payout={payout} />
-                </>
-              )} */}
               <tr className="text-primary-100 font-medium">
                 <td className="text-xs sm:text-base">
                   <Group spacing="xs">
@@ -307,8 +282,13 @@ export function TransactionHistory({
                 <td>{payout.charges}</td>
                 <td>
                   <span
-                    onClick={() =>
-                      createPDF()
+                    onClick={() =>{
+                      setCurrentPayout(payout)
+                      setTimeout(() => {
+                        createPDF()
+                      }
+                      , 1000);
+                    }
                     }
                     className="cursor-pointer"
                   >
@@ -321,7 +301,8 @@ export function TransactionHistory({
         })
         .reverse();
     },
-    [payoutHistory?.data.result, transactionModalState]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [payoutHistory?.data.result]
   );
 
   if (!isAdmin && !defaultGateway) {
@@ -382,6 +363,10 @@ export function TransactionHistory({
   }
 
   return (
+    <> 
+    <div id = "memoPay" style={{ position: 'absolute', left: '-9999px' }}>
+      <MemoizedComponent payout={currentPayout}/>
+    </div>
     <div className="flex-grow flex flex-col gap-2">
       <div className="bg-gray-30 rounded-lg border p-5 py-2 flex gap-4 items-center justify-between">
         <span className="text-primary-100 font-semibold mr-auto">
@@ -432,6 +417,7 @@ export function TransactionHistory({
         </div>
       </Skeleton>
     </div>
+    </>
   );
 }
 

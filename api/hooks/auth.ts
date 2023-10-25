@@ -65,6 +65,7 @@ export function useRegisterAdmin(cb: () => void) {
   });
 }
 export interface ErrorItem {
+  attr?: any;
   detail?: string;
   code?: string;
 }

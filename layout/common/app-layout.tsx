@@ -71,9 +71,10 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isApiClient = data?.data.category === USER_CATEGORIES.API_CLIENT;
   const homePageRoute = isApiClient ? "/dashboard" : "/admin";
 
-  const defaultGateway = selectedGateways?.data.find(
-    (gateway) => gateway.is_default
-  );
+  const defaultGateway = selectedGateways?.data && Array.isArray(selectedGateways.data)
+  ? selectedGateways.data.find((gateway) => gateway.is_default)
+  : null;
+
 
   const dashboardItems =
     data?.data.category === USER_CATEGORIES.API_CLIENT ? (

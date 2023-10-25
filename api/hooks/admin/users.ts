@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/api";
-import { APICLIENT_BASE_URL, USER_CATEGORIES } from "@/utils/constants";
+import { USER_CATEGORIES } from "@/utils/constants";
 import {
   IOnboardingDocuments,
   IOnboardingProfile,
@@ -48,9 +48,7 @@ export function useClientSelectedGateways(userId: string) {
   return useQuery(["client-gateways", userId], function (): Promise<
     AxiosResponse<ISelectedGateway[]>
   > {
-    return axiosInstance.get(`/local/admin/user-selected-gateways/${userId}/`, {
-      baseURL: APICLIENT_BASE_URL,
-    });
+    return axiosInstance.get(`/local/admin/user-selected-gateways/${userId}/`);
   });
 }
 
@@ -61,9 +59,6 @@ export function useApproveGateway(cb: () => void) {
         `/local/selected-gateway/approve/${id}/`,
         {
           status,
-        },
-        {
-          baseURL: APICLIENT_BASE_URL,
         }
       );
     },

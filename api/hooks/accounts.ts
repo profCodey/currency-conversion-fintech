@@ -1,18 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
-import { IAccount } from "@/utils/validators/interfaces";
+import { IAccount, IVirtualAccount } from "@/utils/validators/interfaces";
 import { useCallback, useMemo } from "react";
 import { getCurrency } from "@/utils/currency";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetAccounts() {
   return useQuery({
     queryKey: ["accounts"],
     queryFn: (): Promise<AxiosResponse<IAccount[]>> =>
-      axiosInstance.get("/accounts/", {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.get("/accounts/"),
+  });
+}
+
+export function useGetVirtualAccount(id: string) {
+  return useQuery({
+    queryKey: ["virtual-account", id],
+    queryFn: (): Promise<AxiosResponse<IVirtualAccount>> =>
+      axiosInstance.get(`/local/virtual-account/${id}`),
+  });
+}
+export function useFXWalletAccounts() {
+  return useQuery({
+    queryKey: ["site-settings"],
+    queryFn: (): Promise<AxiosResponse<IAccount[]>> =>
+      axiosInstance.get("/site-settings/"),
   });
 }
 
@@ -20,9 +32,7 @@ export function useGetClientAccounts(userId: string) {
   return useQuery({
     queryKey: ["accounts", userId],
     queryFn: (): Promise<AxiosResponse<IAccount[]>> =>
-      axiosInstance.get(`/accounts/${userId}`, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.get(`/accounts/${userId}`),
   });
 }
 

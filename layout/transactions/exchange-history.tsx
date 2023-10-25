@@ -64,17 +64,16 @@ function handlePDFDonwload(data: IExchangeDetailed){
       Id:                                 ${data.id}
       Status:                          ${data.status}
       Date Created:               ${data.created_on}
-
-      Source Account
-      Account:                        ${data.source_account_detail.label}
-      Category:                       ${data.source_account_detail.category}
-      Currency:                       ${data.source_account_detail.currency.name}
-      Balance:                        ${data.source_account_detail.true_balance}
+      Rate:                            ${data.rate}
 
       Destination Account
+      
       Account:                        ${data.destination_account_detail.label}
       Category:                       ${data.destination_account_detail.category}
       Currency:                       ${data.destination_account_detail.currency.name}
+      Bank Name:                   ${data.source_account_detail.bank_name}
+      Account Name:              ${data.source_account_detail.account_name}
+      Account Number:           ${data.source_account_detail.account_number}
       Balance:                        ${data.destination_account_detail.true_balance}
 
     `;

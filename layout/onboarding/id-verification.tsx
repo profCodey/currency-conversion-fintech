@@ -29,7 +29,7 @@ export function IdVerification() {
 
   if (isLoading || loadingCurrentUser)
     return (
-      <div>
+      <div className="mx-auto max-w-md flex items-center gap-x-2">
         Loading... <Loader color="green" />
       </div>
     );
@@ -53,11 +53,16 @@ export function IdVerification() {
         <SumsubWebSdk
           accessToken={token}
           expirationHandler={() => {
-            console.log("token expired");
+            // console.log("token expired");
+
             setToken(null);
           }}
-          onMessage={(message: string) => console.log({ message })}
-          onError={(error: any) => console.log({ error })}
+          onMessage={(message: string) => {
+            // console.log({ message });
+          }}
+          onError={(error: any) => {
+            //  console.log({ error })
+          }}
         />
       )}
     </div>

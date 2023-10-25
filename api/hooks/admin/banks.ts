@@ -2,7 +2,6 @@ import { axiosInstance } from "@/api";
 import { AddNewBankValidator } from "@/layout/admin/banks/add-bank";
 import { MapBankValidator } from "@/layout/admin/banks/map-bank";
 import { queryClient } from "@/pages/_app";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 import { IBank, INewBank } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -18,9 +17,7 @@ export interface ErrorItem {
 export function useAddNewBank(cb?: () => void) {
   return useMutation(
     (payload: z.infer<typeof AddNewBankValidator>) =>
-      axiosInstance.post("/banks/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.post("/banks/", payload),
     {
       onSuccess: function (data: AxiosResponse) {
         showNotification({
@@ -47,9 +44,7 @@ export function useAddNewBank(cb?: () => void) {
 export function useDeactivateBank(cb?: () => void) {
   return useMutation(
     ({ id, ...payload }: any) =>
-      axiosInstance.patch(`/banks/${id}/`, payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.patch(`/banks/${id}/`, payload),
     {
       onSuccess: function (data: AxiosResponse, variables) {
         showNotification({
@@ -78,9 +73,7 @@ export function useDeactivateBank(cb?: () => void) {
 
 export function useGetBanks() {
   return useQuery(["banks"], function (): Promise<AxiosResponse<IBank[]>> {
-    return axiosInstance.get(`/banks/`, {
-      baseURL: APICLIENT_BASE_URL,
-    });
+    return axiosInstance.get(`/banks/`);
   });
 }
 
@@ -105,9 +98,7 @@ export function useBankOptions() {
 export function useMapNewBank(cb?: () => void) {
   return useMutation(
     (payload: z.infer<typeof MapBankValidator>) =>
-      axiosInstance.post("/local/admin/bank-mapping/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.post("/local/admin/bank-mapping/", payload),
     {
       onSuccess: function (data: AxiosResponse) {
         showNotification({

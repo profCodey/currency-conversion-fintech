@@ -10,15 +10,12 @@ import {
 } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { useMemo } from "react";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetGateways() {
   return useQuery({
     queryKey: ["apiclient", "gateways"],
     queryFn: function (): Promise<AxiosResponse<Array<IGateway>>> {
-      return axiosInstance.get("/local/gateways/", {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.get("/local/gateways/");
     },
   });
 }
@@ -26,9 +23,7 @@ export function useGetGateways() {
 export function useFetchGateways() {
   return useMutation(
     function (payload: {}) {
-      return axiosInstance.post("/local/admin/fetch-gateways/", null, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.post("/local/admin/fetch-gateways/", null);
     },
     {
       onSuccess: function (response) {
@@ -73,9 +68,7 @@ export function useGatewayOptions() {
 export function useEditGateway(gatewayId: number, cb: () => void) {
   return useMutation(
     function (payload: IGateway) {
-      return axiosInstance.patch(`/local/gateways/${gatewayId}/`, payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.patch(`/local/gateways/${gatewayId}/`, payload);
     },
     {
       onSuccess: function () {
@@ -104,9 +97,7 @@ export function useGetSelectedGateways() {
   return useQuery({
     queryKey: ["apiclient", "gateways", "selected"],
     queryFn: function (): Promise<AxiosResponse<Array<ISelectedGateway>>> {
-      return axiosInstance.get("/local/selected-gateways/", {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.get("/local/selected-gateways/");
     },
   });
 }
@@ -114,9 +105,7 @@ export function useGetSelectedGateways() {
 export function useAddGateway(cb?: () => void) {
   return useMutation(
     function (payload: { gateway: number; is_approved: boolean }) {
-      return axiosInstance.post("/local/selected-gateways/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.post("/local/selected-gateways/", payload);
     },
     {
       onSuccess: function () {
@@ -146,10 +135,7 @@ export function useMakeDefaultGateway(cb?: () => void) {
     function (payload: { gateway_id: number; is_default: boolean }) {
       return axiosInstance.patch(
         `/local/selected-gateways/${payload.gateway_id}/`,
-        { is_default: payload.is_default },
-        {
-          baseURL: APICLIENT_BASE_URL,
-        }
+        { is_default: payload.is_default }
       );
     },
     {
@@ -201,10 +187,7 @@ export function useGetStatements(payload: IPayoutPayload) {
     queryKey: ["statements", gateway_id, user_id, begin_date, end_date],
     queryFn: function (): Promise<AxiosResponse<IStatementHistory>> {
       return axiosInstance.get(
-        `/local/statements/${user_id}/${gateway_id}/${begin_date}/${end_date}/`,
-        {
-          baseURL: APICLIENT_BASE_URL,
-        }
+        `/local/statements/${user_id}/${gateway_id}/${begin_date}/${end_date}/`
       );
     },
     enabled: !!gateway_id,
@@ -217,10 +200,7 @@ export function useGetPayouts(payload: IPayoutPayload) {
     queryKey: ["payouts", gateway_id, user_id, begin_date, end_date],
     queryFn: function (): Promise<AxiosResponse<IPayoutHistory>> {
       return axiosInstance.get(
-        `/local/payouts/${gateway_id}/${user_id}/${begin_date}/${end_date}/`,
-        {
-          baseURL: APICLIENT_BASE_URL,
-        }
+        `/local/payouts/${gateway_id}/${user_id}/${begin_date}/${end_date}/`
       );
     },
     enabled: !!gateway_id,
@@ -233,10 +213,7 @@ export function useGetAllPayouts(payload: IPayoutPayload) {
     queryKey: ["payouts", gateway_id, begin_date, end_date],
     queryFn: function (): Promise<AxiosResponse<IPayoutHistory>> {
       return axiosInstance.get(
-        `/local/payouts/${gateway_id}/${begin_date}/${end_date}/`,
-        {
-          baseURL: APICLIENT_BASE_URL,
-        }
+        `/local/payouts/${gateway_id}/${begin_date}/${end_date}/`
       );
     },
     enabled: !!gateway_id,

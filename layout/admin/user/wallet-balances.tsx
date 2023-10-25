@@ -23,7 +23,7 @@ export function ClientWalletBalances() {
   return (
     <Skeleton
       visible={clientDetailsLoading || walletsLoading}
-      className="w-[450px]"
+      className="w-full"
     >
       <section className="w-[450px] h-full bg-white shadow p-6 rounded-md border">
         <h3 className="font-semibold text-gray-90">Wallet Balance</h3>

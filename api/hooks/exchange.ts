@@ -6,24 +6,19 @@ import { queryClient } from "@/pages/_app";
 import { AxiosError, AxiosResponse } from "axios";
 import { ApproveRejectFundingPayload } from "@/layout/transactions/manual-funding-drawer";
 import { ErrorItem } from "./auth";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetExchanges() {
   return useQuery({
     queryKey: ["exchanges"],
     queryFn: (): Promise<AxiosResponse<IExchangeDetailed[]>> =>
-      axiosInstance.get("/fx/exchange/", {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.get("/fx/exchange/"),
   });
 }
 
 export function useExchange(cb?: () => void) {
   return useMutation(
     function (payload: IExchange) {
-      return axiosInstance.post("/fx/exchange/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.post("/fx/exchange/", payload);
     },
     {
       onSuccess: function () {
@@ -34,7 +29,7 @@ export function useExchange(cb?: () => void) {
         });
       },
       onError: function (error:any) {
-      
+
         if (error.response.data.non_field_errors[0].includes("Insufficient")) {
         return showNotification({
           title: "An error occured",
@@ -42,7 +37,7 @@ export function useExchange(cb?: () => void) {
           color: "red",
         });
       }
-        
+
         return showNotification({
           title: "An error occured",
           message: "Unable to send exchange request",
@@ -61,9 +56,7 @@ export function useExchange(cb?: () => void) {
 export function useApproveRejectExchange(cb?: () => void) {
   return useMutation(
     function ({ id, ...payload }: ApproveRejectFundingPayload) {
-      return axiosInstance.patch(`/fx/exchange/${id}/approve/`, payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.patch(`/fx/exchange/${id}/approve/`, payload);
     },
     {
       onSuccess: function (data: AxiosResponse) {

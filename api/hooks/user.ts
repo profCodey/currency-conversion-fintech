@@ -12,7 +12,6 @@ import { z } from "zod";
 import { supportFormValidator } from "@/pages/support";
 import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetCurrentUser() {
   return useQuery({
@@ -26,9 +25,7 @@ export function useGetUserDetails(userId: number | undefined) {
   return useQuery({
     queryKey: ["user", "details", userId],
     queryFn: (): Promise<AxiosResponse<IUserDetail>> =>
-      axiosInstance.get(`/user/${userId}/detail/`, {
-        // baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.get(`/user/${userId}/detail/`),
     enabled: !!userId,
   });
 }
@@ -40,9 +37,6 @@ export function useApproveClient(userId: string | number) {
         `/local/admin/approve-client/`,
         {
           client_id: userId,
-        },
-        {
-          baseURL: APICLIENT_BASE_URL,
         }
       );
     },
@@ -74,9 +68,7 @@ export function useGetClientDetails(userId: number | undefined) {
   return useQuery({
     queryKey: ["client", "details", userId],
     queryFn: (): Promise<AxiosResponse<IClientDetail>> =>
-      axiosInstance.get(`/local/client/${userId}/detail/`, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.get(`/local/client/${userId}/detail/`),
     enabled: !!userId,
   });
 }
@@ -115,9 +107,7 @@ export function useGetSupportRequests() {
   return useQuery({
     queryKey: ["support-requests"],
     queryFn: function (): Promise<AxiosResponse<ISupport[]>> {
-      return axiosInstance.get("/supports/", {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.get("/supports/");
     },
   });
 }
@@ -125,9 +115,7 @@ export function useGetSupportRequests() {
 export function useSendSupportRequest(successCb: () => void) {
   return useMutation(
     (payload: z.infer<typeof supportFormValidator>) =>
-      axiosInstance.post("/supports/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+      axiosInstance.post("/supports/", payload),
     {
       onSuccess: function (response: AxiosResponse) {
         showNotification({
@@ -154,10 +142,7 @@ export function useCloseSupportRequest(successCb: () => void) {
     (payload: ISupport) =>
       axiosInstance.patch(
         `/supports/${payload.id}`,
-        { is_closed: true },
-        {
-          baseURL: APICLIENT_BASE_URL,
-        }
+        { is_closed: true }
       ),
     {
       onSuccess: function (response: AxiosResponse) {
@@ -188,10 +173,7 @@ export function useSyncDeposits() {
     () =>
       axiosInstance.post(
         "/local/synchronize-deposit-transaction/",
-        {},
-        {
-          baseURL: APICLIENT_BASE_URL,
-        }
+        {}
       ),
     {
       onSuccess: function () {

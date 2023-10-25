@@ -5,24 +5,19 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorItem } from "../auth";
 import { queryClient } from "@/pages/_app";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useGetFxSummary() {
   return useQuery(["fx", "summary"], function (): Promise<
     AxiosResponse<{ pending: number; approved: 0 }>
   > {
-    return axiosInstance.get(`/fx/exchange/summary`, {
-      baseURL: APICLIENT_BASE_URL,
-    });
+    return axiosInstance.get(`/fx/exchange/summary`);
   });
 }
 
 export function useApproveRejectFxPayout(cb?: () => void) {
   return useMutation(
     function ({ id, ...payload }: ApproveRejectFundingPayload) {
-      return axiosInstance.patch(`/fx/payout/${id}/approve/`, payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.patch(`/fx/payout/${id}/approve/`, payload);
     },
     {
       onSuccess: function (data: AxiosResponse) {

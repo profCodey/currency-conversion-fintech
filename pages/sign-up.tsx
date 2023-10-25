@@ -16,12 +16,14 @@ import { _allCountries } from "@/utils/countries";
 import { useForm, zodResolver } from "@mantine/form";
 import { signupFormValidator } from "@/utils/validators";
 import { useRegister } from "@/api/hooks/auth";
-import { USER_CATEGORIES } from "@/utils/constants";
+import { CLIENT_TYPES, CLIENT_TYPES_DATA, USER_CATEGORIES } from "@/utils/constants";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   flag: string;
   label: string;
   description: string;
 }
+
+
 
 // eslint-disable-next-line react/display-name
 export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
@@ -37,6 +39,9 @@ export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   )
 );
 
+
+
+
 export default function Signup() {
   const { mutate: register, isLoading } = useRegister();
   const signupForm = useForm({
@@ -49,6 +54,7 @@ export default function Signup() {
       phone_number: "",
       phone_code: "+234",
       category: USER_CATEGORIES.API_CLIENT,
+      client_type:"",
     },
     validate: zodResolver(signupFormValidator),
   });
@@ -57,6 +63,7 @@ export default function Signup() {
     const { phone_code, ...payload } = values;
     payload.phone_number = phone_code + payload.phone_number;
 
+    // console.log({payload});
     register(payload);
   }
 
@@ -115,6 +122,8 @@ export default function Signup() {
           size="lg"
           {...signupForm.getInputProps("confirm_password")}
         />
+
+        <Select data={CLIENT_TYPES_DATA}    size="lg"      placeholder="Client Type"         {...signupForm.getInputProps("client_type")}/>
         <Button
           type="submit"
           size="lg"

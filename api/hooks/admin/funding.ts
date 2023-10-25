@@ -6,14 +6,11 @@ import { ErrorItem } from "../auth";
 import { axiosInstance } from "@/api";
 import { ApproveRejectFundingPayload } from "@/layout/transactions/manual-funding-drawer";
 import { IManualPayment } from "@/utils/validators/interfaces";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 
 export function useApproveRejectFunding(cb?: () => void) {
   return useMutation(
     function ({ id, ...payload }: ApproveRejectFundingPayload) {
-      return axiosInstance.patch(`/manual-funding/${id}/approve/`, payload, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.patch(`/manual-funding/${id}/approve/`, payload);
     },
     {
       onSuccess: function (data: AxiosResponse) {
@@ -48,9 +45,7 @@ export function useGetClientManualFundings(userId: string) {
   return useQuery({
     queryKey: ["manual-fundings", userId],
     queryFn: function (): Promise<AxiosResponse<IManualPayment[]>> {
-      return axiosInstance.get(`/manual-funding/user/${userId}`, {
-        baseURL: APICLIENT_BASE_URL,
-      });
+      return axiosInstance.get(`/manual-funding/user/${userId}`);
     },
   });
 }

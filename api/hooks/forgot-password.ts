@@ -20,7 +20,7 @@ export function useResetPassword(cb: () => void) {
         cb();
       },
       onError: function (error: AxiosError) {
-        console.log(error);
+        // console.log(error);
         const errors = error.response?.data as Record<string, string>;
 
         showNotification({

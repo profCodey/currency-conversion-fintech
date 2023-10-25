@@ -1,4 +1,6 @@
-import { useAddNewCurrency } from "@/api/hooks/currencies";
+import { useGetCurrencies } from "@/api/hooks/currencies";
+import { useAddNewUserList } from "@/api/hooks/admin/compliance/user-limit";
+import { useUsersList } from "@/api/hooks/admin/users";
 import {
   Button,
   Group,
@@ -7,29 +9,60 @@ import {
   NumberInput,
   Select,
   Stack,
-  Switch,
-  TextInput,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { z } from "zod";
 
-export const currencyFormValidator = z.object({
-code: z.string().min(2, "code"),
-name: z.string().min(3, "name"),
+export const globalListFormValidator = z.object({
+  daily_limit: z.number().min(2, "Enter a value for daily limit"),
+  quarterly_limit: z.number().min(2, "Enter a value for quarterly limit"),
+  currency: z.string().nonempty("Select a currency"),
+  user: z.string().nonempty("Select a user"),
 });
+
 export function CreateUserLimitButton() {
   const [createRateModalOpen, setCreateRateModalOpen] = useState(false);
 
-const { mutate: addCurrency, isLoading: currencyLoading } =
-useAddNewCurrency(closeRateModal);
+  const { mutate: addCurrency, isLoading: currencyLoading } =
+    useAddNewUserList(closeRateModal);
+  const { data: currencyData, isLoading: getCurrencyLoading } =
+    useGetCurrencies();
+  const { data: usersList, isLoading: usersLoading } = useUsersList();
+  const currencyOptions: { value: string; label: string }[] = useMemo(() => {
+    const options =
+      currencyData?.data?.map((currency) => ({
+        value: currency.id.toString(),
+        label: currency.code,
+      })) || [];
+
+    // Add the extra object to index 0
+    options.unshift({ value: "0", label: "Select Currency" });
+
+    return options;
+  }, [currencyData?.data]);
+
+  const userOptions: { value: string; label: string }[] = useMemo(() => {
+    const options =
+      usersList?.data?.map((user) => ({
+        value: user.id.toString(),
+        label: `${user.first_name} ${user.last_name} (${user.email})`,
+      })) || [];
+
+    // Add the extra object to index 0
+    options.unshift({ value: "0", label: "Select User" });
+
+    return options;
+  }, [usersList?.data]);
 
   const addCurrencyForm = useForm({
     initialValues: {
-      code: "",
-      name: ""
+      daily_limit: 0,
+      quarterly_limit: 0,
+      user: "",
+      currency: "",
     },
-    validate: zodResolver(currencyFormValidator),
+    validate: zodResolver(globalListFormValidator),
   });
 
   function closeRateModal() {
@@ -37,7 +70,8 @@ useAddNewCurrency(closeRateModal);
     addCurrencyForm.reset();
   }
 
-  function handleSubmit(values: z.infer<typeof currencyFormValidator>) {
+  function handleSubmit(values: z.infer<typeof globalListFormValidator>) {
+    // console.log("values", values);
     addCurrency(values);
   }
 
@@ -52,7 +86,7 @@ useAddNewCurrency(closeRateModal);
       </Button>
 
       <Modal
-        title="Add new currency"
+        title="Add User Limit"
         opened={createRateModalOpen}
         onClose={closeRateModal}
         size="md"
@@ -62,17 +96,29 @@ useAddNewCurrency(closeRateModal);
           onSubmit={addCurrencyForm.onSubmit(handleSubmit)}
           className="relative"
         >
-<LoadingOverlay visible={currencyLoading} />
+          <LoadingOverlay visible={currencyLoading || getCurrencyLoading} />
           <Stack>
-          <TextInput
-              label="Currency Code"
-              placeholder="e.g. USD"
-              {...addCurrencyForm.getInputProps("code")}
+            <NumberInput
+              label="Daily Limit"
+              placeholder="e.g. 10000"
+              {...addCurrencyForm.getInputProps("daily_limit")}
             />
-               <TextInput
-              label="Currency Name"
-              placeholder="e.g. Dollar"
-              {...addCurrencyForm.getInputProps("name")}
+            <NumberInput
+              label="Quarterly Limit"
+              placeholder="e.g. 40000"
+              {...addCurrencyForm.getInputProps("quarterly_limit")}
+            />
+            <Select
+              label="Currency Code"
+              placeholder="Select Currency"
+              data={currencyOptions}
+              {...addCurrencyForm.getInputProps("currency")}
+            />
+            <Select
+              label="Users"
+              placeholder="Select User"
+              data={userOptions}
+              {...addCurrencyForm.getInputProps("user")}
             />
             <Group grow>
               <Button

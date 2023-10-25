@@ -23,7 +23,7 @@ import { SendMoneyModal } from "../common/send-money-modal";
 import { useIsVerified } from "@/api/hooks/user";
 import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
 import { ExchangeBox } from "./exchange-box";
-export function RightSection() {
+export function   RightSection() {
   const { isLoading: currenciesLoading, currencyOptions } =
     useCurrencyOptions();
   const { isLoading: recipientsLoading, data: recipients } = useGetRecipients();

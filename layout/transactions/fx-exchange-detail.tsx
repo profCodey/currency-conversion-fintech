@@ -80,10 +80,11 @@ export function FxExchangeDetail({
       <Stack spacing="sm" p={20} className="border-b">
         <Group position="apart">
           <span className="font-secondary text-xl font-semibold">
-            {currencyFormatter(Number(exchange?.amount))}
+            Amount: {currencyFormatter(Number(exchange?.amount))}
           </span>
           <span>{exchange?.created_by_name}</span>
         </Group>
+        
 
         <Group position="apart">
           <div>
@@ -93,13 +94,14 @@ export function FxExchangeDetail({
             {dayjs(exchange?.created_on).format("MMM D, YYYY h:mm A")}
           </span>
         </Group>
+        <span>Rate: {exchange?.rate}</span>
       </Stack>
 
       <Stack p={20} spacing="md" className="bg-gray-30">
-        <Box>
+        {/* <Box>
           <Text>Source account</Text>
           <Detail
-            title="Account"
+            title="Gateway Name"
             content={exchange?.source_account_detail.label}
           />
           <Detail
@@ -110,15 +112,27 @@ export function FxExchangeDetail({
             title="Currency"
             content={exchange?.source_account_detail.currency.name}
           />
+             <Detail
+            title="Bank Name"
+            content={exchange?.source_account_detail.bank_name}
+          />
+            <Detail
+            title="Account Name"
+            content={exchange?.source_account_detail.account_name}
+          />
+            <Detail
+            title="Account Number"
+            content={exchange?.source_account_detail.account_number}
+          />
           <Detail
             title="Balance"
             content={exchange?.source_account_detail.true_balance}
           />
-        </Box>
+        </Box> */}
         <Box className="border-t" py={20}>
-          <Text>Destination account</Text>
+          <p className="font-bold">DESTINATION ACCOUNT</p>
           <Detail
-            title="Account"
+            title="Gateway Name"
             content={exchange?.destination_account_detail.label}
           />
           <Detail
@@ -128,6 +142,18 @@ export function FxExchangeDetail({
           <Detail
             title="Currency"
             content={exchange?.destination_account_detail.currency.name}
+          />
+                 <Detail
+            title="Bank Name"
+            content={exchange?.destination_account_detail.bank_name}
+          />
+            <Detail
+            title="Account Name"
+            content={exchange?.destination_account_detail.account_name}
+          />
+            <Detail
+            title="Account Number"
+            content={exchange?.destination_account_detail.account_number}
           />
           <Detail
             title="Balance"

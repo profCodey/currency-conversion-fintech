@@ -3,7 +3,6 @@ import { axiosInstance } from "..";
 import { AxiosResponse } from "axios";
 import { ICurrency } from "@/utils/validators/interfaces";
 import { useCallback, useMemo } from "react";
-import { APICLIENT_BASE_URL } from "@/utils/constants";
 import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
 import { z } from "zod";
@@ -14,9 +13,7 @@ export function useGetCurrencies() {
   const { data, ...rest } = useQuery(["currencies"], function (): Promise<
     AxiosResponse<ICurrency[]>
   > {
-    return axiosInstance.get("/currencies/", {
-      baseURL: APICLIENT_BASE_URL,
-    });
+    return axiosInstance.get("/currencies/");
   });
 
   const getCurrencyCodeFromId = useCallback(
@@ -32,9 +29,7 @@ export function useGetCurrencies() {
 export function useEditNewCurrency(cb?: () => void) {
   return useMutation(
     (payload: z.infer<typeof editcurrencyFormValidator>) =>
-     axiosInstance.patch(`/currencies/${payload.id}/`, payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+     axiosInstance.patch(`/currencies/${payload.id}/`, payload),
 
     {
       onSuccess: function () {
@@ -63,9 +58,7 @@ export function useEditNewCurrency(cb?: () => void) {
 export function useAddNewCurrency(cb?: () => void) {
   return useMutation(
     (payload: z.infer<typeof currencyFormValidator>) =>
-     axiosInstance.post("/currencies/", payload, {
-        baseURL: APICLIENT_BASE_URL,
-      }),
+     axiosInstance.post("/currencies/", payload),
 
     {
       onSuccess: function () {

@@ -1,0 +1,7 @@
+.mantine-Modal-body, .mantine-Modal-header {
+  padding: 24px;
+}
+
+.mantine-Modal-content {
+  border-radius: 24px;
+}

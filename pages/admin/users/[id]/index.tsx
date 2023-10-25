@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppLayout } from "@/layout/common/app-layout";
 import { ArrowRight2 } from "iconsax-react";
 import Link from "next/link";
@@ -18,13 +19,19 @@ import { ClientGateways } from "@/layout/admin/user/gateways";
 import { ClientDocuments } from "@/layout/admin/user/documents";
 import { useRouter } from "next/router";
 import { PageHeader } from "@/components/admin/page-header";
-import {
-  useApproveClient,
-  useGetClientDetails,
-} from "@/api/hooks/user";
+import { useApproveClient, useGetClientDetails } from "@/api/hooks/user";
+import { useGetUserDetails } from "@/api/hooks/user";
+import { useGetWithdrawalAccount } from "@/api/hooks/withdrawal-account";
+
 export default function UserProfile() {
   const router = useRouter();
   const id = router?.query.id as string;
+  const { data: userInfo, isLoading: userLoading } = useGetUserDetails(
+    Number(router?.query.id) as number
+  );
+
+  const { data: withdrawalAcc, isLoading: withdrawalAccLoading } =
+    useGetWithdrawalAccount(router?.query.id as string);
 
   const items = [
     { title: "User details", href: `/admin/users` },
@@ -56,25 +63,40 @@ export default function UserProfile() {
         }
       />
 
-      <section className="flex gap-6 justify-between relative z-10">
-        <BusinessDetails />
+      <section className="flex flex-col lg:flex-row gap-6 justify-between relative z-10">
+        <BusinessDetails userInfo={userInfo?.data} />
         <ClientWalletBalances />
       </section>
-
-      <section className="rounded-md bg-white shadow border flex-grow relative">
-        <Tabs variant="pills" defaultValue="documents">
-          <Tabs.List>
-            <Tabs.Tab value="documents">Documents</Tabs.Tab>
-            <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value="documents">
-            <ClientDocuments />
-          </Tabs.Panel>
-          <Tabs.Panel value="gateways">
-            <ClientGateways />
-          </Tabs.Panel>
-        </Tabs>
+      <section>
+        <p className="text-center font-bold">Bank Details</p>
+        <div className="flex flex-col md:flex-row justify-around">
+          <p className="flex md:flex-col lg:flex-row">
+            <div className="font-medium">Account Name:</div>{" "}
+            <div>{withdrawalAcc?.data.account_name}</div>
+          </p>
+          <p className="flex md:flex-col lg:flex-row">
+            <div className="font-medium">Account Number:</div>{" "}
+            <div>{withdrawalAcc?.data.account_number}</div>
+          </p>
+        </div>
       </section>
+
+      {userInfo?.data.client_type !== "individual" && (
+        <section className="rounded-md bg-white shadow border flex-grow relative">
+          <Tabs variant="pills" defaultValue="documents">
+            <Tabs.List>
+              <Tabs.Tab value="documents">Documents</Tabs.Tab>
+              <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="documents">
+              <ClientDocuments />
+            </Tabs.Panel>
+            <Tabs.Panel value="gateways">
+              <ClientGateways />
+            </Tabs.Panel>
+          </Tabs>
+        </section>
+      )}
     </section>
   );
 }

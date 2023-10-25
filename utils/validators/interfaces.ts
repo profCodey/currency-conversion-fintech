@@ -1,4 +1,6 @@
+import { CLIENT_TYPES } from './../constants';
 type CategoryTypes = "admin" | "api_client" | "agent" | "agent_user";
+type ClientType = 'individual' | 'corporate';
 type KYCStatusTypes =
   | "pending"
   | "submitted"
@@ -7,6 +9,14 @@ type KYCStatusTypes =
   | "cancelled"
   | "onhold";
 
+  export type CurrencyDetailType = {
+    label: string;
+    value: string;
+    currencyId: string;
+    currencyName: string;
+    category: string;
+    code: string;
+  };
 export interface LoginResponse {
   refresh: string;
   access: string;
@@ -24,6 +34,7 @@ export interface ICurrentUser {
   phone_number: string;
   category: CategoryTypes;
   is_approved: string;
+  client_type:ClientType;
   kyc: {
     id: number;
     created_on: string;
@@ -71,6 +82,7 @@ export interface IUserDetail {
   phone_number: string;
   category: CategoryTypes;
   is_approved: string;
+  client_type?: string;
 }
 export interface IClientDetail {
   status: boolean;
@@ -108,6 +120,15 @@ export interface IBank {
   name: string;
   is_active: true;
   category: "fx" | "local";
+}
+
+export interface ISiteSettings {
+  id: number;
+  created_by: string;
+  use_fx_wallet: boolean;
+  hide_wallet_at: number;
+  created_on: string;
+  default_gateway: number;
 }
 
 export interface IGatewayBank {
@@ -252,6 +273,11 @@ export interface IManualPayment {
 
 // FX
 
+export interface FxPurpose{
+  id:number|string;
+  description:string;
+}
+
 export interface IFxPayout {
   id: number;
   created_by_name: string;
@@ -276,6 +302,11 @@ export interface IFxPayout {
   created_by: number | null;
   updated_by: number | null;
   source_account: number;
+  destination_currency: number;
+  rate: string;
+  destination_currency_code: string;
+  source_Currency_code: string;
+  destination_amount: number
 }
 
 export interface IAccount {
@@ -288,6 +319,12 @@ export interface IAccount {
   true_balance: string;
   category: "fx" | "local";
   is_active: boolean;
+}
+
+export interface IVirtualAccount {
+  account_name: string;
+  account_number: string;
+  bank_name: string;
 }
 
 //ADMIN
@@ -384,3 +421,22 @@ export interface IRatePayload {
   source: string;
   destination: string;
 };
+
+export interface IGlobalList {
+  id: number;
+  created_on: string;
+  updated_on: string;
+  daily_limit: number;
+  currency: number;
+  quarterly_limit: number;
+  updated_by?: number | null;
+  created_by?: number | null;
+};
+
+export interface IWithdrawalAccount {
+  id: number;
+  user_name: string;
+  account_name: string;
+  account_number: string;
+  bank: number;
+}

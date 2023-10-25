@@ -1,4 +1,4 @@
-const ALL_COUNTRIES = [
+export const ALL_COUNTRIES = [
   { name: "Afghanistan", code: "AF" },
   { name: "land Islands", code: "AX" },
   { name: "Albania", code: "AL" },
@@ -245,7 +245,7 @@ const ALL_COUNTRIES = [
   { name: "Zimbabwe", code: "ZW" },
 ];
 
-const COUNTRIES: { name: string; dial_code: string; code: string }[] = [
+export const COUNTRIES: { name: string; dial_code: string; code: string }[] = [
   {
     name: "Afghanistan",
     dial_code: "+93",

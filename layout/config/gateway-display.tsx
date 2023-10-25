@@ -38,9 +38,9 @@ export default function GatewaysDisplay({
             />
           ))}
         </section>
-        <section className="p-5 rounded-lg bg-gray-30 border ">
+        {/* <section className="p-5 rounded-lg bg-gray-30 border ">
           {unSelectedGateways}
-        </section>
+        </section> */}
       </section>
 
       <Modal

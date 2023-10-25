@@ -56,6 +56,7 @@ export function ClientDocuments() {
   }
 
   const status = clientDocuments?.data.status;
+  // console.log(status)
 
   return (
     <section>

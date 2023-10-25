@@ -3,6 +3,7 @@
 //Refer to page below
 //https://github.com/tawk/tawk-messenger-react/issues/13
 import "@/styles/globals.css";
+import "@/styles/modal.css"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

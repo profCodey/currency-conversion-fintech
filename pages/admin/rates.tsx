@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 // import { useGetRate } from "@/api/hooks/admin/rates";
 import { useCallback, useState, useEffect } from "react";
 import { useForm, zodResolver } from "@mantine/form";
-import { unknown, z } from "zod";
+import { z } from "zod";
 import { useUpdateRate } from "@/api/hooks/admin/rates";
 import {
     Button,
@@ -35,6 +35,7 @@ import { closeAllModals, modals } from "@mantine/modals";
 export const rateFormValidator = z.object({
     rate: z.number().gt(0, "Enter a value for rate"),
     is_active: z.boolean(),
+    use_live_rate: z.boolean()
 });
 
 export interface UpdateRatePayload {
@@ -43,6 +44,7 @@ export interface UpdateRatePayload {
     source_currency: number;
     destination_currency: number;
     is_active: boolean;
+    use_live_rate: boolean;
 }
 export default function Rates() {
     const { getCurrencyNameFromId, isLoading: currencyOptionsLoading } =
@@ -63,6 +65,7 @@ export default function Rates() {
             is_active: (selectedRate as any)?.is_active,
             source_currency: (selectedRate as any)?.source_currency,
             destination_currency: (selectedRate as any)?.destination_currency,
+            use_live_rate: (selectedRate as any)?.use_live_rate,
         },
 
         validate: zodResolver(rateFormValidator),
@@ -74,6 +77,7 @@ export default function Rates() {
         if (rate) {
             editRateForm.setFieldValue("rate", rate.rate);
             editRateForm.setFieldValue("is_active", rate.is_active);
+            editRateForm.setFieldValue("use_live_rate", rate.use_live_rate);
         }
     }, []);
     function closeRateModal() {
@@ -91,6 +95,7 @@ export default function Rates() {
             source_currency: selectedRate?.source_currency as unknown as number,
             destination_currency:
                 selectedRate?.destination_currency as unknown as number,
+            use_live_rate: values.use_live_rate,
         };
         console.log(payload);
         updateRate(payload);
@@ -236,6 +241,12 @@ export default function Rates() {
                                     size="md"
                                     checked={editRateForm.values.is_active}
                                     {...editRateForm.getInputProps("is_active")}
+                                />
+                                  <Switch
+                                    label="Use Live Rate"
+                                    size="md"
+                                    checked={editRateForm.values.use_live_rate}
+                                    {...editRateForm.getInputProps("use_live_rate")}
                                 />
                                 <Group grow>
                                     <Button

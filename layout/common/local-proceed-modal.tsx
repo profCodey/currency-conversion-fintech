@@ -552,7 +552,7 @@ export function LocalProceedModal({
       >
         Continue
       </Button>
-    </form>
+    </form
   );
 
   const FormContent = getModalContent(form);

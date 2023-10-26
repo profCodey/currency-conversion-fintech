@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NavLink } from "@mantine/core";
-import { ArrowRight2, DocumentText, I24Support } from "iconsax-react";
+import { ArrowRight2, DocumentText, I24Support, CopySuccess } from "iconsax-react";
 
 export const useNavStyles = createStyles(() => ({
   navLink: {
@@ -127,7 +127,7 @@ export function AdminDashboardItems() {
     {
       route: "/admin/global-limit",
       label: "Compliance",
-      icon: <UsersIcon />,
+      icon: <CopySuccess size="32" color="#DDD" variant="Bold"/>,
       children: [
         {
           route: "/admin/global-limit",

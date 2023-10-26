@@ -53,10 +53,8 @@ export const ConvertFundFxPayRecipient = z.object({
     sort_code: z.string().optional(),
     bic: z
         .string()
-        .max(11, { message: "BIC should be 11 characters" })
-        .refine((bic) => bic.length === 11, {
-            message: "BIC should be 11 characters!",
-        }),
+        .min(1, { message: "BIC cannot be empty" })
+        .max(11, { message: "BIC should be maximum of 11 characters" }),
     city: z.string(),
     country: z.string().min(1, { message: "Country is required!" }),
     state: z.string().min(1, { message: "state is required" }),
@@ -114,6 +112,9 @@ interface SendMoneyProps {
     sourceAmount: number;
     currencyRate: number;
     purposes: SelectItem[];
+    destinationAmount: number;
+    sourceCurrency: string;
+    destinationAccCurrency: string;
 }
 
 export type TransferOperationStage =
@@ -135,6 +136,9 @@ export function FxProceedModal({
     sourceAmount,
     currencyRate,
     purposes,
+    destinationAmount,
+    sourceCurrency,
+    destinationAccCurrency
 }: SendMoneyProps) {
     // const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
     // const [sourceOfFundFile, setSourceOfFundFile] = useState<File | null>(null);
@@ -352,8 +356,9 @@ export function FxProceedModal({
         <Stack align="center" className="w-full">
             <Warning2 size={60} />
             <Text>
-                Amount: {destinationDetails.code}{" "}
-                {currencyFormatter(confirmationDetails.amount)}
+            Amount:{" "}
+        {/* {currencyFormatter(confirmationDetails.amount)} */}
+        {currencyFormatter(sourceAmount)} {sourceCurrency} to  {currencyFormatter(destinationAmount)} {destinationAccCurrency}
             </Text>
             <Text>Recipient: {confirmationDetails.account_name}</Text>
             <Text>Receiving Account: {confirmationDetails.account_number}</Text>
@@ -537,6 +542,7 @@ export function FxProceedModal({
 
             <Textarea
                 label="Narration"
+                required
                 placeholder="Enter narration"
                 {...payRecipientForm.getInputProps("narration")}
             />

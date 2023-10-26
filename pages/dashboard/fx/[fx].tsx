@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { AppLayout } from "@/layout/common/app-layout";
 import { useRouter } from "next/router";
-import { ReactElement, useMemo, useRef } from "react";
+import { ReactElement, useMemo, useRef, ChangeEvent } from "react";
 
 import { ConvertIcon } from "@/components/icons";
 import {
@@ -138,6 +138,8 @@ const ConvertFxFundPage = () => {
   const [destinationCurrency, setDestinationCurrency] = useState("");
   const [sourceAccIdValue, setSourceAccIdValue] = useState("");
   const [destinationAccIdValue, setDestinationAccIdValue] = useState("");
+  const [toPay, setToPay] = useState<number>(1)
+  const [toReceive, setToReceive] = useState<number>(0)
   const [sourceDetails, setSourceDetails] = useState<CurrencyDetailType>({
     label: "",
     value: "",
@@ -317,6 +319,18 @@ const ConvertFxFundPage = () => {
   //   }
   // }, [liveRate, sourceAmount]);
 
+  const handleToPayChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseFloat(e.target.value);
+    setToPay(newValue);
+    setToReceive(Number((newValue * liveRate).toFixed(2))); 
+  };
+
+  const handleToReceiveChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseFloat(e.target.value);
+    setToReceive(newValue);
+    setToPay(Math.round(newValue / liveRate));    
+  };
+
   return (
     <section className="w-full h-full min-h-screen flex items-center justify-center">
       <div className="bg-gray-30 border rounded-lg p-4">
@@ -368,7 +382,7 @@ const ConvertFxFundPage = () => {
               data={selectAccountData}
               nothingFound={"No currencies found"}
             />
-            <NumberInput
+            {/* <NumberInput
               className="flex-grow"
               label="You send"
               value={sourceAmount}
@@ -381,7 +395,24 @@ const ConvertFxFundPage = () => {
                   : ""
               }
               min={1}
-            />
+            /> */}
+             <div className="flex flex-col text-sm font-medium mt-1">
+           <label>You Receive</label>
+                    <input
+                style={{
+                  height: "36px",
+                  paddingLeft: "10px",
+                  color: "grey",
+                  width: "200px",
+                  border: "1px solid #E0E0E0",
+                  transition: "border 0.3s",
+                }}
+        type="number"
+        placeholder="To Pay"
+        value={toPay}
+        onChange={(e)=>handleToPayChange(e)}
+      />
+      </div>
           </section>
           <section className="h-24 flex items-center justify-center relative">
             <div className="absolute h-full w-5 bg-white mx-auto"></div>
@@ -416,7 +447,7 @@ const ConvertFxFundPage = () => {
               data={allAccountsData}
             />
 
-            <NumberInput
+            {/* <NumberInput
               className="flex-grow"
               label="You receive"
               disabled
@@ -427,7 +458,25 @@ const ConvertFxFundPage = () => {
               //     : ""
               // }
               value={destinationAccCurrency ? sourceAmount * liveRate : 0}
-            />
+            /> */}
+                    <div className="flex flex-col text-sm font-medium mt-1">
+              <label>You Receive</label>
+              <input
+                style={{
+                  height: "36px",
+                  paddingLeft: "10px",
+                  color: "grey",
+                  width: "200px",
+                  border: "1px solid #E0E0E0",
+                  transition: "border 0.3s",
+                }}
+                type="number"
+                step="1"
+                placeholder="You Receive"
+                value={toReceive}
+                onChange={(e) => handleToReceiveChange(e)}
+              />
+            </div>
           </section>
 
           <div className="text-primary-70 text-center my-5 text-sm">
@@ -473,9 +522,13 @@ const ConvertFxFundPage = () => {
           sourceDetails={!sourceDetails.value && sourceRef.current?.value ? sourceRef.current : sourceDetails}
           destinationDetails={!destinationDetails.currencyId && destinationRef.current?.currencyId ? destinationRef.current : destinationDetails}
           sourceAmount={
-            (sourceAmount > 1 && sourceAmount) || sourceAmountRef.current
+            // (sourceAmount > 1 && sourceAmount) || sourceAmountRef.current
+            toPay
           }
           currencyRate={liveRate! || liveRateRef.current}
+          destinationAmount = {toReceive}
+          sourceCurrency={sourceCurrency || selectAccountData[0]?.currencyName}
+          destinationAccCurrency = {destinationCurrency}
         />
       </div>
     </section>

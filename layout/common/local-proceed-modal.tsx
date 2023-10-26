@@ -539,6 +539,7 @@ export function LocalProceedModal({
 
       <Textarea
         label="Narration"
+        required
         placeholder="Enter narration"
         {...payRecipientForm.getInputProps("narration")}
       />

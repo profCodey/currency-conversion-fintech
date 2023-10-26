@@ -92,7 +92,7 @@ export function useUpdateRate(cb?: () => void) {
   return useMutation(
       
           function ({ id, ...payload }: UpdateRatePayload) {
-              return axiosInstance.patch(`/fx/rates/${id}`, payload, {
+              return axiosInstance.patch(`/fx/rates/${id}/`, payload, {
               });
             },
       {

@@ -25,44 +25,37 @@ import {
     Drawer,
     Group,
     NumberInput,
-    Select,
+    Text,
     Switch,
     TextInput,
 } from "@mantine/core";
 
 import { IRate } from "@/utils/validators/interfaces";
-
+import { closeAllModals, modals } from "@mantine/modals";
 export const rateFormValidator = z.object({
     rate: z.number().gt(0, "Enter a value for rate"),
     is_active: z.boolean(),
-    // source_currency: z.string().min(1, "Select source currency"),
-    // destination_currency: z.string().min(1, "Select destination currency"),
 });
-
 
 export interface UpdateRatePayload {
     id: number;
-   rate: string;
-   source_currency: number;
-   destination_currency: number;
-   is_active: boolean;
-  }
+    rate: string;
+    source_currency: number;
+    destination_currency: number;
+    is_active: boolean;
+}
 export default function Rates() {
     const { getCurrencyNameFromId, isLoading: currencyOptionsLoading } =
         useCurrencyOptions();
     const { data, isLoading: ratesLoading } = useGetRates();
     const router = useRouter();
     const [editRateModalOpen, setEditRateModalOpen] = useState(false);
-    // const { data: rate, isLoading: rateLoading } = useGetRate(
-    //   router.query.id as string
-    // );
-
     const [selectedRate, setSelectedRate] = useState<IRate | null>(null);
     const { mutate: updateRate, isLoading: updateRateLoading } =
         useUpdateRate(closeRateModal);
-        const { mutate: deleteRate, isLoading: deleteRateLoading } = useDeleteRate()
-    const { currencyOptionsWithId, isLoading: currencyOptionsWithIdLoading } =
-        useCurrencyOptions();
+    const { mutate: deleteRate, isLoading: deleteRateLoading } =
+        useDeleteRate();
+   
 
     const editRateForm = useForm({
         initialValues: {
@@ -78,7 +71,6 @@ export default function Rates() {
     const openDrawer = useCallback((rate: IRate) => {
         setEditRateModalOpen(true);
         setSelectedRate(rate);
-        console.log(rate);
         if (rate) {
             editRateForm.setFieldValue("rate", rate.rate);
             editRateForm.setFieldValue("is_active", rate.is_active);
@@ -87,20 +79,35 @@ export default function Rates() {
     function closeRateModal() {
         setEditRateModalOpen(false);
         setSelectedRate(null);
-        // editRateForm.reset();
     }
 
     function handleSubmit(values: z.infer<typeof rateFormValidator>) {
         console.log("Submit button clicked");
 
-        updateRate({
-            id: router.query.id as unknown as number,
-                rate: values.rate as unknown as string,
-                is_active: values.is_active,
-                source_currency:
-                    selectedRate?.source_currency as unknown as number,
-                destination_currency:
-                    selectedRate?.destination_currency as unknown as number,
+        const payload = {
+            id: selectedRate?.id as unknown as number,
+            rate: values.rate as unknown as string,
+            is_active: values.is_active,
+            source_currency: selectedRate?.source_currency as unknown as number,
+            destination_currency:
+                selectedRate?.destination_currency as unknown as number,
+        };
+        console.log(payload);
+        updateRate(payload);
+        closeRateModal();
+    }
+
+    function handleDeleteRate(rate: IRate) {
+        modals.openConfirmModal({
+            title: "Please confirm the following details",
+            children: <Text>Are you sure you want to delete this rate?</Text>,
+            labels: { confirm: "Confirm", cancel: "Cancel" },
+            confirmProps: {
+                className: "bg-primary-100",
+                loading: deleteRateLoading,
+            },
+            onCancel: closeAllModals,
+            onConfirm: () => deleteRate(rate.id),
         });
     }
 
@@ -135,19 +142,10 @@ export default function Rates() {
                                 <Menu.Item onClick={() => openDrawer(rate)}>
                                     Edit
                                 </Menu.Item>
-                                <Menu.Item
-                                    disabled={rate.is_active}
-                                    onClick={() => {}}>
-                                    Activate
-                                </Menu.Item>
-                                <Menu.Item
-                                    disabled={!rate.is_active}
-                                    onClick={() => {}}>
-                                    De-activate
-                                </Menu.Item>
+
                                 <Menu.Item
                                     color="red"
-                                    onClick={() => deleteRate(rate.id)}>
+                                    onClick={() => handleDeleteRate(rate)}>
                                     Delete
                                 </Menu.Item>
                             </Menu.Dropdown>
@@ -219,19 +217,19 @@ export default function Rates() {
                                     label="Source currency"
                                     placeholder="Select currency"
                                     size="md"
-                                    disabled={true} // Set the `disabled` prop to true
                                     value={getCurrencyNameFromId(
                                         selectedRate?.source_currency as unknown as number
                                     )}
+                                    onChange={() => {}}
                                 />
                                 <TextInput
                                     label="Destination currency"
                                     placeholder="Select currency"
                                     size="md"
-                                    disabled={true} // Set the `disabled` prop to true
                                     value={getCurrencyNameFromId(
                                         selectedRate?.destination_currency as unknown as number
                                     )}
+                                    onChange={() => {}}
                                 />
                                 <Switch
                                     label="Activate rate"
@@ -252,6 +250,15 @@ export default function Rates() {
                                         size="md"
                                         type="submit" // Change the type to "button
                                         loading={updateRateLoading}
+                                        onClick={() => {
+                                            editRateForm.validate();
+                                            console.log(
+                                                "Submit button clicked"
+                                            );
+                                            handleSubmit(
+                                                editRateForm.values
+                                            );
+                                        }}
                                         loaderPosition="right">
                                         Submit
                                     </Button>

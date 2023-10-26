@@ -35,7 +35,7 @@ export default function FxBalance(props: { wallet: IAccount }) {
     //   return seeBalance ? word : "*".repeat(word.toString().length);
     // }
 
-    return seeBalance ? word : "*".repeat(word.toString().length);
+    return seeBalance ? word : "*********";
   }
   return (
     <div

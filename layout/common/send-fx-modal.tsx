@@ -382,22 +382,22 @@ export const NairaOptionsModal = ({
                     </div>
                     <ArrowRight />
                 </div>
-                {/* <Divider my="sm"/>
-        <Link className="flex items-center justify-between mb-3" href={`/transactions/exchange/${id}`}>
+                <Divider my="sm"/>
+        {/* <Link className="flex items-center justify-between mb-3" href={`/transactions/exchange/${id}`}>
           <div className="text-[#6882B6]">
             <h3 className="text-2xl font-semibold"> Transaction </h3>
             <span className="text-sm font-semibold">View all transactions </span>
           </div>
           <ArrowRight />
         </Link>
-        <Divider my="sm" />
+        <Divider my="sm" /> */}
         <Link className="flex items-center justify-between mb-3" href={`/dashboard/ngn/${id}`}>
           <div className="text-[#6882B6]">
             <h3 className="text-2xl font-semibold"> Exchange </h3>
             <span className="text-sm font-semibold"> Exchange NGN to other currencies </span>
           </div>
           <ArrowRight />
-        </Link> */}
+        </Link>
                 {/* <Divider my="sm"/>
           <Link className="flex items-center justify-between mb-3" href="/transactions">
           <div className="text-[#6882B6]">

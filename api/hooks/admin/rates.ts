@@ -8,6 +8,8 @@ import { z } from "zod";
 import { IRate } from "@/utils/validators/interfaces";
 import { queryClient } from "@/pages/_app";
 import { IRatePayload } from "@/utils/validators/interfaces";
+import { UpdateRatePayload } from "@/pages/admin/rates";
+
 
 export function useGetRates() {
   return useQuery(["rates"], function (): Promise<AxiosResponse<IRate[]>> {
@@ -56,4 +58,62 @@ export function useGetLiveRate(payload: IRatePayload) {
 
     return rate;
   });
+}
+
+export function useDeleteRate(cb?: () => void) {
+  return useMutation(
+      (id: number) =>
+          axiosInstance.delete(`/fx/rates/${id}/`, {
+          }),
+      {
+          onSuccess: function (data: AxiosResponse) {
+              showNotification({
+                  title: "Operation successful",
+                  message: "Rate deleted successfully",
+                  color: "green",
+              });
+          },
+          onError: function (data: AxiosError) {
+              const response = data.response?.data as ErrorItem;
+              showNotification({
+                  message: response?.detail || "Unable to delete Rate",
+                  color: "red",
+              });
+          },
+          onSettled: function () {
+              cb && cb();
+              queryClient.invalidateQueries(["rates"]);
+          },
+      }
+  );
+}
+
+export function useUpdateRate(cb?: () => void) {
+  return useMutation(
+      
+          function ({ id, ...payload }: UpdateRatePayload) {
+              return axiosInstance.patch(`/fx/rates/${id}`, payload, {
+              });
+            },
+      {
+          onSuccess: function (data: AxiosResponse) {
+              showNotification({
+                  title: "Operation successful",
+                  message: data?.data.message || "Rate updated successfully",
+                  color: "green",
+              });
+          },
+          onError: function (data: AxiosError) {
+              const response = data.response?.data as ErrorItem;
+              showNotification({
+                  message: response?.detail || "Unable to update rate",
+                  color: "red",
+              });
+          },
+          onSettled: function () {
+              cb && cb();
+              queryClient.invalidateQueries(["rates"]);
+          },
+      }
+  );
 }

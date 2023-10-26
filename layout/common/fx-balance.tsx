@@ -71,7 +71,6 @@ export default function FxBalance(props: { wallet: IAccount }) {
               size="20"
               color="#02A1DB"
               variant="Outline"
-              className={clsx(syncDepositsLoading && "animate-spin")}
             />
           </div>
         </div>

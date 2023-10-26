@@ -134,6 +134,15 @@ export default function Rates() {
                         )}
                     </td>
                     <td>
+                        {rate.use_live_rate ? (
+                            <span className="text-accent font-semibold">
+                                Active
+                            </span>
+                        ) : (
+                            <span className="text-gray-90">Inactive</span>
+                        )}
+                    </td>
+                    <td>
                         {dayjs(rate.updated_on).format("MMM D, YYYY h:mm A")}
                     </td>
                     <td>
@@ -171,8 +180,6 @@ export default function Rates() {
             />
 
             <section className="">
-                <h3 className="font-semibold mt-2">Currencies:</h3>
-
                 <Table verticalSpacing="md" withBorder>
                     {/* <LoadingOverlay visible={isLoading} /> */}
                     <thead>
@@ -182,6 +189,7 @@ export default function Rates() {
                             <th>Source currency</th>
                             <th>Destination currency</th>
                             <th>Status</th>
+                            <th>Live rate</th>
                             <th>Last updated</th>
                             <th>Action</th>
                         </tr>

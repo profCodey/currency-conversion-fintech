@@ -69,7 +69,7 @@ export default function FxBalance(props: { wallet: IAccount }) {
               seeBalance
             )}
           </div>
-          <div style={{ cursor: "pointer" }} onClick={() => syncDeposits()}>
+          <div style={{ cursor: "pointer" }} onClick={() => window.location.reload()}>
             <Refresh
               size="20"
               color="#02A1DB"

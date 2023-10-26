@@ -12,7 +12,6 @@ import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { FxOptionsModal, NairaOptionsModal } from "./send-fx-modal";
 import { Refresh } from "iconsax-react";
-import { useSyncDeposits } from "@/api/hooks/user";
 import { clsx } from "@mantine/core";
 
 export default function FxBalance(props: { wallet: IAccount }) {
@@ -24,8 +23,6 @@ export default function FxBalance(props: { wallet: IAccount }) {
   function toggleBalance(fxId: number) {
     setSeeBalance(!seeBalance);
   }
-  const { mutate: syncDeposits, isLoading: syncDepositsLoading } =
-    useSyncDeposits();
 
   function getBalanceText(word: any, seeBalance: boolean): string {
     // console.log(word,'word');
@@ -69,12 +66,11 @@ export default function FxBalance(props: { wallet: IAccount }) {
               seeBalance
             )}
           </div>
-          <div style={{ cursor: "pointer" }} onClick={() => syncDeposits()}>
+          <div style={{ cursor: "pointer" }} onClick={() => window.location.reload()}>
             <Refresh
               size="20"
               color="#02A1DB"
               variant="Outline"
-              className={clsx(syncDepositsLoading && "animate-spin")}
             />
           </div>
         </div>

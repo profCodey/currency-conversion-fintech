@@ -49,7 +49,8 @@ export function SiteSettingsInitiate() {
         default_gateway: settings.default_gateway,
       });
     }
-  }, [addNewSettings, settings]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings]);
   
 
   const { mutate: updateSiteSettings, isLoading: isUpdating } =
@@ -327,4 +328,3 @@ export function SiteSettingsInitiate() {
 //     </Box>
 //   );
 // }
-

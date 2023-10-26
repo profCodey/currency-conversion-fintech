@@ -22,6 +22,7 @@ export const rateFormValidator = z.object({
     is_active: z.boolean(),
     source_currency: z.string().min(1, "Select source currency"),
     destination_currency: z.string().min(1, "Select destination currency"),
+    use_live_rate: z.boolean(),
 });
 
 export function CreateRateButton() {
@@ -33,6 +34,7 @@ export function CreateRateButton() {
         initialValues: {
             rate: 0.0,
             is_active: false,
+            use_live_rate: false,
             source_currency: "",
             destination_currency: "",
         },
@@ -117,12 +119,22 @@ export function CreateRateButton() {
                                 "destination_currency"
                             )}
                         />
-                        <Switch
-                            label="Activate rate"
-                            size="md"
-                            checked={addRateForm.values.is_active}
-                            {...addRateForm.getInputProps("is_active")}
-                        />
+                        <div className="flex">
+                            <Switch
+                                className="w-1/2"
+                                label="Activate rate"
+                                size="md"
+                                checked={addRateForm.values.is_active}
+                                {...addRateForm.getInputProps("is_active")}
+                            />
+                               <Switch
+                                className="w-1/2"
+                                label="Use Live Rate"
+                                size="md"
+                                checked={addRateForm.values.use_live_rate}
+                                {...addRateForm.getInputProps("use_live_rate")}
+                            />
+                        </div>
                         <Group grow>
                             <Button
                                 className="bg-gray-30 hover:bg-gray-30 text-gray-90"

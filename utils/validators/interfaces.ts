@@ -353,6 +353,7 @@ export interface IRate {
   is_active: boolean;
   source_currency: number;
   destination_currency: number;
+  use_live_rate: boolean;
 }
 
 export interface IOnboardingDocuments {

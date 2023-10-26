@@ -33,9 +33,12 @@ import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useIsVerified } from "@/api/hooks/user";
 import { PayRecipient } from "@/layout/recipients/recipient-list";
 import { PayFxRecipient } from "@/layout/common/send-fx-modal";
-import { ConvertFundFxPayRecipient, FxProceedModal } from "@/layout/common/fx-proceed-modal";
+// import { ConvertFundFxPayRecipient, FxProceedModal } from "@/layout/common/fx-proceed-modal";
 import { useGetFxPurposes } from "@/api/hooks/fx";
-// import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
+import {
+  LocalExchangePayRecipient,
+  LocalProceedModal,
+} from "@/layout/common/local-proceed-modal";
 
 
 
@@ -64,7 +67,7 @@ const ConvertFxFundPage = () => {
   const { isLoading, defaultGateway } = useDefaultGateway();
   const { isLoading: isVerifyLoading, isVerified } = useIsVerified();
   // @ts-ignore
-  const [recipientDetails, setRecipientDetails] = useState<z.infer<typeof ConvertFundFxPayRecipient> & Record<string,any>>({
+  const [recipientDetails, setRecipientDetails] = useState<z.infer<typeof LocalExchangePayRecipient> & Record<string,any>>({
     bank: "",
     amount: 1000,
     account_name: "",
@@ -511,7 +514,7 @@ const ConvertFxFundPage = () => {
           </Button>
         </Skeleton>
 
-        <FxProceedModal
+        <LocalProceedModal
           modalOpen={showConfirmationModal}
           close={() => setShowConfirmationModal(false)}
           banks={bankOptions}
@@ -531,6 +534,7 @@ const ConvertFxFundPage = () => {
           destinationAccCurrency = {destinationCurrency}
         />
       </div>
+  
     </section>
   );
 };

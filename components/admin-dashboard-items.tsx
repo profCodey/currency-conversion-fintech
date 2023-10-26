@@ -48,6 +48,10 @@ export function AdminDashboardItems() {
     router.pathname === "/admin/users" || router.pathname === "/admin/admins"
   );
 
+  const [complianceOpen, setComplianceOpen] = useState(
+    router.pathname === "/admin/global-limit" || router.pathname === "/admin/user-limit"
+  );
+
   const currentPath = router.pathname;
   const { classes } = useNavStyles();
 
@@ -66,6 +70,8 @@ export function AdminDashboardItems() {
         return setSettingsOpen(!settingsOpen);
       case "/admin/users":
         return setUsersOpen(!usersOpen);
+        case "/admin/global-limit":
+          return setComplianceOpen(!complianceOpen);
       default:
         return;
     }
@@ -119,6 +125,21 @@ export function AdminDashboardItems() {
       ],
     },
     {
+      route: "/admin/global-limit",
+      label: "Compliance",
+      icon: <UsersIcon />,
+      children: [
+        {
+          route: "/admin/global-limit",
+          label: "Global Limits",
+        },
+        {
+          route: "/admin/user-limit",
+          label: "User Limits",
+        },
+      ],
+    },
+    {
       route: "/admin/logs",
       label: "Logs",
       icon: <DocumentText />,
@@ -152,7 +173,8 @@ export function AdminDashboardItems() {
           href={route.route}
           className={classes.navLink}
           rightSection={route.children && <ArrowRight2 />}
-          opened={route.route === "/admin/users" ? usersOpen : settingsOpen}
+          opened={route.route === "/admin/global-limit" ? complianceOpen : (route.route === "/admin/users" ? usersOpen : settingsOpen)}
+
           onClick={() => route.children && handleCollapse(route.route)}
         >
           {route.children?.map((route) => (

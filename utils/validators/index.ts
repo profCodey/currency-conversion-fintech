@@ -32,7 +32,9 @@ export type signupPayload = Omit<
 //ONBOARDING
 
 export const invidualProfileFormValidator = z.object({
-  bvn: z.string().optional(),
+  bvn: z.string().refine((value) => /^\d{11}$/.test(value), {
+    message: "BVN must be 11 digits",
+  }),
   city: z.string().min(1, "Enter city"),
   state: z.string().min(1, "Enter state"),
   country_of_residence: z.string().min(1, "Select country of registration"),
@@ -42,10 +44,12 @@ export const invidualProfileFormValidator = z.object({
 
 
 export const businessProfileFormValidator = z.object({
-  bvn: z.string().optional(),
-  city: z.string().min(1, "Enter city").optional(),
-  state: z.string().min(1, "Enter state").optional(),
-  zip_code: z.string().min(1, "Enter zip code").optional(),
+  bvn: z.string().refine((value) => /^\d{11}$/.test(value), {
+    message: "BVN must be 11 digits",
+  }),
+  city: z.string().min(1, "Enter city"),
+  state: z.string().min(1, "Enter state"),
+  zip_code: z.string().min(1, "Enter zip code"),
   tax_number: z.string().optional(),
   business_legal_name: z.string().min(1, "Enter legal name of business").optional(),
   business_trading_name: z.string().min(1, "Enter trading name of business").optional(),
@@ -62,7 +66,9 @@ export const businessProfileFormValidator = z.object({
     .min(1, "Enter business registration number").optional(),
 });
 export const basicProfileFormValidator = z.object({
-  bvn: z.string().optional(),
+  bvn: z.string().refine((value) => /^\d{11}$/.test(value), {
+    message: "BVN must be 11 digits",
+  }),
   city: z.string().min(1, "Enter city"),
   state: z.string().min(1, "Enter state"),
   zip_code: z.string().min(1, "Enter zip code"),
@@ -83,8 +89,11 @@ export const basicProfileFormValidator = z.object({
 });
 
 export const accountDetailFormValidator = z.object({
-  account_number:z.string(),
-  account_name: z.string(),
+  account_number: z
+  .string()
+  .min(10, "Enter valid account number")
+  .max(10, "Enter valid account number"),
+    account_name: z.string(),
   bank_name:z.string(),
   bank:z.string().optional(),
 })

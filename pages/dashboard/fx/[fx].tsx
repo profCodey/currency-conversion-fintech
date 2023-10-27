@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { set, z } from "zod";
 import { AppLayout } from "@/layout/common/app-layout";
 import { useRouter } from "next/router";
 import { ReactElement, useMemo, useRef, ChangeEvent } from "react";
@@ -168,8 +168,6 @@ const ConvertFxFundPage = () => {
     destination: "",
   });
 
-  // console.log(liveRateValue, "data for liveRateValue");
-
   const allAccountsDataMap = useMemo(() => {
     return (
       allAccounts?.data.map((account: any) => {
@@ -236,6 +234,10 @@ const ConvertFxFundPage = () => {
   });
 
   const liveRate = liveRateValue?.data?.rate;
+
+  useEffect(() => {
+setToReceive(parseInt((toPay * liveRate).toFixed(2)));
+  }, [liveRate, toPay, currentCurrency]);
 
   useEffect(() => {
     if (selectAccountData.length > 0 && selectAccountData[0]) {
@@ -397,7 +399,7 @@ const ConvertFxFundPage = () => {
               min={1}
             /> */}
              <div className="flex flex-col text-sm font-medium mt-1">
-           <label>You Receive</label>
+           <label>You Send</label>
                     <input
                 style={{
                   height: "36px",
@@ -443,10 +445,11 @@ const ConvertFxFundPage = () => {
                   ...currentCurrency,
                   destination: value,
                 });
+                setToReceive(parseInt((toPay * liveRate).toFixed(2)));
               }}
               data={allAccountsData}
             />
-
+        
             {/* <NumberInput
               className="flex-grow"
               label="You receive"

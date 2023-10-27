@@ -297,6 +297,10 @@ const ExchangeFxFundPage = () => {
     }
   }, [destinationDetails]);
 
+  useEffect(() => {
+    setToReceive(parseInt((toPay * liveRate).toFixed(2)));
+      }, [liveRate, toPay, currentCurrency]);
+
   function getCurrencyNameFromId(id: string | null) {
     const currency = currencyOptionsWithId.find(
       (currency: any) => currency.value === id
@@ -381,7 +385,7 @@ const ExchangeFxFundPage = () => {
               nothingFound={"No currencies found"}
             />
             <div className="flex flex-col text-sm font-medium mt-1">
-           <label>You Receive</label>
+           <label>You Send</label>
               <input
                 style={{
                   height: "36px",
@@ -427,6 +431,7 @@ const ExchangeFxFundPage = () => {
                   ...currentCurrency,
                   destination: value,
                 });
+                setToReceive(parseInt((toPay * liveRate).toFixed(2)));
               }}
               data={allAccountsData}
             />

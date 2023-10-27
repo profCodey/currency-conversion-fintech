@@ -22,6 +22,7 @@ import { CLIENT_TYPES } from "@/utils/constants";
 import { BusinessProfileForm } from "@/layout/onboarding/business-profile-form";
 import { InvidualProfileForm } from "@/layout/onboarding/invidual-profile-form";
 import { AccountDetailForm } from "@/layout/onboarding/account-detail-form";
+import { Confirmation } from "@/layout/onboarding/confirmation";
 import { useBankOptions, useGetBanks } from "@/api/hooks/banks";
 
 export default function Onboarding() {
@@ -110,6 +111,7 @@ export default function Onboarding() {
     // else if (tab === "gateway-options" && !disableDocumentNextButton())
     //   setActiveTab(tab);
     else if (tab === "status" && !disableGatewayNextButton) setActiveTab(tab);
+    else if (tab === "confirmation") setActiveTab(tab);
   }
 
   return (
@@ -141,6 +143,7 @@ export default function Onboarding() {
             )}
             {/* <Tabs.Tab value="gateway-options">Gateway Options</Tabs.Tab> */}
             <Tabs.Tab value="account-detail">Account Detail</Tabs.Tab>
+            <Tabs.Tab value="confirmation">Confirmation</Tabs.Tab>  
             <Tabs.Tab value="status">Status</Tabs.Tab>
           </Tabs.List>
 
@@ -182,6 +185,7 @@ export default function Onboarding() {
               userSelectedGateways={userSelectedGateways?.data}
               nextTab={setActiveTab}
             />
+
           </Tabs.Panel> */}
           <Tabs.Panel value="account-detail" pt="lg">
             <AccountDetailForm
@@ -194,6 +198,9 @@ export default function Onboarding() {
               showNext={showAccountDetailNextBtn}
             />
           </Tabs.Panel>
+          <Tabs.Panel value="confirmation" pt="lg">
+            <Confirmation />
+            </Tabs.Panel>
           <Tabs.Panel value="status" pt="lg">
             <OnboardingStatus />
           </Tabs.Panel>

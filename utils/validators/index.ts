@@ -89,10 +89,9 @@ export const basicProfileFormValidator = z.object({
 });
 
 export const accountDetailFormValidator = z.object({
-  account_number: z
-  .string()
-  .min(10, "Enter valid account number")
-  .max(10, "Enter valid account number"),
+  account_number: z.string()
+  .refine((value) => /^\d{10}$/.test(value), {
+    message: "Account Number must be 10 digits",}),
     account_name: z.string(),
   bank_name:z.string(),
   bank:z.string().optional(),
@@ -100,10 +99,9 @@ export const accountDetailFormValidator = z.object({
 export const addRecipientFormValidator = z.object({
   currency: z.string(),
   bank: z.string(),
-  account_number: z
-    .string()
-    .min(10, "Enter valid account number")
-    .max(10, "Enter valid account number"),
+  account_number: z.string()
+  .refine((value) => /^\d{10}$/.test(value), {
+    message: "Account Number must be 10 digits",}),
   account_name: z.string(),
   user: z.number(),
   category: z.string(),

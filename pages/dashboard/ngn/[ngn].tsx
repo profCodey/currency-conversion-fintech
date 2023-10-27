@@ -297,6 +297,10 @@ const ExchangeFxFundPage = () => {
     }
   }, [destinationDetails]);
 
+  useEffect(() => {
+    setToReceive(parseInt((toPay * liveRate).toFixed(2)));
+      }, [liveRate, toPay, currentCurrency]);
+
   function getCurrencyNameFromId(id: string | null) {
     const currency = currencyOptionsWithId.find(
       (currency: any) => currency.value === id
@@ -427,6 +431,7 @@ const ExchangeFxFundPage = () => {
                   ...currentCurrency,
                   destination: value,
                 });
+                setToReceive(parseInt((toPay * liveRate).toFixed(2)));
               }}
               data={allAccountsData}
             />

@@ -58,9 +58,9 @@ export const LocalExchangePayRecipient = z.object({
     .max(11, { message: "BIC cannot be more than 11 characters" })
     .optional(),
   city: z.string(),
-  country: z.string().min(1, { message: "Country is required!" }),
-  state: z.string().min(1, { message: "state is required" }),
-  zipcode: z.string().min(1, { message: "zipcode is required" }),
+  country: z.string().min(1,{ message: "Country is required!" }),
+  state: z.string().min(1,{ message: "state is required" }),
+  zipcode: z.string().min(1,{ message: "zipcode is required" }),
   swift_code: z.string().optional(),
   invoice: z
     .object({
@@ -109,7 +109,7 @@ interface SendMoneyProps {
   gateway: number | undefined;
   recipientDetails: z.infer<typeof LocalExchangePayRecipient>;
   destinationDetails: CurrencyDetailType;
-  sourceDetails: CurrencyDetailType;
+  sourceDetails:CurrencyDetailType;
   sourceAmount: number;
   destinationAmount: number;
   destinationAccCurrency: string;
@@ -204,7 +204,7 @@ export function LocalProceedModal({
     // if(sourceDetails.currencyId && sourceDetails.value){
     // console.log({sourceDetailsProp:sourceDetails},"sourceDetailsProp Updated");
     // }
-  }, [sourceDetails]);
+  },[sourceDetails]);
 
   const {
     data: nameEnquiryResult,
@@ -216,7 +216,6 @@ export function LocalProceedModal({
     initialValues: {
       source_account: sourceDetails.value,
       destination_currency: destinationDetails.currencyId,
-
       // bank: recipientDetails?.bank ? recipientDetails?.bank.toString() : "",
       amount: sourceAmount,
       account_name: recipientDetails?.account_name,
@@ -271,25 +270,25 @@ export function LocalProceedModal({
       // console.log({sourceAccD:payRecipientForm.values});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sourceDetails]);
+  },[sourceDetails]);
   useEffect(() => {
-    if (currencyRate) {
-      payRecipientForm.setFieldValue("rate", currencyRate);
+    if(currencyRate) {
+      payRecipientForm.setFieldValue('rate', currencyRate);
       // console.log({sourceAccD:payRecipientForm.values});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currencyRate]);
+  },[currencyRate]);
 
   useEffect(() => {
-    if (destinationDetails?.currencyId) {
+    if(destinationDetails?.currencyId){
       payRecipientForm.setFieldValue(
-        "destination_currency",
+        'destination_currency',
         destinationDetails.currencyId
       );
       // console.log({destCurrD:payRecipientForm.values});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [destinationDetails]);
+  },[destinationDetails])
 
   useEffect(() => {
     if (sourceAmount) {

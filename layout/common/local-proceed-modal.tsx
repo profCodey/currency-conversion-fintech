@@ -322,6 +322,7 @@ export function LocalProceedModal({
     queryClient.removeQueries(["name-enquiry"]);
     close();
     setForm("send-money");
+    window.location.reload()
   }
 
   function handleAccountNumberChange(e: ChangeEvent<HTMLInputElement>) {

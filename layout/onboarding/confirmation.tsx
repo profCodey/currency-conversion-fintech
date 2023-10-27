@@ -29,7 +29,7 @@ import { useGetCurrentUser
          <div className="text-center">
             <h1 className="text-2xl font-semibold">Confirm details</h1>
             <p className="text-base text-gray-600">
-              Click the confirm button below to send a notification to the admin
+              Click the confirm button below to submit your entire details
             </p>
          </div>
          <div className="flex flex-col items-center justify-center gap-4">

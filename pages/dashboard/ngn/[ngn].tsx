@@ -31,7 +31,7 @@ import { CurrencyDetailType, IRecipient } from "@/utils/validators/interfaces";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useIsVerified } from "@/api/hooks/user";
 import { PayFxRecipient } from "@/layout/common/send-fx-modal";
-import { FxProceedModal } from "@/layout/common/fx-proceed-modal";
+
 import {
   LocalExchangePayRecipient,
   LocalProceedModal,
@@ -381,7 +381,7 @@ const ExchangeFxFundPage = () => {
               nothingFound={"No currencies found"}
             />
             <div className="flex flex-col text-sm font-medium mt-1">
-           <label>You Receive</label>
+           <label>You Send</label>
               <input
                 style={{
                   height: "36px",

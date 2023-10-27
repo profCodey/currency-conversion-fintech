@@ -177,6 +177,7 @@ export function useCreateFxPayout(
                     type: string;
                     errors: ErrorItem[] | ErrorItem;
                 };
+                
                 const response: E = data.response?.data as unknown as E;
                 const errors = response?.errors;
                 //  console.log({ errRes: response });

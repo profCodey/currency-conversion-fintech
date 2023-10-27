@@ -55,12 +55,12 @@ export const LocalExchangePayRecipient = z.object({
   sort_code: z.string().optional(),
   bic: z
     .string()
-    .min(1, { message: "BIC cannot be empty" })
-    .max(11, { message: "BIC should be maximum of 11 characters" }),
+    .max(11, { message: "BIC cannot be more than 11 characters" })
+    .optional(),
   city: z.string(),
-  country: z.string().min(1,{message:"Country is required!"}),
-  state: z.string().min(1,{message:"state is required"}),
-  zipcode: z.string().min(1,{message:"zipcode is required"}),
+  country: z.string().min(1, { message: "Country is required!" }),
+  state: z.string().min(1, { message: "state is required" }),
+  zipcode: z.string().min(1, { message: "zipcode is required" }),
   swift_code: z.string().optional(),
   invoice: z
     .object({
@@ -109,7 +109,7 @@ interface SendMoneyProps {
   gateway: number | undefined;
   recipientDetails: z.infer<typeof LocalExchangePayRecipient>;
   destinationDetails: CurrencyDetailType;
-  sourceDetails:CurrencyDetailType;
+  sourceDetails: CurrencyDetailType;
   sourceAmount: number;
   destinationAmount: number;
   destinationAccCurrency: string;
@@ -202,9 +202,9 @@ export function LocalProceedModal({
 
   useEffect(() => {
     // if(sourceDetails.currencyId && sourceDetails.value){
-      // console.log({sourceDetailsProp:sourceDetails},"sourceDetailsProp Updated");
+    // console.log({sourceDetailsProp:sourceDetails},"sourceDetailsProp Updated");
     // }
-  },[sourceDetails])
+  }, [sourceDetails]);
 
   const {
     data: nameEnquiryResult,
@@ -216,12 +216,12 @@ export function LocalProceedModal({
     initialValues: {
       source_account: sourceDetails.value,
       destination_currency: destinationDetails.currencyId,
-      
+
       // bank: recipientDetails?.bank ? recipientDetails?.bank.toString() : "",
       amount: sourceAmount,
       account_name: recipientDetails?.account_name,
       account_number: recipientDetails?.account_number,
-      
+
       narration: "",
       bank_name: "",
       purpose_of_payment: "",
@@ -266,39 +266,42 @@ export function LocalProceedModal({
   );
 
   useEffect(() => {
-    if(sourceDetails?.value){
-      payRecipientForm.setFieldValue('source_account',sourceDetails.value)
-            // console.log({sourceAccD:payRecipientForm.values});
+    if (sourceDetails?.value) {
+      payRecipientForm.setFieldValue("source_account", sourceDetails.value);
+      // console.log({sourceAccD:payRecipientForm.values});
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[sourceDetails])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceDetails]);
   useEffect(() => {
-    if(currencyRate){
-      payRecipientForm.setFieldValue('rate',currencyRate)
-            // console.log({sourceAccD:payRecipientForm.values});
+    if (currencyRate) {
+      payRecipientForm.setFieldValue("rate", currencyRate);
+      // console.log({sourceAccD:payRecipientForm.values});
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[currencyRate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencyRate]);
 
   useEffect(() => {
-    if(destinationDetails?.currencyId){
-      payRecipientForm.setFieldValue('destination_currency',destinationDetails.currencyId)
-            // console.log({destCurrD:payRecipientForm.values});
+    if (destinationDetails?.currencyId) {
+      payRecipientForm.setFieldValue(
+        "destination_currency",
+        destinationDetails.currencyId
+      );
+      // console.log({destCurrD:payRecipientForm.values});
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[destinationDetails])
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destinationDetails]);
 
   useEffect(() => {
-    if(sourceAmount){
-      payRecipientForm.setFieldValue("amount",sourceAmount);
+    if (sourceAmount) {
+      payRecipientForm.setFieldValue("amount", sourceAmount);
       // console.log({sourceAmountD:payRecipientForm.values});
-      
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[sourceAmount])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceAmount]);
 
-  function handleSubmit(values: z.infer<typeof LocalExchangePayRecipient> & Record<string,string>) {
+  function handleSubmit(
+    values: z.infer<typeof LocalExchangePayRecipient> & Record<string, string>
+  ) {
     // console.log({ values }, "fx proceed modal values");
     // console.log({ defaultGatewayBalance });
 
@@ -350,9 +353,9 @@ export function LocalProceedModal({
     <Stack align="center" className="w-full">
       <Warning2 size={60} />
       <Text>
-        Amount:{" "}
-        {/* {currencyFormatter(confirmationDetails.amount)} */}
-        {currencyFormatter(sourceAmount)} {sourceCurrency} to  {currencyFormatter(destinationAmount)} {destinationAccCurrency}
+        Amount: {/* {currencyFormatter(confirmationDetails.amount)} */}
+        {currencyFormatter(sourceAmount)} {sourceCurrency} to{" "}
+        {currencyFormatter(destinationAmount)} {destinationAccCurrency}
       </Text>
       <Text>Recipient: {confirmationDetails.account_name}</Text>
       <Text>Receiving Account: {confirmationDetails.account_number}</Text>
@@ -379,7 +382,7 @@ export function LocalProceedModal({
 
   const SendMoneyForm = (
     <form
-    // @ts-ignore
+      // @ts-ignore
       onSubmit={payRecipientForm.onSubmit(handleSubmit)}
       className="flex flex-col gap-4 relative"
     >
@@ -446,11 +449,10 @@ export function LocalProceedModal({
         {...payRecipientForm.getInputProps("bank_address")}
         // disabled
       /> */}
-           <Select
+      <Select
         data={purposes}
         label="Purpose of Payment"
         placeholder="Select Purpose of Payment"
-
         {...payRecipientForm.getInputProps("purpose_of_payment")}
       />
 
@@ -560,7 +562,7 @@ export function LocalProceedModal({
   return (
     <section>
       <Modal
-      closeOnClickOutside={false}
+        closeOnClickOutside={false}
         opened={modalOpen}
         title={FormContent?.title}
         onClose={handleModalClose}

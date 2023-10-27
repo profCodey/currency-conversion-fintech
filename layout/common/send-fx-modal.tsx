@@ -46,7 +46,7 @@ export const PayFxRecipient = z.object({
         .string()
         .min(1, { message: "Sort code is required" })
         .optional(),
-    bic: z.string().min(1, { message: "BIC is required" }).optional(),
+    bic: z.string().max(11, { message: "BIC cannot be more than 11 characters" }).optional(),
     iban: z.string().min(1, { message: "IBAN is required" }).optional(),
     recipient_address: z
         .string()

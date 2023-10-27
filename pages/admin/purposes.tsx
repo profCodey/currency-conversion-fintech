@@ -102,9 +102,9 @@ export default function Purposes() {
                 <tr key={purpose.id}>
                     <td>{idx + 1}</td>
                     <td>{purpose.description}</td>                   
-                    <td>
+                    {/* <td>
                         {dayjs(purpose.created_on).format("MMM D, YYYY h:mm A")}
-                    </td>
+                    </td> */}
                     <td>
                         <Menu width={150} position="right">
                             <Menu.Target>
@@ -146,7 +146,7 @@ export default function Purposes() {
                         <tr>
                             <th>S/N</th>
                             <th>Description</th>
-                            <th>Created On</th>
+                            {/* <th>Created On</th> */}
                             
                             <th>Action</th>
                         </tr>

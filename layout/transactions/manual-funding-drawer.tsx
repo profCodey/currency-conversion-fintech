@@ -13,6 +13,7 @@ import {
 import { closeAllModals, modals } from "@mantine/modals";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { showNotification } from "@mantine/notifications";
 
 export type FundingStatuses = "pending" | "approved" | "rejected" | "cancelled";
 
@@ -39,9 +40,21 @@ export function ManualFundingDrawer({
       status,
       admin_remark: remark,
     });
+    setTimeout(() => {
+    window.location.reload();
+    }, 3000);
   }
 
   function confirmApproveReject(status: FundingStatuses) {
+    if (remark.trim() === ""){
+      console.log("remark is empty 2")
+        return showNotification({
+          title: "Error",
+          message: `Remark cannot be empty. Kindly fill in a remark`,
+          color: "red",
+        });
+    }
+    
     modals.openConfirmModal({
       title: "Please confirm the following details",
       children: (
@@ -119,6 +132,7 @@ export function ManualFundingDrawer({
         <Textarea
           placeholder="Enter remark"
           value={remark}
+          required
           onChange={(e) => setRemark(e.target.value)}
           disabled={fundingData?.status !== "pending"}
         />

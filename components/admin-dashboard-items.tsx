@@ -111,6 +111,10 @@ export function AdminDashboardItems() {
           label: "Rates",
         },
         {
+          route: "/admin/purposes",
+          label: "Purposes of Payment"
+        },
+        {
           route: "/admin/gateways",
           label: "Gateways",
         },

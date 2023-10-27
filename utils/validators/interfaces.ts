@@ -68,6 +68,15 @@ export interface ISelectedGateway {
   gateway_reference: string;
 }
 
+export interface IPurpose{
+  id: number;
+  created_on: string;
+  updated_on: string;
+  description: string;
+  created_by: number;
+  updated_by: number;
+}
+
 export interface ICurrency {
   id: number;
   code: string;

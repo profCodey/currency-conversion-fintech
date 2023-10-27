@@ -28,8 +28,10 @@ export function middleware(request: NextRequest) {
     "/admin/gateways",
     "/admin/siteSettings",
     "/admin/currencies",
+    "/admin/purposes",
     "/admin/global-limit",
     "/admin/user-limit"
+    
   ];
 
   const publicPaths = [

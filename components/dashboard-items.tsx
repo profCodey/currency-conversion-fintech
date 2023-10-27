@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useNavStyles } from "./admin-dashboard-items";
-import { ArrowRight2 } from "iconsax-react";
+import { ArrowRight2, Cards } from "iconsax-react";
 import { useGetSiteSettings } from "@/api/hooks/admin/sitesettings";
 import { ISiteSettings } from "@/utils/validators/interfaces";
 
@@ -30,7 +30,7 @@ const routes = [
   {
     route: "/fx-payouts",
     label: "FX",
-    icon: <RecipientsIcon />,
+    icon: <Cards variant="Bold"/>,
     children: [
       {
         route: "/fx-payouts",
@@ -45,7 +45,7 @@ const routes = [
   {
     route: "/local-transactions",
     label: "Payout",
-    icon: <RecipientsIcon />,
+    icon: <TransactionsIcon />,
     children: [
       {
         route: "/local-transactions",
@@ -66,11 +66,11 @@ const routes = [
     label: "Recipient",
     icon: <RecipientsIcon />,
   },
-  {
-    route: "/transactions",
-    label: "Transactions",
-    icon: <TransactionsIcon />,
-  },
+  // {
+  //   route: "/transactions",
+  //   label: "Transactions",
+  //   icon: <TransactionsIcon />,
+  // },
   {
     route: "/config",
     label: "Config",

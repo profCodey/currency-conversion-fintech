@@ -12,7 +12,13 @@ export function middleware(request: NextRequest) {
     "/fund-account",
     "/transactions",
     "/wallet",
-    "/old"
+    "/old",
+    "/fx-exchange",
+    "/fx-payouts",
+    "/local-transactions",
+    "/local-statement",
+    "/local-manual-funding"
+
   ];
 
   const adminPaths = [

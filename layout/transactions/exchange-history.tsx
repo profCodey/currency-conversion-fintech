@@ -161,7 +161,6 @@ function handlePDFDonwload(data: IExchangeDetailed){
     },
     [exchanges?.data]
   );
-
   return (
     <Skeleton visible={isLoading} className="flex-grow">
       <div className="flex-grow overflow-y-auto relative flex flex-col h-full">

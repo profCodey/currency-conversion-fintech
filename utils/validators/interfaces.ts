@@ -58,6 +58,17 @@ export interface IGateway {
   is_active: boolean;
 }
 
+export interface INotification {
+  length: number;
+  map(arg0: (notification: INotification, index: number) => import("react").JSX.Element): any;
+  id: number;
+  created_on: string;
+  updated_on: string;
+  message: string;
+  created_by: number;
+  updated_by: number;
+}
+
 export interface ISelectedGateway {
   id: number;
   gateway: number;

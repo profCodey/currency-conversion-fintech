@@ -6,19 +6,12 @@ import { ChangeEvent, ReactElement, useMemo, useRef } from "react";
 import { ConvertIcon } from "@/components/icons";
 import {
   Button,
-  Group,
-  Modal,
-  NumberInput,
   Select,
   Skeleton,
-  Stack,
-  Text,
 } from "@mantine/core";
 import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { useCallback, useEffect, useState } from "react";
 import { useGetRates } from "@/api/hooks/admin/rates";
-import { Warning2 } from "iconsax-react";
-import { currencyFormatter } from "@/utils/currency";
 import { useExchange } from "@/api/hooks/exchange";
 import { showNotification } from "@mantine/notifications";
 import { useGetAccounts } from "@/api/hooks/accounts";
@@ -26,18 +19,15 @@ import { useGetLiveRate } from "@/api/hooks/admin/rates";
 import { SendMoneyModal } from "@/layout/common/send-money-modal";
 import { useGetRecipients } from "@/api/hooks/recipients";
 import { useBankOptions } from "@/api/hooks/banks";
-// import { LocalExchangePayRecipientPayRecipient } from "../../../recipients/recipient-list";
 import { CurrencyDetailType, IRecipient } from "@/utils/validators/interfaces";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useIsVerified } from "@/api/hooks/user";
-import { PayFxRecipient } from "@/layout/common/send-fx-modal";
 
 import {
   LocalExchangePayRecipient,
   LocalProceedModal,
 } from "@/layout/common/local-proceed-modal";
 import { useGetFxPurposes } from "@/api/hooks/fx";
-// import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
 
 const ExchangeFxFundPage = () => {
   const sourceRef = useRef<CurrencyDetailType | null>(null);
@@ -124,7 +114,6 @@ const ExchangeFxFundPage = () => {
   const [showRecipientsModal, setShowRecipientsModal] = useState(false);
   const { data: rates, isLoading: ratesLoading } = useGetRates();
   const { data: allAccounts, isLoading: allAccountsLoading } = useGetAccounts();
-  // console.log({allAccounts:allAccounts?.data});
   const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -158,7 +147,7 @@ const ExchangeFxFundPage = () => {
     category: "",
     code: "",
   });
-  const [destinationAmount, setDestinationAmount] = useState(0);
+
   const [toPay, setToPay] = useState<number>(1)
   const [toReceive, setToReceive] = useState<number>(0)
 
@@ -235,7 +224,6 @@ const ExchangeFxFundPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allAccountsDataMap,fx]);
 
-  // console.log({ allAccountsData });
   const {
     data: liveRateValue,
     isLoading: isLoadingLiveRate,
@@ -259,9 +247,6 @@ const ExchangeFxFundPage = () => {
       setSourceAccCurrency(selectAccountData[0].currencyId);
 
       sourceRef.current = { ...selectAccountData[0] } as CurrencyDetailType;
-
-      // console.log({ sourceDetails }, "SOURCE DETAILS UPDATED");
-      // console.log({ sourceRefData: sourceRef.current }, "SOURCE Detail REF DATA");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAccountData,allAccounts]);
@@ -270,35 +255,27 @@ const ExchangeFxFundPage = () => {
     if (sourceAmount > 1) {
       sourceAmountRef.current = sourceAmount;
 
-      // console.log({sourceAmount},"SOURCE AMOUNT DATA");
-      // console.log({ sourceAmountREF: sourceAmount }, "SOURCE Amount REF DATA");
     }
   }, [sourceAmount]);
 
   useEffect(() => {
     if (!!liveRate) {
       liveRateRef.current = liveRate;
-      // console.log({ liveRate }, "LIFE RATE DATA");
-      // console.log({ liveRateREF: liveRate }, "LIFE RATE REF DATA");
     }
   }, [liveRate]);
 
   useEffect(() => {
-    // console.log({destinationDetails});
     if (
       destinationDetails.currencyId &&
       destinationDetails.code &&
       destinationDetails.value
     ) {
       destinationRef.current = destinationDetails;
-
-      // console.log({destinationDetails},"DESTINATION DETAILS DATA");
-      // console.log({destinationDetailsREF:destinationRef.current},"DESTINATION DETAILS REF DATA");
     }
   }, [destinationDetails]);
 
   useEffect(() => {
-    setToReceive(parseInt((toPay * liveRate).toFixed(2)));
+    setToReceive(parseFloat((toPay * liveRate).toFixed(2)));
       }, [liveRate, toPay, currentCurrency]);
 
   function getCurrencyNameFromId(id: string | null) {
@@ -323,7 +300,7 @@ const ExchangeFxFundPage = () => {
   const handleToPayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(e.target.value);
     setToPay(newValue);
-    setToReceive(Number((newValue * liveRate).toFixed(2))); 
+    setToReceive(parseFloat((newValue * liveRate).toFixed(2))); 
   };
 
   const handleToReceiveChange = (e: ChangeEvent<HTMLInputElement>) => {

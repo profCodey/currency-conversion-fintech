@@ -6,34 +6,22 @@ import { ReactElement, useMemo, useRef, ChangeEvent } from "react";
 import { ConvertIcon } from "@/components/icons";
 import {
   Button,
-  Group,
-  Modal,
-  NumberInput,
   Select,
   Skeleton,
-  Stack,
-  Text,
 } from "@mantine/core";
 import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { useCallback, useEffect, useState } from "react";
 import { useGetRates } from "@/api/hooks/admin/rates";
-import { Warning2 } from "iconsax-react";
-import { currencyFormatter } from "@/utils/currency";
 import { useExchange } from "@/api/hooks/exchange";
 import { showNotification } from "@mantine/notifications";
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { useGetLiveRate } from "@/api/hooks/admin/rates";
-import { SendMoneyModal } from "@/layout/common/send-money-modal";
 
 import { useGetRecipients } from "@/api/hooks/recipients";
 import { useBankOptions } from "@/api/hooks/banks";
-// import { PayRecipient } from "../../../recipients/recipient-list";
 import { CurrencyDetailType, IRecipient } from "@/utils/validators/interfaces";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useIsVerified } from "@/api/hooks/user";
-import { PayRecipient } from "@/layout/recipients/recipient-list";
-import { PayFxRecipient } from "@/layout/common/send-fx-modal";
-// import { ConvertFundFxPayRecipient, FxProceedModal } from "@/layout/common/fx-proceed-modal";
 import { useGetFxPurposes } from "@/api/hooks/fx";
 import {
   LocalExchangePayRecipient,
@@ -116,16 +104,9 @@ const ConvertFxFundPage = () => {
   };
 
   // @ts-ignore
-  const [fxRecipientDetails, setFxRecipientDetails] = useState<z.infer<typeof ConvertFundFxPayRecipient> & Record<string,any> >(initialState);
-  const [showFxModal, setShowFxModal] = useState(false);
-  const [showSelectRecipientModal, setShowSelectRecipientModal] =
-    useState(false);
-  const [showRecipientsModal, setShowRecipientsModal] = useState(false);
-
   const { data: rates, isLoading: ratesLoading } = useGetRates();
   const { data: allAccounts, isLoading: allAccountsLoading } = useGetAccounts();
   const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
-  // console.log({ allAccounts: allAccounts?.data });
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const { mutate: exchange, isLoading: exchangeLoading } = useExchange(() =>
@@ -160,8 +141,6 @@ const ConvertFxFundPage = () => {
       category: "",
       code: "",
     });
-
-  // const [destinationAmount, setDestinationAmount] = useState(0);
 
   const [currentCurrency, setCurrentCurrency] = useState<{
     source: string | null;
@@ -203,8 +182,6 @@ const ConvertFxFundPage = () => {
       : [];
   }, [allAccountsDataMap, fx]);
 
-  // console.log({selectAccountData});
-
   const allAccountsData = useMemo(() => {
     return allAccountsDataMap.length > 0
       ? allAccountsDataMap
@@ -225,8 +202,6 @@ const ConvertFxFundPage = () => {
       : [];
   }, [allAccountsDataMap, fx]);
 
-  // console.log({ destinationAccountsData: allAccountsData });
-
   const {
     data: liveRateValue,
     isLoading: isLoadingLiveRate,
@@ -239,7 +214,7 @@ const ConvertFxFundPage = () => {
   const liveRate = liveRateValue?.data?.rate;
 
   useEffect(() => {
-setToReceive(parseInt((toPay * liveRate).toFixed(2)));
+setToReceive(parseFloat((toPay * liveRate).toFixed(2)));
   }, [liveRate, toPay, currentCurrency]);
 
   useEffect(() => {
@@ -264,29 +239,19 @@ setToReceive(parseInt((toPay * liveRate).toFixed(2)));
   useEffect(() => {
     if (sourceAmount > 1) {
       sourceAmountRef.current = sourceAmount;
-      
-      // console.log({sourceAmount},"SOURCE AMOUNT DATA");
-      // console.log({ sourceAmountREF: sourceAmount }, "SOURCE Amount REF DATA");
     }
   }, [sourceAmount]);
   
   useEffect(() => {
     if (!!liveRate) {
       liveRateRef.current = liveRate;
-      // console.log({ liveRate }, "LIFE RATE DATA");
-      // console.log({ liveRateREF: liveRate }, "LIFE RATE REF DATA");
     }
   }, [liveRate]);
 
 
   useEffect(() => {
-    // console.log({destinationDetails});
     if(destinationDetails.currencyId && destinationDetails.code && destinationDetails.value){
       destinationRef.current = destinationDetails;
-
-      // console.log({destinationDetails},"DESTINATION DETAILS DATA");
-      // console.log({destinationDetailsREF:destinationRef.current},"DESTINATION DETAILS REF DATA");
-      
     }
     
   },[destinationDetails])
@@ -310,24 +275,10 @@ setToReceive(parseInt((toPay * liveRate).toFixed(2)));
     setShowConfirmationModal(true);
   }
 
-  function handleExchange() {
-    // exchange({
-    //   amount: sourceAmount.toString(),
-    //   destination_account: Number(destinationAccIdValue),
-    //   source_account: Number(sourceAccIdValue),
-    // });
-  }
-
-  // useEffect(() => {
-  //   if (liveRate && sourceAmount) {
-  //     // setDestinationAmount(sourceAmount);
-  //   }
-  // }, [liveRate, sourceAmount]);
-
   const handleToPayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(e.target.value);
     setToPay(newValue);
-    setToReceive(Number((newValue * liveRate).toFixed(2))); 
+    setToReceive(parseFloat((newValue * liveRate).toFixed(2))); 
   };
 
   const handleToReceiveChange = (e: ChangeEvent<HTMLInputElement>) => {

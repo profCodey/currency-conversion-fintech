@@ -22,7 +22,6 @@ import { PageHeader } from "@/components/admin/page-header";
 import { useApproveClient, useGetClientDetails } from "@/api/hooks/user";
 import { useGetUserDetails } from "@/api/hooks/user";
 import { useGetWithdrawalAccount } from "@/api/hooks/withdrawal-account";
-
 export default function UserProfile() {
   const router = useRouter();
   const id = router?.query.id as string;
@@ -32,6 +31,8 @@ export default function UserProfile() {
 
   const { data: withdrawalAcc, isLoading: withdrawalAccLoading } =
     useGetWithdrawalAccount(router?.query.id as string);
+
+    const [updateUserDetailsOpen, setUpdateUserDetailsOpen] = useState(false);
 
   const items = [
     { title: "User details", href: `/admin/users` },
@@ -45,9 +46,20 @@ export default function UserProfile() {
   return (
     <section className="flex flex-col gap-6 h-full">
       <PageHeader
-        header={<Breadcrumbs>{items}</Breadcrumbs>}
+        header={
+          <div className="flex gap-6">
+        <Breadcrumbs>{items}</Breadcrumbs>
+        <Button
+        className="bg-primary-100 hover:bg-primary-100"
+        size="md"
+        onClick={() => setUpdateUserDetailsOpen(true)}>
+        Update Details
+    </Button>
+    </div>
+      }
         meta={
           <Group>
+                
             <ClientApprovalStatus />
             <Link href={`/admin/users/${id}/transactions`}>
               <Button
@@ -64,22 +76,23 @@ export default function UserProfile() {
       />
 
       <section className="flex flex-col lg:flex-row gap-6 justify-between relative z-10">
-        <BusinessDetails userInfo={userInfo?.data} />
+        <BusinessDetails userInfo={userInfo?.data} updateUserDetailsOpen={updateUserDetailsOpen} setUpdateUserDetailsOpen={setUpdateUserDetailsOpen} />
         <ClientWalletBalances />
       </section>
-      <section>
-        <p className="text-center font-bold">Bank Details</p>
-        <div className="flex flex-col md:flex-row justify-around">
-          <p className="flex md:flex-col lg:flex-row">
-            <div className="font-medium">Account Name:</div>{" "}
-            <div>{withdrawalAcc?.data.account_name}</div>
-          </p>
-          <p className="flex md:flex-col lg:flex-row">
-            <div className="font-medium">Account Number:</div>{" "}
-            <div>{withdrawalAcc?.data.account_number}</div>
-          </p>
-        </div>
-      </section>
+
+        <section className="border  shadow py-6">
+          <p className="text-center font-bold">Bank Details</p>
+          <div className="flex flex-col md:flex-row justify-around">
+            <p className="flex md:flex-col lg:flex-row">
+              <div className="font-medium">Account Name:</div>{" "}
+              <div>{withdrawalAcc?.data.account_name}</div>
+            </p>
+            <p className="flex md:flex-col lg:flex-row">
+              <div className="font-medium">Account Number:</div>{" "}
+              <div>{withdrawalAcc?.data.account_number}</div>
+            </p>
+          </div>
+        </section>
 
       {userInfo?.data.client_type !== "individual" && (
         <section className="rounded-md bg-white shadow border flex-grow relative">

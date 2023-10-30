@@ -86,7 +86,7 @@ export default function GlobalLimit() {
           <td>{getCurrencyCodeFromId(global.currency)}</td>
           <td>{global.daily_limit}</td>
           <td>{global.quarterly_limit}</td>
-          <td>{global.created_by}</td>
+          <td>{global.created_by_name}</td>
           <td>{convertIsoToNormalTime(global.created_on)}</td>
           <td>
             <Menu width={150} position="right">

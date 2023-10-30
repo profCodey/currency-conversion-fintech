@@ -1,5 +1,5 @@
-import { ActionIcon } from "@mantine/core";
-import NotificationAlert from "@/public/notification-alert.svg";
+import { ActionIcon, Badge } from "@mantine/core";
+import { NotificationIcon } from "../icons/icons";
 import { ReactNode } from "react";
 import { Drawer, Text } from "@mantine/core";
 import { INotification } from "@/utils/validators/interfaces";
@@ -20,11 +20,14 @@ export function PageHeader({
 }) {
   const { data, isLoading: notificationsLoading } = useGetNotifications();
   console.log(data)
+  console.log(data?.data.length)
   const [notificationsModalOpen, setNotificationsModalOpen] = useState(false);
 const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = useDeleteNotification();
   function handleDeleteNotification(notification: INotification) {
     deleteNotification(notification.id);
   }
+  const notificationCount = data? data.data.length : 0;
+
 
   const _notifications = useMemo(
     function () {
@@ -48,6 +51,9 @@ const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = use
     [data]
   );
 
+function handleNotificationClick () {
+  setNotificationsModalOpen(true)
+}
 
 
   return (
@@ -60,9 +66,8 @@ const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = use
       <div className="flex gap-5 items-center">
         {meta}
         <ActionIcon>
-          <NotificationAlert 
-          onClick={() => setNotificationsModalOpen(true)}
-          />
+        
+        <NotificationIcon notificationCount={notificationCount} onClick={handleNotificationClick} />
         </ActionIcon>
         <Drawer
           opened={notificationsModalOpen}

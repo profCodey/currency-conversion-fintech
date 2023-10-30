@@ -444,6 +444,7 @@ export interface IRatePayload {
 };
 
 export interface IGlobalList {
+  created_by_name: ReactNode;
   id: number;
   created_on: string;
   updated_on: string;

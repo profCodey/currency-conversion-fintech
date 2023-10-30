@@ -300,7 +300,7 @@ const ExchangeFxFundPage = () => {
   const handleToPayChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(e.target.value);
     setToPay(newValue);
-    setToReceive(Number((newValue * liveRate).toFixed(2))); 
+    setToReceive(parseFloat((newValue * liveRate).toFixed(2))); 
   };
 
   const handleToReceiveChange = (e: ChangeEvent<HTMLInputElement>) => {

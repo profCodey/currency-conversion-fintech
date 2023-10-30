@@ -43,23 +43,23 @@ export const invidualProfileFormValidator = z.object({
 
 export const businessProfileFormValidator = z.object({
   bvn: z.string().optional(),
-  city: z.string().min(1, "Enter city"),
-  state: z.string().min(1, "Enter state"),
-  zip_code: z.string().min(1, "Enter zip code"),
+  city: z.string().min(1, "Enter city").optional(),
+  state: z.string().min(1, "Enter state").optional(),
+  zip_code: z.string().min(1, "Enter zip code").optional(),
   tax_number: z.string().optional(),
-  business_legal_name: z.string().min(1, "Enter legal name of business"),
-  business_trading_name: z.string().min(1, "Enter trading name of business"),
-  country_of_registration: z.string().min(1, "Select country of registration"),
+  business_legal_name: z.string().min(1, "Enter legal name of business").optional(),
+  business_trading_name: z.string().min(1, "Enter trading name of business").optional(),
+  country_of_registration: z.string().min(1, "Select country of registration").optional(),
   business_code: z
     .string()
-    .max(10, "Business code cannot be more than 10 characters"),
+    .max(10, "Business code cannot be more than 10 characters").optional(),
   primary_business_activity: z
     .string()
-    .min(1, "Enter primary business activity"),
-  business_registration_date: z.union([z.null(), z.date(), z.string()]),
+    .min(1, "Enter primary business activity").optional(),
+  business_registration_date: z.union([z.null(), z.date(), z.string()]).optional(),
   business_registration_number: z
     .string()
-    .min(1, "Enter business registration number"),
+    .min(1, "Enter business registration number").optional(),
 });
 export const basicProfileFormValidator = z.object({
   bvn: z.string().optional(),

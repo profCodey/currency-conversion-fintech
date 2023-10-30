@@ -388,6 +388,7 @@ export interface IOnboardingProfile {
   tax_number: string;
   zip_code: string;
   state: string;
+  business_code?: string;
   city: string;
   status: "pending" | "approved" | "rejected" | "cancelled";
   bvn: string;

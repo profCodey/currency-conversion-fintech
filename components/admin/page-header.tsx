@@ -1,6 +1,13 @@
-import { ActionIcon } from "@mantine/core";
-import NotificationAlert from "@/public/notification-alert.svg";
+import { ActionIcon, Badge } from "@mantine/core";
+import { NotificationIcon } from "../icons/icons";
 import { ReactNode } from "react";
+import { Drawer, Text } from "@mantine/core";
+import { INotification } from "@/utils/validators/interfaces";
+import { closeAllModals, modals } from "@mantine/modals";
+import { useGetNotifications, useDeleteNotification } from "@/api/hooks/admin/notification";
+import { useState, useMemo } from "react";
+import { BinDelete } from "@/components/icons";
+
 
 export function PageHeader({
   header,
@@ -11,6 +18,44 @@ export function PageHeader({
   subheader?: ReactNode;
   meta?: ReactNode;
 }) {
+  const { data, isLoading: notificationsLoading } = useGetNotifications();
+  console.log(data)
+  console.log(data?.data.length)
+  const [notificationsModalOpen, setNotificationsModalOpen] = useState(false);
+const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = useDeleteNotification();
+  function handleDeleteNotification(notification: INotification) {
+    deleteNotification(notification.id);
+  }
+  const notificationCount = data? data.data.length : 0;
+
+
+  const _notifications = useMemo(
+    function () {
+      if (!data) return null;
+      if (data.data.length === 0) {
+        // Display "No notifications" message when there are no notifications
+        return <Text size="sm">No notifications</Text>;
+      }
+      return data.data.map((notification: INotification, index: number) => (
+        <div key={index} className="flex items-center cursor-pointer border-b hover:bg-gray-200 p-2 justify-between">
+          <span className="text-sm ">{notification.message}</span>
+          <span className="cursor-pointer ">
+            <BinDelete 
+           
+            onClick={() => handleDeleteNotification(notification)}
+            />
+          </span>
+        </div>
+      ));
+    },
+    [data]
+  );
+
+function handleNotificationClick () {
+  setNotificationsModalOpen(true)
+}
+
+
   return (
     <section className="flex gap-5 items-start">
       <div className="text-primary-100 mr-auto">
@@ -21,9 +66,20 @@ export function PageHeader({
       <div className="flex gap-5 items-center">
         {meta}
         <ActionIcon>
-          <NotificationAlert />
+        
+        <NotificationIcon notificationCount={notificationCount} onClick={handleNotificationClick} />
         </ActionIcon>
-      </div>
+        <Drawer
+          opened={notificationsModalOpen}
+          onClose={() => setNotificationsModalOpen(false)}
+          size="md"
+          padding="xl"
+          position="right"
+          title="Notifications">
+            {_notifications}
+
+          </Drawer>
+          </div>
     </section>
   );
 }

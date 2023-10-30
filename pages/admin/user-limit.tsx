@@ -82,7 +82,7 @@ export default function UserLimit() {
           <td>{getCurrencyCodeFromId(user.currency)}</td>
           <td>{user.daily_limit}</td>
           <td>{user.quarterly_limit}</td>
-          <td>{user.created_by}</td>
+          <td>{user.created_by_name}</td>
           <td>{convertIsoToNormalTime(user.created_on)}</td>
           <td>
             <Menu width={150} position="right">

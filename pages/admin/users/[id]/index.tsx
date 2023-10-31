@@ -61,16 +61,7 @@ export default function UserProfile() {
           <Group>
                 
             <ClientApprovalStatus />
-            <Link href={`/admin/users/${id}/transactions`}>
-              <Button
-                variant="white"
-                className="font-primary flex items-center"
-                rightIcon={<ArrowRight2 size={16} />}
-                size="md"
-              >
-                View Transactions
-              </Button>
-            </Link>
+          
           </Group>
         }
       />
@@ -96,17 +87,31 @@ export default function UserProfile() {
 
       {userInfo?.data.client_type !== "individual" && (
         <section className="rounded-md bg-white shadow border flex-grow relative">
-          <Tabs variant="pills" defaultValue="documents">
-            <Tabs.List>
+         <Tabs variant="pills" defaultValue="documents">
+           <Group position="apart">
+           <Tabs.List>
               <Tabs.Tab value="documents">Documents</Tabs.Tab>
               <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
+
             </Tabs.List>
+            <Link href={`/admin/users/${id}/transactions`}>
+              <Button
+                variant="white"
+                className="font-primary flex items-center"
+                rightIcon={<ArrowRight2 size={16} />}
+                size="md"
+              >
+                View Transactions
+              </Button>
+            </Link>
+           </Group>
             <Tabs.Panel value="documents">
               <ClientDocuments />
             </Tabs.Panel>
             <Tabs.Panel value="gateways">
               <ClientGateways />
             </Tabs.Panel>
+          
           </Tabs>
         </section>
       )}

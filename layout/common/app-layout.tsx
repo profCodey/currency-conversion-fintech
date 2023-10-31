@@ -133,7 +133,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                       <small className="text-white">
                         {defaultGateway
                           ? defaultGateway.gateway_name
-                          : ""}
+                          : "Default not set"}
                       </small>
 
                       <ActionIcon

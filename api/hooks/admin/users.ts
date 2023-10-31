@@ -85,6 +85,41 @@ export function useApproveGateway(cb: () => void) {
   );
 }
 
+interface confirmationPayload {
+  userId: string;
+}
+
+export function useConfrimation(userId: string,
+  cb: () => void){
+  return useMutation(
+    (payload: confirmationPayload) => {
+      return axiosInstance.post(`/apiclient/onboarding/profile/${userId}/complete/`, payload);
+
+    },
+    {onSuccess: function (data: AxiosResponse) {
+      showNotification({
+        title: "Operation successful",
+        message: "Profile update completed successfully",
+        color: "green"
+      });
+      cb();
+
+    },
+    onError: function (data: AxiosError) {
+      const response = data.response?.data as ErrorItem;
+      showNotification({
+        message: response?.detail || "Unable to update profile",
+        color: "red"
+      });
+    },
+    onSettled: function () {
+      queryClient.invalidateQueries(["client-profile-details"]);
+    },
+
+  }
+  )
+}
+
 interface DocumentApproveReject {
   comment: string;
   status: string;

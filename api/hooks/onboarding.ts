@@ -90,6 +90,7 @@ export function useGetAccountDetails(){
   )
 }
 
+
 export function usePostAccountDetails(){
   return useMutation(
     function(payload: z.infer<typeof accountDetailFormValidator>){
@@ -117,6 +118,8 @@ export function usePostAccountDetails(){
     }
   )
 }
+
+
 export function usePatchAccountDetails(){
   return useMutation(
     function(payload: z.infer<typeof accountDetailFormValidator>){

@@ -2,28 +2,43 @@ import { Button, Loader } from "@mantine/core";
 import { useState } from "react";
 import { useGetCurrentUser
  } from "@/api/hooks/user";
+ import { useConfrimation } from "@/api/hooks/admin/users";
 
  export const Confirmation = () => {
-    const { data } = useGetCurrentUser();
+   const { data } = useGetCurrentUser();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    
-    // const handleConfirm = async () => {
-    //   setLoading(true);
-    //   // console.log({ data });
-    //   try {
-    //      // const response = await confirmEmail(data?.data.id);
-    //      // console.log({ response });
-    //      setSuccess(true);
-    //      setLoading(false);
-    //   } catch (error) {
-    //      setError(true);
-    //      setErrorMessage(error?.response?.data?.message);
-    //      setLoading(false);
-    //   }
-    // };
+    const { mutate: confirmDetails, isLoading: confirmDetailsLoading } = useConfrimation(data?.data.id as unknown as string, () => {
+      setSuccess(true);
+      setLoading(false);
+    });
+   
+  
+
+    interface ConfirmationPayload {
+      userId: string;
+    }
+
+     function handleConfirm() {
+      const payload: ConfirmationPayload = { userId: data?.data.id as unknown as string };
+      if (!payload.userId) {
+        return;
+      }
+      setLoading(true);
+      setError(false);
+      setErrorMessage("");
+      try {
+         confirmDetails(payload);
+        setSuccess(true);
+      } catch (error: any) {
+        setError(true);
+        setErrorMessage(error?.response?.data?.message || "An error occurred");
+      }
+      setLoading(false);
+    }
+   
     return (
       <div className="flex flex-col items-center justify-center gap-4">
          <div className="text-center">
@@ -39,7 +54,7 @@ import { useGetCurrentUser
               disabled={success}
               variant={success ? "success" : "outline"}
             >
-              {success ? "Email confirmed" : "Confirm"}
+              Confirm
             </Button>
             {error && (
               <p className="text-red-500 text-sm text-center">{errorMessage}</p>

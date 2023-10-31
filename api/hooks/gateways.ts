@@ -65,6 +65,34 @@ export function useGatewayOptions() {
   return { gatewayOptions, isLoading };
 }
 
+export function useCreateNewGateway(cb: () => void) {
+  return useMutation(
+    function (payload:{ gateway: number; user: number; }) {
+      return axiosInstance.post("/local/mapgateway-to-client/", payload);
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation Successful",
+          message: `Successfully created gateway`,
+          color: "green",
+        });
+      },
+      onError: function () {
+        return showNotification({
+          title: "An error occured",
+          message: "Unable to create gateway",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        cb && cb();
+        queryClient.invalidateQueries(["apiclient", "gateways"]);
+      },
+    }
+  );
+}
+
 export function useEditGateway(gatewayId: number, cb: () => void) {
   return useMutation(
     function (payload: IGateway) {

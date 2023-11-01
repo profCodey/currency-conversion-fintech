@@ -143,12 +143,14 @@ export interface IBank {
 }
 
 export interface ISiteSettings {
-  id: number;
-  created_by: string;
+  id?: number;
+  created_by?: string;
   use_fx_wallet: boolean;
   hide_wallet_at: number;
-  created_on: string;
+  created_on?: string;
   default_gateway: number;
+  company_name?: string;
+  company_address?: string;
 }
 
 export interface IGatewayBank {

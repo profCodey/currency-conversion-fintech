@@ -143,7 +143,7 @@ export default function Onboarding() {
             )}
             {/* <Tabs.Tab value="gateway-options">Gateway Options</Tabs.Tab> */}
             <Tabs.Tab value="account-detail">Account Detail</Tabs.Tab>
-            <Tabs.Tab value="confirmation">Confirmation</Tabs.Tab>  
+            {/* <Tabs.Tab value="confirmation">Confirmation</Tabs.Tab>   */}
             <Tabs.Tab value="status">Status</Tabs.Tab>
           </Tabs.List>
 
@@ -198,9 +198,9 @@ export default function Onboarding() {
               showNext={showAccountDetailNextBtn}
             />
           </Tabs.Panel>
-          <Tabs.Panel value="confirmation" pt="lg">
+          {/* <Tabs.Panel value="confirmation" pt="lg">
             <Confirmation />
-            </Tabs.Panel>
+            </Tabs.Panel> */}
           <Tabs.Panel value="status" pt="lg">
             <OnboardingStatus />
           </Tabs.Panel>

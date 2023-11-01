@@ -85,7 +85,7 @@ export default function UserProfile() {
           </div>
         </section>
 
-      {userInfo?.data.client_type !== "individual" && (
+     
         <section className="rounded-md bg-white shadow border flex-grow relative">
          <Tabs variant="pills" defaultValue="documents">
            <Group position="apart">
@@ -108,13 +108,13 @@ export default function UserProfile() {
             <Tabs.Panel value="documents">
               <ClientDocuments />
             </Tabs.Panel>
+            )}
             <Tabs.Panel value="gateways">
               <ClientGateways />
             </Tabs.Panel>
           
           </Tabs>
         </section>
-      )}
     </section>
   );
 }

@@ -141,7 +141,7 @@ export function NGNWalletContainer({ children }: { children: ReactNode }) {
       <section className="flex justify-between items-center text-primary-70 text-sm">
         <div>
           <p className="text-2xl text-semibold mb-2 text-[#6882B6]">
-            NGN Balances
+            Naira Gateways
           </p>
           <span className="text-black font-normal text-base">
             Click on the account for more information

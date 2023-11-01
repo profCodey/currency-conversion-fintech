@@ -377,7 +377,7 @@ export const NairaOptionsModal = ({
                             Withdraw Fund{" "}
                         </h3>
                         <span className="text-sm font-semibold">
-                            Withdraw to foreign account{" "}
+                            Withdraw to local account{" "}
                         </span>
                     </div>
                     <ArrowRight />

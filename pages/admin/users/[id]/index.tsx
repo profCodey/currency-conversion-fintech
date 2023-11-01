@@ -89,11 +89,16 @@ export default function UserProfile() {
         <section className="rounded-md bg-white shadow border flex-grow relative">
          <Tabs variant="pills" defaultValue="documents">
            <Group position="apart">
+            {userInfo?.data?.client_type === "individual" ? (
            <Tabs.List>
+              <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
+            </Tabs.List>
+            ) : (
+              <Tabs.List>
               <Tabs.Tab value="documents">Documents</Tabs.Tab>
               <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
-
             </Tabs.List>
+            )}
             <Link href={`/admin/users/${id}/transactions`}>
               <Button
                 variant="white"
@@ -105,13 +110,20 @@ export default function UserProfile() {
               </Button>
             </Link>
            </Group>
-            <Tabs.Panel value="documents">
+     {   userInfo?.data?.client_type !== "individual" ?  ( 
+              <><Tabs.Panel value="documents">
               <ClientDocuments />
-            </Tabs.Panel>
-            )}
-            <Tabs.Panel value="gateways">
+            </Tabs.Panel><Tabs.Panel value="gateways">
+                <ClientGateways />
+              </Tabs.Panel></>
+            ) :
+            (
+              <h2>
               <ClientGateways />
-            </Tabs.Panel>
+            </h2>
+          
+            )
+            }
           
           </Tabs>
         </section>

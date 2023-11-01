@@ -14,8 +14,8 @@ import { useGetCurrentUser
       setSuccess(true);
       setLoading(false);
     });
-   
-  
+
+
 
     interface ConfirmationPayload {
       userId: string;
@@ -38,7 +38,7 @@ import { useGetCurrentUser
       }
       setLoading(false);
     }
-   
+
     return (
       <div className="flex flex-col items-center justify-center gap-4">
          <div className="text-center">

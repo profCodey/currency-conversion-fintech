@@ -165,7 +165,7 @@ export function AdminDashboardItems() {
   }
 
   return (
-    <Stack spacing={4} className="mt-24 mb-auto text-lg text-slate-400 font-secondary">
+    <Stack spacing={4} className="mt-16 mb-auto text-lg text-slate-400 font-secondary">
       {routes.map((route) => (
         <NavLink
           key={route.label}

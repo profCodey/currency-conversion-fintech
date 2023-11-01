@@ -53,6 +53,8 @@ export function BusinessProfileForm({
   });
 
   function handleSubmit(data: z.infer<typeof businessProfileFormValidator>) {
+    console.log("haleluyahhhh");
+    
     const payload = {
       ...data,
       business_registration_date: dayjs(data.business_registration_date).format(

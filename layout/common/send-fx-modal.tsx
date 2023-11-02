@@ -31,6 +31,7 @@ import { LocalProceedModal } from "./local-proceed-modal";
 import { useGetFxPurposes } from "@/api/hooks/fx";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { useGetAccounts } from "@/api/hooks/accounts";
+import { ExchangeBox } from "../dashboard/exchange-box";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -248,6 +249,7 @@ export const FxOptionsModal = ({
     id,
 }: FxOptionsModalProps) => {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showExchangeModal, setShowExchangeModal] = useState(false);
     const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
     const { isLoading, data: userInfo } = useGetCurrentUser();
     const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
@@ -257,6 +259,14 @@ return wallet.id === id;
     
 function handleSendMoneyOpen(){
     setShowConfirmationModal(true)
+}
+
+function handleSendExchangeOpen(){
+    setShowExchangeModal(true)
+}
+
+function closeExchageModal(){
+    setShowExchangeModal(false)
 }
 
     return (
@@ -279,17 +289,20 @@ function handleSendMoneyOpen(){
                 <ArrowRight />
             </div>
             <Divider my="sm" />
-            <Link
+            <div
+                style={{cursor: 'pointer'}}
                 className="flex items-center justify-between mb-3"
-                href={`/dashboard/fx/${id}`}>
-                <div className="text-[#6882B6]">
+                onClick = {handleSendExchangeOpen}
+                >
+                <div className="text-[#6882B6]"  
+                >
                     <h3 className="text-2xl font-semibold"> Convert Fund </h3>
                     <span className="text-sm font-semibold">
                         Convert to other currencies{" "}
                     </span>
                 </div>
                 <ArrowRight />
-            </Link>
+            </div>
             <Divider my="sm" />
             <Link
                 className="flex items-center justify-between mb-3"
@@ -319,6 +332,15 @@ function handleSendMoneyOpen(){
           destinationDetails={wallet?.currency.id}
 
         />
+ <Modal
+            opened={showExchangeModal}
+            onClose={closeExchageModal}
+            title={`Send ${title}`}
+            centered>
+      <div className="z-100">
+            <ExchangeBox gatewayID= {id}/>
+        </div>
+        </Modal>
         </>
     );
 };

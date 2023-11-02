@@ -19,6 +19,7 @@ export function useExchange(cb?: () => void) {
   return useMutation(
     function (payload: IExchange) {
       return axiosInstance.post("/fx/exchange/", payload);
+      
     },
     {
       onSuccess: function () {
@@ -29,18 +30,11 @@ export function useExchange(cb?: () => void) {
         });
       },
       onError: function (error:any) {
-
-        if (error.response.data.non_field_errors[0].includes("Insufficient")) {
+        let errorShown = error.response.data.errors[0];
+        
         return showNotification({
           title: "An error occured",
-          message: error.response.data.non_field_errors[0],
-          color: "red",
-        });
-      }
-
-        return showNotification({
-          title: "An error occured",
-          message: "Unable to send exchange request",
+          message: `${errorShown.attr} ${errorShown.detail}}`,
           color: "red",
         });
       },

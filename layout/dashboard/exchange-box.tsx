@@ -8,6 +8,7 @@ import {
   Skeleton,
   Stack,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { useCallback, useEffect, useState } from "react";
@@ -19,7 +20,11 @@ import { showNotification } from "@mantine/notifications";
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { useGetLiveRate } from "@/api/hooks/admin/rates";
 
-export function ExchangeBox() {
+interface ExchangeBoxProps {
+  gatewayID?: number|undefined;
+}
+
+export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
   const {
     isLoading: currenciesLoading,
     currencyOptionsWithId,
@@ -40,22 +45,7 @@ export function ExchangeBox() {
     destination: "",
   });
 
-  const [sourceAccCurrency, setSourceAccCurrency] = useState("");
-  const [destinationAccCurrency, setDestinationAccCurrency] = useState("");
-  const [sourceCurrency, setSourceCurrency] = useState("");
-  const [destinationCurrency, setDestinationCurrency] = useState("");
-  const {
-    data: liveRateValue,
-    isLoading,
-    isError,
-  } = useGetLiveRate({
-    source: sourceAccCurrency,
-    destination: destinationAccCurrency,
-  });
-  let liveRate = liveRateValue?.data?.rate;
-  const [sourceAccIdValue, setSourceAccIdValue] = useState("");
-  const [destinationAccIdValue, setDestinationAccIdValue] = useState("");
-
+ 
   const allAccountsData =
     allAccounts?.data.map((account) => ({
       label: account.label,
@@ -63,6 +53,33 @@ export function ExchangeBox() {
       currencyId: account.currency.id.toString(),
       currencyName: account.currency.name,
     })) ?? [];
+
+  let sourceAcc = allAccountsData.find((acc)=> {
+    return acc.value == gatewayID?.toString();
+  })
+
+  
+
+  // const [sourceAccCurrency, setSourceAccCurrency] = useState("");
+  const [destinationAccCurrency, setDestinationAccCurrency] = useState("");
+  // const [sourceCurrency, setSourceCurrency] = useState("");
+  const [destinationCurrency, setDestinationCurrency] = useState("");
+
+  let sourceCurrency = sourceAcc?.currencyName;
+  let sourceAccCurrency = sourceAcc?.currencyId;
+  console.log('sourceAcc', sourceAcc, 'sourceCurrency', sourceCurrency, 'sourceAccCurrency', sourceAccCurrency);
+  const {
+    data: liveRateValue,
+    isLoading,
+    isError,
+  } = useGetLiveRate({
+    //@ts-ignore
+    source: sourceAccCurrency,
+    destination: destinationAccCurrency,
+  });
+  let liveRate = liveRateValue?.data?.rate;
+  const [sourceAccIdValue, setSourceAccIdValue] = useState("");
+  const [destinationAccIdValue, setDestinationAccIdValue] = useState("");
 
   function getCurrencyNameFromId(id: string | null) {
     const currency = currencyOptionsWithId.find(
@@ -87,15 +104,17 @@ export function ExchangeBox() {
     exchange({
       amount: sourceAmount.toString(),
       destination_account: Number(destinationAccIdValue),
-      source_account: Number(sourceAccIdValue),
+      source_account: Number(sourceAcc?.value),
     });
   }
+
+ 
 
   return (
     <div className="bg-gray-30 border rounded-lg p-4">
       <Skeleton visible={currenciesLoading || ratesLoading}>
         <section className="bg-white p-4 rounded border flex gap-4">
-          <Select
+          {/* <Select
             className="flex-grow"
             label="Source"
             value={currentCurrency.source}
@@ -113,7 +132,15 @@ export function ExchangeBox() {
             }}
             data={allAccountsData}
             nothingFound={"No currencies found"}
-          />
+          /> */}
+
+          <TextInput 
+            className="flex-grow"
+            label="Source"
+            value={sourceAcc?.label}
+            disabled
+            />
+
           <NumberInput
             className="flex-grow"
             label="You send"

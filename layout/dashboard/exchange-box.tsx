@@ -45,7 +45,6 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
     destination: "",
   });
 
- 
   const allAccountsData =
     allAccounts?.data.map((account) => ({
       label: account.label,
@@ -57,8 +56,6 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
   let sourceAcc = allAccountsData.find((acc)=> {
     return acc.value == gatewayID?.toString();
   })
-
-  
 
   // const [sourceAccCurrency, setSourceAccCurrency] = useState("");
   const [destinationAccCurrency, setDestinationAccCurrency] = useState("");
@@ -107,8 +104,6 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
       source_account: Number(sourceAcc?.value),
     });
   }
-
- 
 
   return (
     <div className="bg-gray-30 border rounded-lg p-4">

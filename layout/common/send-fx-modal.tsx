@@ -27,6 +27,10 @@ import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { PayRecipient } from "../recipients/recipient-list";
 import { useGetVirtualAccount } from "@/api/hooks/accounts";
+import { LocalProceedModal } from "./local-proceed-modal";
+import { useGetFxPurposes } from "@/api/hooks/fx";
+import { useGetCurrentUser } from "@/api/hooks/user";
+import { useGetAccounts } from "@/api/hooks/accounts";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -235,21 +239,43 @@ interface FxOptionsModalProps {
     id?: number;
 }
 
+
+
 export const FxOptionsModal = ({
     title,
     close,
     optionsOpen,
     id,
 }: FxOptionsModalProps) => {
+    console.log('id', id)
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
+    const { isLoading, data: userInfo } = useGetCurrentUser();
+    const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
+    console.log('wallets', wallets);
+
+    const wallet = wallets?.data.find((wallet)=> {
+return wallet.id === id;
+    })
+    
+    console.log('here hre', wallet);
+    
+    
+function handleSendMoneyOpen(){
+    setShowConfirmationModal(true)
+}
+
     return (
+        <>
         <Modal
             opened={optionsOpen}
             onClose={close}
             title={`Send ${title}`}
             centered>
-            <Link
+            <div
+                style={{cursor: 'pointer'}}
                 className="flex items-center justify-between mb-3"
-                href="/transactions">
+                onClick={handleSendMoneyOpen}>
                 <div className="text-[#6882B6]">
                     <h3 className="text-2xl font-semibold"> Send Fund </h3>
                     <span className="text-sm font-semibold">
@@ -257,7 +283,7 @@ export const FxOptionsModal = ({
                     </span>
                 </div>
                 <ArrowRight />
-            </Link>
+            </div>
             <Divider my="sm" />
             <Link
                 className="flex items-center justify-between mb-3"
@@ -283,6 +309,23 @@ export const FxOptionsModal = ({
                 <ArrowRight />
             </Link>
         </Modal>
+        <LocalProceedModal
+          modalOpen={showConfirmationModal}
+          close={() => setShowConfirmationModal(false)}
+          sourceAmount={0}
+          currencyRate={0}
+          destinationAmount = {0}
+          sourceCurrency={wallet?.currency.name}
+          destinationAccCurrency = {''}
+          purposes = {fxPurposes}
+          isFXPayout = {true}
+          //@ts-ignore
+          sourceDetails={wallet?.id}
+          //@ts-ignore
+          destinationDetails={wallet?.currency.id}
+
+        />
+        </>
     );
 };
 export const NairaOptionsModal = ({
@@ -305,6 +348,7 @@ export const NairaOptionsModal = ({
         account_number: "",
         narration: "",
     });
+    
     return (
         <>
             <Modal

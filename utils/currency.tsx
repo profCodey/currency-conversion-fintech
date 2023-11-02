@@ -38,8 +38,6 @@ export function useCurrencyFlags() {
   };
 }
 
-
-
   export function validateAndFormatAmount(amount: string): string {
     // Remove any non-digit characters, including spaces and symbols
     const cleanAmount: string = amount.replace(/[^\d.-]/g, '');

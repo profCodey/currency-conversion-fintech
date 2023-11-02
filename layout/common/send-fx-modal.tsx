@@ -247,19 +247,13 @@ export const FxOptionsModal = ({
     optionsOpen,
     id,
 }: FxOptionsModalProps) => {
-    console.log('id', id)
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
     const { isLoading, data: userInfo } = useGetCurrentUser();
     const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
-    console.log('wallets', wallets);
-
     const wallet = wallets?.data.find((wallet)=> {
 return wallet.id === id;
     })
-    
-    console.log('here hre', wallet);
-    
     
 function handleSendMoneyOpen(){
     setShowConfirmationModal(true)

@@ -26,7 +26,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { ArrowRight, Danger, DirectboxSend, Warning2 } from "iconsax-react";
 import { ChangeEvent, useEffect, useState } from "react";
-import { set, z } from "zod";
+import { z } from "zod";
 import { FxTransferOperationStage } from "./fx-forms/dollar-form";
 import { CurrencyDetailType } from "@/utils/validators/interfaces";
 
@@ -35,7 +35,7 @@ export const LocalExchangePayRecipient = z.object({
   // currency: z.string(),
   // source_account: z.string(),
   // destination_currency: z.string(),
-  amount: z.number().gte(1, { message: "Kinly input a valid" }),
+  amount: z.number().gte(1, { message: "Kinly input a valid amount" }),
   account_name: z
     .string()
     .min(1, { message: "Account name is required" })
@@ -204,13 +204,6 @@ export function LocalProceedModal({
     isFetching: fetchingNameEnquiryDetails,
   } = useNameEnquiry(nameEnquiryDetails);
 
-  console.log(
-    "destinationDetails",
-    destinationDetails,
-    "sourceDetaais",
-    sourceDetails
-  );
-
   const payRecipientForm = useForm({
     initialValues: {
       source_account: isFXPayout ? sourceDetails : sourceDetails?.value,
@@ -322,6 +315,9 @@ export function LocalProceedModal({
     queryClient.removeQueries(["name-enquiry"]);
     close();
     setForm("send-money");
+    if (isFXPayout) {
+      return;
+    }
     window.location.reload();
   }
 
@@ -342,14 +338,10 @@ export function LocalProceedModal({
   }
 
   const handlePayout = () => {
-    // console.log({ confirmationDetails },'local modal');
-
-    let response = createFxPayout({
+  createFxPayout({
       ...confirmationDetails,
       // gateway,
     });
-
-    console.log('response', response);
     
   };
   useEffect(() => {}, [sourceAmount, sourceDetails, destinationDetails]);
@@ -499,10 +491,8 @@ Amount:
         label="Country"
         placeholder="Select Country"
         onChange={(val) => {
-          // console.log({ value }, "country val");
           payRecipientForm.setFieldValue("country", val as string);
         }}
-        // {...payRecipientForm.getInputProps("country")}
       />
       <TextInput
         size="md"

@@ -12,9 +12,6 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
   const { data: fxData } = useFXWalletAccounts();
 
-console.log("check here check here", clientDetails, wallets, fxData);
-
-
   if (clientDetailsLoading || walletsLoading) {
     return (
       <WalletsContainer>

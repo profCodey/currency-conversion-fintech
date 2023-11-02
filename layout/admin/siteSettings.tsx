@@ -109,7 +109,7 @@ export function SiteSettingsInitiate() {
               <form onSubmit={addNewSettings.onSubmit(handleSubmit)}>
                 <div className="flex flex-col items-center justify-between mt-3 mb-3">
                 <div className="mb-3">
-                  <p>Hide wallet</p>
+                  <p>Hide wallet at</p>
                     <TextInput
                       type="number"
                       className=""

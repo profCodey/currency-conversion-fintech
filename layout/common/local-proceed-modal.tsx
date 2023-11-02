@@ -1,14 +1,12 @@
 import { useLocalBalance } from "@/api/hooks/balance";
 import {
   useCreateFxPayout,
-  useCreatePayout,
   useNameEnquiry,
 } from "@/api/hooks/banks";
-import IconAt from "@/components/icons/icon-at";
 import { queryClient } from "@/pages/_app";
 import { SUPPORTED_FILE_FORMATS } from "@/utils/constants";
 import { allCountries, allCountryNames } from "@/utils/countries";
-import { currencyFormatter } from "@/utils/currency";
+import { currencyFormatter, validateAndFormatAmount } from "@/utils/currency";
 import {
   Button,
   Group,
@@ -37,8 +35,7 @@ export const LocalExchangePayRecipient = z.object({
   // currency: z.string(),
   // source_account: z.string(),
   // destination_currency: z.string(),
-
-  amount: z.number().gte(1),
+  amount: z.number().gte(1, { message: "Kinly input a valid amount" }),
   account_name: z
     .string()
     .min(1, { message: "Account name is required" })
@@ -58,9 +55,9 @@ export const LocalExchangePayRecipient = z.object({
     .max(11, { message: "BIC cannot be more than 11 characters" })
     .optional(),
   city: z.string(),
-  country: z.string().min(1,{ message: "Country is required!" }),
-  state: z.string().min(1,{ message: "state is required" }),
-  zipcode: z.string().min(1,{ message: "zipcode is required" }),
+  country: z.string().min(1, { message: "Country is required!" }),
+  state: z.string().min(1, { message: "state is required" }),
+  zipcode: z.string().min(1, { message: "zipcode is required" }),
   swift_code: z.string().optional(),
   invoice: z
     .object({
@@ -104,18 +101,19 @@ export const LocalExchangePayRecipient = z.object({
 interface SendMoneyProps {
   modalOpen: boolean;
   close(): void;
-  banks: { label: string; value: string }[];
-  currencies: { label: string; value: string }[];
-  gateway: number | undefined;
-  recipientDetails: z.infer<typeof LocalExchangePayRecipient>;
-  destinationDetails: CurrencyDetailType;
-  sourceDetails:CurrencyDetailType;
-  sourceAmount: number;
-  destinationAmount: number;
-  destinationAccCurrency: string;
-  currencyRate: number;
-  sourceCurrency: string;
-  purposes: SelectItem[];
+  banks?: { label: string; value: string }[];
+  currencies?: { label: string; value: string }[];
+  gateway?: number | undefined;
+  recipientDetails?: z.infer<typeof LocalExchangePayRecipient>;
+  destinationDetails?: CurrencyDetailType;
+  sourceDetails?: CurrencyDetailType;
+  sourceAmount?: number;
+  destinationAmount?: number;
+  destinationAccCurrency?: string;
+  currencyRate?: number;
+  sourceCurrency?: string;
+  purposes?: SelectItem[];
+  isFXPayout?: boolean;
 }
 
 export type TransferOperationStage =
@@ -140,18 +138,8 @@ export function LocalProceedModal({
   destinationAccCurrency,
   sourceCurrency,
   purposes,
+  isFXPayout,
 }: SendMoneyProps) {
-  // console.log({sourceDetails},'ngn');
-
-  // console.log({ currencies });
-
-  // // console.log({ destinationDetails });
-  // console.log({sourceDetails},'ngn source in ngn modal');
-  // console.log({destinationDetails},'ngn destination in ngn modal');
-
-  // const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
-  // const [sourceOfFundFile, setSourceOfFundFile] = useState<File | null>(null);
-
   const [form, setForm] = useState<"send-money" | FxTransferOperationStage>(
     "send-money"
   );
@@ -162,6 +150,10 @@ export function LocalProceedModal({
     bank_code: string;
     gateway_id: string;
   } | null>(null);
+  const [accNameEnquiry, setAccNameEnquiry] = useState<any>("");
+  const [amountEnquiry, setAmountEnquiry] = useState<any>(1);
+  const [accNumberEnquiry, setAccNumberEnquiry] = useState<any>("");
+  const [bankEnquiry, setBankEnquiry] = useState<any>("");
   const { mutate: createFxPayout, isLoading: createFxPayoutLoading } =
     useCreateFxPayout(setForm);
   const { defaultGatewayBalance, isLoading: defaultGatewayLoading } =
@@ -204,7 +196,7 @@ export function LocalProceedModal({
     // if(sourceDetails.currencyId && sourceDetails.value){
     // console.log({sourceDetailsProp:sourceDetails},"sourceDetailsProp Updated");
     // }
-  },[sourceDetails]);
+  }, [sourceDetails]);
 
   const {
     data: nameEnquiryResult,
@@ -214,12 +206,14 @@ export function LocalProceedModal({
 
   const payRecipientForm = useForm({
     initialValues: {
-      source_account: sourceDetails.value,
-      destination_currency: destinationDetails.currencyId,
+      source_account: isFXPayout ? sourceDetails : sourceDetails?.value,
+      destination_currency: isFXPayout
+        ? destinationDetails
+        : destinationDetails?.currencyId ?? "",
       // bank: recipientDetails?.bank ? recipientDetails?.bank.toString() : "",
-      amount: sourceAmount,
-      account_name: recipientDetails?.account_name,
-      account_number: recipientDetails?.account_number,
+      amount: sourceAmount ?? "",
+      account_name: "",
+      account_number: "",
 
       narration: "",
       bank_name: "",
@@ -270,25 +264,25 @@ export function LocalProceedModal({
       // console.log({sourceAccD:payRecipientForm.values});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[sourceDetails]);
+  }, [sourceDetails]);
   useEffect(() => {
-    if(currencyRate) {
-      payRecipientForm.setFieldValue('rate', currencyRate);
+    if (currencyRate) {
+      payRecipientForm.setFieldValue("rate", currencyRate);
       // console.log({sourceAccD:payRecipientForm.values});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[currencyRate]);
+  }, [currencyRate]);
 
   useEffect(() => {
-    if(destinationDetails?.currencyId){
+    if (destinationDetails?.currencyId) {
       payRecipientForm.setFieldValue(
-        'destination_currency',
+        "destination_currency",
         destinationDetails.currencyId
       );
       // console.log({destCurrD:payRecipientForm.values});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[destinationDetails])
+  }, [destinationDetails]);
 
   useEffect(() => {
     if (sourceAmount) {
@@ -321,12 +315,15 @@ export function LocalProceedModal({
     queryClient.removeQueries(["name-enquiry"]);
     close();
     setForm("send-money");
-    window.location.reload()
+    if (isFXPayout) {
+      return;
+    }
+    window.location.reload();
   }
 
   function handleAccountNumberChange(e: ChangeEvent<HTMLInputElement>) {
     const number = e.target.value;
-
+    setAccNumberEnquiry(number)
     payRecipientForm.setFieldValue("account_number", number);
     // if (number.toString().length === 10) {
     //   setNameEnquiryDetails({
@@ -341,24 +338,37 @@ export function LocalProceedModal({
   }
 
   const handlePayout = () => {
-    // console.log({ confirmationDetails },'local modal');
-
-    createFxPayout({
+  createFxPayout({
       ...confirmationDetails,
       // gateway,
     });
+    
   };
   useEffect(() => {}, [sourceAmount, sourceDetails, destinationDetails]);
   const ConfirmationForm = (
     <Stack align="center" className="w-full">
       <Warning2 size={60} />
+
+{isFXPayout ? (
+  <>
       <Text>
-        Amount: {/* {currencyFormatter(confirmationDetails.amount)} */}
-        {currencyFormatter(sourceAmount)} {sourceCurrency} to{" "}
-        {currencyFormatter(destinationAmount)} {destinationAccCurrency}
+        You are about to send:{" "}
+        {(validateAndFormatAmount(amountEnquiry.toString()) ?? 0)} {sourceCurrency} to{" "}
       </Text>
-      <Text>Recipient: {confirmationDetails.account_name}</Text>
-      <Text>Receiving Account: {confirmationDetails.account_number}</Text>
+      <Text>Recipient: {accNameEnquiry}</Text>
+      <Text>Receiving Account: <br /> {bankEnquiry}; {accNumberEnquiry}</Text>
+      </>
+) : (
+<>
+<Text>
+Amount:
+{currencyFormatter(sourceAmount ?? 0)} {sourceCurrency} to{" "}
+{currencyFormatter(destinationAmount ?? 0)} {destinationAccCurrency}
+</Text>
+<Text>Recipient: {confirmationDetails.account_name}</Text>
+<Text>Receiving Account: {confirmationDetails.account_number}</Text>
+</>
+)}
 
       <Group grow className="w-full">
         <Button
@@ -403,8 +413,11 @@ export function LocalProceedModal({
         placeholder="Bank Name"
         withAsterisk
         // data={banks}
-        // {...payRecipientForm.getInputProps("bank")}
-        {...payRecipientForm.getInputProps("bank_name")}
+        onChange={(e)=> {
+          const bank = e.currentTarget.value
+          setBankEnquiry(bank)
+          payRecipientForm.setFieldValue("bank_name", bank);
+        }}
       />
       {/* <Select
         size="md"
@@ -420,8 +433,6 @@ export function LocalProceedModal({
         // withAsterisk
         label="Account number"
         placeholder="Enter account number"
-        // {...payRecipientForm.getInputProps("account_number")}
-        // disabled={!!recipientDetails?.account_number}
         onChange={handleAccountNumberChange}
       />
 
@@ -430,9 +441,27 @@ export function LocalProceedModal({
         withAsterisk
         placeholder="Enter account name"
         label="Account name"
-        {...payRecipientForm.getInputProps("account_name")}
+        onChange={(e)=> {
+          let accName = e.target.value          
+          setAccNameEnquiry(accName)
+          payRecipientForm.setFieldValue("account_name", accName);
+        }}
+       
         // disabled
       />
+      {isFXPayout && (
+          <NumberInput
+            size="md"
+            label="Amount"
+            placeholder="Amount"
+            withAsterisk
+            onChange={(value)=> {
+              setAmountEnquiry(value)
+              payRecipientForm.setFieldValue("amount", value);
+            }}
+          />
+        )}
+   
       <TextInput
         size="md"
         // withAsterisk
@@ -450,6 +479,7 @@ export function LocalProceedModal({
         // disabled
       /> */}
       <Select
+      //@ts-ignore
         data={purposes}
         label="Purpose of Payment"
         placeholder="Select Purpose of Payment"
@@ -461,10 +491,8 @@ export function LocalProceedModal({
         label="Country"
         placeholder="Select Country"
         onChange={(val) => {
-          // console.log({ value }, "country val");
           payRecipientForm.setFieldValue("country", val as string);
         }}
-        // {...payRecipientForm.getInputProps("country")}
       />
       <TextInput
         size="md"

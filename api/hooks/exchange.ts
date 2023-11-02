@@ -19,6 +19,7 @@ export function useExchange(cb?: () => void) {
   return useMutation(
     function (payload: IExchange) {
       return axiosInstance.post("/fx/exchange/", payload);
+      
     },
     {
       onSuccess: function () {
@@ -29,20 +30,42 @@ export function useExchange(cb?: () => void) {
         });
       },
       onError: function (error:any) {
+//         let errorShown = error.response.data.errors;
+// console.log('errorShown', errorShown);
 
-        if (error.response.data.non_field_errors[0].includes("Insufficient")) {
-        return showNotification({
-          title: "An error occured",
-          message: error.response.data.non_field_errors[0],
-          color: "red",
-        });
-      }
+//         let errors = errorShown.map((value: { attr: string; detail: string; code:string })=> {
+//           return showNotification({
+//             title: "An error occured",
+//             message: `${value.attr} ${value.detail}}`,
+//             color: "red",
+//           });
+//         })
+// console.log('errorrrs', errors);
 
-        return showNotification({
-          title: "An error occured",
-          message: "Unable to send exchange request",
-          color: "red",
-        });
+//         return errors;
+
+
+
+let errorShown = error.response?.data?.errors;
+
+
+if (Array.isArray(errorShown)) {
+  let errors = errorShown.map((value: { attr: string; code: string; detail: string }) => {
+    return showNotification({
+      title: "An error occurred",
+      message: `${value.attr}: ${value.detail}`,
+      color: "red",
+    });
+  });
+  return errors;
+} else {
+  return showNotification({
+    title: "An error occurred",
+    message:  "Request failed",
+    color: "red",
+  });
+}
+
       },
       onSettled: function () {
         cb && cb();

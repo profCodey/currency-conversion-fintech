@@ -77,15 +77,15 @@ const routes = [
     icon: <SettingsIcon />,
   },
   {
+    route: "/fund-account",
+    label: "Manual Funding",
+    icon: <FundAccountIcon />,
+  },
+  {
     route: "/support",
     label: "Support",
     icon: <SupportIcon />,
   },
-  // {
-  //   route: "/fund-account",
-  //   label: "Account",
-  //   icon: <FundAccountIcon />,
-  // },
 ];
 
 export function DashboardItems() {

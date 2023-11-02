@@ -30,13 +30,42 @@ export function useExchange(cb?: () => void) {
         });
       },
       onError: function (error:any) {
-        let errorShown = error.response.data.errors[0];
-        
-        return showNotification({
-          title: "An error occured",
-          message: `${errorShown.attr} ${errorShown.detail}}`,
-          color: "red",
-        });
+//         let errorShown = error.response.data.errors;
+// console.log('errorShown', errorShown);
+
+//         let errors = errorShown.map((value: { attr: string; detail: string; code:string })=> {
+//           return showNotification({
+//             title: "An error occured",
+//             message: `${value.attr} ${value.detail}}`,
+//             color: "red",
+//           });
+//         })
+// console.log('errorrrs', errors);
+
+//         return errors;
+
+
+
+let errorShown = error.response?.data?.errors;
+
+
+if (Array.isArray(errorShown)) {
+  let errors = errorShown.map((value: { attr: string; code: string; detail: string }) => {
+    return showNotification({
+      title: "An error occurred",
+      message: `${value.attr}: ${value.detail}`,
+      color: "red",
+    });
+  });
+  return errors;
+} else {
+  return showNotification({
+    title: "An error occurred",
+    message:  "Request failed",
+    color: "red",
+  });
+}
+
       },
       onSettled: function () {
         cb && cb();

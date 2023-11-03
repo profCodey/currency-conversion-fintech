@@ -132,14 +132,14 @@ export function useGetSelectedGateways() {
 
 export function useAddGateway(cb?: () => void) {
   return useMutation(
-    function (payload: { gateway: number; is_approved: boolean }) {
+    function (payload: { gateway: number; is_approved?: boolean }) {
       return axiosInstance.post("/local/selected-gateways/", payload);
     },
     {
       onSuccess: function () {
         showNotification({
           title: "Operation Successful",
-          message: `Successfully added gateways`,
+          message: `Request succesfully sent. You will be notified as soon as it is approved.`,
           color: "green",
         });
       },

@@ -132,23 +132,36 @@ export function useGetSelectedGateways() {
 
 export function useAddGateway(cb?: () => void) {
   return useMutation(
-    function (payload: { gateway: number; is_approved: boolean }) {
+    function (payload: { gateway: number; is_approved?: boolean }) {
       return axiosInstance.post("/local/selected-gateways/", payload);
     },
     {
       onSuccess: function () {
         showNotification({
           title: "Operation Successful",
-          message: `Successfully added gateways`,
+          message: `Request succesfully sent. You will be notified as soon as it is approved.`,
           color: "green",
         });
       },
-      onError: function () {
-        return showNotification({
-          title: "An error occured",
-          message: "Unable to add gateway",
-          color: "red",
-        });
+      onError: function (error:any) {
+
+        let errorShown = error.response?.data?.errors;
+        if (Array.isArray(errorShown)) {
+          let errors = errorShown.map((value: { attr: string; code: string; detail: string }) => {
+            return showNotification({
+              title: "An error occurred",
+              message: `${value.attr}: ${value.detail}`,
+              color: "red",
+            });
+          });
+          return errors;
+        } else {
+          return showNotification({
+            title: "An error occurred",
+            message:  "Unable to add gateway",
+            color: "red",
+          });
+        }
       },
       onSettled: function () {
         cb && cb();

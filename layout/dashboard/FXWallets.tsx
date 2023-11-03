@@ -1,10 +1,15 @@
 import { useFXWalletAccounts, useGetAccounts } from "@/api/hooks/accounts";
 import { useGetClientDetails } from "@/api/hooks/user";
-import { Skeleton } from "@mantine/core";
+import { Skeleton, Modal, Stack, Select, Button } from "@mantine/core";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import FxBalance from "../common/fx-balance";
 import NGNBalance from "../common/ng-balance";
+import { useCreateNewGateway, useGatewayOptions, useAddGateway } from "@/api/hooks/gateways";
+import { useRouter } from "next/router";
+import { useForm, zodResolver } from "@mantine/form";
+import { z } from "zod";
+import { useClientSelectedGateways } from "@/api/hooks/admin/users";
 
 export function FXWallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
@@ -136,6 +141,33 @@ function WalletsContainer({ children }: { children: ReactNode }) {
   );
 }
 export function NGNWalletContainer({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [currentGateway, setCurrentGateway] = useState<string | null>(null);
+  const { mutate: addGateway, isLoading:gatewayLoading } = useAddGateway();
+  const { gatewayOptions, isLoading: gatewaysLoading } = useGatewayOptions();
+  const CreateGateWayValidator = z.object({
+    gateway: z.string().min(1, { message: "Select gateway" }),
+});
+function handleGatewayChange(gateway: string) {
+  setCurrentGateway(gateway);
+  createNewGateForm.setFieldValue("gateway", gateway);
+}
+
+  function handleSubmit() {
+    addGateway({
+      gateway: currentGateway ? parseInt(currentGateway) : 0,
+    });
+    setCreateModalOpen(false)
+  }
+
+  const createNewGateForm = useForm({
+    initialValues: {
+      gateway: "",
+    },
+    validate: zodResolver(CreateGateWayValidator),
+  });
+
   return (
     <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col gap-4">
       <section className="flex justify-between items-center text-primary-70 text-sm">
@@ -147,8 +179,45 @@ export function NGNWalletContainer({ children }: { children: ReactNode }) {
             Click on the account for more information
           </span>
         </div>
-        {/* <span role="button" className="text-[#03A1DB] font-semibold">Request Another Gateway </span> */}
+        <span role="button" className="text-[#03A1DB] font-semibold"
+        onClick={() => setCreateModalOpen(true)}>
+        Request Another Gateway </span>
       </section>
+
+      <Modal
+                    onClose={() => setCreateModalOpen(false)}
+                    opened={createModalOpen}
+                    withCloseButton={true}
+                    centered
+                    title="Select new gateway">
+                    <Skeleton visible={gatewaysLoading}>
+                        <form
+                        onSubmit={createNewGateForm.onSubmit(
+                          handleSubmit)}
+                        >
+                            <Stack>
+                                <Select
+                                    label="Gateway"
+                                    data={gatewayOptions}
+                                    placeholder="Select gateway"
+                                    size="md"
+                                    {...createNewGateForm.getInputProps(
+                                        "gateway"
+                                    )}
+                                    onChange={handleGatewayChange}
+                                />
+                               
+                               
+                                <Button
+                                    className="bg-primary-100 hover:bg-primary-100 my-5"
+                                    size="md"
+                                    type="submit">
+                                    Create
+                                </Button>
+                            </Stack>
+                        </form>
+                    </Skeleton>
+                </Modal>
 
       {/* <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1,_minmax(4rem,_auto))] gap-4 mt-3 bg-[#EFF3FB] ">
         {children}
@@ -159,3 +228,4 @@ export function NGNWalletContainer({ children }: { children: ReactNode }) {
     </div>
   );
 }
+

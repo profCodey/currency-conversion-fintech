@@ -123,7 +123,8 @@ export function ClientGateways() {
                                 <Button
                                     className="bg-primary-100 hover:bg-primary-100 my-5"
                                     size="md"
-                                    type="submit">
+                                    type="submit"
+                                    >
                                     Create
                                 </Button>
                             </Stack>

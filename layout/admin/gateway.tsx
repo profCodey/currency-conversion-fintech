@@ -1,6 +1,6 @@
 import { useEditGateway } from "@/api/hooks/gateways";
 import { IGateway } from "@/utils/validators/interfaces";
-import { Button, Stack, Switch, TextInput, Textarea } from "@mantine/core";
+import { Button, Group, Stack, Switch, TextInput, Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 
@@ -8,6 +8,7 @@ export const gatewayEditValidator = z.object({
   label: z.string().min(1, "Enter gateway label"),
   description: z.string().min(1, "Enter gateway description"),
   is_active: z.boolean(),
+  is_private: z.boolean(),
 });
 
 export function GatewayEditModal({
@@ -26,6 +27,7 @@ export function GatewayEditModal({
       label: formValues?.label ?? "",
       description: formValues?.description ?? "",
       is_active: formValues?.is_active ?? false,
+      is_private: formValues?.is_private ?? false,
     },
     validate: zodResolver(gatewayEditValidator),
   });
@@ -47,11 +49,19 @@ export function GatewayEditModal({
           label="Description"
           {...gatewayEditForm.getInputProps("description")}
         />
-        <Switch
+       <Group
+       grow>
+         <Switch
           label="Is active"
           checked={gatewayEditForm.values.is_active}
           {...gatewayEditForm.getInputProps("is_active")}
         />
+        <Switch 
+        label="Is private"
+        checked={gatewayEditForm.values.is_private}
+        {...gatewayEditForm.getInputProps("is_private")}
+        />
+       </Group>
         <Button
           type="submit"
           size="sm"

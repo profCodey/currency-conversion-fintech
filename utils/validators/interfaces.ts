@@ -56,6 +56,7 @@ export interface IGateway {
   description: string;
   label: string;
   is_active: boolean;
+  is_private: boolean;
 }
 
 export interface INotification {

@@ -144,15 +144,7 @@ export function NGNWalletContainer({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [currentGateway, setCurrentGateway] = useState<string | null>(null);
-  // const { mutate: createNewGateway, isLoading: createNewGatewayLoading } = useCreateNewGateway(() => {
-  //   setCreateModalOpen(false);
-  // });
   const { mutate: addGateway, isLoading:gatewayLoading } = useAddGateway();
-  // () =>
-  // setModalState(null)
-  const { data: selectedGateways, isLoading } = useClientSelectedGateways(
-    router.query.id as string
-);
   const { gatewayOptions, isLoading: gatewaysLoading } = useGatewayOptions();
   const CreateGateWayValidator = z.object({
     gateway: z.string().min(1, { message: "Select gateway" }),
@@ -198,7 +190,7 @@ function handleGatewayChange(gateway: string) {
                     withCloseButton={true}
                     centered
                     title="Select new gateway">
-                    <Skeleton visible={isLoading}>
+                    <Skeleton visible={gatewaysLoading}>
                         <form
                         onSubmit={createNewGateForm.onSubmit(
                           handleSubmit)}

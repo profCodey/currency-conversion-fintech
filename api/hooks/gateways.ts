@@ -10,6 +10,9 @@ import {
 } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { useMemo } from "react";
+import { useGetCurrentUser } from "./user";
+import { USER_CATEGORIES } from "@/utils/constants";
+
 
 export function useGetGateways() {
   return useQuery({
@@ -122,12 +125,18 @@ export function useEditGateway(gatewayId: number, cb: () => void) {
 }
 
 export function useGetSelectedGateways() {
+  const { isLoading, data } = useGetCurrentUser();
+  const isApiClient = data?.data.category === USER_CATEGORIES.API_CLIENT;
   return useQuery({
     queryKey: ["apiclient", "gateways", "selected"],
     queryFn: function (): Promise<AxiosResponse<Array<ISelectedGateway>>> {
-      return axiosInstance.get("/local/selected-gateways/");
-    },
-  });
+      
+      if (isApiClient) {
+
+        return axiosInstance.get("/local/selected-gateways/");
+      } 
+      },
+    });
 }
 
 export function useAddGateway(cb?: () => void) {

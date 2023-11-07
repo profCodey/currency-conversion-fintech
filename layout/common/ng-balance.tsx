@@ -38,10 +38,6 @@ export default function NGNBalance(props: { wallet: IAccount }) {
     
 const selectedGateway = wallets?.data.find((wallet) => wallet.reference == defaultGateway?.gateway);
 
-console.log('selectedGateway', selectedGateway);
-console.log('defaultGateway', defaultGateway);
-
-
   function getBalanceText(word: any, seeBalance: boolean): string {
 
     if (+word === 0) {
@@ -58,10 +54,7 @@ console.log('defaultGateway', defaultGateway);
 const selectedStyle = { };
 
 if (wallet.id == selectedGateway?.id ) {
-  console.log('wallet.id', wallet.id);
-  console.log('selectedGateway?.id', selectedGateway?.id);
-  
-  
+
   //@ts-ignore
   selectedStyle.border = "1px solid #02A1DB";
   //@ts-ignore

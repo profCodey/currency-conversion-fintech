@@ -83,9 +83,9 @@ export function BusinessDetails({
 //@ts-ignore
     updateProfile(businessProfileForm.values);
     closeRateModal()
-    setTimeout(()=> {
-      window.location.reload()
-    }, 2000)
+    // setTimeout(()=> {
+    //   window.location.reload()
+    // }, 2000)
   }
 
   function closeRateModal() {

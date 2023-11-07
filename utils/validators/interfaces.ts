@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { CLIENT_TYPES } from './../constants';
 type CategoryTypes = "admin" | "api_client" | "agent" | "agent_user";
 type ClientType = 'individual' | 'corporate';
@@ -57,6 +58,7 @@ export interface IGateway {
   label: string;
   is_active: boolean;
   is_private: boolean;
+  virtual_wallet_method_name: string;
 }
 
 export interface INotification {

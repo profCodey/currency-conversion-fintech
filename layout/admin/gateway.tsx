@@ -9,6 +9,7 @@ export const gatewayEditValidator = z.object({
   description: z.string().min(1, "Enter gateway description"),
   is_active: z.boolean(),
   is_private: z.boolean(),
+ virtual_wallet_method_name: z.string().min(1, "Enter Virtual Wallet Method Name")
 });
 
 export function GatewayEditModal({
@@ -28,6 +29,7 @@ export function GatewayEditModal({
       description: formValues?.description ?? "",
       is_active: formValues?.is_active ?? false,
       is_private: formValues?.is_private ?? false,
+      virtual_wallet_method_name: formValues?.virtual_wallet_method_name ?? "",
     },
     validate: zodResolver(gatewayEditValidator),
   });
@@ -48,6 +50,12 @@ export function GatewayEditModal({
           size="sm"
           label="Description"
           {...gatewayEditForm.getInputProps("description")}
+        />
+        <Textarea
+        size="sm"
+        label="Virtual Wallet Method Name"
+        
+        {...gatewayEditForm.getInputProps("virtual_wallet_method_name")}
         />
        <Group
        grow>

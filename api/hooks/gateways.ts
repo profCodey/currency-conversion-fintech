@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { queryClient } from "@/pages/_app";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   IGateway,
   IPayoutHistory,
@@ -64,6 +64,37 @@ export function useGatewayOptions() {
 
   return { gatewayOptions, isLoading };
 }
+
+
+export function useCreateVirtualAccount(cb: () => void) {
+  return useMutation(
+    function (selected_gateway_id: string) {
+      const payload = { selected_gateway_id };
+      return axiosInstance.post(`local/virtual-account/generate/${selected_gateway_id}/`, payload);
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation successful",
+          message: "Request for a virtual account sent successfully",
+          color: "green",
+        });
+      },
+      onError: function () {
+        return showNotification({
+          title: "An error occurred",
+          message: "Unable to request a virtual account",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        cb && cb();
+        queryClient.invalidateQueries(["apiclient", "gateways"]);
+      },
+    }
+  );
+}
+
 
 export function useCreateNewGateway(cb: () => void) {
   return useMutation(

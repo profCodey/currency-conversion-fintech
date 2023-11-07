@@ -2,7 +2,7 @@ import {
     useApproveGateway,
     useClientSelectedGateways,
 } from "@/api/hooks/admin/users";
-import { useCreateNewGateway, useGatewayOptions } from "@/api/hooks/gateways";
+import { useCreateNewGateway, useGatewayOptions, useCreateVirtualAccount } from "@/api/hooks/gateways";
 import { ISelectedGateway } from "@/utils/validators/interfaces";
 import {
     Badge,
@@ -40,6 +40,8 @@ export function ClientGateways() {
       setCreateModalOpen(false);
     });
 
+  
+   
     const { mutate: approveGateway, isLoading: approveGatewayLoading } =
       useApproveGateway(() => {
         setRejectModalOpen(false);
@@ -52,6 +54,7 @@ export function ClientGateways() {
           user: parseInt(router.query.id as string)
         });
       }
+
 
       const createNewGateForm = useForm({
         initialValues: {
@@ -219,6 +222,10 @@ export function ClientGateways() {
     );
 }
 
+export interface createVirtualAccountPayload {
+    selected_gateway_id: string
+  }
+
 function GatewayOption({
     gateway,
     approveGateway,
@@ -228,11 +235,29 @@ function GatewayOption({
     approveGateway: (arg0: ISelectedGateway) => void;
     rejectGateway: (arg0: ISelectedGateway) => void;
 }) {
+    const { mutate: createVirtualAccount, isLoading: createVirtualAccountLoading } = useCreateVirtualAccount(() => {
+      console.log("Virtual account created");    })
+
+     
+      function handleCreate ( gateway_id: string ) {
+        console.log(gateway_id)
+        const selected_gateway_id = gateway_id
+        console.log(selected_gateway_id)
+        createVirtualAccount(selected_gateway_id)
+    }
+
+    
+
     return (
         <Group key={gateway.id}>
             {/* <Text>{idx + 1}</Text> */}
             <Text>{gateway.gateway_name}</Text>
-
+            <Button
+                className="bg-primary-100 "
+                onClick={() =>handleCreate(gateway?.id as unknown as string)}
+                >
+                    Create Virtual Account
+                </Button>
             <Group className="ml-auto" spacing="sm">
                 {gateway.status === "pending" ? (
                     <>

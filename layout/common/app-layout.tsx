@@ -40,12 +40,17 @@ export function AppLayout({ children }: AppLayoutProps) {
   const { isLoading: clientDetailsLoading } = useGetClientDetails(
     data?.data.id
   );
+  
   const { data: selectedGateways, isLoading: gatewaysLoading } =
     useGetSelectedGateways();
   const { mutate: syncDeposits, isLoading: syncDepositsLoading } =
     useSyncDeposits();
   const logout = useLogout();
+  const isApiClient = data?.data.category === USER_CATEGORIES.API_CLIENT;
 
+  const homePageRoute = isApiClient ? "/dashboard" : "/admin";
+  
+  
   function handleLogout() {
     modals.openConfirmModal({
       title: <Text className="font-secondary">Please confirm your action</Text>,
@@ -67,9 +72,6 @@ export function AppLayout({ children }: AppLayoutProps) {
     ) : (
       children
     );
-
-  const isApiClient = data?.data.category === USER_CATEGORIES.API_CLIENT;
-  const homePageRoute = isApiClient ? "/dashboard" : "/admin";
 
   const defaultGateway = selectedGateways?.data && Array.isArray(selectedGateways.data)
   ? selectedGateways.data.find((gateway) => gateway.is_default)

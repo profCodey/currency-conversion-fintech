@@ -51,16 +51,14 @@ const selectedGateway = wallets?.data.find((wallet) => wallet.reference === defa
     return seeBalance ? word : "*********";
   }
 
-const selectedStyle = {
-  // border: '',
-  // color: '',
-};
+const selectedStyle = {};
 
 if (wallet.id === selectedGateway?.id ) {
   //@ts-ignore
   selectedStyle.border = "1px solid #02A1DB";
   //@ts-ignore
   selectedStyle.color = "#02A1DB";
+    //@ts-ignore
   selectedStyle.borderWidth = "8px";
 }
 

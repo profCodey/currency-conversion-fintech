@@ -14,10 +14,10 @@ import { FxOptionsModal, NairaOptionsModal } from "./send-fx-modal";
 import { Refresh } from "iconsax-react";
 import { useSyncDeposits } from "@/api/hooks/user";
 import { clsx } from "@mantine/core";
+import { useGetSelectedGateways } from "@/api/hooks/gateways";
 
 export default function NGNBalance(props: { wallet: IAccount }) {
   const { wallet } = props;
-  // console.log({wallet});
 
   const [opened, { open, close }] = useDisclosure(false);
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
@@ -30,8 +30,15 @@ export default function NGNBalance(props: { wallet: IAccount }) {
   const { mutate: syncDeposits, isLoading: syncDepositsLoading } =
     useSyncDeposits();
 
+    const { data: selectedGateways, isLoading: gatewaysLoading } =
+    useGetSelectedGateways();
+    const defaultGateway = selectedGateways?.data && Array.isArray(selectedGateways.data)
+    ? selectedGateways.data.find((gateway) => gateway.is_default)
+    : null;
+    
+const selectedGateway = wallets?.data.find((wallet) => wallet.reference === defaultGateway?.gateway);
+
   function getBalanceText(word: any, seeBalance: boolean): string {
-    // console.log(word,'word');
 
     if (+word === 0) {
       return seeBalance ? word : "*********";
@@ -43,8 +50,23 @@ export default function NGNBalance(props: { wallet: IAccount }) {
 
     return seeBalance ? word : "*********";
   }
+
+const selectedStyle = {
+  // border: '',
+  // color: '',
+};
+
+if (wallet.id === selectedGateway?.id ) {
+  //@ts-ignore
+  selectedStyle.border = "1px solid #02A1DB";
+  //@ts-ignore
+  selectedStyle.color = "#02A1DB";
+  selectedStyle.borderWidth = "8px";
+}
+
   return (
     <div
+    style={selectedStyle}
       key={wallet.id}
       className="px-4 py-3 bg-white flex flex-col gap-y-4 justify-between rounded-xl border-1 border-[#A9BADA]"
     >

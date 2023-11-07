@@ -342,6 +342,7 @@ export interface IAccount {
   true_balance: string;
   category: "fx" | "local";
   is_active: boolean;
+  reference?: string;
 }
 
 export interface IVirtualAccount {

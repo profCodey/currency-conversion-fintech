@@ -40,6 +40,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const { isLoading: clientDetailsLoading } = useGetClientDetails(
     data?.data.id
   );
+
   const { data: selectedGateways, isLoading: gatewaysLoading } =
     useGetSelectedGateways();
   const { mutate: syncDeposits, isLoading: syncDepositsLoading } =

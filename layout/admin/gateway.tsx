@@ -9,7 +9,7 @@ export const gatewayEditValidator = z.object({
   description: z.string().min(1, "Enter gateway description"),
   is_active: z.boolean(),
   is_private: z.boolean(),
- virtual_wallet_method_name: z.string().min(1, "Enter Virtual Wallet Method Name")
+  virtual_wallet_method_name: z.string().min(0).optional(),
 });
 
 export function GatewayEditModal({
@@ -35,8 +35,16 @@ export function GatewayEditModal({
   });
 
   function handleSubmit(values: z.infer<typeof gatewayEditValidator>) {
-    editGateway({ id: formValues!.id, ...values });
+    editGateway({
+      id: formValues!.id,
+      label: values.label,
+      description: values.description,
+      is_active: values.is_active,
+      is_private: values.is_private,
+      virtual_wallet_method_name: values.virtual_wallet_method_name || "", 
+    });
   }
+  
 
   return (
     <form onSubmit={gatewayEditForm.onSubmit(handleSubmit)}>

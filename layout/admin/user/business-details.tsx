@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Skeleton,
   Stack,
@@ -79,13 +79,42 @@ export function BusinessDetails({
     validate: zodResolver(businessProfileFormValidator),
   });
 
+
+  useEffect(() => {
+    if (clientProfileDetails?.data) {
+      businessProfileForm.setValues({
+        bvn: clientProfileDetails?.data.bvn || "",
+        city: clientProfileDetails?.data.city || "",
+        state: clientProfileDetails?.data.state || "",
+        zip_code: clientProfileDetails?.data.zip_code || "",
+        tax_number: clientProfileDetails?.data.tax_number || "",
+        business_legal_name: clientProfileDetails?.data.business_legal_name || "",
+        business_code: clientProfileDetails?.data.business_code || "",
+        business_trading_name:
+          clientProfileDetails?.data.business_trading_name || "",
+        country_of_registration:
+          clientProfileDetails?.data.country_of_registration || "",
+        primary_business_activity:
+          clientProfileDetails?.data.primary_business_activity || "",
+        business_registration_date: clientProfileDetails?.data
+          .business_registration_date
+          ? new Date(clientProfileDetails?.data.business_registration_date)
+          : null,
+        business_registration_number:
+          clientProfileDetails?.data.business_registration_number || "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clientProfileDetails?.data]);
+
+
   function handleSubmit() {
 //@ts-ignore
     updateProfile(businessProfileForm.values);
     closeRateModal()
-    // setTimeout(()=> {
-    //   window.location.reload()
-    // }, 2000)
+    setTimeout(()=> {
+      window.location.reload()
+    }, 2000)
   }
 
   function closeRateModal() {

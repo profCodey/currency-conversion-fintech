@@ -92,7 +92,10 @@ if (wallet.id == selectedGateway?.id ) {
               seeBalance
             )}
           </div>
-          <div style={{ cursor: "pointer" }} onClick={() => syncDeposits()}>
+          <div style={{ cursor: "pointer" }} onClick={() => {
+            syncDeposits()
+            window.location.reload()
+            }}>
             <Refresh
               size="20"
               color="#02A1DB"

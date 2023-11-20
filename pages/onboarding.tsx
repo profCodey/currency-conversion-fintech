@@ -61,9 +61,7 @@ export default function Onboarding() {
   }
 
   const disableBusinessProfileFields = Boolean(
-    basicProfile?.data?.business_legal_name &&
-      (basicProfile?.data.status === "pending" ||
-        basicProfile?.data?.status === "approved")
+    basicProfile?.data?.business_legal_name
   );
   
   const showIndividualProfileNextBtn = Boolean(
@@ -173,27 +171,13 @@ export default function Onboarding() {
           </Tabs.Panel>
           {data?.data?.client_type === CLIENT_TYPES.CORPORATE && (
             <Tabs.Panel value="document-upload" pt="lg">
-  {!disableBusinessProfileFields ? (
-    <div className="text-center">
-      <p className="text-red-500 font-bold mb-4">
-        Please complete Basic Profile registration first.
-      </p>
-      {/* You can add more details or a button to navigate to the "basic-profile" tab */}
-      {/* Example: */}
-      <button
-        className="bg-primary-100 text-white px-4 py-2 rounded-md"
-        onClick={() => setActiveTab("basic-profile")}
-      >
-        Go to Basic Profile
-      </button>
-    </div>
-  ) : (
+ 
     <DocumentUpload
       formData={documents?.data}
       disableDocumentNextButton={disableBusinessDocumentNextButton()}
       nextTab={setActiveTab}
     />
-  )}
+
 </Tabs.Panel>
 
           )}

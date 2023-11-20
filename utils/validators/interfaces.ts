@@ -380,6 +380,7 @@ export interface IRate {
   source_currency: number;
   destination_currency: number;
   use_live_rate: boolean;
+  user: number;
 }
 
 export interface IOnboardingDocuments {

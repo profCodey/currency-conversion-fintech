@@ -1,7 +1,8 @@
-import { useGetRates, useDeleteRate } from "@/api/hooks/admin/rates";
+import { useDeleteUserRate, useGetUserRates } from "@/api/hooks/admin/rates";
 import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { PageHeader } from "@/components/admin/page-header";
 import { CreateRateButton } from "@/layout/admin/rates/create-rate-button";
+import { CreateUserRateButton } from "@/layout/admin/rates/create-user-rate-button";
 import { AppLayout } from "@/layout/common/app-layout";
 import {
     ActionIcon,
@@ -19,7 +20,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState, useEffect } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
-import { useUpdateRate } from "@/api/hooks/admin/rates";
+import { useUpdateUserRate } from "@/api/hooks/admin/rates";
 import {
     Button,
     Drawer,
@@ -35,7 +36,6 @@ import { closeAllModals, modals } from "@mantine/modals";
 export const rateFormValidator = z.object({
     rate: z.number().gt(0, "Enter a value for rate"),
     is_active: z.boolean(),
-    use_live_rate: z.boolean()
 });
 
 export interface UpdateRatePayload {
@@ -44,19 +44,18 @@ export interface UpdateRatePayload {
     source_currency: number;
     destination_currency: number;
     is_active: boolean;
-    use_live_rate: boolean;
 }
-export default function Rates() {
+export default function UserRates() {
     const { getCurrencyNameFromId, isLoading: currencyOptionsLoading } =
         useCurrencyOptions();
-    const { data, isLoading: ratesLoading } = useGetRates();
+    const { data, isLoading: ratesLoading } = useGetUserRates();
     const router = useRouter();
     const [editRateModalOpen, setEditRateModalOpen] = useState(false);
     const [selectedRate, setSelectedRate] = useState<IRate | null>(null);
     const { mutate: updateRate, isLoading: updateRateLoading } =
-        useUpdateRate(closeRateModal);
+        useUpdateUserRate(closeRateModal);
     const { mutate: deleteRate, isLoading: deleteRateLoading } =
-        useDeleteRate();
+        useDeleteUserRate();
    
 
     const editRateForm = useForm({
@@ -65,7 +64,6 @@ export default function Rates() {
             is_active: (selectedRate as any)?.is_active,
             source_currency: (selectedRate as any)?.source_currency,
             destination_currency: (selectedRate as any)?.destination_currency,
-            use_live_rate: (selectedRate as any)?.use_live_rate,
         },
 
         validate: zodResolver(rateFormValidator),
@@ -77,7 +75,6 @@ export default function Rates() {
         if (rate) {
             editRateForm.setFieldValue("rate", rate.rate);
             editRateForm.setFieldValue("is_active", rate.is_active);
-            editRateForm.setFieldValue("use_live_rate", rate.use_live_rate);
         }
     }, []);
     function closeRateModal() {
@@ -95,7 +92,6 @@ export default function Rates() {
             source_currency: selectedRate?.source_currency as unknown as number,
             destination_currency:
                 selectedRate?.destination_currency as unknown as number,
-            use_live_rate: values.use_live_rate,
         };
         console.log(payload);
         updateRate(payload);
@@ -121,6 +117,7 @@ export default function Rates() {
             return data?.data.map((rate, idx) => (
                 <tr key={rate.id}>
                     <td>{idx + 1}</td>
+                    <td>{rate.user}</td>
                     <td>{rate.rate}</td>
                     <td>{getCurrencyNameFromId(rate.source_currency)}</td>
                     <td>{getCurrencyNameFromId(rate.destination_currency)}</td>
@@ -133,15 +130,7 @@ export default function Rates() {
                             <span className="text-gray-90">Inactive</span>
                         )}
                     </td>
-                    <td>
-                        {rate.use_live_rate ? (
-                            <span className="text-accent font-semibold">
-                                Active
-                            </span>
-                        ) : (
-                            <span className="text-gray-90">Inactive</span>
-                        )}
-                    </td>
+                    
                     <td>
                         {dayjs(rate.updated_on).format("MMM D, YYYY h:mm A")}
                     </td>
@@ -174,9 +163,9 @@ export default function Rates() {
     return (
         <section className="flex flex-col gap-6 h-full relative">
             <PageHeader
-                header="Global Rates"
-                subheader="View and set global rates for different currencies"
-                meta={<CreateRateButton />}
+                header="User Rates"
+                subheader="View and set user rates for different currencies"
+                meta={<CreateUserRateButton />}
             />
 
             <section className="">
@@ -185,18 +174,18 @@ export default function Rates() {
                     <thead>
                         <tr>
                             <th>S/N</th>
+                            <th>User</th>
                             <th>Rate</th>
                             <th>Source currency</th>
                             <th>Destination currency</th>
                             <th>Status</th>
-                            <th>Live rate</th>
                             <th>Last updated</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>{_rows}</tbody>
                     <Drawer
-                        title="Edit Rate"
+                        title={`Edit rate for user ${selectedRate?.user}`}
                         opened={editRateModalOpen}
                         onClose={closeRateModal}
                         size="md"
@@ -207,6 +196,7 @@ export default function Rates() {
                             className="relative">
                             <LoadingOverlay visible={updateRateLoading} />
                             <Stack>
+                                
                                 <TextInput
                                     label="Rate"
                                     placeholder="0.00"
@@ -250,12 +240,7 @@ export default function Rates() {
                                     checked={editRateForm.values.is_active}
                                     {...editRateForm.getInputProps("is_active")}
                                 />
-                                  <Switch
-                                    label="Use Live Rate"
-                                    size="md"
-                                    checked={editRateForm.values.use_live_rate}
-                                    {...editRateForm.getInputProps("use_live_rate")}
-                                />
+                                  
                                 <Group grow>
                                     <Button
                                         className="bg-gray-30 hover:bg-gray-30 text-gray-90"
@@ -291,6 +276,6 @@ export default function Rates() {
     );
 }
 
-Rates.getLayout = function getLayout(page: ReactElement) {
+UserRates.getLayout = function getLayout(page: ReactElement) {
     return <AppLayout>{page}</AppLayout>;
 };

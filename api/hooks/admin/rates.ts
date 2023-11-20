@@ -16,6 +16,40 @@ export function useGetRates() {
     return axiosInstance.get(`/fx/rates/`);
   });
 }
+export function useGetUserRates() {
+  return useQuery({
+    queryKey: ["user-rates"],
+    queryFn: (): Promise<AxiosResponse<IRate[]>> =>
+      axiosInstance.get(`/fx/user-rates/`),
+  });
+}
+
+export function useAddNewUserRate(cb?: () => void) {
+  return useMutation(
+    (payload: z.infer<typeof rateFormValidator>) =>
+    axiosInstance.post("/fx/user-rates/", payload),
+    {
+      onSuccess: function (data: AxiosResponse) {
+        showNotification({
+          title: "Operation successful",
+          message: data?.data.message || "Rate created successfully", 
+          color: "green",
+        });
+    }, 
+    onError: function (data: AxiosError) {
+      const response = data.response?.data as ErrorItem;
+      showNotification({
+        message: response?.detail || "Unable to create rate",
+        color: "red",
+      });
+    },
+    onSettled: function () {
+      cb && cb();
+      queryClient.invalidateQueries(["user-rates"]);
+    },
+  }
+);
+}
 
 export function useAddNewRate(cb?: () => void) {
   return useMutation(
@@ -60,6 +94,34 @@ export function useGetLiveRate(payload: IRatePayload) {
   });
 }
 
+export const useDeleteUserRate = (cb?: () => void) => {
+  return useMutation(
+      (id: number) =>
+          axiosInstance.delete(`/fx/user-rates/${id}/`, {
+          }),
+      {
+          onSuccess: function (data: AxiosResponse) {
+              showNotification({
+                  title: "Operation successful",
+                  message: "Rate deleted successfully",
+                  color: "green",
+              });
+          },
+          onError: function (data: AxiosError) {
+              const response = data.response?.data as ErrorItem;
+              showNotification({
+                  message: response?.detail || "Unable to delete Rate",
+                  color: "red",
+              });
+          },
+          onSettled: function () {
+              cb && cb();
+              queryClient.invalidateQueries(["user-rates"]);
+          },
+      }
+  );
+}
+
 export function useDeleteRate(cb?: () => void) {
   return useMutation(
       (id: number) =>
@@ -83,6 +145,36 @@ export function useDeleteRate(cb?: () => void) {
           onSettled: function () {
               cb && cb();
               queryClient.invalidateQueries(["rates"]);
+          },
+      }
+  );
+}
+
+export function useUpdateUserRate(cb?: () => void) {
+  return useMutation(
+      
+          function ({ id, ...payload }: UpdateRatePayload) {
+              return axiosInstance.patch(`/fx/user-rates/${id}/`, payload, {
+              });
+            },
+      {
+          onSuccess: function (data: AxiosResponse) {
+              showNotification({
+                  title: "Operation successful",
+                  message: data?.data.message || "Rate updated successfully",
+                  color: "green",
+              });
+          },
+          onError: function (data: AxiosError) {
+              const response = data.response?.data as ErrorItem;
+              showNotification({
+                  message: response?.detail || "Unable to update rate",
+                  color: "red",
+              });
+          },
+          onSettled: function () {
+              cb && cb();
+              queryClient.invalidateQueries(["user-rates"]);
           },
       }
   );

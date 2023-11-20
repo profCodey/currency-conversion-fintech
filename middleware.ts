@@ -26,6 +26,7 @@ export function middleware(request: NextRequest) {
     "/admin/logs",
     "/admin/banks",
     "/admin/rates",
+    "/admin/user-rates",
     "/admin/users",
     "/admin/admins",
     "/admin/transactions",

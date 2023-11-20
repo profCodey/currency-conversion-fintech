@@ -17,6 +17,7 @@ export function middleware(request: NextRequest) {
     "/fx-payouts",
     "/local-transactions",
     "/local-statement",
+    "/collection",
     "/local-manual-funding"
 
   ];

@@ -62,6 +62,11 @@ const routes = [
     ],
   },
   {
+    route: "/collection",
+    label: "Collection",
+    icon: <TransactionsIcon />
+  },
+  {
     route: "/recipients",
     label: "Recipient",
     icon: <RecipientsIcon />,

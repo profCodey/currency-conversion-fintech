@@ -117,12 +117,12 @@ export function AppLayout({ children }: AppLayoutProps) {
       }
       aside={
         <Navbar
-          p={32}
-          className="bg-primary-100 border-none order-1 left-0"
-          width={{ sm: 200, lg: 300 }}
-          hiddenBreakpoint="sm"
-          hidden={!opened}
-        >
+        p={32}
+        className="bg-primary-100 border-none order-1 left-0 overflow-y-auto"
+        width={{ sm: 200, lg: 300 }}
+        hiddenBreakpoint="sm"
+        hidden={!opened}
+      >
           <section className="py-2 pt-4 h-full flex flex-col">
             <div className="w-full flex justify-between items-center">
               <Stack spacing="xs" className="w-full">

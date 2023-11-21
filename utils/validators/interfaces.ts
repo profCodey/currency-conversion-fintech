@@ -154,7 +154,7 @@ export interface ISiteSettings {
   default_gateway: number;
   company_name?: string;
   company_address?: string;
-  logo?: string;
+  logo?: File;
   secondary_color?: string;
   primary_color?: string;
   background_color?: string;

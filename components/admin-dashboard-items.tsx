@@ -43,6 +43,9 @@ export function AdminDashboardItems() {
       router.pathname === "/admin/accounts" ||
       router.pathname === "/admin/currencies"
   );
+  const [ratesOpen, setRatesOpen] = useState(
+    router.pathname === "/admin/rates" || router.pathname === "/admin/user-rates"
+  );
 
   const [usersOpen, setUsersOpen] = useState(
     router.pathname === "/admin/users" || router.pathname === "/admin/admins"
@@ -72,6 +75,8 @@ export function AdminDashboardItems() {
         return setUsersOpen(!usersOpen);
         case "/admin/global-limit":
           return setComplianceOpen(!complianceOpen);
+      case "/admin/rates":
+        return setRatesOpen(!ratesOpen)
       default:
         return;
     }
@@ -106,10 +111,7 @@ export function AdminDashboardItems() {
           route: "/admin/banks",
           label: "Banks",
         },
-        {
-          route: "/admin/rates",
-          label: "Rates",
-        },
+       
         {
           route: "/admin/purposes",
           label: "Purposes of Payment"
@@ -127,6 +129,21 @@ export function AdminDashboardItems() {
           label: "Currencies",
         },
       ],
+    },
+    {
+      route: "/admin/rates",
+      label: "Rates Setup",
+      icon: <SettingsIcon />,
+      children: [
+        {
+          route: "/admin/rates",
+          label: "Global Rates",
+        },
+        {
+          route: "/admin/user-rates",
+          label: "User Rates" 
+        }
+      ]
     },
     {
       route: "/admin/global-limit",
@@ -177,7 +194,7 @@ export function AdminDashboardItems() {
           href={route.route}
           className={classes.navLink}
           rightSection={route.children && <ArrowRight2 />}
-          opened={route.route === "/admin/global-limit" ? complianceOpen : (route.route === "/admin/users" ? usersOpen : settingsOpen)}
+          opened={route.route === "/admin/global-limit" ? complianceOpen : route.route === "/admin/rates" ? ratesOpen : (route.route === "/admin/users" ? usersOpen : settingsOpen)}
 
           onClick={() => route.children && handleCollapse(route.route)}
         >

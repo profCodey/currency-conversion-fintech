@@ -62,6 +62,11 @@ const routes = [
     ],
   },
   {
+    route: "/collection",
+    label: "Collection",
+    icon: <TransactionsIcon />
+  },
+  {
     route: "/recipients",
     label: "Recipient",
     icon: <RecipientsIcon />,
@@ -132,31 +137,25 @@ const [isFX, setIsFX] = useState(false);
   }
 
   useEffect(() => {
-   siteSettings?.data.use_fx_wallet
-      ? setIsFX(true)
-      : setIsFX(false);
-
-  }, [siteSettings]);
-
-  if (!isFX) {
-    // Remove the "Exchange" route when isFX is false
-    const fxIndex = routes.findIndex((route) => route.route === "/fx-payouts");
-    if (fxIndex) {
-      const fxRoute = routes[fxIndex];
-      if (fxRoute.children) {
-        fxRoute.children = fxRoute.children.filter(
-          (child) => child.route !== "/fx-exchange"
-        );
-      }
+    if (siteSettings && siteSettings.data) {
+      setIsFX(siteSettings.data.use_fx_wallet);
     }
+  }, [siteSettings]);
+  if (siteSettingsLoading) {
+    // Return loading state or placeholder while waiting for the API response
+    return <div>Loading...</div>;
   }
+
+  const filteredRoutes = isFX
+  ? routes
+  : routes.filter((route) => route.route !== "/config" && route.route !== "/collection" && route.route !== "/fx-payouts");
 
   return (
     <Stack
       spacing={4}
       className="mt-24 mb-auto text-lg text-slate-400 font-secondary"
     >
-      {routes.map((route) => (
+      {filteredRoutes.map((route) => (
         <NavLink
           key={route.label}
           active={!!isCurrentPath(route.route)}

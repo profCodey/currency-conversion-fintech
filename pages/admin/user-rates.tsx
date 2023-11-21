@@ -93,7 +93,6 @@ export default function UserRates() {
             destination_currency:
                 selectedRate?.destination_currency as unknown as number,
         };
-        console.log(payload);
         updateRate(payload);
         closeRateModal();
     }

@@ -61,9 +61,7 @@ export default function Onboarding() {
   }
 
   const disableBusinessProfileFields = Boolean(
-    basicProfile?.data?.business_legal_name &&
-      (basicProfile?.data.status === "pending" ||
-        basicProfile?.data?.status === "approved")
+    basicProfile?.data?.business_legal_name
   );
   
   const showIndividualProfileNextBtn = Boolean(
@@ -103,7 +101,7 @@ export default function Onboarding() {
     if (tab === "basic-profile") setActiveTab(tab);
     else if (tab === "id-verification") {
       setActiveTab(tab);
-    } else if (tab === "document-upload" && disableBusinessProfileFields) {
+    } else if (tab === "document-upload") {
       if (data?.data.client_type === CLIENT_TYPES.CORPORATE) {
         setActiveTab(tab);
       }
@@ -173,12 +171,15 @@ export default function Onboarding() {
           </Tabs.Panel>
           {data?.data?.client_type === CLIENT_TYPES.CORPORATE && (
             <Tabs.Panel value="document-upload" pt="lg">
-              <DocumentUpload
-                formData={documents?.data}
-                disableDocumentNextButton={disableBusinessDocumentNextButton()}
-                nextTab={setActiveTab}
-              />
-            </Tabs.Panel>
+ 
+    <DocumentUpload
+      formData={documents?.data}
+      disableDocumentNextButton={disableBusinessDocumentNextButton()}
+      nextTab={setActiveTab}
+    />
+
+</Tabs.Panel>
+
           )}
           {/* <Tabs.Panel value="gateway-options" pt="lg">
             <GatewayOptions

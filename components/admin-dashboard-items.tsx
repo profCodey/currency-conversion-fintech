@@ -12,20 +12,26 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { NavLink } from "@mantine/core";
 import { ArrowRight2, DocumentText, I24Support, CopySuccess } from "iconsax-react";
+import Cookies from "js-cookie";
+
+    //ts-ignore 
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const useNavStyles = createStyles(() => ({
   navLink: {
     color: "#ddd",
     "&:hover": {
       backgroundColor: "transparent",
-      color: "#00B0F0",
+      color: colorSecondary,
     },
     "&[data-active='true']": {
       backgroundColor: "transparent",
-      color: "#00B0F0",
+      color: colorSecondary,
       "&:hover": {
         backgroundColor: "transparent",
-        color: "#00B0F0",
+        color: colorSecondary,
       },
     },
   },

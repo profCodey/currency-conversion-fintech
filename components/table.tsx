@@ -15,6 +15,7 @@ declare module "@tanstack/table-core" {
     itemRank: RankingInfo;
   }
 }
+import Cookies from "js-cookie";
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -56,6 +57,9 @@ export default function Table({
     },
   });
 
+  let colorPrimary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <section className="flex flex-col gap-4 h-full flex-grow">
       <div className="flex justify-between">
@@ -69,7 +73,8 @@ export default function Table({
         <div>
         <button
           onClick={handleDownloadCSV}
-          className="bg-primary-100 hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
+          style={{backgroundColor:colorBackground}}
+          className="hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
         >
           Download Excel
         </button>

@@ -56,6 +56,10 @@ export default function App(props: AppPropsWithLayout) {
           theme={{
             /** Put your mantine theme override here */
             colorScheme: "light",
+            colors: {
+              'ocean-blue': ['#7AD1DD' ]
+            },
+
           }}
         >
           <Notifications position="top-right" />

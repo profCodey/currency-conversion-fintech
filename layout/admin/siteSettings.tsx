@@ -19,6 +19,7 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useEffect } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
 
 export const AddNewSettingsValidator = z.object({
   use_fx_wallet: z.boolean(),
@@ -37,8 +38,6 @@ export function SiteSettingsInitiate() {
     useGetSiteSettings();
 
   const settings: ISiteSettings | undefined = siteSettings?.data;
-
-  // console.log("settings", settings);
 
   const addNewSettings = useForm({
     initialValues: {
@@ -68,6 +67,10 @@ export function SiteSettingsInitiate() {
         secondary_color: settings.secondary_color,
         background_color: settings.background_color
       });
+
+      settings.primary_color && Cookies.set("primary_color", settings.primary_color);
+    settings.secondary_color && Cookies.set("secondary_color", settings.secondary_color);
+    settings.background_color && Cookies.set("background_color", settings.background_color);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
@@ -79,6 +82,7 @@ export function SiteSettingsInitiate() {
     addNewSettings: z.infer<typeof AddNewSettingsValidator>
   ) {
     updateSiteSettings(addNewSettings);
+       //ts-ignore 
   }
 
   return (

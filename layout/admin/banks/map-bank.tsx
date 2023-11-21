@@ -14,6 +14,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 
 export const MapBankValidator = z.object({
   bank: z.string().min(1, { message: "Select bank" }),
@@ -73,8 +74,8 @@ export function MapBankButton() {
   return (
     <>
       <Button
-      style={{backgroundColor:colorSecondary}}
-        className=" hover:bg-accent"
+      style={{backgroundColor:colorBackground}}
+        className="bg-accent hover:bg-accent"
         size="md"
         onClick={() => setMapBankModalOpen(true)}
       >

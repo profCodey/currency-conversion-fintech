@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
 export const AddNewSettingsValidator = z.object({
     use_fx_wallet: z.boolean(),
     hide_wallet_at: z.number().min(1, { message: "Set time" }),
@@ -103,242 +105,164 @@ export function SiteSettingsInitiate() {
                         visible={siteSettingsLoading || isUpdating}
                     />
 
-                    <div>
-                        <Paper
-                            radius="lg"
-                            className="p-10 border-gray-90 border h-fit">
-                            <div className="flex items-center justify-between mb-3">
-                                <p>Use FX Wallet</p>
-                                <div>
-                                    <Switch
-                                        checked={
-                                            addNewSettings.values.use_fx_wallet
-                                        }
-                                        onChange={(event) => {
-                                            const useFxWallet =
-                                                event.currentTarget.checked;
-                                            if (
-                                                useFxWallet ||
-                                                addNewSettings.values
-                                                    .hide_wallet_at !== 0
-                                            ) {
-                                                // Only update if use_fx_wallet is true or hide_wallet_at is not 0
-                                                updateSiteSettings({
-                                                    hide_wallet_at:
-                                                        addNewSettings.values
-                                                            .hide_wallet_at,
-                                                    use_fx_wallet: useFxWallet,
-                                                    id: 1,
-                                                    default_gateway:
-                                                        addNewSettings.values
-                                                            .default_gateway,
-                                                    created_by: "",
-                                                    created_on: "",
-                                                    primary_color:
-                                                        addNewSettings.values
-                                                            .primary_color,
-                                                    secondary_color:
-                                                        addNewSettings.values
-                                                            .secondary_color,
-                                                    background_color:
-                                                        addNewSettings.values
-                                                            .background_color,
-                                                    // logo: addNewSettings.values.logo,
-                                                    company_name:
-                                                        addNewSettings.values
-                                                            .company_name,
-                                                    company_address:
-                                                        addNewSettings.values
-                                                            .company_address,
-                                                });
-                                            }
-                                            addNewSettings.setFieldValue(
-                                                "use_fx_wallet",
-                                                useFxWallet
-                                            );
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            <Divider />
-                            <form
-                                onSubmit={addNewSettings.onSubmit(
-                                    handleSubmit
-                                )}>
-                                <div className="flex flex-col items-center justify-between mt-3 mb-3">
-                                    <div className="mb-3 w-full">
-                                        <p>Hide wallet at</p>
-                                        <TextInput
-                                            type="number"
-                                            className=""
-                                            value={
-                                                addNewSettings.values
-                                                    .hide_wallet_at
-                                            }
-                                            onChange={(event) => {
-                                                const hideWalletAt = parseInt(
-                                                    event.currentTarget.value
-                                                );
-                                                addNewSettings.setFieldValue(
-                                                    "hide_wallet_at",
-                                                    hideWalletAt
-                                                );
-                                            }}
-                                        />
-                                    </div>
-
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Default Gateway</p>
-                                        <div>
-                                            <TextInput
-                                                type="number"
-                                                className=""
-                                                value={
-                                                    addNewSettings.values
-                                                        .default_gateway
-                                                }
-                                                onChange={(event) => {
-                                                    const defaultGateway =
-                                                        parseInt(
-                                                            event.currentTarget
-                                                                .value
-                                                        );
-                                                    addNewSettings.setFieldValue(
-                                                        "default_gateway",
-                                                        defaultGateway
-                                                    );
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Company Name</p>
-                                        <div>
-                                            <TextInput
-                                                className=""
-                                                value={
-                                                    addNewSettings.values
-                                                        .company_name
-                                                }
-                                                onChange={(event) => {
-                                                    addNewSettings.setFieldValue(
-                                                        "company_name",
-                                                        event.currentTarget
-                                                            .value
-                                                    );
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Company Logo</p>
-                                        <div>
-                                            <FileInput
-                                                accept="image/*"
-                                                onChange={(file) => {
-                                                    if (file) {
-                                                      setLogoFile(file);
-                                                        addNewSettings.setFieldValue(
-                                                            "logo",
-                                                            file.name
-                                                        );
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Primary Color</p>
-                                        <div>
-                                            <ColorInput
-                                                value={
-                                                    addNewSettings.values
-                                                        .primary_color
-                                                }
-                                                onChange={(value) =>
-                                                    addNewSettings.setFieldValue(
-                                                        "primary_color",
-                                                        value
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Secondary Color</p>
-                                        <div>
-                                            <ColorInput
-                                                value={
-                                                    addNewSettings.values
-                                                        .secondary_color
-                                                }
-                                                onChange={(value) =>
-                                                    addNewSettings.setFieldValue(
-                                                        "secondary_color",
-                                                        value
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Background Color</p>
-                                        <div>
-                                            <ColorInput
-                                                value={
-                                                    addNewSettings.values
-                                                        .background_color
-                                                }
-                                                onChange={(value) =>
-                                                    addNewSettings.setFieldValue(
-                                                        "background_color",
-                                                        value
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                    <Divider />
-                                    <div className="mb-3 w-full">
-                                        <p>Address</p>
-                                        <div>
-                                            <Textarea
-                                                autosize
-                                                className=""
-                                                value={
-                                                    addNewSettings.values
-                                                        .company_address
-                                                }
-                                                onChange={(event) => {
-                                                    addNewSettings.setFieldValue(
-                                                        "company_address",
-                                                        event.currentTarget
-                                                            .value
-                                                    );
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                   
-                                    <Button
-                                        className="bg-primary-100 hover:bg-primary-100"
-                                        size="md"
-                                        type="submit"
-                                        loaderPosition="right">
-                                        Submit
-                                    </Button>
-                                </div>
-                            </form>
-                        </Paper>
-                    </div>
-                </Skeleton>
-            </Box>
-        </>
-    );
+          <div>
+            <Paper radius="lg" className="p-10 border-gray-90 border h-fit">
+              <div className="flex items-center justify-between mb-3">
+                <p>Use FX Wallet</p>
+                <div>
+                  <Switch
+                    checked={addNewSettings.values.use_fx_wallet}
+                    onChange={(event) => {
+                      const useFxWallet = event.currentTarget.checked;
+                      if (
+                        useFxWallet ||
+                        addNewSettings.values.hide_wallet_at !== 0
+                      ) {
+                        // Only update if use_fx_wallet is true or hide_wallet_at is not 0
+                        updateSiteSettings({
+                          hide_wallet_at: addNewSettings.values.hide_wallet_at,
+                          use_fx_wallet: useFxWallet,
+                          id: 1,
+                          default_gateway:
+                            addNewSettings.values.default_gateway,
+                          created_by: "",
+                          created_on: "",
+                          primary_color: addNewSettings.values.primary_color,
+                          secondary_color:
+                            addNewSettings.values.secondary_color,
+                          background_color: addNewSettings.values.background_color,
+                          // logo: addNewSettings.values.logo,
+                          company_name: addNewSettings.values.company_name,
+                          company_address:
+                            addNewSettings.values.company_address,
+                        });
+                      }
+                      addNewSettings.setFieldValue(
+                        "use_fx_wallet",
+                        useFxWallet
+                      );
+                    }}
+                  />
+                </div>
+              </div>
+              <Divider />
+              <form onSubmit={addNewSettings.onSubmit(handleSubmit)}>
+                <div className="flex flex-col items-center justify-between mt-3 mb-3">
+                <div className="mb-3">
+                  <p>Hide wallet at</p>
+                    <TextInput
+                      type="number"
+                      className=""
+                      value={addNewSettings.values.hide_wallet_at}
+                      onChange={(event) => {
+                        const hideWalletAt = parseInt(
+                          event.currentTarget.value
+                        );
+                        addNewSettings.setFieldValue(
+                          "hide_wallet_at",
+                          hideWalletAt
+                        );
+                      }}
+                    />
+                  </div>
+        
+            <Divider />
+            <div className="mb-3">
+              <p>
+                Default Gateway
+              </p>
+              <div>
+                <TextInput
+                  type="number"
+                  className=""
+                  value={addNewSettings.values.default_gateway}
+                  onChange={(event) => {
+                    const defaultGateway = parseInt(event.currentTarget.value);
+                    addNewSettings.setFieldValue("default_gateway", defaultGateway);
+                  } } />
+              </div>
+            </div>
+            <Divider />
+            <div className="mb-3">
+              <p>
+                Company Name
+              </p>
+              <div>
+                <TextInput
+                  className=""
+                  value={addNewSettings.values.company_name}
+                  onChange={(event) => {
+                    addNewSettings.setFieldValue("company_name", event.currentTarget.value);
+                  } } />
+              </div>
+            </div>
+            <Divider />
+            <div className="mb-3">
+              <p>Primary Color</p>
+              <div>
+              <ColorInput
+                      value={addNewSettings.values.primary_color}
+                      onChange={(value) =>
+                        addNewSettings.setFieldValue("primary_color", value)
+                      }
+                    />
+              </div>
+              </div>
+              <Divider />
+            <div className="mb-3">
+              <p>Secondary Color</p>
+              <div>
+              <ColorInput
+                      value={addNewSettings.values.secondary_color}
+                      onChange={(value) =>
+                        addNewSettings.setFieldValue("secondary_color", value)
+                      }
+                    />
+              </div>
+              </div>
+              <Divider />
+            <div className="mb-3">
+              <p>Background Color</p>
+              <div>
+              <ColorInput
+                      value={addNewSettings.values.background_color}
+                      onChange={(value) =>
+                        addNewSettings.setFieldValue("background_color", value)
+                      }
+                    />
+              </div>
+              </div>
+              <Divider />
+            <div className="mb-3">
+              <p>
+                Address
+              </p>
+              <div>
+                <Textarea
+                  autosize
+                  className=""
+                  value={addNewSettings.values.company_address}
+                  onChange={(event) => {
+                    addNewSettings.setFieldValue("company_address", event.currentTarget.value);
+                  } } />
+              </div>
+       
+            </div>
+            <Button
+                style={{backgroundColor: colorBackground}}
+                className="hover:bg-primary-100"
+                size="md"
+                type="submit"
+                loaderPosition="right"
+              >
+                Submit
+              </Button>
+                </div>
+              </form>
+            </Paper>
+          </div>
+        </Skeleton>
+      </Box>
+    </>
+  );
 }

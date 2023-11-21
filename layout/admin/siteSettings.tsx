@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
 export const AddNewSettingsValidator = z.object({
     use_fx_wallet: z.boolean(),
     hide_wallet_at: z.number().min(1, { message: "Set time" }),

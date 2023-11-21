@@ -17,6 +17,9 @@ import { modals, openModal } from "@mantine/modals";
 import { Warning2 } from "iconsax-react";
 import { useState, useMemo } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const rateFormValidator = z.object({
     user: z.string().min(1, "Select a user"),
@@ -76,7 +79,8 @@ export function CreateUserRateButton() {
     return (
         <>
             <Button
-                className="bg-primary-100 hover:bg-primary-100"
+                style={{backgroundColor:colorBackground}}
+                className=" hover:bg-primary-100"
                 size="md"
                 onClick={() => setCreateRateModalOpen(true)}>
                 Create Rate
@@ -147,7 +151,8 @@ export function CreateUserRateButton() {
                                 Cancel
                             </Button>
                             <Button
-                                className="bg-primary-100 hover:bg-primary-100"
+                                style={{backgroundColor:colorBackground}}
+                                className="hover:bg-primary-100"
                                 size="md"
                                 type="submit"
                                 loading={rateLoading}

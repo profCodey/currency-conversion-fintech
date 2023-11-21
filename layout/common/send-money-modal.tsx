@@ -19,6 +19,9 @@ import { showNotification } from "@mantine/notifications";
 import { ArrowRight, Danger, DirectboxSend, Warning2 } from "iconsax-react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 const PayRecipient = z.object({
  bank: z.string().min(1, { message: "Bank name is required" }).optional(),
@@ -267,7 +270,7 @@ export function SendMoneyModal({
    />
 
    <Button
-    className="bg-primary-100"
+    style={{backgroundColor: colorBackground}}
     rightIcon={<ArrowRight />}
     size="md"
     type="submit">

@@ -68,8 +68,6 @@ export default function Signup() {
   let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
-
-
   return (
     <form className="w-full" onSubmit={signupForm.onSubmit(handleSignup)}>
       <Stack spacing="lg">

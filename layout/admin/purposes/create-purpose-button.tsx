@@ -13,6 +13,7 @@ import { modals, openModal } from "@mantine/modals";
 import { Warning2 } from "iconsax-react";
 import { useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
 
 export const purposeFormValidator = z.object({
     description: z.string().min(1, "Enter Purpose Description"),
@@ -37,11 +38,12 @@ export function CreatePurposeButton() {
     function handleSubmit(values: z.infer<typeof purposeFormValidator>) {
         addPurpose(values);
     }
-
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     return (
         <>
             <Button
-                className="bg-primary-100 hover:bg-primary-100"
+            style ={{backgroundColor: colorBackground}}
+                className=" hover:bg-primary-100"
                 size="md"
                 onClick={() => setCreatePurposeModalOpen(true)}>
                 Create new purpose
@@ -82,7 +84,8 @@ export function CreatePurposeButton() {
                                 Cancel
                             </Button>
                             <Button
-                                className="bg-primary-100 hover:bg-primary-100"
+                                style={{ backgroundColor: colorBackground }}
+                                className="hover:bg-primary-100"
                                 size="md"
                                 type="submit"
                                 loading={purposeLoading}

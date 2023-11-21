@@ -10,6 +10,9 @@ import { useRouter } from "next/router";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { useClientSelectedGateways } from "@/api/hooks/admin/users";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export function FXWallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
@@ -209,7 +212,8 @@ function handleGatewayChange(gateway: string) {
                                
                                
                                 <Button
-                                    className="bg-primary-100 hover:bg-primary-100 my-5"
+                                    style={{ backgroundColor: colorBackground}}
+                                    className="hover:bg-primary-100 my-5"
                                     size="md"
                                     type="submit">
                                     Create

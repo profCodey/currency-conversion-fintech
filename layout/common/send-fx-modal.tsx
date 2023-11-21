@@ -32,6 +32,7 @@ import { useGetFxPurposes } from "@/api/hooks/fx";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { ExchangeBox } from "../dashboard/exchange-box";
+import { useFXWalletAccounts } from "@/api/hooks/accounts";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -51,7 +52,10 @@ export const PayFxRecipient = z.object({
         .string()
         .min(1, { message: "Sort code is required" })
         .optional(),
-    bic: z.string().max(11, { message: "BIC cannot be more than 11 characters" }).optional(),
+    bic: z
+        .string()
+        .max(11, { message: "BIC cannot be more than 11 characters" })
+        .optional(),
     iban: z.string().min(1, { message: "IBAN is required" }).optional(),
     recipient_address: z
         .string()
@@ -240,8 +244,6 @@ interface FxOptionsModalProps {
     id?: number;
 }
 
-
-
 export const FxOptionsModal = ({
     title,
     close,
@@ -253,94 +255,97 @@ export const FxOptionsModal = ({
     const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
     const { isLoading, data: userInfo } = useGetCurrentUser();
     const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
-    const wallet = wallets?.data.find((wallet)=> {
-return wallet.id === id;
-    })
-    
-function handleSendMoneyOpen(){
-    setShowConfirmationModal(true)
-}
+    const wallet = wallets?.data.find((wallet) => {
+        return wallet.id === id;
+    });
 
-function handleSendExchangeOpen(){
-    setShowExchangeModal(true)
-}
+    function handleSendMoneyOpen() {
+        setShowConfirmationModal(true);
+    }
 
-function closeExchageModal(){
-    setShowExchangeModal(false)
-}
+    function handleSendExchangeOpen() {
+        setShowExchangeModal(true);
+    }
+
+    function closeExchageModal() {
+        setShowExchangeModal(false);
+    }
 
     return (
         <>
-        <Modal
-            opened={optionsOpen}
-            onClose={close}
-            title={`Send ${title}`}
-            centered>
-            <div
-                style={{cursor: 'pointer'}}
-                className="flex items-center justify-between mb-3"
-                onClick={handleSendMoneyOpen}>
-                <div className="text-[#6882B6]">
-                    <h3 className="text-2xl font-semibold"> Send Fund </h3>
-                    <span className="text-sm font-semibold">
-                        Send to foreign account{" "}
-                    </span>
+            <Modal
+                opened={optionsOpen}
+                onClose={close}
+                title={`Send ${title}`}
+                centered>
+                <div
+                    style={{ cursor: "pointer" }}
+                    className="flex items-center justify-between mb-3"
+                    onClick={handleSendMoneyOpen}>
+                    <div className="text-[#6882B6]">
+                        <h3 className="text-2xl font-semibold"> Send Fund </h3>
+                        <span className="text-sm font-semibold">
+                            Send to foreign account{" "}
+                        </span>
+                    </div>
+                    <ArrowRight />
                 </div>
-                <ArrowRight />
-            </div>
-            <Divider my="sm" />
-            <div
-                style={{cursor: 'pointer'}}
-                className="flex items-center justify-between mb-3"
-                onClick = {handleSendExchangeOpen}
-                >
-                <div className="text-[#6882B6]"  
-                >
-                    <h3 className="text-2xl font-semibold"> Convert Fund </h3>
-                    <span className="text-sm font-semibold">
-                        Convert to other currencies{" "}
-                    </span>
+                <Divider my="sm" />
+                <div
+                    style={{ cursor: "pointer" }}
+                    className="flex items-center justify-between mb-3"
+                    onClick={handleSendExchangeOpen}>
+                    <div className="text-[#6882B6]">
+                        <h3 className="text-2xl font-semibold">
+                            {" "}
+                            Convert Fund{" "}
+                        </h3>
+                        <span className="text-sm font-semibold">
+                            Convert to other currencies{" "}
+                        </span>
+                    </div>
+                    <ArrowRight />
                 </div>
-                <ArrowRight />
-            </div>
-            <Divider my="sm" />
-            <Link
-                className="flex items-center justify-between mb-3"
-                href="/transactions">
-                <div className="text-[#6882B6]">
-                    <h3 className="text-2xl font-semibold"> Transaction </h3>
-                    <span className="text-sm font-semibold">
-                        View all transactions{" "}
-                    </span>
+                <Divider my="sm" />
+                <Link
+                    className="flex items-center justify-between mb-3"
+                    href="/transactions">
+                    <div className="text-[#6882B6]">
+                        <h3 className="text-2xl font-semibold">
+                            {" "}
+                            Transaction{" "}
+                        </h3>
+                        <span className="text-sm font-semibold">
+                            View all transactions{" "}
+                        </span>
+                    </div>
+                    <ArrowRight />
+                </Link>
+            </Modal>
+            <LocalProceedModal
+                modalOpen={showConfirmationModal}
+                close={() => setShowConfirmationModal(false)}
+                sourceAmount={0}
+                currencyRate={0}
+                destinationAmount={0}
+                sourceCurrency={wallet?.currency.name}
+                destinationAccCurrency={""}
+                purposes={fxPurposes}
+                isFXPayout={true}
+                //@ts-ignore
+                sourceDetails={wallet?.id}
+                //@ts-ignore
+                destinationDetails={wallet?.currency.id}
+            />
+            <Modal
+                opened={showExchangeModal}
+                onClose={closeExchageModal}
+                title={`Send ${title}`}
+                centered>
+                <div className="z-100">
+                    <ExchangeBox gatewayID={id} />
                 </div>
-                <ArrowRight />
-            </Link>
-        </Modal>
-        <LocalProceedModal
-          modalOpen={showConfirmationModal}
-          close={() => setShowConfirmationModal(false)}
-          sourceAmount={0}
-          currencyRate={0}
-          destinationAmount = {0}
-          sourceCurrency={wallet?.currency.name}
-          destinationAccCurrency = {''}
-          purposes = {fxPurposes}
-          isFXPayout = {true}
-          //@ts-ignore
-          sourceDetails={wallet?.id}
-          //@ts-ignore
-          destinationDetails={wallet?.currency.id}
-
-        />
- <Modal
-            opened={showExchangeModal}
-            onClose={closeExchageModal}
-            title={`Send ${title}`}
-            centered>
-      <div className="z-100">
-            <ExchangeBox gatewayID= {id}/>
-        </div>
-        </Modal>
+            </Modal>
         </>
     );
 };
@@ -349,6 +354,9 @@ export const NairaOptionsModal = ({
     optionsOpen,
     id,
 }: FxOptionsModalProps) => {
+    const { data: fxData } = useFXWalletAccounts();
+    console.log(fxData);
+
     const [opened, { open, close: closeModal }] = useDisclosure(false);
     const { data: virtualAccount } = useGetVirtualAccount(String(id));
     const { bankOptions } = useBankOptions();
@@ -364,7 +372,7 @@ export const NairaOptionsModal = ({
         account_number: "",
         narration: "",
     });
-    
+   
     return (
         <>
             <Modal
@@ -410,23 +418,32 @@ export const NairaOptionsModal = ({
                     </div>
                 </section>
                 <Divider my="sm" />
-                <div className="flex items-center justify-between mb-3">
-                    <div className="text-red-600 ">
-                        <h3 className="text-lg font-medium mb-1">
-                            {" "}
-                            Please Note!!!{" "}
-                        </h3>
-                        <span className="text-sm font-medium">
-                            Any funds sent to the account number provided must
-                            be utilized by the end of the day. If not spent, you
-                            have the option to withdraw them to your Naira
-                            account. Failure to withdraw the funds will result
-                            in an automatic transfer overnight, incurring an
-                            additional charge of ₦10,000{" "}
-                        </span>
-                    </div>
-                </div>
-                <Divider my="sm" />
+                {fxData?.data &&
+                "use_fx_wallet" in fxData?.data &&
+                fxData?.data.use_fx_wallet ? (
+                    <></>
+                ) : (
+                    <>
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="text-red-600 ">
+                                <h3 className="text-lg font-medium mb-1">
+                                    {" "}
+                                    Please Note!!!{" "}
+                                </h3>
+                                <span className="text-sm font-medium">
+                                    Any funds sent to the account number
+                                    provided must be utilized by the end of the
+                                    day. If not spent, you have the option to
+                                    withdraw them to your Naira account. Failure
+                                    to withdraw the funds will result in an
+                                    automatic transfer overnight, incurring an
+                                    additional charge of ₦10,000{" "}
+                                </span>
+                            </div>
+                        </div>
+                        <Divider my="sm" />
+                    </>
+                )}
                 <div
                     role="button"
                     className="flex items-center justify-between mb-3"
@@ -442,8 +459,8 @@ export const NairaOptionsModal = ({
                     </div>
                     <ArrowRight />
                 </div>
-                <Divider my="sm"/>
-        {/* <Link className="flex items-center justify-between mb-3" href={`/transactions/exchange/${id}`}>
+                <Divider my="sm" />
+                {/* <Link className="flex items-center justify-between mb-3" href={`/transactions/exchange/${id}`}>
           <div className="text-[#6882B6]">
             <h3 className="text-2xl font-semibold"> Transaction </h3>
             <span className="text-sm font-semibold">View all transactions </span>
@@ -451,13 +468,18 @@ export const NairaOptionsModal = ({
           <ArrowRight />
         </Link>
         <Divider my="sm" /> */}
-        <Link className="flex items-center justify-between mb-3" href={`/dashboard/ngn/${id}`}>
-          <div className="text-[#6882B6]">
-            <h3 className="text-2xl font-semibold"> Exchange </h3>
-            <span className="text-sm font-semibold"> Exchange NGN to other currencies </span>
-          </div>
-          <ArrowRight />
-        </Link>
+                <Link
+                    className="flex items-center justify-between mb-3"
+                    href={`/dashboard/ngn/${id}`}>
+                    <div className="text-[#6882B6]">
+                        <h3 className="text-2xl font-semibold"> Exchange </h3>
+                        <span className="text-sm font-semibold">
+                            {" "}
+                            Exchange NGN to other currencies{" "}
+                        </span>
+                    </div>
+                    <ArrowRight />
+                </Link>
                 {/* <Divider my="sm"/>
           <Link className="flex items-center justify-between mb-3" href="/transactions">
           <div className="text-[#6882B6]">

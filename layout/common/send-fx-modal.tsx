@@ -384,7 +384,7 @@ export const NairaOptionsModal = ({
                     <div className="text-[rgb(104,130,182)] w-full">
                         <h3 className="text-lg text-black font-medium mb-2">
                             {" "}
-                            Your Virtual Wallet Account is:{" "}
+                            Your Virtual Account is:{" "}
                         </h3>
                         <div className="flex flex-col align-center justify-center w-100">
                             <div className="mb-[-3px] flex">

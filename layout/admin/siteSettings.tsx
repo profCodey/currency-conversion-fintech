@@ -11,6 +11,8 @@ import {
   Skeleton,
   Switch,
   TextInput,
+  ColorInput,
+
   Textarea,
   Button,
 } from "@mantine/core";
@@ -24,6 +26,10 @@ export const AddNewSettingsValidator = z.object({
   default_gateway: z.number().min(1, { message: "Set default gateway" }),
   company_name: z.string(),
   company_address: z.string(),
+  // logo: z.string(),
+  primary_color: z.string(),
+  secondary_color: z.string(),
+  background_color: z.string(),
 });
 
 export function SiteSettingsInitiate() {
@@ -41,6 +47,10 @@ export function SiteSettingsInitiate() {
       default_gateway: settings?.default_gateway || 0,
       company_name: settings?.company_name || "",
       company_address: settings?.company_address || "",
+      // logo: settings?.logo || "",
+      primary_color: settings?.primary_color || "",
+      secondary_color: settings?.secondary_color || "",
+      background_color: settings?.background_color || "",
     },
     validate: zodResolver(AddNewSettingsValidator),
   });
@@ -53,6 +63,10 @@ export function SiteSettingsInitiate() {
         default_gateway: settings.default_gateway,
         company_name: settings.company_name,
         company_address: settings.company_address,
+        // logo: settings.logo,
+        primary_color: settings.primary_color,
+        secondary_color: settings.secondary_color,
+        background_color: settings.background_color
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,6 +109,14 @@ export function SiteSettingsInitiate() {
                             addNewSettings.values.default_gateway,
                           created_by: "",
                           created_on: "",
+                          primary_color: addNewSettings.values.primary_color,
+                          secondary_color:
+                            addNewSettings.values.secondary_color,
+                          background_color: addNewSettings.values.background_color,
+                          // logo: addNewSettings.values.logo,
+                          company_name: addNewSettings.values.company_name,
+                          company_address:
+                            addNewSettings.values.company_address,
                         });
                       }
                       addNewSettings.setFieldValue(
@@ -125,22 +147,7 @@ export function SiteSettingsInitiate() {
                       }}
                     />
                   </div>
-                  <Divider />
-            <div className="mb-3">
-              <p>
-                Default Gateway
-              </p>
-              <div>
-                <TextInput
-                  type="number"
-                  className=""
-                  value={addNewSettings.values.default_gateway}
-                  onChange={(event) => {
-                    const defaultGateway = parseInt(event.currentTarget.value);
-                    addNewSettings.setFieldValue("default_gateway", defaultGateway);
-                  } } />
-              </div>
-            </div>
+        
             <Divider />
             <div className="mb-3">
               <p>
@@ -172,6 +179,42 @@ export function SiteSettingsInitiate() {
               </div>
             </div>
             <Divider />
+            <div className="mb-3">
+              <p>Primary Color</p>
+              <div>
+              <ColorInput
+                      value={addNewSettings.values.primary_color}
+                      onChange={(value) =>
+                        addNewSettings.setFieldValue("primary_color", value)
+                      }
+                    />
+              </div>
+              </div>
+              <Divider />
+            <div className="mb-3">
+              <p>Secondary Color</p>
+              <div>
+              <ColorInput
+                      value={addNewSettings.values.secondary_color}
+                      onChange={(value) =>
+                        addNewSettings.setFieldValue("secondary_color", value)
+                      }
+                    />
+              </div>
+              </div>
+              <Divider />
+            <div className="mb-3">
+              <p>Background Color</p>
+              <div>
+              <ColorInput
+                      value={addNewSettings.values.background_color}
+                      onChange={(value) =>
+                        addNewSettings.setFieldValue("background_color", value)
+                      }
+                    />
+              </div>
+              </div>
+              <Divider />
             <div className="mb-3">
               <p>
                 Address
@@ -205,131 +248,3 @@ export function SiteSettingsInitiate() {
   );
 }
 
-// import {
-//   useGetSiteSettings,
-//   useUpdateSiteSettings,
-// } from "@/api/hooks/admin/sitesettings";
-// import { ISiteSettings } from "@/utils/validators/interfaces";
-// import {
-//   Box,
-//   Divider,
-//   LoadingOverlay,
-//   Paper,
-//   Switch,
-//   TextInput,
-// } from "@mantine/core";
-// import { useForm, zodResolver } from "@mantine/form";
-// import { z } from "zod";
-
-// export const AddNewSettingsValidator = z.object({
-//   use_fx_wallet: z.boolean(),
-//   hide_wallet_at: z.number().min(1, { message: "Set time" }),
-//   default_gateway: z.number().min(1, { message: "Set default gateway" }),
-// });
-
-// export function SiteSettingsInitiate() {
-//   const { data: siteSettings, isLoading: siteSettingsLoading } =
-//     useGetSiteSettings();
-
-//   const settings: ISiteSettings | undefined = siteSettings?.data;
-
-//   const addNewSettings = useForm({
-//     initialValues: {
-//       use_fx_wallet: settings?.use_fx_wallet || false,
-//       hide_wallet_at: settings?.hide_wallet_at || 0,
-//       default_gateway: settings?.default_gateway || 0,
-//     },
-//     validate: zodResolver(AddNewSettingsValidator),
-//   });
-
-//   const { mutate: updateSiteSettings, isLoading: isUpdating } =
-//     useUpdateSiteSettings();
-
-//   return (
-//     <Box className="flex items-center justify-center h-fit relative mt-4">
-//       <Paper radius="lg" className="h-[500px] p-10 border-gray-90 border">
-//         <div className="flex items-center justify-between mb-3">
-//           <p>Use FX Wallet</p>
-//           <div>
-//             <Switch
-//               checked={addNewSettings.values.use_fx_wallet}
-//               onChange={(event) => {
-//                 const useFxWallet = event.currentTarget.checked;
-//                 if (useFxWallet || addNewSettings.values.hide_wallet_at !== 0) {
-//                   updateSiteSettings({
-//                     hide_wallet_at: addNewSettings.values.hide_wallet_at,
-//                     use_fx_wallet: useFxWallet,
-//                     id: 1,
-//                     default_gateway: addNewSettings.values.default_gateway,
-//                     created_by: "",
-//                     created_on: "",
-//                   });
-//                 }
-//                 addNewSettings.setFieldValue("use_fx_wallet", useFxWallet);
-//               }}
-//             />
-//           </div>
-//         </div>
-//         <Divider />
-//         <div className="flex items-center justify-between mt-3">
-//           <p>Hide wallet</p>
-//           <div>
-//             <TextInput
-//               type="number"
-//               className=""
-//               value={addNewSettings.values.hide_wallet_at}
-//               onChange={(event) => {
-//                 const hideWalletAt = parseInt(event.currentTarget.value);
-//                 if (
-//                   hideWalletAt >= 1 &&
-//                   hideWalletAt <= 24 &&
-//                   (hideWalletAt !== 0 || addNewSettings.values.use_fx_wallet)
-//                 ) {
-//                   updateSiteSettings({
-//                     hide_wallet_at: hideWalletAt,
-//                     use_fx_wallet: addNewSettings.values.use_fx_wallet,
-//                     id: 1,
-//                     default_gateway: addNewSettings.values.default_gateway,
-//                     created_by: "",
-//                     created_on: "",
-//                   });
-//                 }
-//                 addNewSettings.setFieldValue("hide_wallet_at", hideWalletAt);
-//               }}
-//             />
-//           </div>
-//         </div>
-//         <Divider />
-//         <div className="flex items-center justify-between mt-3">
-//           <p>Default Gateway</p>
-//           <div>
-//             <TextInput
-//               type="number"
-//               className=""
-//               value={addNewSettings.values.default_gateway}
-//               onChange={(event) => {
-//                 const defaultGateway = parseInt(event.currentTarget.value);
-//                 if (
-//                   defaultGateway >= 1 &&
-//                   (defaultGateway !== 0 ||
-//                     addNewSettings.values.use_fx_wallet ||
-//                     addNewSettings.values.hide_wallet_at !== 0)
-//                 ) {
-//                   updateSiteSettings({
-//                     hide_wallet_at: addNewSettings.values.hide_wallet_at,
-//                     use_fx_wallet: addNewSettings.values.use_fx_wallet,
-//                     id: 1,
-//                     default_gateway: defaultGateway,
-//                     created_by: "",
-//                     created_on: "",
-//                   });
-//                 }
-//                 addNewSettings.setFieldValue("default_gateway", defaultGateway);
-//               }}
-//             />
-//           </div>
-//         </div>
-//       </Paper>
-//     </Box>
-//   );
-// }

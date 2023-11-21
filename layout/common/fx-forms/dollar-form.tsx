@@ -16,6 +16,9 @@ import { ConfirmationForm, FailureForm, SuccessForm } from "../send-fx-modal";
 import { useGetFxAccounts } from "@/api/hooks/fx";
 import { useFxBalance } from "@/api/hooks/balance";
 import { showNotification } from "@mantine/notifications";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const DollarFormValidator = z.object({
   amount: z.number().gte(1, "Enter valid amount"),
@@ -182,9 +185,10 @@ export function DollarForm({
           {...DollarForm.getInputProps("narration")}
         />
         <Button
+          style={{ backgroundColor: colorBackground}}
           type="submit"
           size="md"
-          className="bg-[#132144] hover:bg-[#00B0F0] transition-colors duration-500"
+          className=" hover:bg-[#00B0F0] transition-colors duration-500"
         >
           Continue
         </Button>

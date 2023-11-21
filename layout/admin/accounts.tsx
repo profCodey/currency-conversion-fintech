@@ -12,6 +12,9 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const AddNewAccountValidator = z.object({
   account_number: z.string().min(1, { message: "Enter bank name" }),
@@ -51,7 +54,8 @@ export function AddAccountButton() {
   return (
     <>
       <Button
-        className="bg-primary-100 hover:bg-primary-100"
+      style={{backgroundColor:colorBackground}}
+        className=" hover:bg-primary-100"
         size="md"
         onClick={() => setCreateBankModalOpen(true)}
       >
@@ -109,7 +113,8 @@ export function AddAccountButton() {
                 {...addNewAccountForm.getInputProps("is_active")}
               />
               <Button
-                className="bg-primary-100 hover:bg-primary-100"
+              style={{backgroundColor:colorBackground}}
+                className="hover:bg-primary-100"
                 size="md"
                 type="submit"
                 loading={addNewAccountLoading}

@@ -12,6 +12,9 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { z } from "zod";
 import { Dispatch, SetStateAction } from "react";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const editcurrencyFormValidator = z.object({
   id: z.number().min(1, "id"),
@@ -88,7 +91,8 @@ export function EditCurrencyButton({
                 Cancel
               </Button>
               <Button
-                className="bg-primary-100 hover:bg-primary-100"
+                style={{ backgroundColor: colorBackground }}
+                className="hover:bg-primary-100"
                 size="md"
                 type="submit"
                 loading={currencyLoading}

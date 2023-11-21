@@ -8,8 +8,10 @@ import { AppLayout } from "@/layout/common/app-layout";
 import { FxPayoutHistory } from "@/layout/transactions/fx-payout-history";
 import { Tabs } from "@mantine/core";
 import { ReactElement } from "react";
+import Cookies from "js-cookie";
 
 export default function Transactions() {
+
   return (
     <section className="flex flex-col gap-6 h-full">
       <PageHeader

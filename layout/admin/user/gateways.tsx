@@ -18,6 +18,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const CreateGateWayValidator = z.object({
     gateway: z.string().min(1, { message: "Select gateway" }),
@@ -124,7 +127,8 @@ export function ClientGateways() {
                                
                                
                                 <Button
-                                    className="bg-primary-100 hover:bg-primary-100 my-5"
+                                    style={{backgroundColor:colorBackground}}
+                                    className="hover:bg-primary-100 my-5"
                                     size="md"
                                     type="submit">
                                     Create

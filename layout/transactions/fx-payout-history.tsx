@@ -12,6 +12,7 @@ import { FundingStatuses } from "./manual-funding-drawer";
 import { FaDownload } from "react-icons/fa6";
 // import { CSVLink } from 'react-csv';
 import * as XLSX from "xlsx";
+import Cookies from "js-cookie";
 
 export function FxPayoutHistory() {
     const [payout, setPayout] = useState<IFxPayout | null>(null);
@@ -95,12 +96,15 @@ export function FxPayoutHistory() {
         [fxPayouts?.data]
     );
 
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
     return (
         <Skeleton visible={isLoading} className="flex-grow">
             <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
                 <div className="flex justify-end mb-4">
                     <button
-                        className="text-white bg-primary-100 p-2 rounded"
+                     style={{backgroundColor:colorBackground}}
+                        className="text-white p-2 rounded"
                         onClick={handleDownloadExcel}>
                         Download Excel
                     </button>

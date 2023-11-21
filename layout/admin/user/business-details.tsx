@@ -30,6 +30,9 @@ import { z } from "zod";
 import { businessProfileFormValidator } from "@/utils/validators";
 import { useUpdateBusinessProfile } from "@/api/hooks/onboarding";
 import { allCountryNames } from "@/utils/countries";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const updateUserDetailsValidator = z.object({
   rate: z.number().gt(0, "Enter a value for rate"),
@@ -331,7 +334,8 @@ export function BusinessDetails({
               Cancel
             </Button>
             <Button
-              className="bg-primary-100 hover:bg-primary-100"
+              style={{ backgroundColor: colorBackground }}
+              className="hover:bg-primary-100"
               size="md"
               type="submit"
               loaderPosition="right"

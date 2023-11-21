@@ -57,8 +57,6 @@ export default function Table({
     },
   });
 
-  let colorPrimary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <section className="flex flex-col gap-4 h-full flex-grow">

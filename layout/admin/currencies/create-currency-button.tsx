@@ -13,6 +13,9 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const currencyFormValidator = z.object({
 code: z.string().min(2, "code"),
@@ -44,7 +47,8 @@ useAddNewCurrency(closeRateModal);
   return (
     <>
       <Button
-        className="bg-primary-100 hover:bg-primary-100"
+      style={{backgroundColor:colorBackground}}
+        className=" hover:bg-primary-100"
         size="md"
         onClick={() => setCreateRateModalOpen(true)}
       >
@@ -84,7 +88,8 @@ useAddNewCurrency(closeRateModal);
                 Cancel
               </Button>
               <Button
-                className="bg-primary-100 hover:bg-primary-100"
+                style={{ backgroundColor: colorBackground }}
+                className="hover:bg-primary-100"
                 size="md"
                 type="submit"
                 loading={currencyLoading}

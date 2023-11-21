@@ -20,6 +20,9 @@ import { addRecipientFormValidator } from "@/utils/validators";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { RecipientList } from "@/layout/recipients/recipient-list";
 import { queryClient } from "./_app";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export default function Recipients() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -267,6 +270,7 @@ export default function Recipients() {
           )}
 
           <Button
+            style={{ backgroundColor: colorBackground }}
             type="submit"
             size="md"
             className="bg-[#132144] hover:bg-[#00B0F0] transition-colors duration-500"

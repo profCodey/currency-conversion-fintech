@@ -7,6 +7,7 @@ import { closeAllModals, modals } from "@mantine/modals";
 import { useGetNotifications, useDeleteNotification } from "@/api/hooks/admin/notification";
 import { useState, useMemo } from "react";
 import { BinDelete } from "@/components/icons";
+import Cookies from "js-cookie";
 
 
 export function PageHeader({
@@ -27,7 +28,6 @@ const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = use
     deleteNotification(notification.id);
   }
   const notificationCount = data? data.data.length : 0;
-
 
   const _notifications = useMemo(
     function () {
@@ -54,13 +54,17 @@ const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = use
 function handleNotificationClick () {
   setNotificationsModalOpen(true)
 }
-
+let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
 
   return (
     <section className="flex gap-5 items-start">
       <div className="text-primary-100 mr-auto">
-        <h2 className="text-2xl font-secondary">{header}</h2>
-        <span>{subheader}</span>
+        <h2 
+        style={{color:colorPrimary}}
+        className="text-2xl font-secondary">{header}</h2>
+        <span
+        style={{color:colorPrimary}}
+        >{subheader}</span>
       </div>
 
       <div className="flex gap-5 items-center">

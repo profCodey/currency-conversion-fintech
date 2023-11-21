@@ -24,7 +24,12 @@ export function useGetSiteSettings() {
 export function useUpdateSiteSettings() {
     return useMutation(
         function (data: ISiteSettings): Promise<AxiosResponse<ISiteSettings>> {
-            return axiosInstance.patch("/site-settings/", data);
+            return axiosInstance.patch("/site-settings/update/", data,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            });
         },
         {
             onSuccess: function (data) {

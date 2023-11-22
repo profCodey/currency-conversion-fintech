@@ -3,6 +3,10 @@ import { Button, Modal, Select, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const AddNewBankValidator = z.object({
   name: z.string().min(1, { message: "Enter bank name" }),
@@ -35,7 +39,8 @@ export function AddBankButton() {
   return (
     <>
       <Button
-        className="bg-primary-100 hover:bg-primary-100"
+      style={{backgroundColor: colorBackground }}
+        className="hover:bg-primary-100"
         size="md"
         onClick={() => setCreateBankModalOpen(true)}
       >
@@ -71,11 +76,13 @@ export function AddBankButton() {
             <Switch
               label="Activate"
               size="md"
+              color= {colorSecondary}
               checked={addNewBankForm.values.is_active}
               {...addNewBankForm.getInputProps("is_active")}
             />
             <Button
-              className="bg-primary-100 hover:bg-primary-100"
+              style={{ backgroundColor: colorBackground }}
+              className="hover:bg-primary-100"
               size="md"
               type="submit"
               loading={addNewBankLoading}

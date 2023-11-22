@@ -25,6 +25,7 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { FaDownload } from "react-icons/fa6";
 import * as XLSX from "xlsx";
+import Cookies from "js-cookie";
 
 
 export function StatementsHistory({
@@ -211,7 +212,7 @@ export function StatementsHistory({
       </div>
     );
   }
-
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="flex-grow flex flex-col gap-2">
       <div className="bg-gray-30 rounded-lg border p-5 py-2 flex gap-4 items-center justify-between">
@@ -229,7 +230,8 @@ export function StatementsHistory({
         />
                 <button
   onClick={handleDownloadExcel}
-  className=" bg-primary-100 hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2 z-50"
+  style={{backgroundColor:colorBackground}}
+  className="hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2 z-50"
 >
   Download Excel
 </button>

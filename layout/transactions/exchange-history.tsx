@@ -12,6 +12,7 @@ import { FundingStatuses } from "./manual-funding-drawer";
 import * as XLSX from 'xlsx';
 import { FaDownload } from "react-icons/fa6";
 import { jsPDF } from "jspdf";
+import Cookies from "js-cookie";
 
 export function ExchangeHistory() {
   const [exchange, setExchange] = useState<IExchangeDetailed | null>(null);
@@ -161,6 +162,9 @@ function handlePDFDonwload(data: IExchangeDetailed){
     },
     [exchanges?.data]
   );
+
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+  
   return (
     <Skeleton visible={isLoading} className="flex-grow">
       <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
@@ -189,7 +193,8 @@ function handlePDFDonwload(data: IExchangeDetailed){
             <div className="flex justify-end p-4">
           <button
           onClick={handleDownloadExcel}
-          className="relative top-[-120px] bg-primary-100 hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
+          style={{backgroundColor:colorBackground}}
+          className="relative top-[-120px] hover:bg-[#132144] text-white font-bold py-2 px-4 rounded mr-2"
         >
           Download Excel
         </button>

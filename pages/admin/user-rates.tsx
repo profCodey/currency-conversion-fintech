@@ -33,6 +33,9 @@ import {
 
 import { IRate } from "@/utils/validators/interfaces";
 import { closeAllModals, modals } from "@mantine/modals";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 export const rateFormValidator = z.object({
     rate: z.number().gt(0, "Enter a value for rate"),
     is_active: z.boolean(),
@@ -249,7 +252,8 @@ export default function UserRates() {
                                         Cancel
                                     </Button>
                                     <Button
-                                        className="bg-primary-100 hover:bg-primary-100"
+                                         style={{backgroundColor: colorBackground}}
+                                        className="hover:bg-primary-100"
                                         size="md"
                                         type="submit" // Change the type to "button
                                         loading={updateRateLoading}

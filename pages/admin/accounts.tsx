@@ -11,6 +11,9 @@ import { IPaycelerAccount } from "@/utils/validators/interfaces";
 import { ActionIcon, LoadingOverlay, Menu, Table } from "@mantine/core";
 import { More } from "iconsax-react";
 import { ReactElement, useCallback, useMemo } from "react";
+import Cookies from "js-cookie";
+
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
 
 export default function Banks() {
   const { data: accounts, isLoading: accountsLoading } =
@@ -44,7 +47,9 @@ export default function Banks() {
             <td>{account.category}</td>
             <td>
               {account.is_active ? (
-                <span className="text-accent font-semibold">Active</span>
+                <span 
+                style={{color: colorSecondary}}
+                className=" font-semibold">Active</span>
               ) : (
                 <span className="text-gray-90">Inactive</span>
               )}

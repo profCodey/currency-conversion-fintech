@@ -3,6 +3,9 @@ import { IGateway } from "@/utils/validators/interfaces";
 import { Button, Group, Stack, Switch, TextInput, Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const gatewayEditValidator = z.object({
   label: z.string().min(1, "Enter gateway label"),
@@ -79,9 +82,9 @@ export function GatewayEditModal({
         />
        </Group>
         <Button
+          style={{backgroundColor: colorBackground}}
           type="submit"
           size="sm"
-          className="bg-primary-100"
           loading={isLoading}
           fullWidth
         >

@@ -31,6 +31,9 @@ import {
 
 import { IPurpose } from "@/utils/validators/interfaces";
 import { closeAllModals, modals } from "@mantine/modals";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const purposeFormValidator = z.object({
     description: z.string().min(1, "Enter Purpose Description"),
@@ -192,7 +195,8 @@ export default function Purposes() {
                                         Cancel
                                     </Button>
                                     <Button
-                                        className="bg-primary-100 hover:bg-primary-100"
+                                        style={{backgroundColor: colorBackground}}
+                                        className="hover:bg-primary-100"
                                         size="md"
                                         type="submit" // Change the type to "button
                                         loading={updatePurposeLoading}

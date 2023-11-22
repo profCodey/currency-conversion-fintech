@@ -30,6 +30,12 @@ import { USER_CATEGORIES } from "@/utils/constants";
 import Link from "next/link";
 import { useGetSelectedGateways } from "@/api/hooks/gateways";
 import { InfoCircle, Refresh } from "iconsax-react";
+import Cookies from "js-cookie";
+import { useGetSiteSettings } from "@/api/hooks/admin/sitesettings";
+import { ISiteSettings } from "@/utils/validators/interfaces";
+import Image from 'next/image';
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -49,7 +55,9 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isApiClient = data?.data.category === USER_CATEGORIES.API_CLIENT;
 
   const homePageRoute = isApiClient ? "/dashboard" : "/admin";
-  
+  const { data: siteSettings, isLoading: siteSettingsLoading } =
+  useGetSiteSettings();
+  const settings: ISiteSettings | undefined = siteSettings?.data;
   
   function handleLogout() {
     modals.openConfirmModal({
@@ -118,7 +126,8 @@ export function AppLayout({ children }: AppLayoutProps) {
       aside={
         <Navbar
         p={32}
-        className="bg-primary-100 border-none order-1 left-0 overflow-y-auto"
+        style={{backgroundColor: colorBackground}}
+        className="border-none order-1 left-0 overflow-y-auto"
         width={{ sm: 200, lg: 300 }}
         hiddenBreakpoint="sm"
         hidden={!opened}

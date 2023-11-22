@@ -22,6 +22,7 @@ import { SelectItem } from "../sign-up";
 import { _allCountries } from "@/utils/countries";
 import { z } from "zod";
 import { useRegisterAdmin } from "@/api/hooks/auth";
+import Cookies from "js-cookie";
 
 export default function Admins() {
  const { data: users, isLoading } = useAdminsList();
@@ -84,7 +85,7 @@ export default function Admins() {
 
   registerAdmin(payload);
  }
-
+ let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
  return (
   <section className="flex flex-col gap-6 h-full">
    <PageHeader
@@ -92,7 +93,8 @@ export default function Admins() {
     subheader="View and create admins"
     meta={
      <Button
-      className="bg-primary-100"
+     style={{backgroundColor:colorBackground}}
+      // className="bg-primary-100"
       onClick={() => setShowAdminCreateModal(true)}>
       Create admin
      </Button>

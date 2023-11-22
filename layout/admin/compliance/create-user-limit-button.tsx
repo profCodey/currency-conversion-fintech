@@ -13,6 +13,9 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useMemo, useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const globalListFormValidator = z.object({
   daily_limit: z.number().min(2, "Enter a value for daily limit"),
@@ -78,7 +81,8 @@ export function CreateUserLimitButton() {
   return (
     <>
       <Button
-        className="bg-primary-100 hover:bg-primary-100"
+        style={{ backgroundColor: colorBackground }}
+        className="hover:bg-primary-100"
         size="md"
         onClick={() => setCreateRateModalOpen(true)}
       >
@@ -130,7 +134,8 @@ export function CreateUserLimitButton() {
                 Cancel
               </Button>
               <Button
-                className="bg-primary-100 hover:bg-primary-100"
+                style={{ backgroundColor: colorBackground }}
+                className="hover:bg-primary-100"
                 size="md"
                 type="submit"
                 loading={currencyLoading}

@@ -306,6 +306,7 @@ export function TransactionHistory({
   );
 
   if (!isAdmin && !defaultGateway) {
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     return (
       <div className="flex-grow flex flex-col gap-2">
         <div className="bg-gray-30 rounded-lg border p-5 py-2 flex gap-4 items-center justify-between">
@@ -322,7 +323,8 @@ export function TransactionHistory({
 
           {/* Button to download table in Excel format */}
           <button
-            className="text-white bg-primary-100 p-2 rounded"
+          style={{backgroundColor:colorBackground}}
+            className="text-white p-2 rounded"
             onClick={exportToExcel}
           >
             Download Excel
@@ -361,7 +363,7 @@ export function TransactionHistory({
       </div>
     );
   }
-
+ let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <> 
     <div id = "memoPay" style={{ position: 'absolute', left: '-9999px' }}>
@@ -384,7 +386,8 @@ export function TransactionHistory({
 
         {/* Button to download table in Excel format */}
         <button
-          className="bg-primary-100 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+         style={{backgroundColor:colorBackground}}
+          className=" hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           onClick={exportToExcel}
         >
           Download Excel

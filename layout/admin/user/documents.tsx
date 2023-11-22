@@ -18,6 +18,11 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Cookies from "js-cookie";
+
+let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export function ClientDocuments() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
@@ -107,7 +112,8 @@ export function ClientDocuments() {
         {status !== "approved" && (
           <Group p={20}>
             <Button
-              className="bg-primary-100 hover:bg-primary-100"
+            style={{backgroundColor: colorBackground}}
+              className=" hover:bg-primary-100"
               onClick={() => setApproveModalOpen(true)}
             >
               Approve documents

@@ -6,6 +6,9 @@ import { IGateway } from "@/utils/validators/interfaces";
 import { Button, LoadingOverlay, Modal, Table } from "@mantine/core";
 import { data } from "autoprefixer";
 import { ReactElement, useMemo, useState } from "react";
+import Cookies from "js-cookie";
+
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export default function Gateways() {
     const { data: gateways, isLoading: gatewaysLoading } = useGetGateways();
@@ -26,7 +29,8 @@ export default function Gateways() {
                         <td>
                             <Button
                                 size="sm"
-                                className="bg-primary-100"
+                                style={{backgroundColor:colorBackground}}
+                                className=""
                                 onClick={() => setCurrentGateway(gateway)}>
                                 Edit
                             </Button>
@@ -37,7 +41,7 @@ export default function Gateways() {
         },
         [gateways?.data]
     );
-
+ 
     return (
         <section className="flex flex-col gap-6 h-full">
             <PageHeader
@@ -45,7 +49,8 @@ export default function Gateways() {
                 subheader="View and fetch available gateways"
                 meta={
                     <Button
-                        className="bg-primary-100"
+                    style={{backgroundColor:colorBackground}}
+                        className=""
                         size="md"
                         onClick={fetchGateways}
                         loading={fetchGatewaysLoading}

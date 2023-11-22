@@ -28,6 +28,7 @@ import {
   LocalProceedModal,
 } from "@/layout/common/local-proceed-modal";
 
+import Cookies from "js-cookie";
 
 
 const ConvertFxFundPage = () => {
@@ -286,6 +287,9 @@ setToReceive(parseFloat((toPay * liveRate).toFixed(2)));
     setToReceive(newValue);
     setToPay(Math.round(newValue / liveRate));    
   };
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   return (
     <section className="w-full h-full min-h-screen flex items-center justify-center">
@@ -459,7 +463,7 @@ setToReceive(parseFloat((toPay * liveRate).toFixed(2)));
               !sourceDetails.currencyId ||
               !destinationDetails.currencyId
             }
-            className="bg-accent hover:bg-accent"
+            style={{ backgroundColor: colorSecondary}}
             size="md"
             fullWidth
             onClick={handleProceedClick}

@@ -11,6 +11,7 @@ import { closeAllModals, modals } from "@mantine/modals";
 import { useBankOptions } from "@/api/hooks/banks";
 import { PayFxRecipient, SendFxMoneyModal } from "../common/send-fx-modal";
 import { useGetCurrentUser } from "@/api/hooks/user";
+import Cookies from "js-cookie";
 
 export const PayRecipient = z.object({
   bank: z.string().min(1, { message: "Bank name is required" }).optional(),
@@ -31,6 +32,9 @@ export function RecipientList({
   gateway: number | undefined;
 }) {
   const { data } = useGetCurrentUser();
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   const [recipientDetails, setRecipientDetails] = useState<
     z.infer<typeof PayRecipient>
   >({
@@ -148,7 +152,8 @@ export function RecipientList({
                   Delete
                 </Button>
                 <Button
-                  className="bg-primary-100 text-white"
+                style={{ backgroundColor: colorBackground }}
+                  className=" text-white"
                   rightIcon={<ArrowRight />}
                   onClick={() => handleSend(recipient)}
                 >

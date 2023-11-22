@@ -29,6 +29,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { z } from "zod";
 import { FxTransferOperationStage } from "./fx-forms/dollar-form";
 import { CurrencyDetailType } from "@/utils/validators/interfaces";
+import Cookies from "js-cookie";
 
 export const LocalExchangePayRecipient = z.object({
   // bank: z.string().min(1, { message: "Bank name is required" }).optional(),
@@ -320,6 +321,9 @@ export function LocalProceedModal({
     }
     window.location.reload();
   }
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   function handleAccountNumberChange(e: ChangeEvent<HTMLInputElement>) {
     const number = e.target.value;
@@ -575,8 +579,8 @@ Amount:
       />
 
       <Button
-        className="bg-primary-100"
-        rightIcon={<ArrowRight />}
+style={{ backgroundColor: colorBackground }}
+rightIcon={<ArrowRight />}
         size="md"
         type="submit"
       >

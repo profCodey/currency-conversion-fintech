@@ -17,8 +17,12 @@ import {
 } from "@mantine/core";
 import { Copy, CopySuccess } from "iconsax-react";
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 export function ApiKeyDisplay() {
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   const [showKey, setShowKey] = useState(false);
   const { data, isLoading } = useGetCurrentUser();
   const { isVerified, isLoading: isVerifyLoading } = useIsVerified();
@@ -153,7 +157,7 @@ export function ApiKeyDisplay() {
             </Group>
             <Group grow>
               <Button
-                className="bg-accent"
+                style={{ backgroundColor: colorSecondary }}
                 size="md"
                 onClick={() => setShowKey((state) => !state)}
               >

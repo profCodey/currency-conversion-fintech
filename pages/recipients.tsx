@@ -20,6 +20,7 @@ import { addRecipientFormValidator } from "@/utils/validators";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { RecipientList } from "@/layout/recipients/recipient-list";
 import { queryClient } from "./_app";
+import Cookies from "js-cookie";
 
 export default function Recipients() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -124,17 +125,20 @@ export default function Recipients() {
   const showUsdFields = addRecipientForm.values.currency === "USD";
   const showGbpFields = addRecipientForm.values.currency === "GBP";
   const showNairaFields = addRecipientForm.values.currency === "NGN";
-
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <section className="flex flex-col gap-8">
-      <div className="text-primary-100">
+      <div style={{ color: colorPrimary}}>
         <h2 className={"text-2xl font-secondary mt-2"}>Recipients</h2>
         <span>Select and Send Money to Saved Recipients</span>
       </div>
 
       <Button
-        leftIcon={<UserPlus />}
-        className="bg-primary-100 hover:bg-primary-100 text-white w-fit"
+        leftIcon={<UserPlus style={{ color: colorSecondary }} />}
+        className=" text-white w-fit"
+        style={{ backgroundColor: colorBackground }}
         size="md"
         onClick={handleAddRecipient}
       >
@@ -269,7 +273,8 @@ export default function Recipients() {
           <Button
             type="submit"
             size="md"
-            className="bg-[#132144] hover:bg-[#00B0F0] transition-colors duration-500"
+            style={{ backgroundColor: colorBackground }}
+            className=" transition-colors duration-500"
             loading={addRecipientLoading}
           >
             Add Recipient

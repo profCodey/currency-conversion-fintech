@@ -12,11 +12,14 @@ import { FundingStatuses } from "./manual-funding-drawer";
 import { FaDownload } from "react-icons/fa6";
 // import { CSVLink } from 'react-csv';
 import * as XLSX from "xlsx";
+import Cookies from "js-cookie";
 
 export function FxPayoutHistory() {
     const [payout, setPayout] = useState<IFxPayout | null>(null);
     const { data: fxPayouts, isLoading } = useGetFxPayouts();
-
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     function getTransactionIcon(status: FundingStatuses) {
         switch (status) {
             case "cancelled":
@@ -100,7 +103,8 @@ export function FxPayoutHistory() {
             <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
                 <div className="flex justify-end mb-4">
                     <button
-                        className="text-white bg-primary-100 p-2 rounded"
+                    style={{ backgroundColor: colorBackground }}
+                        className="text-white  p-2 rounded"
                         onClick={handleDownloadExcel}>
                         Download Excel
                     </button>

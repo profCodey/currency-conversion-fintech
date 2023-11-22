@@ -14,6 +14,7 @@ import {
 import { useNameEnquiry, useNewClientNameEnquiry } from "@/api/hooks/banks";
 import { useState, useEffect, ChangeEvent } from "react";
 import { log } from "console";
+import Cookies from "js-cookie";
 
 interface SelectBankType {
     label: string;
@@ -45,6 +46,15 @@ export const AccountDetailForm = ({
     const { data: accountDeets, isLoading: isLoadingDeets } =
         useGetAccountDetails();
     // console.log({ accountDeets: accountDeets?.data });
+    let colorPrimary = Cookies.get("primary_color")
+        ? Cookies.get("primary_color")
+        : "#132144";
+    let colorSecondary = Cookies.get("secondary_color")
+        ? Cookies.get("secondary_color")
+        : "#132144";
+    let colorBackground = Cookies.get("background_color")
+        ? Cookies.get("background_color")
+        : "#132144";
 
     // console.log({ banks });
     const [defaultBank, setDefaultBank] = useState<SelectBankType>({
@@ -109,7 +119,6 @@ export const AccountDetailForm = ({
         const bank_name = banks.find((b) => b.value === bank_id);
 
         if (bank_name) {
-
             accountDetailForm.setFieldValue("bank_name", bank_name?.label);
             setDefaultBank(bank_name.label);
         }
@@ -207,7 +216,6 @@ export const AccountDetailForm = ({
                 <TextInput
                     placeholder="Account Number"
                     size="lg"
-                    
                     defaultValue={accountDeets.data.account_number}
                     classNames={{ input: "disabled:bg-white text-black" }}
                     disabled={true}
@@ -243,7 +251,7 @@ export const AccountDetailForm = ({
                 <Button
                     type="submit"
                     size="lg"
-                    className="bg-[#00B0F0] hover:bg-[#00B0F0]"
+                    style={{ backgroundColor: colorSecondary }}
                     loading={isLoading}>
                     Submit
                 </Button>

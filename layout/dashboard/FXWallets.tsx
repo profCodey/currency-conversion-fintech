@@ -10,12 +10,16 @@ import { useRouter } from "next/router";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { useClientSelectedGateways } from "@/api/hooks/admin/users";
+import Cookies from "js-cookie";
 
 export function FXWallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
   const { data: fxData } = useFXWalletAccounts();
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   if (clientDetailsLoading || walletsLoading) {
     return (
@@ -95,6 +99,9 @@ function FXNonWalletsContainer({
   account_id: number | undefined;
   children?: ReactNode;
 }) {
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col items-center">
       <section className="text-primary-70 text-sm">
@@ -111,8 +118,8 @@ function FXNonWalletsContainer({
       </section>
 
       {!!children && (
-        <section className="flex items-center justify-center mt-8 w-full  bg-[#EFF3FB] p-4 rounded-md ">
-          {children}
+        <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: colorBackground }}>
+                    {children}
         </section>
       )}
     </div>
@@ -120,11 +127,15 @@ function FXNonWalletsContainer({
 }
 
 function WalletsContainer({ children }: { children: ReactNode }) {
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col gap-4">
-      <section className="flex justify-between items-center text-primary-70 text-sm">
+      <section className="flex justify-between items-center  text-sm">
         <div>
-          <p className="text-2xl text-semibold mb-2 text-[#6882B6]">
+          <p className="text-2xl text-semibold mb-2 "
+          style={{ color: colorPrimary}}>
             FX Balances
           </p>
           <span className="text-black font-normal text-base">
@@ -134,7 +145,7 @@ function WalletsContainer({ children }: { children: ReactNode }) {
         {/* <span role="button" className="text-[#03A1DB] font-semibold">Request Additional Account </span> */}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 bg-[#EFF3FB] ">
+      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: colorBackground }}>
         {children}
       </section>
     </div>
@@ -149,6 +160,9 @@ export function NGNWalletContainer({ children }: { children: ReactNode }) {
   const CreateGateWayValidator = z.object({
     gateway: z.string().min(1, { message: "Select gateway" }),
 });
+let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 function handleGatewayChange(gateway: string) {
   setCurrentGateway(gateway);
   createNewGateForm.setFieldValue("gateway", gateway);
@@ -170,16 +184,17 @@ function handleGatewayChange(gateway: string) {
 
   return (
     <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col gap-4">
-      <section className="flex justify-between items-center text-primary-70 text-sm">
+      <section className="flex justify-between items-center  text-sm">
         <div>
-          <p className="text-2xl text-semibold mb-2 text-[#6882B6]">
+          <p className="text-2xl text-semibold mb-2 "
+          style={{ color: colorPrimary }}>
             Naira Gateways
           </p>
           <span className="text-black font-normal text-base">
             Click on the account for more information
           </span>
         </div>
-        <span role="button" className="text-[#03A1DB] font-semibold"
+        <span role="button" className=" font-semibold" style={{ color: colorSecondary }}
         onClick={() => setCreateModalOpen(true)}>
         Request Another Gateway </span>
       </section>
@@ -209,7 +224,8 @@ function handleGatewayChange(gateway: string) {
                                
                                
                                 <Button
-                                    className="bg-primary-100 hover:bg-primary-100 my-5"
+                                style={{ backgroundColor: colorBackground }}
+                                    className=" my-5"
                                     size="md"
                                     type="submit">
                                     Create
@@ -222,7 +238,7 @@ function handleGatewayChange(gateway: string) {
       {/* <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1,_minmax(4rem,_auto))] gap-4 mt-3 bg-[#EFF3FB] ">
         {children}
       </section> */}
-      <section className="grid grid-cols-1 lg:grid-cols-3  grid-rows-[repeat(1,_minmax(4rem,_auto))] gap-4 mt-3 bg-[#EFF3FB]  rounded-[18px] p-3">
+      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: colorBackground }}>
         {children}
       </section>
     </div>

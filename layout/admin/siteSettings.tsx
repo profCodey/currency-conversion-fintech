@@ -39,6 +39,7 @@ export function SiteSettingsInitiate() {
 
     const settings: ISiteSettings | undefined = siteSettings?.data;
     const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoFileName, setLogoFileName] = useState<string>("");
 
     const addNewSettings = useForm({
         initialValues: {
@@ -62,14 +63,23 @@ export function SiteSettingsInitiate() {
                 default_gateway: settings.default_gateway,
                 company_name: settings.company_name,
                 company_address: settings.company_address,
-                logo: settings.logo,
+                logo: settings.logo, // Set logo value as obtained from the backend
                 primary_color: settings.primary_color,
                 secondary_color: settings.secondary_color,
                 background_color: settings.background_color,
             });
+    
+            // Set logo file name in the state
+            if (typeof settings.logo === 'string') {
+                const url = new URL(settings.logo as string);
+                const logoFileName = url.pathname.split('/').pop();
+                setLogoFile(new File([], logoFileName || ""));
+                setLogoFileName(logoFileName || "");
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settings]);
+    
 
     const { mutate: updateSiteSettings, isLoading: isUpdating } =
         useUpdateSiteSettings();
@@ -245,6 +255,7 @@ export function SiteSettingsInitiate() {
                                         <div>
                                             <FileInput
                                                 accept="image/*"
+                                                placeholder="Select file"
                                                 onChange={(file) => {
                                                     if (file) {
                                                       setLogoFile(file);
@@ -256,7 +267,20 @@ export function SiteSettingsInitiate() {
                                                 }}
                                             />
                                         </div>
-                                    </div>
+                                        {logoFileName && (
+                                                <div
+                                                        className="hover-message cursor-pointer"
+                                                        onClick={handleLogoFileNameClick}
+                                                    >
+                                                       <span className="text-sm italic">
+                                                        {logoFileName}
+                                                        </span> 
+                                                        <span className="tooltip-text">
+                                                            Click to view in another window
+                                                        </span>
+                                                    </div>
+                                                )}                 
+                                            </div>
                                     <Divider />
                                     <div className="mb-3 w-full">
                                         <p>Primary Color</p>

@@ -109,12 +109,9 @@ export const AccountDetailForm = ({
         const bank_name = banks.find((b) => b.value === bank_id);
 
         if (bank_name) {
-            console.log({ bank_name });
 
             accountDetailForm.setFieldValue("bank_name", bank_name?.label);
             setDefaultBank(bank_name.label);
-            console.log(defaultBank);
-            console.log(accountDetailForm.values?.bank_name, "bank name");
         }
     }
 
@@ -122,7 +119,6 @@ export const AccountDetailForm = ({
         function () {
             if (newClientNameEnquiryResult?.data) {
                 const name = newClientNameEnquiryResult?.data.result ?? "";
-                console.log("Setting account name:", name);
                 if (name) {
                     accountDetailForm.setFieldValue("account_name", name);
                 } else {
@@ -150,7 +146,6 @@ export const AccountDetailForm = ({
     useEffect(() => {
         if (accountDeets?.data) {
             const bankId = accountDeets.data.bank;
-            console.log(bankId);
 
             handleBankName(bankId);
             const acc_number = accountDeets.data.account_number;

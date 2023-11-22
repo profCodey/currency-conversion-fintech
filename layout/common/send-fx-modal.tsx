@@ -355,7 +355,6 @@ export const NairaOptionsModal = ({
     id,
 }: FxOptionsModalProps) => {
     const { data: fxData } = useFXWalletAccounts();
-    console.log(fxData);
 
     const [opened, { open, close: closeModal }] = useDisclosure(false);
     const { data: virtualAccount } = useGetVirtualAccount(String(id));

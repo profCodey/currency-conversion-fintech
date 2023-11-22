@@ -17,3 +17,24 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.hover-message {
+  bottom: 0;
+  cursor: pointer;
+  color: gray;
+  text-decoration: underline;
+}
+
+.tooltip-text {
+  display: none;
+  position: absolute;
+  background-color: #555;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.hover-message:hover .tooltip-text {
+  display: block;
+}

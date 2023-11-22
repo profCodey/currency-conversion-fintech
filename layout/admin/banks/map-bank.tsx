@@ -73,8 +73,8 @@ export function MapBankButton() {
   return (
     <>
       <Button
-      style={{backgroundColor:colorBackground}}
-        className="bg-accent hover:bg-accent"
+      style={{backgroundColor:colorSecondary}}
+        className=" hover:bg-accent"
         size="md"
         onClick={() => setMapBankModalOpen(true)}
       >

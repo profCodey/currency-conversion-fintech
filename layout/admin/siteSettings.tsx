@@ -1,8 +1,6 @@
 import {
     useGetSiteSettings,
     useUpdateSiteSettings,
-    useGetSiteSettings,
-    useUpdateSiteSettings,
 } from "@/api/hooks/admin/sitesettings";
 import { ISiteSettings } from "@/utils/validators/interfaces";
 import {
@@ -130,8 +128,6 @@ export function SiteSettingsInitiate() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settings]);
 
-    const { mutate: updateSiteSettings, isLoading: isUpdating } =
-        useUpdateSiteSettings();
     const { mutate: updateSiteSettings, isLoading: isUpdating } =
         useUpdateSiteSettings();
 

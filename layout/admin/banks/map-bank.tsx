@@ -13,8 +13,6 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import Cookies from "js-cookie";
-import Cookies from "js-cookie";
 
 export const MapBankValidator = z.object({
   bank: z.string().min(1, { message: "Select bank" }),

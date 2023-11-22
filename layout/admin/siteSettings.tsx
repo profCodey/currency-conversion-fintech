@@ -27,7 +27,7 @@ export const AddNewSettingsValidator = z.object({
     default_gateway: z.number().min(1, { message: "Set default gateway" }),
     company_name: z.string(),
     company_address: z.string(),
-    logo: z.string(),
+    logo: z.string().nullable(), // Make logo field nullable
     primary_color: z.string(),
     secondary_color: z.string(),
     background_color: z.string(),
@@ -39,6 +39,7 @@ export function SiteSettingsInitiate() {
 
     const settings: ISiteSettings | undefined = siteSettings?.data;
     const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoBackend, setLogoBackend] = useState<File | null>(null); // This is the logo url from the backend [string
     const [logoFileName, setLogoFileName] = useState<string>("");
 
     const addNewSettings = useForm({
@@ -63,7 +64,6 @@ export function SiteSettingsInitiate() {
                 default_gateway: settings.default_gateway,
                 company_name: settings.company_name,
                 company_address: settings.company_address,
-                logo: settings.logo, // Set logo value as obtained from the backend
                 primary_color: settings.primary_color,
                 secondary_color: settings.secondary_color,
                 background_color: settings.background_color,
@@ -73,7 +73,7 @@ export function SiteSettingsInitiate() {
             if (typeof settings.logo === 'string') {
                 const url = new URL(settings.logo as string);
                 const logoFileName = url.pathname.split('/').pop();
-                setLogoFile(new File([], logoFileName || ""));
+                setLogoBackend(new File([], logoFileName || ""));
                 setLogoFileName(logoFileName || "");
             }
         }
@@ -264,6 +264,9 @@ export function SiteSettingsInitiate() {
                                                             file.name
                                                         );
                                                     }
+                                                    // else {
+                                                    //     setLogoFile(logoFile)
+                                                    // }
                                                 }}
                                             />
                                         </div>

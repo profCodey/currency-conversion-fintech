@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FormFile } from "./form-file";
 import { useUpdateOnboardingDocuments } from "@/api/hooks/onboarding";
 import { useGetCurrentUser } from "@/api/hooks/user";
+import Cookies from "js-cookie";
 
 export interface DocumentsValidator {
   certificate_of_registration: string;
@@ -28,7 +29,9 @@ export function DocumentUpload({
   const { mutate: updateDocuments, isLoading } = useUpdateOnboardingDocuments(
     data?.data.id
   );
-
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   const [certificateOfRegistration, setCertificateOfRegistration] =
     useState<File | null>(null);
   const [utilityBill, setUtilityBill] = useState<File | null>(null);
@@ -137,7 +140,8 @@ export function DocumentUpload({
             acceptFormat="image/png,image/jpeg"
           />
           <Button
-            className="bg-accent font-semibold w-3/4"
+            className=" font-semibold w-3/4"
+            style={{ backgroundColor: colorSecondary }}
             size="lg"
             type="button"
             loading={isLoading}

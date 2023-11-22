@@ -33,6 +33,7 @@ import { useGetCurrentUser } from "@/api/hooks/user";
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { ExchangeBox } from "../dashboard/exchange-box";
 import { useFXWalletAccounts } from "@/api/hooks/accounts";
+import Cookies from "js-cookie";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -197,6 +198,9 @@ export const ConfirmationForm = ({
     handleSend(arg0: z.infer<typeof PayFxRecipient>): void;
     buttonLoading: boolean;
 }) => {
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     return (
         <Stack align="center" className="w-full">
             <Warning2 size={60} />
@@ -219,7 +223,7 @@ export const ConfirmationForm = ({
                     Cancel
                 </Button>
                 <Button
-                    className="bg-primary-100 hover:bg-primary-100"
+                    style={{ backgroundColor: colorBackground }}
                     loading={buttonLoading}
                     onClick={() => {
                         handleSend(
@@ -259,6 +263,9 @@ export const FxOptionsModal = ({
         return wallet.id === id;
     });
 
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     function handleSendMoneyOpen() {
         setShowConfirmationModal(true);
     }
@@ -282,7 +289,7 @@ export const FxOptionsModal = ({
                     style={{ cursor: "pointer" }}
                     className="flex items-center justify-between mb-3"
                     onClick={handleSendMoneyOpen}>
-                    <div className="text-[#6882B6]">
+                    <div style={{ color: colorPrimary }}>
                         <h3 className="text-2xl font-semibold"> Send Fund </h3>
                         <span className="text-sm font-semibold">
                             Send to foreign account{" "}
@@ -292,10 +299,10 @@ export const FxOptionsModal = ({
                 </div>
                 <Divider my="sm" />
                 <div
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", color: colorPrimary }}
                     className="flex items-center justify-between mb-3"
                     onClick={handleSendExchangeOpen}>
-                    <div className="text-[#6882B6]">
+                    <div >
                         <h3 className="text-2xl font-semibold">
                             {" "}
                             Convert Fund{" "}
@@ -310,7 +317,7 @@ export const FxOptionsModal = ({
                 <Link
                     className="flex items-center justify-between mb-3"
                     href="/transactions">
-                    <div className="text-[#6882B6]">
+                    <div style={{ color: colorPrimary}}>
                         <h3 className="text-2xl font-semibold">
                             {" "}
                             Transaction{" "}
@@ -355,7 +362,9 @@ export const NairaOptionsModal = ({
     id,
 }: FxOptionsModalProps) => {
     const { data: fxData } = useFXWalletAccounts();
-
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     const [opened, { open, close: closeModal }] = useDisclosure(false);
     const { data: virtualAccount } = useGetVirtualAccount(String(id));
     const { bankOptions } = useBankOptions();
@@ -372,6 +381,7 @@ export const NairaOptionsModal = ({
         narration: "",
     });
    
+   
     return (
         <>
             <Modal
@@ -380,7 +390,8 @@ export const NairaOptionsModal = ({
                 title={"Naira Exchange"}
                 centered>
                 <section className="flex items-center justify-between mb-3">
-                    <div className="text-[rgb(104,130,182)] w-full">
+                    <div className="w-full"
+                    style={{ color: colorPrimary}}>
                         <h3 className="text-lg text-black font-medium mb-2">
                             {" "}
                             Your Virtual Account is:{" "}
@@ -447,7 +458,7 @@ export const NairaOptionsModal = ({
                     role="button"
                     className="flex items-center justify-between mb-3"
                     onClick={open}>
-                    <div className="text-[#6882B6]">
+                    <div  style={{ color: colorPrimary }}>
                         <h3 className="text-2xl font-semibold">
                             {" "}
                             Withdraw Fund{" "}
@@ -470,7 +481,7 @@ export const NairaOptionsModal = ({
                 <Link
                     className="flex items-center justify-between mb-3"
                     href={`/dashboard/ngn/${id}`}>
-                    <div className="text-[#6882B6]">
+                    <div style={{ color: colorPrimary}}>
                         <h3 className="text-2xl font-semibold"> Exchange </h3>
                         <span className="text-sm font-semibold">
                             {" "}

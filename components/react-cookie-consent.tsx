@@ -1,7 +1,11 @@
 import React from "react";
 import CookieConsent from "react-cookie-consent";
+import Cookies from "js-cookie";
 
 function CookieConsentBanner() {
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     return (
         <div>
             <CookieConsent
@@ -17,9 +21,9 @@ function CookieConsentBanner() {
                     border: "1px solid #fff",
                     fontWeight: "bold",
                 }}
-                style={{ background: "#132144" }}
+                style={{ background: colorBackground }}
                 buttonStyle={{
-                    background: "#2196f3",
+                    background: colorPrimary,
                     fontSize: "10px",
                     color: "#fff",
                     borderRadius: "5px",

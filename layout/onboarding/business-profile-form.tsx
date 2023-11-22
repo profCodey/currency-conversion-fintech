@@ -8,6 +8,7 @@ import { DateInput } from "@mantine/dates";
 import dayjs from "dayjs";
 import { allCountryNames } from "@/utils/countries";
 import { ArrowRight } from "iconsax-react";
+import Cookies from "js-cookie";
 
 // interface ProfileValidator {
 //   status: string
@@ -30,6 +31,10 @@ export function BusinessProfileForm({
   const { mutate: updateProfile, isLoading } = useUpdateBusinessProfile(
     data?.data.id
   );
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
 
   const businessProfileForm = useForm({
     initialValues: {
@@ -192,7 +197,7 @@ export function BusinessProfileForm({
         <Button
           type="submit"
           size="lg"
-          className="bg-[#00B0F0] hover:bg-[#00B0F0]"
+          style={{ backgroundColor: colorSecondary}}
           loading={isLoading}
         >
           Submit
@@ -201,7 +206,7 @@ export function BusinessProfileForm({
         <Button
           type="button"
           size="lg"
-          className="bg-[#00B0F0] hover:bg-[#00B0F0]"
+          style={{ backgroundColor: colorSecondary}}
           onClick={handleNext}
           rightIcon={<ArrowRight />}
         >

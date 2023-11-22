@@ -15,6 +15,7 @@ import { Refresh } from "iconsax-react";
 import { useSyncDeposits } from "@/api/hooks/user";
 import { clsx } from "@mantine/core";
 import { useGetSelectedGateways } from "@/api/hooks/gateways";
+import Cookies from "js-cookie";
 
 export default function NGNBalance(props: { wallet: IAccount }) {
   const { wallet } = props;
@@ -23,6 +24,9 @@ export default function NGNBalance(props: { wallet: IAccount }) {
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
   const getIcon = useCurrencyFlags();
   const [seeBalance, setSeeBalance] = useState(false);
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   function toggleBalance(fxId: number) {
     const toggleFXBalance = wallets?.data.find((wallet) => wallet.id === fxId);
     setSeeBalance(!seeBalance);
@@ -67,11 +71,11 @@ if (wallet.id == selectedGateway?.id ) {
     <div
     style={selectedStyle}
       key={wallet.id}
-      className="px-4 py-3 bg-white flex flex-col gap-y-4 justify-between rounded-xl border-1 border-[#A9BADA]"
+      className="px-4 py-3 bg-white flex flex-col gap-y-4 justify-between rounded-xl border-1 "
     >
       <div className="flex items-start justify-between">
         <div className="flex gap-2 items-center ">
-          <div className="w-[74px] flex items-center gap-1 text-sm font-normal px-2 py-[10px] rounded-xl bg-[#F7F9FD] border-1 border-[#D7E1F4] text-[#1B2437]">
+          <div className="w-[74px] flex items-center gap-1 text-sm font-normal px-2 py-[10px] rounded-xl border-1 ">
             <span>{wallet.label}</span>
           </div>
           <span role="button" onClick={() => toggleBalance(wallet.id)}>
@@ -83,7 +87,9 @@ if (wallet.id == selectedGateway?.id ) {
           <OptionsIcon />
         </Button>
       </div>
-      <span className="text-[#4C689E] font-semibold text-xl flex gap-x-1">
+      <span
+      style={{ color: colorSecondary}}
+      className=" font-semibold text-xl flex gap-x-1">
         <span> {getCurrency(wallet.currency.code)}</span>
         <div className="flex justify-between w-full">
           <div>
@@ -98,7 +104,7 @@ if (wallet.id == selectedGateway?.id ) {
             }}>
             <Refresh
               size="20"
-              color="#02A1DB"
+              color={colorSecondary}
               variant="Outline"
               className={clsx(syncDepositsLoading && "animate-spin")}
             />

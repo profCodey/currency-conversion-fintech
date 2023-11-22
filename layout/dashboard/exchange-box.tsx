@@ -19,6 +19,7 @@ import { useExchange } from "@/api/hooks/exchange";
 import { showNotification } from "@mantine/notifications";
 import { useGetAccounts } from "@/api/hooks/accounts";
 import { useGetLiveRate } from "@/api/hooks/admin/rates";
+import Cookies from "js-cookie";
 
 interface ExchangeBoxProps {
   gatewayID?: number|undefined;
@@ -103,6 +104,9 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
       source_account: Number(sourceAcc?.value),
     });
   }
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144"; 
 
   return (
     <div className="bg-gray-30 border rounded-lg p-4">
@@ -205,7 +209,7 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
 
         <Button
           disabled={!liveRate || !destinationAccCurrency || !sourceAccCurrency}
-          className="bg-accent hover:bg-accent"
+style={{ backgroundColor: colorSecondary}}
           size="md"
           fullWidth
           onClick={handleExchangeClick}
@@ -247,7 +251,7 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
               Cancel
             </Button>
             <Button
-              className="bg-primary-100 hover:bg-primary-100"
+              style={{ backgroundColor: colorBackground}}
               loading={exchangeLoading}
               onClick={handleExchange}
               size="md"

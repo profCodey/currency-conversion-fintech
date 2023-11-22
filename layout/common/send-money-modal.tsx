@@ -21,8 +21,6 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 
-let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
-
 const PayRecipient = z.object({
  bank: z.string().min(1, { message: "Bank name is required" }).optional(),
  currency: z.string().min(1, { message: "Currency is required" }),
@@ -66,6 +64,10 @@ export function SendMoneyModal({
   useCreatePayout(setForm);
  const { defaultGatewayBalance, isLoading: defaultGatewayLoading } =
   useLocalBalance();
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
 
  function getModalContent(
   state:
@@ -270,7 +272,7 @@ export function SendMoneyModal({
    />
 
    <Button
-    style={{backgroundColor: colorBackground}}
+    style={{ backgroundColor: colorBackground}}
     rightIcon={<ArrowRight />}
     size="md"
     type="submit">

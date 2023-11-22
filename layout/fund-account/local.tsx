@@ -21,8 +21,12 @@ import { closeAllModals, modals } from "@mantine/modals";
 import { useMemo } from "react";
 import { z } from "zod";
 import { ManualFundingHistory } from "../transactions/manual-funding";
+import Cookies from "js-cookie";
 
 export function LocalManualFunding() {
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   const { data: bankDetails, isLoading } = useGetPaycelerBankDetails();
   const { localAccountOptions, isLoading: accountsLoading } =
     useAccountOptions();
@@ -137,7 +141,7 @@ export function LocalManualFunding() {
             );
           })}
 
-          <Text color="#0DC300">
+          <Text color={colorPrimary}>
             Kindly ensure that you have paid into the account number above
             before submitting this form
           </Text>
@@ -145,7 +149,7 @@ export function LocalManualFunding() {
           <Button
             type="submit"
             size="md"
-            className="bg-accent"
+            style={{ backgroundColor: colorSecondary }}
             loading={postManualFundingLoading}
           >
             Confirm Payment

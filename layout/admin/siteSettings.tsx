@@ -278,8 +278,8 @@ export function SiteSettingsInitiate() {
                                                        <span className="text-sm italic">
                                                         {logoFileName}
                                                         </span> 
-                                                        <span className="tooltip-text">
-                                                            Click to view in another window
+                                                        <span className="tooltip-text text-sm">
+                                                            Click to view in another tab
                                                         </span>
                                                     </div>
                                                 )}                 

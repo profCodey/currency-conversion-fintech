@@ -15,36 +15,13 @@ import {
     FileInput,
     Textarea,
     Button,
-    Box,
-    Divider,
-    LoadingOverlay,
-    Paper,
-    Skeleton,
-    Switch,
-    TextInput,
-    ColorInput,
-    FileInput,
-    Textarea,
-    Button,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useEffect, useState } from "react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 
-let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
-
 export const AddNewSettingsValidator = z.object({
-    use_fx_wallet: z.boolean(),
-    hide_wallet_at: z.number().min(1, { message: "Set time" }),
-    default_gateway: z.number().min(1, { message: "Set default gateway" }),
-    company_name: z.string(),
-    company_address: z.string(),
-    logo: z.string(),
-    primary_color: z.string(),
-    secondary_color: z.string(),
-    background_color: z.string(),
     use_fx_wallet: z.boolean(),
     hide_wallet_at: z.number().min(1, { message: "Set time" }),
     default_gateway: z.number().min(1, { message: "Set default gateway" }),
@@ -59,44 +36,10 @@ export const AddNewSettingsValidator = z.object({
 export function SiteSettingsInitiate() {
     const { data: siteSettings, isLoading: siteSettingsLoading } =
         useGetSiteSettings();
-    const { data: siteSettings, isLoading: siteSettingsLoading } =
-        useGetSiteSettings();
 
     const settings: ISiteSettings | undefined = siteSettings?.data;
     const [logoFile, setLogoFile] = useState<File | null>(null);
-    const settings: ISiteSettings | undefined = siteSettings?.data;
-    const [logoFile, setLogoFile] = useState<File | null>(null);
 
-    const addNewSettings = useForm({
-        initialValues: {
-            use_fx_wallet: settings?.use_fx_wallet || false,
-            hide_wallet_at: settings?.hide_wallet_at || 0,
-            default_gateway: settings?.default_gateway || 0,
-            company_name: settings?.company_name || "",
-            company_address: settings?.company_address || "",
-            logo: settings?.logo || "",
-            primary_color: settings?.primary_color || "",
-            secondary_color: settings?.secondary_color || "",
-            background_color: settings?.background_color || "",
-        },
-        validate: zodResolver(AddNewSettingsValidator),
-    });
-    useEffect(() => {
-        if (settings) {
-            addNewSettings.setValues({
-                use_fx_wallet: settings.use_fx_wallet,
-                hide_wallet_at: settings.hide_wallet_at,
-                default_gateway: settings.default_gateway,
-                company_name: settings.company_name,
-                company_address: settings.company_address,
-                logo: settings.logo,
-                primary_color: settings.primary_color,
-                secondary_color: settings.secondary_color,
-                background_color: settings.background_color,
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [settings]);
     const addNewSettings = useForm({
         initialValues: {
             use_fx_wallet: settings?.use_fx_wallet || false,
@@ -152,13 +95,6 @@ export function SiteSettingsInitiate() {
         updateSiteSettings(payload);
     }
 
-    return (
-        <>
-            <Box className="flex items-center justify-center h-fit relative mt-4">
-                <Skeleton visible={siteSettingsLoading} className="w-2/5">
-                    <LoadingOverlay
-                        visible={siteSettingsLoading || isUpdating}
-                    />
     return (
         <>
             <Box className="flex items-center justify-center h-fit relative mt-4">

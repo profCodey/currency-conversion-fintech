@@ -385,6 +385,7 @@ export interface IRate {
   destination_currency: number;
   use_live_rate: boolean;
   user: number;
+  user_email: string;
 }
 
 export interface IOnboardingDocuments {

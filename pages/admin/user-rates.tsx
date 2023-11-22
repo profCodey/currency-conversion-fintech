@@ -115,7 +115,7 @@ export default function UserRates() {
             return data?.data.map((rate, idx) => (
                 <tr key={rate.id}>
                     <td>{idx + 1}</td>
-                    <td>{rate.user}</td>
+                    <td>{rate.user_email}</td>
                     <td>{rate.rate}</td>
                     <td>{getCurrencyNameFromId(rate.source_currency)}</td>
                     <td>{getCurrencyNameFromId(rate.destination_currency)}</td>
@@ -183,7 +183,7 @@ export default function UserRates() {
                     </thead>
                     <tbody>{_rows}</tbody>
                     <Drawer
-                        title={`Edit rate for user ${selectedRate?.user}`}
+                        title={`Edit rate for user "${selectedRate?.user_email}"`}
                         opened={editRateModalOpen}
                         onClose={closeRateModal}
                         size="md"

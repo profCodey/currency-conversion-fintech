@@ -166,7 +166,7 @@ export function SiteSettingsInitiate() {
                                     handleSubmit
                                 )}>
                                 <div className="flex flex-col items-center justify-between mt-3 mb-3">
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
                                         <p>Hide wallet at</p>
                                         <TextInput
                                             type="number"
@@ -188,7 +188,7 @@ export function SiteSettingsInitiate() {
                                     </div>
 
                                     <Divider />
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
                                         <p>Default Gateway</p>
                                         <div>
                                             <TextInput
@@ -213,7 +213,7 @@ export function SiteSettingsInitiate() {
                                         </div>
                                     </div>
                                     <Divider />
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
                                         <p>Company Name</p>
                                         <div>
                                             <TextInput
@@ -232,9 +232,26 @@ export function SiteSettingsInitiate() {
                                             />
                                         </div>
                                     </div>
-                                    
                                     <Divider />
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
+                                        <p>Company Logo</p>
+                                        <div>
+                                            <FileInput
+                                                accept="image/*"
+                                                onChange={(file) => {
+                                                    if (file) {
+                                                      setLogoFile(file);
+                                                        addNewSettings.setFieldValue(
+                                                            "logo",
+                                                            file.name
+                                                        );
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <Divider />
+                                    <div className="mb-3 w-full">
                                         <p>Primary Color</p>
                                         <div>
                                             <ColorInput
@@ -252,7 +269,7 @@ export function SiteSettingsInitiate() {
                                         </div>
                                     </div>
                                     <Divider />
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
                                         <p>Secondary Color</p>
                                         <div>
                                             <ColorInput
@@ -270,7 +287,7 @@ export function SiteSettingsInitiate() {
                                         </div>
                                     </div>
                                     <Divider />
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
                                         <p>Background Color</p>
                                         <div>
                                             <ColorInput
@@ -288,7 +305,7 @@ export function SiteSettingsInitiate() {
                                         </div>
                                     </div>
                                     <Divider />
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full">
                                         <p>Address</p>
                                         <div>
                                             <Textarea
@@ -308,24 +325,7 @@ export function SiteSettingsInitiate() {
                                             />
                                         </div>
                                     </div>
-                                    <Divider />
-                                    <div className="mb-3">
-                                        <p>Company Logo</p>
-                                        <div>
-                                            <FileInput
-                                                accept="image/*"
-                                                onChange={(file) => {
-                                                    if (file) {
-                                                      setLogoFile(file);
-                                                        addNewSettings.setFieldValue(
-                                                            "logo",
-                                                            file.name
-                                                        );
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
+                                   
                                     <Button
                                         className="bg-primary-100 hover:bg-primary-100"
                                         size="md"

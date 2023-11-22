@@ -27,7 +27,7 @@ export const AddNewSettingsValidator = z.object({
     default_gateway: z.number().min(1, { message: "Set default gateway" }),
     company_name: z.string(),
     company_address: z.string(),
-    logo: z.string(),
+    logo: z.string().nullable(), // Make logo field nullable
     primary_color: z.string(),
     secondary_color: z.string(),
     background_color: z.string(),
@@ -39,6 +39,7 @@ export function SiteSettingsInitiate() {
 
     const settings: ISiteSettings | undefined = siteSettings?.data;
     const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoBackend, setLogoBackend] = useState<File | null>(null); // This is the logo url from the backend [string
     const [logoFileName, setLogoFileName] = useState<string>("");
 
     const addNewSettings = useForm({
@@ -63,7 +64,6 @@ export function SiteSettingsInitiate() {
                 default_gateway: settings.default_gateway,
                 company_name: settings.company_name,
                 company_address: settings.company_address,
-                logo: settings.logo, // Set logo value as obtained from the backend
                 primary_color: settings.primary_color,
                 secondary_color: settings.secondary_color,
                 background_color: settings.background_color,
@@ -73,7 +73,7 @@ export function SiteSettingsInitiate() {
             if (typeof settings.logo === 'string') {
                 const url = new URL(settings.logo as string);
                 const logoFileName = url.pathname.split('/').pop();
-                setLogoFile(new File([], logoFileName || ""));
+                setLogoBackend(new File([], logoFileName || ""));
                 setLogoFileName(logoFileName || "");
             }
         }
@@ -84,15 +84,17 @@ export function SiteSettingsInitiate() {
     const { mutate: updateSiteSettings, isLoading: isUpdating } =
         useUpdateSiteSettings();
 
-        function handleSubmit(addNewSettings: z.infer<typeof AddNewSettingsValidator>) {
+        function handleSubmit(
+            addNewSettings: z.infer<typeof AddNewSettingsValidator>
+        ) {
             const formData = new FormData();
         
             if (logoFile) {
                 formData.append("logo", logoFile);
+
             }
-            console.log(formData)
         
-            const payload = {
+            const payload: any = {
                 hide_wallet_at: addNewSettings.hide_wallet_at,
                 use_fx_wallet: addNewSettings.use_fx_wallet,
                 id: 1,
@@ -102,11 +104,19 @@ export function SiteSettingsInitiate() {
                 primary_color: addNewSettings.primary_color,
                 secondary_color: addNewSettings.secondary_color,
                 background_color: addNewSettings.background_color,
-                ...(logoFile && { logo: formData.get("logo") as File }), // Add logo to payload only if logoFile is truthy
+                // ...(logoFile && { logo: formData.get("logo") as File }), // Add logo to payload only if logoFile is present
             };
+        
+            // Add logo to payload only if logoFile is not null
+            if (logoFile) {
+                payload.logo = formData.get("logo") as File;
+            }
         
             updateSiteSettings(payload);
         }
+        
+        
+        
         
     function handleLogoFileNameClick() {
         if (settings && typeof settings.logo === 'string') {
@@ -267,6 +277,9 @@ export function SiteSettingsInitiate() {
                                                             file.name
                                                         );
                                                     }
+                                                    // else {
+                                                    //     setLogoFile(logoFile)
+                                                    // }
                                                 }}
                                             />
                                         </div>

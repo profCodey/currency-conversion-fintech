@@ -5,6 +5,7 @@ import { useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
 let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const AddNewBankValidator = z.object({
@@ -38,7 +39,8 @@ export function AddBankButton() {
   return (
     <>
       <Button
-        className="bg-primary-100 hover:bg-primary-100"
+      style={{backgroundColor: colorBackground }}
+        className="hover:bg-primary-100"
         size="md"
         onClick={() => setCreateBankModalOpen(true)}
       >
@@ -74,6 +76,7 @@ export function AddBankButton() {
             <Switch
               label="Activate"
               size="md"
+              color= {colorSecondary}
               checked={addNewBankForm.values.is_active}
               {...addNewBankForm.getInputProps("is_active")}
             />

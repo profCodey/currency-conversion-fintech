@@ -22,6 +22,12 @@ import { PageHeader } from "@/components/admin/page-header";
 import { useApproveClient, useGetClientDetails } from "@/api/hooks/user";
 import { useGetUserDetails } from "@/api/hooks/user";
 import { useGetWithdrawalAccount } from "@/api/hooks/withdrawal-account";
+import Cookies from "js-cookie";
+
+let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
 export default function UserProfile() {
   const router = useRouter();
   const id = router?.query.id as string;
@@ -42,7 +48,6 @@ export default function UserProfile() {
       {item.title}
     </Link>
   ));
-
   return (
     <section className="flex flex-col gap-6 h-full">
       <PageHeader
@@ -50,7 +55,8 @@ export default function UserProfile() {
           <div className="flex gap-6">
         <Breadcrumbs>{items}</Breadcrumbs>
         <Button
-        className="bg-primary-100 hover:bg-primary-100"
+        style={{backgroundColor: colorBackground}}
+        className=" hover:bg-primary-100"
         size="md"
         onClick={() => setUpdateUserDetailsOpen(true)}>
         Update Details
@@ -147,8 +153,9 @@ function ClientApprovalStatus() {
     <Group>
       {!isUserApproved && (
         <Button
+        style={{backgroundColor: colorBackground}}
           size="sm"
-          className="bg-primary-100"
+          className=""
           loading={approveClientLoading}
           onClick={() => approveClient()}
         >

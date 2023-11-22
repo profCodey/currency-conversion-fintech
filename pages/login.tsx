@@ -33,7 +33,6 @@ export default function Login() {
     const { data: siteSettings, isLoading: siteSettingsLoading } =
     useGetSiteSettings();
     const settings: ISiteSettings | undefined = siteSettings?.data;
-    console.log("settings", settings);
 
 const primaryColor = settings?.primary_color;
 const secondaryColor = settings?.secondary_color;

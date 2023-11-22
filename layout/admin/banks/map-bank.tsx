@@ -13,6 +13,11 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
+
+let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const MapBankValidator = z.object({
   bank: z.string().min(1, { message: "Select bank" }),
@@ -66,9 +71,6 @@ export function MapBankButton() {
     mapNewBankForm.setFieldValue("gateway", gateway);
     setCurrentGateway(gateway);
   }
-  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <>
       <Button

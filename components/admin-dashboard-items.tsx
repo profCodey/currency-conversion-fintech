@@ -15,9 +15,7 @@ import { ArrowRight2, DocumentText, I24Support, CopySuccess } from "iconsax-reac
 import Cookies from "js-cookie";
 
     //ts-ignore 
-    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
     let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const useNavStyles = createStyles(() => ({
   navLink: {

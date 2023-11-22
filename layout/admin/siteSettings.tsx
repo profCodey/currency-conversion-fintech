@@ -74,6 +74,8 @@ export function SiteSettingsInitiate() {
     const { mutate: updateSiteSettings, isLoading: isUpdating } =
         useUpdateSiteSettings();
 
+        let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
     function handleSubmit(
         addNewSettings: z.infer<typeof AddNewSettingsValidator>
     ) {
@@ -93,6 +95,11 @@ export function SiteSettingsInitiate() {
           };
 
         updateSiteSettings(payload);
+
+            //ts-ignore 
+    Cookies.set("primary_color", payload.primary_color);
+    Cookies.set("secondary_color", payload.secondary_color);
+    Cookies.set("background_color", payload.background_color);
     }
 
     return (
@@ -327,7 +334,8 @@ export function SiteSettingsInitiate() {
                                     </div>
                                    
                                     <Button
-                                        className="bg-primary-100 hover:bg-primary-100"
+                                        style={{backgroundColor: colorBackground}}
+                                        className="hover:bg-primary-100"
                                         size="md"
                                         type="submit"
                                         loaderPosition="right">

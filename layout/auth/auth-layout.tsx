@@ -3,6 +3,8 @@ import styles from "./auth-layout.module.css";
 import Logo from "@/public/logo-light.svg";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { useGetSiteSettings } from "@/api/hooks/admin/sitesettings";
+import { ISiteSettings } from "@/utils/validators/interfaces";
 interface AuthLayoutProps {
   children: ReactNode;
   title: string;
@@ -14,10 +16,14 @@ export default function AuthLayout({
   title,
   subtitle,
 }: AuthLayoutProps) {
+  const { data: siteSettings, isLoading: siteSettingsLoading } =
+  useGetSiteSettings();
+  const settings: ISiteSettings | undefined = siteSettings?.data;
+  console.log("settings", settings);
 
-  let primaryColor = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let secondaryColor = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let backgroundColor = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+const primaryColor = settings?.primary_color;
+const secondaryColor = settings?.secondary_color;
+const backgroundColor = settings?.background_color;
 console.log("primaryColor", primaryColor);
 console.log("secondaryColor", secondaryColor);
 console.log("backgroundColor", backgroundColor);

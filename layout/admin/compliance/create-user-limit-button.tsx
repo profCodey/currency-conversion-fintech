@@ -126,8 +126,7 @@ export function CreateUserLimitButton() {
             />
             <Group grow>
               <Button
-                style={{ backgroundColor: colorBackground }}
-                className="hover:bg-gray-30 text-gray-90"
+                className="bg-gray-30 hover:bg-gray-30 text-gray-90"
                 size="md"
                 type="button"
                 onClick={closeRateModal}

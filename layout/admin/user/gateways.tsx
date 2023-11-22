@@ -239,9 +239,7 @@ function GatewayOption({
 
      
       function handleCreate ( gateway_id: string ) {
-        console.log(gateway_id)
         const selected_gateway_id = gateway_id
-        console.log(selected_gateway_id)
         createVirtualAccount(selected_gateway_id)
     }
 

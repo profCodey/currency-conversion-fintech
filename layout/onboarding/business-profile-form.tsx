@@ -53,7 +53,6 @@ export function BusinessProfileForm({
   });
 
   function handleSubmit(data: z.infer<typeof businessProfileFormValidator>) {
-    console.log("haleluyahhhh");
     
     const payload = {
       ...data,

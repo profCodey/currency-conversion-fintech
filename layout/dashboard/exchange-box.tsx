@@ -64,7 +64,6 @@ export function ExchangeBox({gatewayID} : ExchangeBoxProps) {
 
   let sourceCurrency = sourceAcc?.currencyName;
   let sourceAccCurrency = sourceAcc?.currencyId;
-  console.log('sourceAcc', sourceAcc, 'sourceCurrency', sourceCurrency, 'sourceAccCurrency', sourceAccCurrency);
   const {
     data: liveRateValue,
     isLoading,

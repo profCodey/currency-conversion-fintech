@@ -1,3 +1,6 @@
+'use client'
+import { useGetSiteSettings } from "@/api/hooks/admin/sitesettings";
+import { ISiteSettings } from "@/utils/validators/interfaces";
 import { useLogin } from "@/api/hooks/auth";
 import { useState } from "react";
 import AuthLayout from "@/layout/auth/auth-layout";
@@ -7,6 +10,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { z } from "zod";
+import Cookies from "js-cookie";
 import CookieConsentBanner from "@/components/react-cookie-consent";
 
 export default function Login() {
@@ -26,6 +30,20 @@ export default function Login() {
         setIsLoggedIn(true);
     }
 
+    const { data: siteSettings, isLoading: siteSettingsLoading } =
+    useGetSiteSettings();
+    const settings: ISiteSettings | undefined = siteSettings?.data;
+    console.log("settings", settings);
+
+const primaryColor = settings?.primary_color;
+const secondaryColor = settings?.secondary_color;
+const backgroundColor = settings?.background_color;
+
+    //ts-ignore 
+    Cookies.set("primary_color", primaryColor);
+    Cookies.set("secondary_color", secondaryColor);
+    Cookies.set("background_color", backgroundColor);
+    
     return (
         <div>
             <form
@@ -51,14 +69,17 @@ export default function Login() {
                     <Button
                         type="submit"
                         size="lg"
-                        className="mt-1 bg-[#132144] hover:bg-[#132144] font-secondary"
+                        style={{backgroundColor: backgroundColor }}   
+                        className="mt-1 hover:bg-[#132144] font-secondary"
                         loading={isLoading}>
                         Login
                     </Button>
 
                     <div>
                         Not registered yet?{" "}
-                        <Link className="text-blue-700" href="/sign-up">
+                        <Link 
+                        style={{color: secondaryColor}}
+                        href="/sign-up">
                             Sign up
                         </Link>
                     </div>

@@ -9,6 +9,7 @@ import {
   useResetPassword,
 } from "@/api/hooks/forgot-password";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 export const forgotPasswordValidator = z
   .object({
@@ -79,6 +80,9 @@ export default function Login() {
     router.push(router);
     setInstructionsSent(true);
   }
+
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   return (
     <AuthLayout
@@ -151,14 +155,17 @@ export default function Login() {
               size="lg"
               loading={isLoading}
               loaderPosition="right"
-              className="mt-1 bg-[#132144] hover:bg-[#132144]"
+              style={{backgroundColor: colorBackground }}  
+              className="mt-1 hover:bg-[#132144]"
             >
               Send reset instructions
             </Button>
 
             <div>
               Remember password?{" "}
-              <Link className="text-blue-700" href="/login">
+              <Link 
+                 style={{color: colorSecondary }}  
+              href="/login">
                 Return to login
               </Link>
             </div>

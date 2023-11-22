@@ -17,6 +17,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { signupFormValidator } from "@/utils/validators";
 import { useRegister } from "@/api/hooks/auth";
 import { CLIENT_TYPES, CLIENT_TYPES_DATA, USER_CATEGORIES } from "@/utils/constants";
+import Cookies from "js-cookie";
 interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   flag: string;
   label: string;
@@ -38,9 +39,6 @@ export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
     </div>
   )
 );
-
-
-
 
 export default function Signup() {
   const { mutate: register, isLoading } = useRegister();
@@ -66,6 +64,11 @@ export default function Signup() {
     // console.log({payload});
     register(payload);
   }
+
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+
+
 
   return (
     <form className="w-full" onSubmit={signupForm.onSubmit(handleSignup)}>
@@ -127,7 +130,9 @@ export default function Signup() {
         <Button
           type="submit"
           size="lg"
-          className="mt-1 bg-[#132144] hover:bg-[#132144] font-secondary"
+          variant= "filled"  
+          style={{backgroundColor: colorBackground }}   
+          className="mt-1 hover:bg-[#132144] font-secondary"
           loading={isLoading}
         >
           Sign Up
@@ -135,14 +140,18 @@ export default function Signup() {
 
         <div>
           Have an account?{" "}
-          <Link className="text-blue-700" href="/login">
+          <Link 
+          style={{color: colorSecondary }}  
+          href="/login">
             Login
           </Link>
         </div>
 
         <div>
           By Clicking the Sign Up button, you agree to our{" "}
-          <Link className="text-blue-700" href="/privacy-policy">
+          <Link 
+          style={{color: colorSecondary }}  
+          href="/privacy-policy">
             Privacy Policy
           </Link>
         </div>

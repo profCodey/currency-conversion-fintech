@@ -1,3 +1,8 @@
+import Cookies from "js-cookie";
+let primaryColor = Cookies.get("primary_color");
+let secondaryColor = Cookies.get("secondary_color");
+let bgColor = Cookies.get("background_color");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -12,6 +17,9 @@ module.exports = {
         primary: { 100: "#132144", 70: "#7F8698", 30: "#BCC0C9" },
         gray: { 30: "#F3F3FA", 70: "#9C9898", 90: "#494949" },
         accent: "#00B0F0",
+        primaryColor: primaryColor,
+        secondaryColor: secondaryColor,
+        bgColor: bgColor
       },
       fontFamily: {
         // primary: ["var(--font-montserrat)"],

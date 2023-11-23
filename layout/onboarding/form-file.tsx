@@ -5,6 +5,7 @@ import { useGetCurrentUser } from "@/api/hooks/user";
 import { usePatchOnboardingDocuments } from "@/api/hooks/onboarding";
 import GreenCheck from "@/public/green-check.svg";
 import { Edit, Edit2 } from "iconsax-react";
+import Cookies from "js-cookie";
 
 export function FormFile({
   docName,
@@ -25,6 +26,15 @@ export function FormFile({
   const { mutate: updateDocuments, isLoading } = usePatchOnboardingDocuments(
     data?.data.id
   );
+  let colorPrimary = Cookies.get("primary_color")
+  ? Cookies.get("primary_color")
+  : "#132144";
+let colorSecondary = Cookies.get("secondary_color")
+  ? Cookies.get("secondary_color")
+  : "#132144";
+let colorBackground = Cookies.get("background_color")
+  ? Cookies.get("background_color")
+  : "#132144";
   const [showViewIcon, setShowViewIcon] = useState(false);
 
   function handleFileSelect(file: File) {
@@ -56,7 +66,8 @@ export function FormFile({
               <Anchor
                 href={fileUrl}
                 target="_blank"
-                className="text-accent border-right px-1"
+                style={{ color: colorSecondary }}
+                className=" border-right px-1"
               >
                 View
               </Anchor>
@@ -79,7 +90,8 @@ export function FormFile({
         <FileButton onChange={handleFileSelect} accept={acceptableFormat}>
           {(props) => (
             <Button
-              className="bg-transparent hover:bg-transparent text-accent font-semibold ml-auto"
+            style={{ color: colorSecondary }}
+              className="bg-transparent hover:bg-transparent  font-semibold ml-auto"
               loading={isLoading}
               {...props}
             >

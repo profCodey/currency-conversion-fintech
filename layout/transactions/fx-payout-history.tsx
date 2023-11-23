@@ -17,7 +17,8 @@ import Cookies from "js-cookie";
 export function FxPayoutHistory() {
     const [payout, setPayout] = useState<IFxPayout | null>(null);
     const { data: fxPayouts, isLoading } = useGetFxPayouts();
-
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
     function getTransactionIcon(status: FundingStatuses) {
         switch (status) {
             case "cancelled":
@@ -103,8 +104,8 @@ export function FxPayoutHistory() {
             <div className="flex-grow overflow-y-auto relative flex flex-col h-full">
                 <div className="flex justify-end mb-4">
                     <button
-                     style={{backgroundColor:colorBackground}}
-                        className="text-white p-2 rounded"
+                    style={{ backgroundColor: colorBackground }}
+                        className="text-white  p-2 rounded"
                         onClick={handleDownloadExcel}>
                         Download Excel
                     </button>

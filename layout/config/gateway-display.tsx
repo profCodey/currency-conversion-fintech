@@ -5,6 +5,7 @@ import { ReactNode, useState } from "react";
 import { AddNewGateway } from "./new-gateway";
 import { MakeDefaultGateway } from "./default-gateway";
 import { useIsVerified } from "@/api/hooks/user";
+import Cookies from "js-cookie";
 
 export default function GatewaysDisplay({
   selectedGateways,
@@ -21,6 +22,7 @@ export default function GatewaysDisplay({
   function handleDefaultGatewaySelect(gateway: ISelectedGateway) {
     setModalState(gateway);
   }
+ 
 
   return (
     <section className="text-gray-90">
@@ -71,6 +73,9 @@ function Gateway({
   handleSelect: (arg0: ISelectedGateway) => void;
 }) {
   const { isVerified } = useIsVerified();
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div
       key={gateway.id}
@@ -83,12 +88,15 @@ function Gateway({
           Not approved
         </Button>
       ) : gateway.is_default ? (
-        <Button className="bg-white hover:bg-white border-[#132144] py-2 px-3 text-[#132144] rounded-[4px]">
+        <Button className="  py-2 px-3  rounded-[4px]"
+        style={{ borderColor: colorBackground, color: colorBackground, backgroundColor: "white" }}
+        >
           Default
         </Button>
       ) : (
         <Button
-          className="bg-[#132144] hover:bg-[#132144] py-2 px-3 text-gray-200 rounded-[4px]"
+          className="py-2 px-3 text-gray-200 rounded-[4px]"
+          style={{ backgroundColor: colorBackground }}
           onClick={() => isVerified && handleSelect(gateway)}
           disabled={!isVerified}
         >

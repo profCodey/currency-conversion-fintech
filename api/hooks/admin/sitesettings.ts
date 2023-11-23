@@ -7,6 +7,7 @@ import { showNotification } from "@mantine/notifications";
 import { queryClient } from "@/pages/_app";
 import { useMemo } from "react";
 
+
 export interface ErrorItem {
     detail?: string;
     code?: string;
@@ -21,7 +22,7 @@ export function useGetSiteSettings() {
     );
 }
 
-export function useUpdateSiteSettings() {
+export function useUpdateSiteSettings(cb?: () => void) {
     return useMutation(
         function (data: ISiteSettings): Promise<AxiosResponse<ISiteSettings>> {
             return axiosInstance.patch("/site-settings/update/", data,
@@ -47,6 +48,10 @@ export function useUpdateSiteSettings() {
                     color: "red",
                 });
             },
+            onSettled: function () {
+                cb && cb();
+                queryClient.invalidateQueries(["site-settings"]);
+              },
         },
     );
 }

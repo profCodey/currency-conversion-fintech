@@ -74,7 +74,9 @@ export function SiteSettingsInitiate() {
     const { mutate: updateSiteSettings, isLoading: isUpdating } =
         useUpdateSiteSettings();
 
-        let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+    let colorBackground = Cookies.get("background_color")
+        ? Cookies.get("background_color")
+        : "#132144";
 
     function handleSubmit(
         addNewSettings: z.infer<typeof AddNewSettingsValidator>
@@ -92,14 +94,14 @@ export function SiteSettingsInitiate() {
             secondary_color: addNewSettings.secondary_color,
             background_color: addNewSettings.background_color,
             logo: formData.get("logo") as File, // Retrieve the file from FormData
-          };
+        };
 
         updateSiteSettings(payload);
 
-            //ts-ignore 
-    Cookies.set("primary_color", payload.primary_color);
-    Cookies.set("secondary_color", payload.secondary_color);
-    Cookies.set("background_color", payload.background_color);
+        //ts-ignore
+        Cookies.set("primary_color", payload.primary_color);
+        Cookies.set("secondary_color", payload.secondary_color);
+        Cookies.set("background_color", payload.background_color);
     }
 
     return (
@@ -247,7 +249,7 @@ export function SiteSettingsInitiate() {
                                                 accept="image/*"
                                                 onChange={(file) => {
                                                     if (file) {
-                                                      setLogoFile(file);
+                                                        setLogoFile(file);
                                                         addNewSettings.setFieldValue(
                                                             "logo",
                                                             file.name
@@ -332,9 +334,11 @@ export function SiteSettingsInitiate() {
                                             />
                                         </div>
                                     </div>
-                                   
+
                                     <Button
-                                        style={{backgroundColor: colorBackground}}
+                                        style={{
+                                            backgroundColor: colorBackground,
+                                        }}
                                         className="hover:bg-primary-100"
                                         size="md"
                                         type="submit"

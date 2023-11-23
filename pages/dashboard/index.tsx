@@ -5,9 +5,13 @@ import { AppLayout } from "@/layout/common/app-layout";
 import { FXWallets } from "@/layout/dashboard/FXWallets";
 import { ReactElement } from "react";
 import CookieConsentBanner from "@/components/react-cookie-consent";
+import Cookies from "js-cookie";
 
 export default function Dashboard() {
   const { data } = useGetCurrentUser();
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   const { data: fxData } = useFXWalletAccounts();
 
@@ -17,7 +21,8 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col gap-6 min-h-full">
-      <h2 className={"text-primary-100 text-2xl font-secondary"}>
+      <h2 className={" text-2xl font-secondary"}
+      style={{ color: colorPrimary}}>
         Thank you for choosing us,{" "}
         <span className="font-semibold">{data?.data.last_name}</span>
       </h2>

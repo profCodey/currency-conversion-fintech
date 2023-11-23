@@ -47,7 +47,6 @@ export function ManualFundingDrawer({
 
   function confirmApproveReject(status: FundingStatuses) {
     if (remark.trim() === ""){
-      console.log("remark is empty 2")
         return showNotification({
           title: "Error",
           message: `Remark cannot be empty. Kindly fill in a remark`,

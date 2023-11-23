@@ -8,12 +8,16 @@ import GatewaysDisplay, {
 import { IGateway } from "@/utils/validators/interfaces";
 import { ApiKeyDisplay } from "@/layout/config/api-key-display";
 import { PageHeader } from "@/components/admin/page-header";
+import Cookies from "js-cookie";
 
 export default function Settings() {
   const [showApiCreds, setShowApiCreds] = useState(false);
   const { data: gateways, isLoading: gatewaysLoading } = useGetGateways();
   const { data: selectedGateways, isLoading: selectedGatewaysLoading } =
     useGetSelectedGateways();
+    let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   if (gatewaysLoading || selectedGatewaysLoading) {
     return (
@@ -40,7 +44,8 @@ export default function Settings() {
         subheader="Request and manage gateway here"
         meta={
           <Button
-            className="bg-primary-100 hover:bg-primary-100 text-white"
+          style={{ backgroundColor: colorBackground }}
+            className=" text-white"
             onClick={() => setShowApiCreds(true)}
           >
             View API credentials

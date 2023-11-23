@@ -89,7 +89,6 @@ export default function Rates() {
     }
 
     function handleSubmit(values: z.infer<typeof rateFormValidator>) {
-        console.log("Submit button clicked");
 
         const payload = {
             id: selectedRate?.id as unknown as number,
@@ -100,7 +99,6 @@ export default function Rates() {
                 selectedRate?.destination_currency as unknown as number,
             use_live_rate: values.use_live_rate,
         };
-        console.log(payload);
         updateRate(payload);
         closeRateModal();
     }
@@ -275,9 +273,6 @@ export default function Rates() {
                                         loading={updateRateLoading}
                                         onClick={() => {
                                             editRateForm.validate();
-                                            console.log(
-                                                "Submit button clicked"
-                                            );
                                             handleSubmit(
                                                 editRateForm.values
                                             );

@@ -3,11 +3,15 @@ import { FxManualFunding } from "@/layout/fund-account/fx";
 import { LocalManualFunding } from "@/layout/fund-account/local";
 import { Tabs } from "@mantine/core";
 import { ReactElement } from "react";
+import Cookies from "js-cookie";
 
 export default function FundAccount() {
+  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+    let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="flex flex-col gap-6 h-full">
-      <div className="text-primary-100">
+      <div style={{ color: colorPrimary }}>
         <h2 className={"text-2xl font-secondary mt-2"}>Fund Wallet</h2>
         <span>fund your wallet here</span>
       </div>

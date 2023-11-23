@@ -79,7 +79,7 @@ export default function UserRates() {
             editRateForm.setFieldValue("rate", rate.rate);
             editRateForm.setFieldValue("is_active", rate.is_active);
         }
-    }, []);
+    }, [editRateForm]);
     function closeRateModal() {
         setEditRateModalOpen(false);
         setSelectedRate(null);
@@ -158,6 +158,7 @@ export default function UserRates() {
                 </tr>
             ));
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [data?.data, getCurrencyNameFromId]
     );
 

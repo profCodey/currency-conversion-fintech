@@ -274,7 +274,6 @@ export default function Recipients() {
             style={{ backgroundColor: colorBackground }}
             type="submit"
             size="md"
-            style={{ backgroundColor: colorBackground }}
             className=" transition-colors duration-500"
             loading={addRecipientLoading}
           >

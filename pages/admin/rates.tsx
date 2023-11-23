@@ -82,7 +82,7 @@ export default function Rates() {
             editRateForm.setFieldValue("is_active", rate.is_active);
             editRateForm.setFieldValue("use_live_rate", rate.use_live_rate);
         }
-    }, []);
+    }, [editRateForm]);
     function closeRateModal() {
         setEditRateModalOpen(false);
         setSelectedRate(null);
@@ -169,6 +169,7 @@ export default function Rates() {
                 </tr>
             ));
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [data?.data, getCurrencyNameFromId]
     );
 

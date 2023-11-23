@@ -383,7 +383,7 @@ Amount:
           Cancel
         </Button>
         <Button
-          className="bg-primary-100 hover:bg-primary-100"
+          style={{ backgroundColor: colorBackground }}
           loading={createFxPayoutLoading}
           onClick={handlePayout}
           size="md"

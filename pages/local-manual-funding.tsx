@@ -9,9 +9,9 @@ export default function Transactions() {
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="flex flex-col gap-6 h-full">
-      <div style={{ color: colorPrimary}}>
-        <h2 className={"text-2xl font-secondary mt-2"}>Manual Funding</h2>
-        <span>View Manual Fnding Histories</span>
+      <div >
+        <h2 style={{ color: colorPrimary}} className={"text-2xl font-secondary mt-2"}>Manual Funding</h2>
+        <span style={{ color: colorPrimary}}>View Manual Fnding Histories</span>
         <ManualFundingHistory/>
       </div>
     </div>

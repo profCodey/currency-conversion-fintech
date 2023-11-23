@@ -19,7 +19,6 @@ export function FxPayoutHistory() {
     const { data: fxPayouts, isLoading } = useGetFxPayouts();
     let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
   let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     function getTransactionIcon(status: FundingStatuses) {
         switch (status) {
             case "cancelled":

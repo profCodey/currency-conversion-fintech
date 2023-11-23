@@ -79,8 +79,6 @@ export function SiteSettingsInitiate() {
                 const logoFileName = url.pathname.split("/").pop();
                 setLogoBackend(new File([], logoFileName || ""));
                 setLogoFileName(logoFileName || "");
-                console.log(url);
-                console.log(logoFileName);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

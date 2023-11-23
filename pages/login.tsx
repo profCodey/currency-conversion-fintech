@@ -26,7 +26,6 @@ export default function Login() {
 
     function handleSubmit(values: z.infer<typeof loginFormValidator>) {
         login(values);
-
         setIsLoggedIn(true);
     }
 
@@ -47,7 +46,8 @@ const backgroundColor = settings?.background_color;
         <div>
             <form
                 className="w-full"
-                onSubmit={loginForm.onSubmit(handleSubmit)}>
+                onSubmit={loginForm.onSubmit(handleSubmit)}
+                >
                 <Stack spacing="lg">
                     <TextInput
                         placeholder="Enter email address"

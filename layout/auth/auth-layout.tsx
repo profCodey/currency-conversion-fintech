@@ -20,11 +20,11 @@ export default function AuthLayout({
   const { data: siteSettings, isLoading: siteSettingsLoading } =
   useGetSiteSettings();
   const settings: ISiteSettings | undefined = siteSettings?.data;
-  console.log("settings", settings);
 
   const [logo, setLogo] = useState("");
   useEffect(() => {
-    setLogo(settings?.logo);
+    settings?.logo ?
+    setLogo(settings?.logo) : setLogo("")
   }, [settings?.logo]);
 
 const primaryColor = settings?.primary_color;

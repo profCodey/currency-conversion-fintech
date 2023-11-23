@@ -46,6 +46,7 @@ const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = use
         </div>
       ));
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data]
   );
 

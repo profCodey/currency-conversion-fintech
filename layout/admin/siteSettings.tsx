@@ -104,10 +104,8 @@ export function SiteSettingsInitiate() {
                 primary_color: addNewSettings.primary_color,
                 secondary_color: addNewSettings.secondary_color,
                 background_color: addNewSettings.background_color,
-                // ...(logoFile && { logo: formData.get("logo") as File }), // Add logo to payload only if logoFile is present
             };
         
-            // Add logo to payload only if logoFile is not null
             if (logoFile) {
                 payload.logo = formData.get("logo") as File;
             }

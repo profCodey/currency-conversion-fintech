@@ -68,7 +68,7 @@ export default function Purposes() {
         if (purpose) {
             editPurposeForm.setFieldValue("description", purpose.description)
         }
-    }, []);
+    }, [editPurposeForm]);
     function closePurposeModal() {
         setEditPurposeModalOpen(false);
         setSelectedPurpose(null);
@@ -131,6 +131,7 @@ export default function Purposes() {
                 </tr>
             ));
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [data?.data, openDrawer]
     );
 

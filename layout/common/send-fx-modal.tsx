@@ -289,7 +289,7 @@ export const FxOptionsModal = ({
                     style={{ cursor: "pointer" }}
                     className="flex items-center justify-between mb-3"
                     onClick={handleSendMoneyOpen}>
-                    <div >
+                    <div style={{ color: colorSecondary }}>
                         <h3 className="text-2xl font-semibold"> Send Fund </h3>
                         <span className="text-sm font-semibold">
                             Send to foreign account{" "}
@@ -299,7 +299,7 @@ export const FxOptionsModal = ({
                 </div>
                 <Divider my="sm" />
                 <div
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", color: colorSecondary }}
                     className="flex items-center justify-between mb-3"
                     onClick={handleSendExchangeOpen}>
                     <div >
@@ -317,7 +317,7 @@ export const FxOptionsModal = ({
                 <Link
                     className="flex items-center justify-between mb-3"
                     href="/transactions">
-                    <div >
+                    <div style={{ color: colorSecondary }}>
                         <h3 className="text-2xl font-semibold">
                             {" "}
                             Transaction{" "}
@@ -391,8 +391,11 @@ export const NairaOptionsModal = ({
                 centered>
                 <section className="flex items-center justify-between mb-3">
                     <div className="w-full"
+                    style={{ color: colorSecondary }}
                     >
-                        <h3 className="text-lg text-black font-medium mb-2">
+                        <h3 
+                        
+                        className="text-lg font-medium mb-2">
                             {" "}
                             Your Virtual Account is:{" "}
                         </h3>
@@ -458,7 +461,7 @@ export const NairaOptionsModal = ({
                     role="button"
                     className="flex items-center justify-between mb-3"
                     onClick={open}>
-                    <div >
+                    <div style={{ color: colorSecondary }}>
                         <h3 className="text-2xl font-semibold">
                             {" "}
                             Withdraw Fund{" "}
@@ -481,7 +484,7 @@ export const NairaOptionsModal = ({
                 <Link
                     className="flex items-center justify-between mb-3"
                     href={`/dashboard/ngn/${id}`}>
-                    <div className="text-black">
+                    <div style={{ color: colorSecondary }}>
                         <h3 className="text-2xl font-semibold"> Exchange </h3>
                         <span className="text-sm font-semibold">
                             {" "}

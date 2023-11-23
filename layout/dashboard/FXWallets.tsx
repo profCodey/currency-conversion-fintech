@@ -118,7 +118,7 @@ function FXNonWalletsContainer({
       </section>
 
       {!!children && (
-        <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: colorBackground }}>
+        <section className="grid grid-cols-1  rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: "#ddd" }}>
                     {children}
         </section>
       )}
@@ -145,7 +145,7 @@ function WalletsContainer({ children }: { children: ReactNode }) {
         {/* <span role="button" className="text-[#03A1DB] font-semibold">Request Additional Account </span> */}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: colorBackground }}>
+      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: "#ddd" }}>
         {children}
       </section>
     </div>
@@ -238,7 +238,7 @@ function handleGatewayChange(gateway: string) {
       {/* <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1,_minmax(4rem,_auto))] gap-4 mt-3 bg-[#EFF3FB] ">
         {children}
       </section> */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: colorBackground }}>
+      <section className="grid grid-cols-1 lg:grid-cols-3 rounded-[18px] p-3 grid-rows-[repeat(1 ,_minmax(4rem,_auto))] gap-4 mt-3 " style={{ backgroundColor: "#ddd" }}>
         {children}
       </section>
     </div>

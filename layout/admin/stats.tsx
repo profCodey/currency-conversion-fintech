@@ -30,7 +30,7 @@ export function Stats() {
       {/* <section className="grid grid-cols-3 grid-rows-[64px_64px] gap-4 text-sm"> */}
       <Skeleton visible={usersLoading}>
         <div 
-        style={{backgroundColor:colorSecondary}}
+        style={{backgroundColor: colorBackground}}
         className="flex flex-col justify-center items-center gap-5 rounded-[10px] border h-full">
           <span
           style={{color:colorPrimary}}
@@ -47,7 +47,7 @@ export function Stats() {
         </div> */}
       <Skeleton visible={isLoading}>
         <div 
-        style={{backgroundColor:colorSecondary}}
+        style={{backgroundColor: colorBackground}}
         className=" rounded-[10px] flex flex-col gap-5 justify-center items-center px-5 h-full border">
           <span
            style={{color:colorPrimary}}>Pending Exchange:</span>
@@ -63,7 +63,7 @@ export function Stats() {
         </div> */}
       <Skeleton visible={isLoading}>
         <div 
-        style={{backgroundColor:colorSecondary}}
+        style={{backgroundColor: colorBackground}}
         className=" rounded-[10px] flex flex-col gap-5 justify-center items-center px-5 h-full border">
           <span
            style={{color:colorPrimary}}

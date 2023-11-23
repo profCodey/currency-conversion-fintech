@@ -20,6 +20,9 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
+let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const AddNewSettingsValidator = z.object({
     use_fx_wallet: z.boolean(),
@@ -27,18 +30,21 @@ export const AddNewSettingsValidator = z.object({
     default_gateway: z.number().min(1, { message: "Set default gateway" }),
     company_name: z.string(),
     company_address: z.string(),
-    logo: z.string(),
+    logo: z.string().nullable(), // Make logo field nullable
     primary_color: z.string(),
     secondary_color: z.string(),
     background_color: z.string(),
 });
 
 export function SiteSettingsInitiate() {
+    let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
     const { data: siteSettings, isLoading: siteSettingsLoading } =
         useGetSiteSettings();
 
     const settings: ISiteSettings | undefined = siteSettings?.data;
     const [logoFile, setLogoFile] = useState<File | null>(null);
+    const [logoBackend, setLogoBackend] = useState<File | null>(null); // This is the logo url from the backend [string
+    const [logoFileName, setLogoFileName] = useState<string>("");
 
     const addNewSettings = useForm({
         initialValues: {
@@ -62,11 +68,20 @@ export function SiteSettingsInitiate() {
                 default_gateway: settings.default_gateway,
                 company_name: settings.company_name,
                 company_address: settings.company_address,
-                logo: settings.logo,
                 primary_color: settings.primary_color,
                 secondary_color: settings.secondary_color,
                 background_color: settings.background_color,
             });
+
+            // Set logo file name in the state
+            if (typeof settings.logo === "string") {
+                const url = new URL(settings.logo as string);
+                const logoFileName = url.pathname.split("/").pop();
+                setLogoBackend(new File([], logoFileName || ""));
+                setLogoFileName(logoFileName || "");
+                console.log(url);
+                console.log(logoFileName);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settings]);
@@ -74,16 +89,16 @@ export function SiteSettingsInitiate() {
     const { mutate: updateSiteSettings, isLoading: isUpdating } =
         useUpdateSiteSettings();
 
-    let colorBackground = Cookies.get("background_color")
-        ? Cookies.get("background_color")
-        : "#132144";
-
     function handleSubmit(
         addNewSettings: z.infer<typeof AddNewSettingsValidator>
     ) {
         const formData = new FormData();
-        formData.append("logo", logoFile || "");
-        const payload = {
+
+        if (logoFile) {
+            formData.append("logo", logoFile);
+        }
+
+        const payload: any = {
             hide_wallet_at: addNewSettings.hide_wallet_at,
             use_fx_wallet: addNewSettings.use_fx_wallet,
             id: 1,
@@ -93,21 +108,32 @@ export function SiteSettingsInitiate() {
             primary_color: addNewSettings.primary_color,
             secondary_color: addNewSettings.secondary_color,
             background_color: addNewSettings.background_color,
-            logo: formData.get("logo") as File, // Retrieve the file from FormData
         };
 
-        updateSiteSettings(payload);
+        if (logoFile) {
+            payload.logo = formData.get("logo") as File;
+        }
 
-        //ts-ignore
+        updateSiteSettings(payload);
         Cookies.set("primary_color", payload.primary_color);
         Cookies.set("secondary_color", payload.secondary_color);
         Cookies.set("background_color", payload.background_color);
+
+        setTimeout(()=>{
+        window.location.reload();
+        }, 2000)
+    }
+
+    function handleLogoFileNameClick() {
+        if (settings && typeof settings.logo === "string") {
+            window.open(settings.logo, "_blank");
+        }
     }
 
     return (
         <>
             <Box className="flex items-center justify-center h-fit relative mt-4">
-                <Skeleton visible={siteSettingsLoading} className="w-2/5">
+                <Skeleton visible={siteSettingsLoading} className="w-full md:w-4/5 lg:w-2/5">
                     <LoadingOverlay
                         visible={siteSettingsLoading || isUpdating}
                     />
@@ -246,7 +272,8 @@ export function SiteSettingsInitiate() {
                                         <p>Company Logo</p>
                                         <div>
                                             <FileInput
-                                                accept="image/*"
+                                                accept="image/png, image/jpeg, image/jpg"
+                                                placeholder="Select file"
                                                 onChange={(file) => {
                                                     if (file) {
                                                         setLogoFile(file);
@@ -255,9 +282,26 @@ export function SiteSettingsInitiate() {
                                                             file.name
                                                         );
                                                     }
+                                                    // else {
+                                                    //     setLogoFile(logoFile)
+                                                    // }
                                                 }}
                                             />
                                         </div>
+                                        {logoFileName && (
+                                            <div
+                                                className="hover-message cursor-pointer"
+                                                onClick={
+                                                    handleLogoFileNameClick
+                                                }>
+                                                <span className="text-sm italic">
+                                                    {logoFileName}
+                                                </span>
+                                                <span className="tooltip-text text-sm">
+                                                    Click to view in another tab
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                     <Divider />
                                     <div className="mb-3 w-full">
@@ -336,9 +380,7 @@ export function SiteSettingsInitiate() {
                                     </div>
 
                                     <Button
-                                        style={{
-                                            backgroundColor: colorBackground,
-                                        }}
+                                        style={{backgroundColor: colorBackground}}
                                         className="hover:bg-primary-100"
                                         size="md"
                                         type="submit"
@@ -354,3 +396,4 @@ export function SiteSettingsInitiate() {
         </>
     );
 }
+

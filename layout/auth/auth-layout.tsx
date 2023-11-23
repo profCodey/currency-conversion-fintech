@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import styles from "./auth-layout.module.css";
 import Logo from "@/public/logo-light.svg";
 import Link from "next/link";
+import Image from "next/image";
 import Cookies from "js-cookie";
 import { useGetSiteSettings } from "@/api/hooks/admin/sitesettings";
 import { ISiteSettings } from "@/utils/validators/interfaces";
@@ -21,12 +22,14 @@ export default function AuthLayout({
   const settings: ISiteSettings | undefined = siteSettings?.data;
   console.log("settings", settings);
 
+  const [logo, setLogo] = useState("");
+  useEffect(() => {
+    setLogo(settings?.logo);
+  }, [settings?.logo]);
+
 const primaryColor = settings?.primary_color;
 const secondaryColor = settings?.secondary_color;
 const backgroundColor = settings?.background_color;
-console.log("primaryColor", primaryColor);
-console.log("secondaryColor", secondaryColor);
-console.log("backgroundColor", backgroundColor);
 
   return (
     <main className="flex h-screen">
@@ -37,7 +40,8 @@ console.log("backgroundColor", backgroundColor);
         }
       >
         <Link href="/">
-          <Logo />
+          {/* <Logo /> */}
+          <Image src={logo} alt="" width="100" height="100"/>
         </Link>
         <p className="text-white font-secondary">
           Receive money Anywhere around the world at any time.

@@ -20,8 +20,6 @@ export function PageHeader({
   meta?: ReactNode;
 }) {
   const { data, isLoading: notificationsLoading } = useGetNotifications();
-  console.log(data)
-  console.log(data?.data.length)
   const [notificationsModalOpen, setNotificationsModalOpen] = useState(false);
 const { mutate: deleteNotification, isLoading: deleteNotificationLoading } = useDeleteNotification();
   function handleDeleteNotification(notification: INotification) {

@@ -59,8 +59,9 @@ export function AppLayout({ children }: AppLayoutProps) {
   
   const colorBackground = settings?.background_color;
   const [logo, setLogo] = useState("");
+
   useEffect(() => {
-    setLogo(settings?.logo);
+    settings?.logo ? setLogo(settings?.logo): ""
   }, [settings?.logo]);
 
   function handleLogout() {

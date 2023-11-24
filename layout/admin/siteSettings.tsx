@@ -81,7 +81,6 @@ export function SiteSettingsInitiate() {
             // Set logo file name in the state
             if (typeof settings.logo === "string") {
                 const url = new URL(settings.logo as string);
-                console.log(url)
                 const logoFileName = url.pathname.split("/").pop();
                 setLogoBackend(new File([], logoFileName || ""));
                 setLogoFileName(logoFileName || "");
@@ -89,13 +88,11 @@ export function SiteSettingsInitiate() {
             }
             if (typeof settings.favicon === "string") {
                 const url = new URL(settings.favicon as string);
-                console.log(url)
                 const faviconFileName = url.pathname.split("/").pop();
                 setFaviconBackend(new File([], faviconFileName || ""));
                 setFaviconFileName(faviconFileName || "");
             }
-            console.log(faviconFileName);
-            console.log(logoFileName)
+            
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settings]);
@@ -123,6 +120,8 @@ export function SiteSettingsInitiate() {
             default_gateway: addNewSettings.default_gateway,
             created_by: "",
             created_on: "",
+            company_name: addNewSettings.company_name,
+            company_address: addNewSettings.company_address,
             primary_color: addNewSettings.primary_color,
             secondary_color: addNewSettings.secondary_color,
             background_color: addNewSettings.background_color,

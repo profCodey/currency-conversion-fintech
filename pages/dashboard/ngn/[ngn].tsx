@@ -22,12 +22,12 @@ import { useBankOptions } from "@/api/hooks/banks";
 import { CurrencyDetailType, IRecipient } from "@/utils/validators/interfaces";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useIsVerified } from "@/api/hooks/user";
-
 import {
   LocalExchangePayRecipient,
   LocalProceedModal,
 } from "@/layout/common/local-proceed-modal";
 import { useGetFxPurposes } from "@/api/hooks/fx";
+import { useGetCurrencies } from "@/api/hooks/currencies";
 
 const ExchangeFxFundPage = () => {
   const sourceRef = useRef<CurrencyDetailType | null>(null);
@@ -49,6 +49,21 @@ const ExchangeFxFundPage = () => {
     isLoading: loadingBanks,
     getBankName,
   } = useBankOptions();
+  const { data: currencyData, isLoading: getCurrencyLoading } =
+  useGetCurrencies();
+
+let currencies: { value: string; label: string }[] = useMemo(() => {
+    const options =
+      currencyData?.data?.map((currency) => ({
+        value: currency.id.toString(),
+        label: currency.code,
+      })) || [];
+      
+    // Add the extra object to index 0
+    options.unshift({ value: "0", label: "Select Currency" });
+
+    return options;
+  }, [currencyData?.data]);
 
   const { isLoading, defaultGateway } = useDefaultGateway();
   const { isLoading: isVerifyLoading, isVerified } = useIsVerified();
@@ -130,6 +145,8 @@ const ExchangeFxFundPage = () => {
   const [destinationCurrency, setDestinationCurrency] = useState("");
   const [sourceAccIdValue, setSourceAccIdValue] = useState("");
   const [destinationAccIdValue, setDestinationAccIdValue] = useState("");
+  const [receivingCurrency, setReceivingCurrency] = useState("") 
+  
   const [destinationDetails, setDestinationDetails] =
     useState<CurrencyDetailType>({
       label: "",
@@ -173,7 +190,7 @@ const ExchangeFxFundPage = () => {
         return data;
       }) ?? []
     );
-  }, [allAccounts]);
+  }, [allAccounts]);  
 
   const selectAccountData: CurrencyDetailType[] = useMemo(() => {
     return allAccountsDataMap.length > 0
@@ -194,35 +211,7 @@ const ExchangeFxFundPage = () => {
 
   // console.log({selectAccountData});
 
-  const allAccountsData = useMemo(() => {
-    return allAccountsDataMap.length > 0
-      ? allAccountsDataMap
-          .filter((account: any) => {
-            if (
-              account?.value !== (fx as string) &&
-              account?.category === "fx"
-            ) {
-              const data = {
-                // label: account?.label,
-                // value: account?.id?.toString(),
-                // currencyId: account?.currency?.id.toString(),
-                // currencyName: account?.currency?.name,
-                // category:account?.category,
-                ...account,
-              };
-              return data;
-            }
-          })
-          .map((acc) => {
-            return {
-              ...acc,
-              label: acc["currencyName"],
-            };
-          })
-      : [];
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allAccountsDataMap,fx]);
 
   const {
     data: liveRateValue,
@@ -332,7 +321,7 @@ const ExchangeFxFundPage = () => {
           )}
           {sourceAccCurrency && !destinationAccCurrency && (
             <div className="text-red-600 font-medium font-secondary text-sm text-center mt-1">
-              You have to select destination currency
+              
             </div>
           )}
           {!sourceAccCurrency && destinationAccCurrency && (
@@ -392,28 +381,38 @@ const ExchangeFxFundPage = () => {
             <Select
               className=""
               label="Destination"
-              value={currentCurrency.destination}
+              // value={currentCurrency.destination}
+              value= {receivingCurrency}
               onChange={(value) => {
-                const selectedAcc = allAccountsData?.filter(
-                  (acc) => acc.value === value
-                );
-                // console.log({ selectedAcc });
-                setDestinationDetails((d) => {
-                  return {
-                    ...d,
-                    ...selectedAcc[0],
-                  };
-                });
-                setDestinationAccCurrency(selectedAcc[0]?.currencyId);
-                setDestinationCurrency(selectedAcc[0]?.currencyName);
-                setDestinationAccIdValue(selectedAcc[0]?.value);
-                setCurrentCurrency({
-                  ...currentCurrency,
-                  destination: value,
-                });
+                // const selectedAcc = allAccountsData?.filter(
+                //   (acc) => acc.value === value
+                // );
+                const selectedCurrency =currencies.find((curr)=> {
+                  curr.value === value
+                })
+                // console.log('selectedAcc', selectedAcc );
+                // console.log('allAccountsData', allAccountsData );
+                
+                // setDestinationDetails((d) => {
+                //   return {
+                //     ...d,
+                //     ...selectedAcc[0],
+                //   };
+                // });
+                // setDestinationAccCurrency(selectedAcc[0]?.currencyId);
+                // setDestinationCurrency(selectedAcc[0]?.currencyName);
+                // setDestinationAccIdValue(selectedAcc[0]?.value);
+                // setCurrentCurrency({
+                //   ...currentCurrency,
+                //   destination: value,
+                // });
+                setDestinationAccCurrency(value as string);
+                setDestinationCurrency(selectedCurrency?.label as string);
+                setReceivingCurrency(value as string)
                 setToReceive(parseInt((toPay * liveRate).toFixed(2)));
               }}
-              data={allAccountsData}
+              // data={allAccountsData}
+              data ={currencies}
             />
 
             <div className="flex flex-col text-sm font-medium mt-1">
@@ -456,7 +455,8 @@ const ExchangeFxFundPage = () => {
               !liveRate ||
               // !sourceAccCurrency || !destinationAccCurrency
               !sourceDetails.currencyId ||
-              !destinationDetails.currencyId
+              // !destinationDetails.currencyId
+              !receivingCurrency
             }
 style={{ backgroundColor: colorSecondary }}     
        size="md"
@@ -494,6 +494,7 @@ style={{ backgroundColor: colorSecondary }}
           sourceCurrency={sourceCurrency || selectAccountData[0]?.currencyName
           }
           currencyRate={liveRate! || liveRateRef.current}
+          receivingCurrency={receivingCurrency}
         />
       </div>
     </section>

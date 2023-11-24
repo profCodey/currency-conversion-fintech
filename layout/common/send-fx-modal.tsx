@@ -27,7 +27,7 @@ import { useCurrencyOptions } from "@/api/hooks/currencies";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { PayRecipient } from "../recipients/recipient-list";
 import { useGetVirtualAccount } from "@/api/hooks/accounts";
-import { LocalProceedModal } from "./local-proceed-modal";
+import { FXProceedModal } from "./fx-proceed-modal";
 import { useGetFxPurposes } from "@/api/hooks/fx";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { useGetAccounts } from "@/api/hooks/accounts";
@@ -329,7 +329,7 @@ export const FxOptionsModal = ({
                     <ArrowRight />
                 </Link>
             </Modal>
-            <LocalProceedModal
+            <FXProceedModal
                 modalOpen={showConfirmationModal}
                 close={() => setShowConfirmationModal(false)}
                 sourceAmount={0}

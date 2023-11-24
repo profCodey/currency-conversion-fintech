@@ -115,7 +115,6 @@ interface SendMoneyProps {
   sourceCurrency?: string;
   purposes?: SelectItem[];
   isFXPayout?: boolean;
-  receivingCurrency: string;
 }
 
 export type TransferOperationStage =
@@ -125,7 +124,7 @@ export type TransferOperationStage =
   | "transaction-failed";
 
 // const countries = allCountryNames.map((c) => c.)
-export function LocalProceedModal({
+export function FXProceedModal({
   modalOpen,
   close,
   gateway,
@@ -133,7 +132,6 @@ export function LocalProceedModal({
   currencies,
   recipientDetails,
   destinationDetails,
-  receivingCurrency,
   sourceDetails,
   destinationAmount,
   sourceAmount,
@@ -194,7 +192,12 @@ export function LocalProceedModal({
         break;
     }
   }
-console.log("receiving", typeof receivingCurrency);
+
+  useEffect(() => {
+    // if(sourceDetails.currencyId && sourceDetails.value){
+    // console.log({sourceDetailsProp:sourceDetails},"sourceDetailsProp Updated");
+    // }
+  }, [sourceDetails]);
 
   const {
     data: nameEnquiryResult,
@@ -205,11 +208,14 @@ console.log("receiving", typeof receivingCurrency);
   const payRecipientForm = useForm({
     initialValues: {
       source_account: isFXPayout ? sourceDetails : sourceDetails?.value,
-      destination_currency: Number(receivingCurrency),
+      destination_currency: isFXPayout
+        ? destinationDetails
+        : destinationDetails?.currencyId ?? "",
       // bank: recipientDetails?.bank ? recipientDetails?.bank.toString() : "",
       amount: sourceAmount ?? "",
       account_name: "",
       account_number: "",
+
       narration: "",
       bank_name: "",
       purpose_of_payment: "",
@@ -233,11 +239,6 @@ console.log("receiving", typeof receivingCurrency);
     payRecipientForm.setFieldValue(`${fileKey}`, fileEvent);
     // console.log("payForm", payRecipientForm.values);
   };
-
-  useEffect(() => {
-    payRecipientForm.setValues({ destination_currency: Number(receivingCurrency) });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [receivingCurrency]);
 
   useEffect(
     function () {
@@ -293,8 +294,7 @@ console.log("receiving", typeof receivingCurrency);
   }, [sourceAmount]);
 
   function handleSubmit(
-    // values: z.infer<typeof LocalExchangePayRecipient> & Record<string, string>
-    paymentForm: z.infer<typeof LocalExchangePayRecipient> & Record<string, string>
+    values: z.infer<typeof LocalExchangePayRecipient> & Record<string, string>
   ) {
     // console.log({ values }, "fx proceed modal values");
     // console.log({ defaultGatewayBalance });
@@ -306,10 +306,8 @@ console.log("receiving", typeof receivingCurrency);
     //     color: "red",
     //   });
     // }
-    console.log(paymentForm);
-    
-    setConfirmationDetails(paymentForm);
-    // setConfirmationDetails(values);
+
+    setConfirmationDetails(values);
     setForm("confirm-details");
   }
 
@@ -399,7 +397,7 @@ Amount:
   const SendMoneyForm = (
     <form
       // @ts-ignore
-    //   onSubmit={payRecipientForm.onSubmit(handleSubmit)}
+      onSubmit={payRecipientForm.onSubmit(handleSubmit)}
       className="flex flex-col gap-4 relative"
     >
       {/* <LoadingOverlay visible={fetchingNameEnquiryDetails} overlayBlur={2} /> */}
@@ -585,7 +583,6 @@ style={{ backgroundColor: colorBackground }}
 rightIcon={<ArrowRight />}
         size="md"
         type="submit"
-        onClick={()=>handleSubmit(payRecipientForm.values)}
       >
         Continue
       </Button>

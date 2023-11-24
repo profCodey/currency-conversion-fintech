@@ -458,7 +458,7 @@ let currencies: { value: string; label: string }[] = useMemo(() => {
               // !destinationDetails.currencyId
               !receivingCurrency
             }
-style={{ backgroundColor: colorSecondary }}     
+style={{ backgroundColor: colorBackground }}     
        size="md"
             fullWidth
             onClick={handleProceedClick}

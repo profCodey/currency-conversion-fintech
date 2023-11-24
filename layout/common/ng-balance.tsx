@@ -60,7 +60,7 @@ const selectedStyle = { };
 if (wallet.id == selectedGateway?.id ) {
 
   //@ts-ignore
-  selectedStyle.border = "1px solid #02A1DB";
+  selectedStyle.border = "1px solid ";
   //@ts-ignore
   selectedStyle.color = "#02A1DB";
     //@ts-ignore
@@ -69,7 +69,7 @@ if (wallet.id == selectedGateway?.id ) {
 
   return (
     <div
-    style={selectedStyle}
+    style={{ borderColor: colorSecondary, borderWidth: "8px"}}
       key={wallet.id}
       className="px-4 py-3 bg-white flex flex-col gap-y-4 justify-between rounded-xl border-1 "
     >

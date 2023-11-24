@@ -155,6 +155,7 @@ export interface ISiteSettings {
   company_name?: string;
   company_address?: string;
   logo?: File;
+  favicon?: File;
   secondary_color?: string;
   primary_color?: string;
   background_color?: string;

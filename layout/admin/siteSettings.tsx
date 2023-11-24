@@ -31,6 +31,7 @@ export const AddNewSettingsValidator = z.object({
     company_name: z.string(),
     company_address: z.string(),
     logo: z.string().nullable(), // Make logo field nullable
+    favicon: z.string().nullable(),
     primary_color: z.string(),
     secondary_color: z.string(),
     background_color: z.string(),
@@ -45,6 +46,9 @@ export function SiteSettingsInitiate() {
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [logoBackend, setLogoBackend] = useState<File | null>(null); // This is the logo url from the backend [string
     const [logoFileName, setLogoFileName] = useState<string>("");
+    const [faviconFile, setFaviconFile] = useState<File | null>(null);
+    const [faviconBackend, setFaviconBackend] = useState<File | null>(null); // This is the logo url from the backend [string
+    const [faviconFileName, setFaviconFileName] = useState<string>("");
 
     const addNewSettings = useForm({
         initialValues: {
@@ -54,6 +58,7 @@ export function SiteSettingsInitiate() {
             company_name: settings?.company_name || "",
             company_address: settings?.company_address || "",
             logo: settings?.logo || "",
+            favicon: settings?.favicon || "",
             primary_color: settings?.primary_color || "",
             secondary_color: settings?.secondary_color || "",
             background_color: settings?.background_color || "",
@@ -76,10 +81,21 @@ export function SiteSettingsInitiate() {
             // Set logo file name in the state
             if (typeof settings.logo === "string") {
                 const url = new URL(settings.logo as string);
+                console.log(url)
                 const logoFileName = url.pathname.split("/").pop();
                 setLogoBackend(new File([], logoFileName || ""));
                 setLogoFileName(logoFileName || "");
+
             }
+            if (typeof settings.favicon === "string") {
+                const url = new URL(settings.favicon as string);
+                console.log(url)
+                const faviconFileName = url.pathname.split("/").pop();
+                setFaviconBackend(new File([], faviconFileName || ""));
+                setFaviconFileName(faviconFileName || "");
+            }
+            console.log(faviconFileName);
+            console.log(logoFileName)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settings]);
@@ -94,6 +110,10 @@ export function SiteSettingsInitiate() {
 
         if (logoFile) {
             formData.append("logo", logoFile);
+        }
+
+        if (faviconFile) {
+            formData.append("favicon", faviconFile);
         }
 
         const payload: any = {
@@ -112,14 +132,18 @@ export function SiteSettingsInitiate() {
             payload.logo = formData.get("logo") as File;
         }
 
+        if (faviconFile) {
+            payload.favicon = formData.get("favicon") as File;
+        }
+
         updateSiteSettings(payload);
         Cookies.set("primary_color", payload.primary_color);
         Cookies.set("secondary_color", payload.secondary_color);
         Cookies.set("background_color", payload.background_color);
 
-        setTimeout(()=>{
-        window.location.reload();
-        }, 2000)
+        // setTimeout(()=>{
+        // window.location.reload();
+        // }, 2000)
     }
 
     function handleLogoFileNameClick() {
@@ -127,6 +151,12 @@ export function SiteSettingsInitiate() {
             window.open(settings.logo, "_blank");
         }
     }
+    function handleFaviconFileNameClick() {
+        if (settings && typeof settings.favicon === "string") {
+            window.open(settings.favicon, "_blank");
+    }
+    }
+    
 
     return (
         <>
@@ -294,6 +324,40 @@ export function SiteSettingsInitiate() {
                                                 }>
                                                 <span className="text-sm italic">
                                                     {logoFileName}
+                                                </span>
+                                                <span className="tooltip-text text-sm">
+                                                    Click to view in another tab
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <Divider />
+                                    <div className="mb-3 w-full">
+                                        <p>Company Favicon</p>
+                                        <div>
+                                            <FileInput
+                                                accept="image/png, image/jpeg, image/jpg"
+                                                placeholder="Select file"
+                                                onChange={(file) => {
+                                                    if (file) {
+                                                        setFaviconFile(file);
+                                                        addNewSettings.setFieldValue(
+                                                            "favicon",
+                                                            file.name
+                                                        );
+                                                    }
+                                                   
+                                                }}
+                                            />
+                                        </div>
+                                        {faviconFileName && (
+                                            <div
+                                                className="hover-message cursor-pointer"
+                                                onClick={
+                                                    handleFaviconFileNameClick
+                                                }>
+                                                <span className="text-sm italic">
+                                                    {faviconFileName}
                                                 </span>
                                                 <span className="tooltip-text text-sm">
                                                     Click to view in another tab

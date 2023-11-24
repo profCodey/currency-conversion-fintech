@@ -110,7 +110,9 @@ function FXNonWalletsContainer({
             href={`/dashboard/ngn/${account_id}`}
             className="text-2xl text-semibold mb-2 text-[#6882B6] hover:underline hover:text-blue-500 cursor-pointer"
           >
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600">
+            <button
+            style={{backgroundColor: colorBackground}}
+            className=" text-white px-6 py-2 rounded-full ">
               Exchange
             </button>
           </Link>

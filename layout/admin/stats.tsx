@@ -33,10 +33,10 @@ export function Stats() {
         style={{backgroundColor: colorBackground}}
         className="flex flex-col justify-center items-center gap-5 rounded-[10px] border h-full">
           <span
-          style={{color:colorPrimary}}
+          style={{color:colorSecondary}}
           >No of Customers</span>
           <span 
-           style={{color:colorPrimary}}
+           style={{color:colorSecondary}}
           className="text-4xl font-semibold font-secondary">
             {currencyFormatter(numberOfCustomers)}
           </span>
@@ -50,9 +50,9 @@ export function Stats() {
         style={{backgroundColor: colorBackground}}
         className=" rounded-[10px] flex flex-col gap-5 justify-center items-center px-5 h-full border">
           <span
-           style={{color:colorPrimary}}>Pending Exchange:</span>
+           style={{color:colorSecondary}}>Pending Exchange:</span>
           <span 
-           style={{color:colorPrimary}}
+           style={{color:colorSecondary}}
           className="text-4xl font-semibold font-secondary">
             {currencyFormatter(Number(fxSummary?.data.pending))}
           </span>
@@ -66,10 +66,10 @@ export function Stats() {
         style={{backgroundColor: colorBackground}}
         className=" rounded-[10px] flex flex-col gap-5 justify-center items-center px-5 h-full border">
           <span
-           style={{color:colorPrimary}}
+           style={{color:colorSecondary}}
           >Total Exchange:</span>
           <span 
-           style={{color:colorPrimary}}
+           style={{color:colorSecondary}}
           className="text-4xl font-semibold font-secondary">
             {currencyFormatter(Number(fxSummary?.data.approved))}
           </span>

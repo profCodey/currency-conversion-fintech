@@ -123,8 +123,7 @@ export default function Rates() {
                 <tr key={rate.id}>
                     <td>{idx + 1}</td>
                     <td>{rate.rate}</td>
-                    <td>{getCurrencyNameFromId(rate.source_currency)}</td>
-                    <td>{getCurrencyNameFromId(rate.destination_currency)}</td>
+                    <td>{getCurrencyNameFromId(rate.source_currency)} - {getCurrencyNameFromId(rate.destination_currency)}</td>
                     <td>
                         {rate.is_active ? (
                             <span className="text-accent font-semibold">
@@ -188,8 +187,7 @@ export default function Rates() {
                         <tr>
                             <th>S/N</th>
                             <th>Rate</th>
-                            <th>Source currency</th>
-                            <th>Destination currency</th>
+                            <th>Currency</th>
                             <th>Status</th>
                             <th>Live rate</th>
                             <th>Last updated</th>

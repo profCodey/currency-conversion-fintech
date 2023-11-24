@@ -494,6 +494,7 @@ style={{ backgroundColor: colorSecondary }}
           sourceCurrency={sourceCurrency || selectAccountData[0]?.currencyName
           }
           currencyRate={liveRate! || liveRateRef.current}
+          receivingCurrency={receivingCurrency}
         />
       </div>
     </section>

@@ -26,7 +26,7 @@ import { useGetFxPurposes } from "@/api/hooks/fx";
 import {
   LocalExchangePayRecipient,
   LocalProceedModal,
-} from "@/layout/common/local-proceed-modal";
+} from "@/layout/common/fx-proceed-modal";
 
 import Cookies from "js-cookie";
 

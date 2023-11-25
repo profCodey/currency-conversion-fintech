@@ -120,8 +120,7 @@ export default function UserRates() {
                     <td>{idx + 1}</td>
                     <td>{rate.user_email}</td>
                     <td>{rate.rate}</td>
-                    <td>{getCurrencyNameFromId(rate.source_currency)}</td>
-                    <td>{getCurrencyNameFromId(rate.destination_currency)}</td>
+                    <td>{getCurrencyNameFromId(rate.source_currency)} - {getCurrencyNameFromId(rate.destination_currency)}</td>
                     <td>
                         {rate.is_active ? (
                             <span className="text-accent font-semibold">
@@ -178,8 +177,7 @@ export default function UserRates() {
                             <th>S/N</th>
                             <th>User</th>
                             <th>Rate</th>
-                            <th>Source currency</th>
-                            <th>Destination currency</th>
+                            <th>Currency</th>
                             <th>Status</th>
                             <th>Last updated</th>
                             <th>Action</th>

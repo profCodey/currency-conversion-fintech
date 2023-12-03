@@ -52,6 +52,20 @@ export interface ICurrentUser {
     user: number;
   };
 }
+
+export interface ICreditDebit {
+  id: number;
+  amount: string;
+  client_selected_gateway: number;
+  selected_gateway_label: string;
+  transaction_type: "credit" | "debit";
+  reference: string;
+  narration: string;
+  status: "pending" | "approved" | "rejected" | "cancelled";
+  created_on: string;
+  updated_on: string;
+  }
+
 export interface IGateway {
   id: number;
   description: string;

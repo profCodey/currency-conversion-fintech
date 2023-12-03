@@ -16,6 +16,10 @@ import { useState } from "react";
 import { showNotification } from "@mantine/notifications";
 
 export type FundingStatuses = "pending" | "approved" | "rejected" | "cancelled";
+export interface ApproveRejectCreditDebitPayload {
+  id: number;
+  status: FundingStatuses;
+}
 
 export interface ApproveRejectFundingPayload {
   id: number;

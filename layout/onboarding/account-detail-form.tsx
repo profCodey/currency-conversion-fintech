@@ -197,7 +197,7 @@ export const AccountDetailForm = ({
                     data={banks}
                     placeholder="Bank Name"
                     size="lg"
-                    {...accountDetailForm.getInputProps("ban")}
+                    {...accountDetailForm.getInputProps("bank")}
                     // value={defaultBank.label || accountDetailForm.values.bank_name}
                     defaultValue={
                         formData?.bank ||

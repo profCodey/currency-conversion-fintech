@@ -123,6 +123,8 @@ export default function Onboarding() {
         } else if (tab === "account-detail") setActiveTab(tab);
         // else if (tab === "gateway-options" && !disableDocumentNextButton())
         //   setActiveTab(tab);
+          else if (tab === "gateway-options" && !disableBusinessDocumentNextButton())
+          setActiveTab(tab);
         else if (tab === "status" && !disableGatewayNextButton)
             setActiveTab(tab);
         else if (tab === "confirmation") setActiveTab(tab);

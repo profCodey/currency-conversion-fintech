@@ -25,7 +25,7 @@ export function CreateCurrencyButton() {
   const [createRateModalOpen, setCreateRateModalOpen] = useState(false);
 
 const { mutate: addCurrency, isLoading: currencyLoading } =
-useAddNewCurrency(closeRateModal);
+(closeRateModal);
 
   const addCurrencyForm = useForm({
     initialValues: {

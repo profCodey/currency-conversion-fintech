@@ -7,10 +7,10 @@ export const signupFormValidator = z
     phone_number: z.string().min(5, "Enter valid phone number"),
     phone_code: z.string().min(1, "Enter phone code"),
     client_type: z.string(),
-    password: z.string().min(5, "Enter password with at least 5 characters"),
+    password: z.string().min(8, "Enter password with at least 8 characters"),
     confirm_password: z
       .string()
-      .min(5, "Enter password with at least 5 characters"),
+      .min(8, "Enter password with at least 8 characters"),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords don't match",
@@ -51,8 +51,9 @@ export const businessProfileFormValidator = z.object({
   state: z.string().min(1, "Enter state"),
   zip_code: z.string().min(1, "Enter zip code"),
   tax_number: z.string().optional(),
-  business_legal_name: z.string().min(1, "Enter legal name of business").optional(),
-  business_trading_name: z.string().min(1, "Enter trading name of business").optional(),
+  // business_legal_name: z.string().optional(),
+  business_legal_name: z.string().min(1, "Enter legal name of business"),
+  business_trading_name: z.string().optional(),
   country_of_registration: z.string().min(1, "Select country of registration").optional(),
   business_code: z
     .string()
@@ -92,9 +93,9 @@ export const accountDetailFormValidator = z.object({
   account_number: z.string()
   .refine((value) => /^\d{10}$/.test(value), {
     message: "Account Number must be 10 digits",}),
-    account_name: z.string(),
+    // account_name: z.string().min(1),
   bank_name:z.string(),
-  bank:z.string().optional(),
+  bank:z.string(),
 })
 export const addRecipientFormValidator = z.object({
   currency: z.string(),

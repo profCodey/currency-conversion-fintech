@@ -13,7 +13,6 @@ export interface ErrorItem {
     code?: string;
     }
 
-
 export function useGetSiteSettings() {
     return useQuery(["site-settings"],
          function (): Promise<AxiosResponse<ISiteSettings>> {

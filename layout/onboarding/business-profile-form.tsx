@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { allCountryNames } from "@/utils/countries";
 import { ArrowRight } from "iconsax-react";
 import Cookies from "js-cookie";
+import { useState } from "react";
 
 // interface ProfileValidator {
 //   status: string
@@ -58,19 +59,32 @@ export function BusinessProfileForm({
   });
 
   function handleSubmit(data: z.infer<typeof businessProfileFormValidator>) {
+    let payload;
+    console.log("data", data);
     
-    const payload = {
+   if (businessProfileForm.values.business_registration_date){
+      payload = {
       ...data,
       business_registration_date: dayjs(data.business_registration_date).format(
-        "YYYY-MM-DD"
-      ),
+        "YYYY-MM-DD"),
+        business_code: data.business_legal_name,
     };
     updateProfile(payload);
-  }
+  } else {
+    payload = {
+      ...data,
+      business_code: data.business_legal_name,
+    };
+    updateProfile(data)
+  };
+}
+
 
   function handleNext() {
     nextTab("id-verification");
   }
+
+
 
   return (
     <form
@@ -81,22 +95,23 @@ export function BusinessProfileForm({
         placeholder="Enter Merchant Legal Name"
         label="Merchant Legal Name"
         size="lg"
+        required
         classNames={{
           input: "disabled:bg-white text-black",
         }}
         disabled={disableFields}
-        // {...businessProfileForm.getInputProps("business_legal_name")}
-        onChange={(e) => {
-          const code = e.target.value.replace(/ /g, "");
-          businessProfileForm.setFieldValue("business_code", code);
+        {...businessProfileForm.getInputProps("business_legal_name")}
+        // onChange={(e) => {
+        //   const code = e.target.value.replace(/ /g, "");
+        //   businessProfileForm.setFieldValue("business_code", code);
 
-          businessProfileForm.setFieldValue(
-            "business_legal_name",
-            e.target.value
-          );
+        //   businessProfileForm.setFieldValue(
+        //     "business_legal_name",
+        //     e.target.value
+        //   );
 
-          // console.log({code});
-        }}
+        //   // console.log({code});
+        // }}
       />
       <TextInput
         placeholder="Enter Merchant Trading Name"
@@ -107,7 +122,7 @@ export function BusinessProfileForm({
         disabled={disableFields}
       />
       <TextInput
-        placeholder="Enter Tax Number (optional)"
+        placeholder="Enter Tax Number"
         label="Tax Number (optional)"
         size="lg"
         {...businessProfileForm.getInputProps("tax_number")}
@@ -130,6 +145,7 @@ export function BusinessProfileForm({
         placeholder="Enter Zip Code"
         label="Zip Code"
         size="lg"
+        required
         {...businessProfileForm.getInputProps("zip_code")}
         classNames={{ input: "disabled:bg-white text-black" }}
         disabled={disableFields}
@@ -140,6 +156,7 @@ export function BusinessProfileForm({
         size="lg"
         {...businessProfileForm.getInputProps("state")}
         classNames={{ input: "disabled:bg-white text-black" }}
+        required
         disabled={disableFields}
       />
       <TextInput
@@ -148,12 +165,14 @@ export function BusinessProfileForm({
         size="lg"
         {...businessProfileForm.getInputProps("city")}
         classNames={{ input: "disabled:bg-white text-black" }}
+        required
         disabled={disableFields}
       />
       <TextInput
         placeholder="Enter Business Registration Number"
         label="Business Registration Number"
         size="lg"
+        required
         {...businessProfileForm.getInputProps("business_registration_number")}
         classNames={{ input: "disabled:bg-white text-black" }}
         disabled={disableFields}
@@ -170,6 +189,7 @@ export function BusinessProfileForm({
       <Select
         data={allCountryNames}
         searchable
+        required
         placeholder="Select Country of Business Registration"
         label="Country of Business Registration"
         size="lg"
@@ -181,6 +201,7 @@ export function BusinessProfileForm({
         placeholder="Primary Business Activity"
         label="Primary Business Activity"
         size="lg"
+        required
         {...businessProfileForm.getInputProps("primary_business_activity")}
         classNames={{ input: "disabled:bg-white text-black" }}
         disabled={disableFields}
@@ -189,6 +210,7 @@ export function BusinessProfileForm({
         placeholder="BVN"
         label="BVN"
         size="lg"
+        required
         {...businessProfileForm.getInputProps("bvn")}
         classNames={{ input: "disabled:bg-white text-black" }}
         disabled={disableFields}

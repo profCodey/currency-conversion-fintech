@@ -11,8 +11,6 @@ import { queryClient } from "@/pages/_app";
 import { LoginResponse } from "@/utils/validators/interfaces";
 
 
-
-
 export function useRegister() {
   const { mutate: login } = useLogin();
   return useMutation({
@@ -31,8 +29,11 @@ export function useRegister() {
     },
     onError: function (data: AxiosError) {
       const response = data.response?.data as ErrorItem;
+      //ts-ignore
+      const combinedDetails = response.errors.map(error => error.detail).join(', ');
+
       showNotification({
-        message: response?.detail || "Registration unsuccessful",
+        message: combinedDetails || "Registration unsuccessful",
         color: "red",
       });
     },

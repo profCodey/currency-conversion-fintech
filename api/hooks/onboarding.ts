@@ -65,9 +65,10 @@ export function useUpdateBusinessProfile(userId: number | undefined) {
       },
       onError: function (data: AxiosError) {
         const response = data.response?.data as ErrorItem;
+        const combinedDetails = response.errors.map(error => error.detail).join(', ');
         showNotification({
           title: "Operation failed",
-          message: response.detail || "Unable to update profile",
+          message: combinedDetails || "Unable to update profile",
           color: "red",
         });
       },

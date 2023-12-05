@@ -146,7 +146,8 @@ export function DocumentUpload({
             type="button"
             loading={isLoading}
             disabled={disableDocumentNextButton}
-            onClick={() => nextTab("gateway-options")}
+            // onClick={() => nextTab("gateway-options")}
+            onClick={() => nextTab("account-detail")} 
           >
             Next
           </Button>

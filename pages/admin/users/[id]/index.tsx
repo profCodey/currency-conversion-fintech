@@ -22,6 +22,8 @@ import { PageHeader } from "@/components/admin/page-header";
 import { useApproveClient, useGetClientDetails } from "@/api/hooks/user";
 import { useGetUserDetails } from "@/api/hooks/user";
 import { useGetWithdrawalAccount } from "@/api/hooks/withdrawal-account";
+import CreditDebit from "@/layout/admin/user/creditdebit";
+
 import Cookies from "js-cookie";
 
 let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
@@ -93,16 +95,18 @@ export default function UserProfile() {
 
      
         <section className="rounded-md bg-white shadow border flex-grow relative">
-         <Tabs variant="pills" defaultValue="documents">
+         <Tabs variant="pills" defaultValue="gateways">
            <Group position="apart">
             {userInfo?.data?.client_type === "individual" ? (
            <Tabs.List>
               <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
-            </Tabs.List>
+              <Tabs.Tab value="credit/debit">Credit/Debit</Tabs.Tab>
+                          </Tabs.List>
             ) : (
               <Tabs.List>
               <Tabs.Tab value="documents">Documents</Tabs.Tab>
               <Tabs.Tab value="gateways">Gateways</Tabs.Tab>
+              <Tabs.Tab value="credit/debit">Credit/Debit</Tabs.Tab>
             </Tabs.List>
             )}
             <Link href={`/admin/users/${id}/transactions`}>
@@ -121,12 +125,21 @@ export default function UserProfile() {
               <ClientDocuments />
             </Tabs.Panel><Tabs.Panel value="gateways">
                 <ClientGateways />
-              </Tabs.Panel></>
+              </Tabs.Panel>
+              <Tabs.Panel value="credit/debit">
+            <CreditDebit />
+          </Tabs.Panel>
+              </>
             ) :
             (
-              <h2>
-              <ClientGateways />
-            </h2>
+              <>
+              <Tabs.Panel value="gateways">
+                <ClientGateways />
+                </Tabs.Panel> 
+              <Tabs.Panel value="credit/debit">
+            <CreditDebit />
+          </Tabs.Panel>
+            </>
           
             )
             }

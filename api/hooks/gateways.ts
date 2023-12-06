@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
+import { useClientSelectedGateways } from "@/api/hooks/admin/users";
+import { useRouter } from "next/router";
 import { queryClient } from "@/pages/_app";
 import axios, { AxiosResponse } from "axios";
 import {
@@ -23,6 +25,22 @@ export function useGetGateways() {
   });
 }
 
+export function useClientSelectedGatewayOptions() {
+  const router = useRouter();
+  const { data, isLoading } = useClientSelectedGateways(router?.query.id as string);
+  const gatewayOptions = useMemo(
+    function () {
+      return (
+        data?.data.map((gateway) => ({
+          label: gateway.gateway_name,
+          value: gateway.id.toString(),
+        })) ?? []
+      );
+    },
+    [data?.data]
+  );
+  return { gatewayOptions, isLoading };
+}
 export function useFetchGateways() {
   return useMutation(
     function (payload: {}) {
@@ -165,7 +183,8 @@ export function useGetSelectedGateways() {
       if (isApiClient) {
 
         return axiosInstance.get("/local/selected-gateways/");
-      } 
+      }
+       
       },
     });
 }

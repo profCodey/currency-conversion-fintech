@@ -172,7 +172,7 @@ export const AccountDetailForm = ({
     }
 
     function handleNext() {
-        nextTab("confirmation");
+        nextTab("status");
     }
 
     return (

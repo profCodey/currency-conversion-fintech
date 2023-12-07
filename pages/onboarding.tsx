@@ -125,7 +125,7 @@ export default function Onboarding() {
         //   setActiveTab(tab);
           else if (tab === "gateway-options" && !disableBusinessDocumentNextButton())
           setActiveTab(tab);
-        else if (tab === "status" && !disableGatewayNextButton)
+        else if (tab === "status")
             setActiveTab(tab);
         else if (tab === "confirmation") setActiveTab(tab);
     }
@@ -214,7 +214,7 @@ export default function Onboarding() {
                     <Tabs.Panel value="account-detail" pt="lg">
                         <AccountDetailForm
                             formData={accountDetails?.data}
-                            nextTab={setActiveTab}
+                            nextTab={handleTabChange}
                             disableFields={false}
                             banks={bankOptions}
                             loadingBanks={isLoadingBanks}

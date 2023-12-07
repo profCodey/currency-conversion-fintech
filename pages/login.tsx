@@ -41,6 +41,7 @@ const backgroundColor = settings?.background_color;
     Cookies.set("primary_color", primaryColor);
     Cookies.set("secondary_color", secondaryColor);
     Cookies.set("background_color", backgroundColor);
+    Cookies.set("use_fx_wallet", settings?.use_fx_wallet);
     
     return (
         <div>

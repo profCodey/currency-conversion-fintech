@@ -139,6 +139,7 @@ export function SiteSettingsInitiate() {
         Cookies.set("primary_color", payload.primary_color);
         Cookies.set("secondary_color", payload.secondary_color);
         Cookies.set("background_color", payload.background_color);
+        Cookies.set("use_fx_wallet", payload.use_fx_wallet);
 
         // setTimeout(()=>{
         // window.location.reload();

@@ -162,6 +162,11 @@ function ClientApprovalStatus() {
     return <Skeleton height={50} width={200} />;
   }
   const isUserApproved = data?.data.status;
+
+  function handleApprove(){
+    approveClient();
+    window.location.reload();
+  }
   return (
     <Group>
       {!isUserApproved && (
@@ -170,7 +175,7 @@ function ClientApprovalStatus() {
           size="sm"
           className=""
           loading={approveClientLoading}
-          onClick={() => approveClient()}
+          onClick={handleApprove}
         >
           Approve
         </Button>

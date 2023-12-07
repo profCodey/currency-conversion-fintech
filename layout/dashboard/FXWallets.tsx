@@ -16,10 +16,6 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
-  const { data: fxData } = useFXWalletAccounts();
-  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   if (clientDetailsLoading || walletsLoading) {
     return (
@@ -46,35 +42,38 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
     (wallet) => wallet.category === "local"
   )[0];
 
+  const useFxWalletString = Cookies.get("use_fx_wallet");
+  const useFxWallet = useFxWalletString === "true";  
+
   return (
     <>
-      {fxData?.data && 'use_fx_wallet' in fxData?.data && fxData?.data.use_fx_wallet ? (
-        <>
-          <WalletsContainer>
-            {wallets?.data
-              .filter((wallet) => wallet.category == "fx")
-              .map((wallet) => (
-                <FxBalance key={wallet.id} wallet={wallet} />
-              ))}
-          </WalletsContainer>
-          <NGNWalletContainer>
+    {useFxWallet ? (
+      <>
+        <WalletsContainer>
           {wallets?.data
-            .filter((wallet) => wallet.category === "local")
+            .filter((wallet) => wallet.category == "fx")
             .map((wallet) => (
-              <NGNBalance key={wallet.id} wallet={wallet} />
+              <FxBalance key={wallet.id} wallet={wallet} />
             ))}
-        </NGNWalletContainer>
-        </>
-      ) : (
-        <FXNonWalletsContainer account_id={firstNGNAccountId}>
-          {/* <NGNWalletContainer> */}
-            {walletItem && (
-              <NGNBalance key={walletItem?.id} wallet={walletItem} />
-            )}
-          {/* </NGNWalletContainer> */}
-        </FXNonWalletsContainer>
-      )}
-    </>
+        </WalletsContainer>
+        <NGNWalletContainer>
+        {wallets?.data
+          .filter((wallet) => wallet.category === "local")
+          .map((wallet) => (
+            <NGNBalance key={wallet.id} wallet={wallet} />
+          ))}
+      </NGNWalletContainer>
+      </>
+    ) : (
+      <FXNonWalletsContainer account_id={firstNGNAccountId}>
+        {/* <NGNWalletContainer> */}
+          {walletItem && (
+            <NGNBalance key={walletItem?.id} wallet={walletItem} />
+          )}
+        {/* </NGNWalletContainer> */}
+      </FXNonWalletsContainer>
+    )}
+  </>
   );
 }
 

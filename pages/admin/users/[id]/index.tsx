@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppLayout } from "@/layout/common/app-layout";
 import { ArrowRight2 } from "iconsax-react";
 import Link from "next/link";
@@ -165,7 +165,9 @@ function ClientApprovalStatus() {
 
   function handleApprove(){
     approveClient();
+    setTimeout(() => {
     window.location.reload();
+    }, 2000);
   }
   return (
     <Group>

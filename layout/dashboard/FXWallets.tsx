@@ -16,19 +16,15 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
   const { data: clientDetails, isLoading: clientDetailsLoading } =
     useGetClientDetails(userId);
   const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
-  const { data: fxData } = useFXWalletAccounts();
-  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   if (clientDetailsLoading || walletsLoading) {
     return (
-      <WalletsContainer>
+      <>
+      <Skeleton />
         <Skeleton />
         <Skeleton />
         <Skeleton />
-        <Skeleton />
-      </WalletsContainer>
+      </>
     );
   }
 
@@ -46,35 +42,38 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
     (wallet) => wallet.category === "local"
   )[0];
 
+  const useFxWalletString = Cookies.get("use_fx_wallet");
+  const useFxWallet = useFxWalletString === "true";
+
   return (
     <>
-      {fxData?.data && 'use_fx_wallet' in fxData?.data && fxData?.data.use_fx_wallet ? (
-        <>
-          <WalletsContainer>
-            {wallets?.data
-              .filter((wallet) => wallet.category == "fx")
-              .map((wallet) => (
-                <FxBalance key={wallet.id} wallet={wallet} />
-              ))}
-          </WalletsContainer>
-          <NGNWalletContainer>
+    {useFxWallet ? (
+      <>
+        <WalletsContainer>
           {wallets?.data
-            .filter((wallet) => wallet.category === "local")
+            .filter((wallet) => wallet.category == "fx")
             .map((wallet) => (
-              <NGNBalance key={wallet.id} wallet={wallet} />
+              <FxBalance key={wallet.id} wallet={wallet} />
             ))}
-        </NGNWalletContainer>
-        </>
-      ) : (
-        <FXNonWalletsContainer account_id={firstNGNAccountId}>
-          {/* <NGNWalletContainer> */}
-            {walletItem && (
-              <NGNBalance key={walletItem?.id} wallet={walletItem} />
-            )}
-          {/* </NGNWalletContainer> */}
-        </FXNonWalletsContainer>
-      )}
-    </>
+        </WalletsContainer>
+        <NGNWalletContainer>
+        {wallets?.data
+          .filter((wallet) => wallet.category === "local")
+          .map((wallet) => (
+            <NGNBalance key={wallet.id} wallet={wallet} />
+          ))}
+      </NGNWalletContainer>
+      </>
+    ) : (
+      <FXNonWalletsContainer account_id={firstNGNAccountId}>
+        {/* <NGNWalletContainer> */}
+          {walletItem && (
+            <NGNBalance key={walletItem?.id} wallet={walletItem} />
+          )}
+        {/* </NGNWalletContainer> */}
+      </FXNonWalletsContainer>
+    )}
+  </>
   );
 }
 
@@ -99,8 +98,6 @@ function FXNonWalletsContainer({
   account_id: number | undefined;
   children?: ReactNode;
 }) {
-  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col items-center">
@@ -223,8 +220,8 @@ function handleGatewayChange(gateway: string) {
                                     )}
                                     onChange={handleGatewayChange}
                                 />
-                               
-                               
+
+
                                 <Button
                                 style={{ backgroundColor: colorBackground }}
                                     className=" my-5"

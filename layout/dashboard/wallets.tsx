@@ -26,6 +26,7 @@ export function Wallets({ userId }: { userId: number | undefined }) {
       </WalletsContainer>
     );
   }
+  
   return (
     <WalletsContainer>
       {wallets?.data

@@ -19,12 +19,12 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
 
   if (clientDetailsLoading || walletsLoading) {
     return (
-      <WalletsContainer>
+      <>
+      <Skeleton />
         <Skeleton />
         <Skeleton />
         <Skeleton />
-        <Skeleton />
-      </WalletsContainer>
+      </>
     );
   }
 
@@ -43,7 +43,7 @@ export function FXWallets({ userId }: { userId: number | undefined }) {
   )[0];
 
   const useFxWalletString = Cookies.get("use_fx_wallet");
-  const useFxWallet = useFxWalletString === "true";  
+  const useFxWallet = useFxWalletString === "true";
 
   return (
     <>
@@ -98,8 +98,6 @@ function FXNonWalletsContainer({
   account_id: number | undefined;
   children?: ReactNode;
 }) {
-  let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col items-center">
@@ -222,8 +220,8 @@ function handleGatewayChange(gateway: string) {
                                     )}
                                     onChange={handleGatewayChange}
                                 />
-                               
-                               
+
+
                                 <Button
                                 style={{ backgroundColor: colorBackground }}
                                     className=" my-5"

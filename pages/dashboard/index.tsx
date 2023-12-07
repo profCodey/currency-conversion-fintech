@@ -1,5 +1,3 @@
-import { useFXWalletAccounts, useGetAccounts } from "@/api/hooks/accounts";
-import { useDefaultGateway } from "@/api/hooks/gateways";
 import { useGetCurrentUser } from "@/api/hooks/user";
 import { AppLayout } from "@/layout/common/app-layout";
 import { FXWallets } from "@/layout/dashboard/FXWallets";
@@ -10,14 +8,6 @@ import Cookies from "js-cookie";
 export default function Dashboard() {
   const { data } = useGetCurrentUser();
   let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
-  let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
-  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
-
-  const { data: fxData } = useFXWalletAccounts();
-
-  const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
-
-  const { defaultGateway, isLoading } = useDefaultGateway();
 
   return (
     <div className="flex flex-col gap-6 min-h-full">

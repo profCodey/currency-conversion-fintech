@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
-import { Group, LoadingOverlay, Skeleton, Stack, Table } from "@mantine/core";
+import { Group, LoadingOverlay, Skeleton, Stack, Table, Menu, Button, } from "@mantine/core";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
 import dayjs from "dayjs";
@@ -26,6 +26,9 @@ import * as XLSX from "xlsx";
 import html2canvas from "html2canvas";
 import { useGetBasicProfile } from "@/api/hooks/onboarding";
 
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+
+
 export function TransactionHistory({
   payoutHistory,
   payoutHistoryFetching,
@@ -48,6 +51,7 @@ export function TransactionHistory({
     [payoutId: string]: boolean;
   }>({});
   const [currentPayout, setCurrentPayout] = useState({});
+  const [status, setStatus] = useState<string>("all");
 
   const isAdmin = role === USER_CATEGORIES.ADMIN;
   let emptyTransactionHistory =
@@ -351,6 +355,22 @@ export function TransactionHistory({
           <span className="text-primary-100 font-semibold mr-auto">
             Recent Payouts
           </span>
+          <Group className="">
+      <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <Button 
+         style={{backgroundColor:colorSecondary}}
+        >Filter by Status</Button>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Item>Paid</Menu.Item>
+        <Menu.Item>Cancelled</Menu.Item>
+        <Menu.Item>Completed</Menu.Item>
+        <Menu.Item>Failed</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+      </Group>
           {meta}
           <DatePickerInput
             className="bg-white"
@@ -374,6 +394,33 @@ export function TransactionHistory({
         <span className="text-primary-100 font-semibold mr-auto">
           Recent Payouts
         </span>
+        <Group className="">
+      <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <Button 
+         style={{backgroundColor:colorSecondary}}
+        >Filter by Status</Button>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Item
+        onClick={()=> {setStatus("Paid")}}
+        >Paid</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setStatus("Processing")}}
+        >Processing</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setStatus("Cancelled")}}
+        >Cancelled</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setStatus("Completed")}}
+        >Completed</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setStatus("Failed")}}
+        >Failed</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+      </Group>
 
         {meta}
 

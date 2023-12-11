@@ -14,7 +14,7 @@ export function UserPayoutHistory({
   gateway?: string;
 }) {
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(() => {
-    const startDate = dayjs(new Date()).subtract(30, "days").toDate();
+    const startDate = dayjs(new Date()).subtract(1, "days").toDate();
     const endDate = new Date();
 
     return [startDate, endDate];

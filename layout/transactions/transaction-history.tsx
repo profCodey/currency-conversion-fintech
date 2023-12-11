@@ -388,9 +388,9 @@ export function TransactionHistory({
  <Group className="">
       <Menu shadow="md" width={200}>
       <Menu.Target>
-        <TextInput 
+        <Button 
          style={{backgroundColor:colorSecondary}}
-        >Filter by Status</TextInput>
+        >Filter by Status</Button>
       </Menu.Target>
       <Menu.Dropdown>
       <Menu.Item

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmptyTransactionListVector from "@/public/empty_transaction.svg";
-import { Group, LoadingOverlay, Skeleton, Stack, Table } from "@mantine/core";
+import { Group, LoadingOverlay, Skeleton, Stack, Table, Menu, Button, TextInput, } from "@mantine/core";
 import { useDefaultGateway } from "@/api/hooks/gateways";
 import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
 import dayjs from "dayjs";
@@ -26,6 +26,9 @@ import * as XLSX from "xlsx";
 import html2canvas from "html2canvas";
 import { useGetBasicProfile } from "@/api/hooks/onboarding";
 
+let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
+
+
 export function TransactionHistory({
   payoutHistory,
   payoutHistoryFetching,
@@ -48,6 +51,7 @@ export function TransactionHistory({
     [payoutId: string]: boolean;
   }>({});
   const [currentPayout, setCurrentPayout] = useState({});
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
 
   const isAdmin = role === USER_CATEGORIES.ADMIN;
   let emptyTransactionHistory =
@@ -86,18 +90,6 @@ export function TransactionHistory({
         return status;
     }
   }
-  // Variable to store the modal content
-  // const transactionModalContent = Object.entries(transactionModalState).map(
-  //   ([payoutId, showModal]) =>
-  //     showModal && (
-  //       <TransactionModal
-  //         key={payoutId}
-  //         payout={payoutHistory?.data.result?.find(
-  //           (payout) => payout.payoutId === payoutId
-  //         )}
-  //       />
-  //     )
-  // );
 
   const userId : string | number | undefined = Cookies.get("pycl_user_id");
   const companyInfo = useGetBasicProfile(Number(userId));
@@ -243,7 +235,6 @@ export function TransactionHistory({
       return;
     }
   
-
     const ws = XLSX.utils.json_to_sheet(info);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Payout History");
@@ -256,6 +247,17 @@ export function TransactionHistory({
     function () {
       html2canvas;
       return payoutHistory?.data.result
+      ?.filter((payout) => {
+        // Filter based on the selected status
+        if (selectedStatus === "All") {
+          return true; // Show all data
+        } else if(selectedStatus === "FailedDuringSend"){
+          return payout.status.toLowerCase() === "failed" && payout.status.toLowerCase() === "FailedDuringSend";
+        }
+        else {
+          return payout.status.toLowerCase() === selectedStatus.toLowerCase();
+        }
+      })
         ?.map(function (payout) {
           return (
             <React.Fragment key={payout.payoutId}>
@@ -302,7 +304,7 @@ export function TransactionHistory({
         .reverse();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [payoutHistory?.data.result]
+    [payoutHistory?.data.result, selectedStatus]
   );
 
   if (!isAdmin && !defaultGateway) {
@@ -363,6 +365,7 @@ export function TransactionHistory({
       </div>
     );
   }
+
  let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
     <> 
@@ -374,7 +377,6 @@ export function TransactionHistory({
         <span className="text-primary-100 font-semibold mr-auto">
           Recent Payouts
         </span>
-
         {meta}
 
         <DatePickerInput
@@ -383,7 +385,32 @@ export function TransactionHistory({
           value={dateRange}
           onChange={setDateRange}
         />
-
+ <Group className="">
+      <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <TextInput 
+         style={{backgroundColor:colorSecondary}}
+        >Filter by Status</TextInput>
+      </Menu.Target>
+      <Menu.Dropdown>
+      <Menu.Item
+        onClick={()=> {setSelectedStatus("All")}}
+        >All</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setSelectedStatus("Paid")}}
+        >Completed</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setSelectedStatus("SentToGateway")}}
+        >Processing</Menu.Item>
+        <Menu.Item
+        onClick={()=> {setSelectedStatus("UnResolvable")}}
+        >Unresolved</Menu.Item>
+         <Menu.Item
+        onClick={()=> {setSelectedStatus("FailedDuringSend")}}
+        >Failed</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+      </Group>
         {/* Button to download table in Excel format */}
         <button
          style={{backgroundColor:colorBackground}}

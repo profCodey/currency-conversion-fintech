@@ -138,7 +138,7 @@ export function StatementsHistory({
             key={statement.transactionId}
             className="text-primary-100 font-medium font-secondary"
           >
-            <td>{statement.transDate.slice(0, 10)}</td>
+            <td>{dayjs(statement.transDate).format("MMM D, YYYY h:mm A")}</td>
             <td>{statement.debit || 0}</td>
             <td>{statement.credit || 0}</td>
             <td>{statement.balance || 0}</td>

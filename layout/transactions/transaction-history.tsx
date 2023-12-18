@@ -246,6 +246,7 @@ export function TransactionHistory({
   const MemoizedComponent = React.memo(TransactionDetailsContent);
 
   const _rows = useMemo(
+
     function () {
       html2canvas;
       return payoutHistory?.data.result
@@ -257,10 +258,10 @@ export function TransactionHistory({
         if (selectedStatus === "All") {
           return true; // Show all data
         } else if(selectedStatus === "FailedDuringSend"){
-          return payout.status.toLowerCase() === "failed" && payout.status.toLowerCase() === "FailedDuringSend";
+          return payout.status === "Failed" || payout.status === "FailedDuringSend";
         }
         else {
-          return payout.status.toLowerCase() === selectedStatus.toLowerCase();
+          return payout.status === selectedStatus;
         }
       })
         ?.map(function (payout) {

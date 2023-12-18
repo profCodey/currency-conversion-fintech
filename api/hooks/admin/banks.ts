@@ -79,12 +79,13 @@ export function useGetBanks() {
 
 export function useBankOptions() {
   const { data, isLoading } = useGetBanks();
+console.log("data", data);
 
   const bankOptions = useMemo(
     function () {
       return (
         data?.data.map((bank) => ({
-          label: bank?.name,
+          label: bank?.bankName,
           value: bank?.id?.toString(),
         })) ?? []
       );

@@ -17,7 +17,8 @@ import { USER_CATEGORIES } from "@/utils/constants";
 import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
 import TransactionProcessingIcon from "@/public/transaction-processing.svg";
-import { FaDownload } from "react-icons/fa6";
+import { FaDownload, FaFileExcel, FaFilter} from "react-icons/fa6";
+import { FaSearch } from "react-icons/fa";
 // import TransactionModal from "./transactionModal";
 import { jsPDF } from "jspdf";
 import Cookies from "js-cookie";
@@ -52,6 +53,7 @@ export function TransactionHistory({
   }>({});
   const [currentPayout, setCurrentPayout] = useState({});
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [searchInput, setSearchInput] = useState<string>("")
 
   const isAdmin = role === USER_CATEGORIES.ADMIN;
   let emptyTransactionHistory =
@@ -244,18 +246,22 @@ export function TransactionHistory({
   const MemoizedComponent = React.memo(TransactionDetailsContent);
 
   const _rows = useMemo(
+
     function () {
       html2canvas;
       return payoutHistory?.data.result
       ?.filter((payout) => {
         // Filter based on the selected status
+        if (searchInput.length > 0) {
+          return payout.accountName.toLowerCase().includes(searchInput.toLowerCase()) || payout.bankname.toLowerCase().includes(searchInput.toLowerCase()) || payout.amount.toString().toLowerCase().includes(searchInput.toLowerCase()) || payout.accountNumber.toLowerCase().includes(searchInput.toLowerCase())
+        }
         if (selectedStatus === "All") {
           return true; // Show all data
         } else if(selectedStatus === "FailedDuringSend"){
-          return payout.status.toLowerCase() === "failed" && payout.status.toLowerCase() === "FailedDuringSend";
+          return payout.status === "Failed" || payout.status === "FailedDuringSend";
         }
         else {
-          return payout.status.toLowerCase() === selectedStatus.toLowerCase();
+          return payout.status === selectedStatus;
         }
       })
         ?.map(function (payout) {
@@ -304,7 +310,7 @@ export function TransactionHistory({
         .reverse();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [payoutHistory?.data.result, selectedStatus]
+    [payoutHistory?.data.result, selectedStatus, searchInput]
   );
 
   if (!isAdmin && !defaultGateway) {
@@ -389,7 +395,9 @@ export function TransactionHistory({
       <Menu shadow="md" width={200}>
       <Menu.Target>
         <Button 
-         style={{backgroundColor:colorSecondary}}
+        className="font-normal border-2 border-gray-200"
+         style={{color:"#000", backgroundColor:"#fff"}}
+         leftIcon= {<FaFilter />}
         >Filter by Status</Button>
       </Menu.Target>
       <Menu.Dropdown>
@@ -411,14 +419,12 @@ export function TransactionHistory({
       </Menu.Dropdown>
     </Menu>
       </Group>
+      <TextInput value={searchInput} onChange={(event) => setSearchInput(event.currentTarget.value)} placeholder="Search" icon={<FaSearch />}/>
         {/* Button to download table in Excel format */}
-        <button
-         style={{backgroundColor:colorBackground}}
-          className=" hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={exportToExcel}
-        >
-          Download Excel
-        </button>
+        <div className="cursor-pointer flex flex-col items-center" onClick={exportToExcel}>
+        <FaFileExcel size="2em" color={colorSecondary}/>
+        <p className="text-xs w-12">Download as Excel</p>
+        </div>
       </div>
       <Skeleton
         visible={isAdmin ? payoutHistoryFetching : selectedGatewaysLoading}

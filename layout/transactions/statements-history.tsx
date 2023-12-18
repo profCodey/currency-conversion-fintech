@@ -27,7 +27,6 @@ import { FaDownload } from "react-icons/fa6";
 import * as XLSX from "xlsx";
 import Cookies from "js-cookie";
 
-
 export function StatementsHistory({
   statementsHistory,
   statementsHistoryFetching,
@@ -134,7 +133,6 @@ export function StatementsHistory({
   const rows = useMemo(
     function () {
       return statementsHistory?.data.result?.map(function (statement) {
-        // return tempData.map(function (statement) {
         return (
           <tr
             key={statement.transactionId}

@@ -79,8 +79,6 @@ export function useGetBanks() {
 
 export function useBankOptions() {
   const { data, isLoading } = useGetBanks();
-console.log("data", data);
-
   const bankOptions = useMemo(
     function () {
       return (

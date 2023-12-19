@@ -86,7 +86,7 @@ console.log("data", data);
       return (
         data?.data.map((bank) => ({
           label: bank?.bankName,
-          value: bank?.id?.toString(),
+          value: bank?.bankCode,
         })) ?? []
       );
     },

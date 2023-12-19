@@ -60,8 +60,6 @@ export function MapBankButton() {
   });
 
   function handleNewBankSubmit(values: z.infer<typeof MapBankValidator>) {
-    console.log("values", values);
-    
     mapNewBank(values);
   }
 

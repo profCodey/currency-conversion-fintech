@@ -1,5 +1,5 @@
 import { useBankOptions, useMapNewBank } from "@/api/hooks/admin/banks";
-import { useGetBanks, useGetBanksForGateway } from "@/api/hooks/banks";
+import {  useGetBanksForGateway } from "@/api/hooks/banks";
 import { useGatewayOptions } from "@/api/hooks/gateways";
 import {
   Button,
@@ -34,7 +34,6 @@ export function MapBankButton() {
   const { gatewayOptions, isLoading: gatewaysLoading } = useGatewayOptions();
   const { data: gatewayBanks, isLoading: gatewayBanksLoading } =
     useGetBanksForGateway(currentGateway);
-  const {} = useGetBanks();
 
   useEffect(
     function () {

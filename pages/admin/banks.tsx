@@ -11,18 +11,18 @@ import { FaDownload } from "react-icons/fa6";
 
 export default function Banks() {
   const { data: banks, isLoading: banksLoading } = useGetBanks();
-  // const { mutate, isLoading } = useDeactivateBank();
+  const { mutate, isLoading } = useDeactivateBank();
 
-  // const changeActiveStatus = useCallback(
-  //   function (bank: IBank) {
-  //     mutate({
-  //       name: bank.name,
-  //       category: bank.category,
-  //       id: bank.id,
-  //     });
-  //   },
-  //   [mutate]
-  // );
+  const changeActiveStatus = useCallback(
+      function (bank: IBank) {
+       mutate({
+         name: bank.name,
+         category: bank.category,
+         id: bank.id,
+       });
+     },
+     [mutate]
+   );
 
   const _rows = useMemo(
     function () {

@@ -32,15 +32,15 @@ export default function Banks() {
             <td>{idx + 1}</td>
             <td>{bank.bankName}</td>
             <td>{bank.bankCode}</td>
-            {/* <td>{bank.category}</td> */}
-            {/* <td>
+            <td>{bank.category}</td>
+            <td>
               {bank.is_active ? (
                 <span className="text-accent font-semibold">Active</span>
               ) : (
                 <span className="text-gray-90">Inactive</span>
               )}
-            </td> */}
-            {/* <td>
+            </td>
+            <td>
               <Menu width={150} position="right">
                 <Menu.Target>
                   <ActionIcon className="">
@@ -62,7 +62,7 @@ export default function Banks() {
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
-            </td> */}
+            </td>
           </tr>
         );
       });
@@ -96,9 +96,9 @@ export default function Banks() {
               <th>S/N</th>
               <th>Bank name</th>
               <th>Bank code</th>
-              {/* <th>Category</th>
-              <th>Status</th> */}
-              {/* <th>Action</th> */}
+              <th>Category</th>
+              <th>Status</th>
+              <th>Action</th>
               <th><FaDownload /></th>
             </tr>
           </thead>

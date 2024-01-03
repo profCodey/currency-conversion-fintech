@@ -152,8 +152,11 @@ interface IGatewayBalance {
 
 export interface IBank {
   id: number;
-  bankName: string;
-  bankCode: string;
+  created_on: string;
+  updated_on: string;
+  name: string;
+  is_active: true;
+  category: "fx" | "local";
 }
 
 export interface ISiteSettings {

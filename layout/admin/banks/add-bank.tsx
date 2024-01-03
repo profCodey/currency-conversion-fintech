@@ -10,8 +10,8 @@ let colorBackground = Cookies.get("background_color") ? Cookies.get("background_
 
 export const AddNewBankValidator = z.object({
   name: z.string().min(1, { message: "Enter bank name" }),
-  // category: z.string().min(1, { message: "Select category" }),
-  // is_active: z.boolean(),
+  category: z.string().min(1, { message: "Select category" }),
+  is_active: z.boolean(),
 });
 
 export function AddBankButton() {
@@ -21,8 +21,8 @@ export function AddBankButton() {
   const addNewBankForm = useForm({
     initialValues: {
       name: "",
-      // is_active: true,
-      // category: "local",
+      is_active: true,
+      category: "local",
     },
     validate: zodResolver(AddNewBankValidator),
   });
@@ -62,7 +62,7 @@ export function AddBankButton() {
               size="md"
               {...addNewBankForm.getInputProps("name")}
             />
-            {/* <Select
+            <Select
               label="Category"
               defaultValue="local"
               disabled
@@ -72,14 +72,14 @@ export function AddBankButton() {
               ]}
               size="md"
               {...addNewBankForm.getInputProps("category")}
-            /> */}
-            {/* <Switch
+            />
+            <Switch
               label="Activate"
               size="md"
               color= {colorSecondary}
               checked={addNewBankForm.values.is_active}
               {...addNewBankForm.getInputProps("is_active")}
-            /> */}
+            />
             <Button
               style={{ backgroundColor: colorBackground }}
               className="hover:bg-primary-100"

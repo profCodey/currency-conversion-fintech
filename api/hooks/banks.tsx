@@ -43,8 +43,8 @@ export function useBankOptions() {
         function () {
             return (
                 banks?.data.map((bank) => ({
-                    label: bank.name,
-                    value: bank.id.toString(),
+                    label: bank.bankName,
+                    value: bank.bankCode,
                 })) ?? []
             );
         },

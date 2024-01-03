@@ -11,19 +11,18 @@ import { FaDownload } from "react-icons/fa6";
 
 export default function Banks() {
   const { data: banks, isLoading: banksLoading } = useGetBanks();
-  const { mutate, isLoading } = useDeactivateBank();
+  // const { mutate, isLoading } = useDeactivateBank();
 
-  const changeActiveStatus = useCallback(
-    function (bank: IBank) {
-      mutate({
-        name: bank.name,
-        category: bank.category,
-        is_active: !bank.is_active,
-        id: bank.id,
-      });
-    },
-    [mutate]
-  );
+  // const changeActiveStatus = useCallback(
+  //   function (bank: IBank) {
+  //     mutate({
+  //       name: bank.name,
+  //       category: bank.category,
+  //       id: bank.id,
+  //     });
+  //   },
+  //   [mutate]
+  // );
 
   const _rows = useMemo(
     function () {
@@ -41,7 +40,7 @@ export default function Banks() {
                 <span className="text-gray-90">Inactive</span>
               )}
             </td> */}
-            <td>
+            {/* <td>
               <Menu width={150} position="right">
                 <Menu.Target>
                   <ActionIcon className="">
@@ -63,12 +62,12 @@ export default function Banks() {
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
-            </td>
+            </td> */}
           </tr>
         );
       });
     },
-    [banks?.data, changeActiveStatus]
+    [banks?.data]
   );
 
   return (
@@ -91,7 +90,7 @@ export default function Banks() {
           withBorder
           className="min-h-[20vh] max-h-[50vh] overflow-y-auto relative"
         >
-          <LoadingOverlay visible={banksLoading || isLoading} />
+          <LoadingOverlay visible={banksLoading} />
           <thead>
             <tr className="font-primary font-light">
               <th>S/N</th>

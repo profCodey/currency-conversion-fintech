@@ -1,5 +1,5 @@
 import { useBankOptions, useMapNewBank } from "@/api/hooks/admin/banks";
-import {  useGetBanksForGateway } from "@/api/hooks/banks";
+import { useGetBanks, useGetBanksForGateway } from "@/api/hooks/banks";
 import { useGatewayOptions } from "@/api/hooks/gateways";
 import {
   Button,
@@ -20,11 +20,10 @@ let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_col
 let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
 export const MapBankValidator = z.object({
-  bank_code: z.string().min(1, { message: "Select bank" }),
-  gateway_id: z.string().min(1, { message: "Select gateway" }),
-  gateway_bank_code: z.string().min(1, { message: "Select gateway" }),
-  gateway_bank_name: z.string(),
-  bank_name: z.string(),
+  bank: z.string().min(1, { message: "Select bank" }),
+  gateway: z.string().min(1, { message: "Select gateway" }),
+  code: z.string().min(1, { message: "Select gateway" }),
+  bank_name: z.string().min(1, { message: "Enter bank name" }),
 });
 
 export function MapBankButton() {
@@ -34,6 +33,7 @@ export function MapBankButton() {
   const { gatewayOptions, isLoading: gatewaysLoading } = useGatewayOptions();
   const { data: gatewayBanks, isLoading: gatewayBanksLoading } =
     useGetBanksForGateway(currentGateway);
+  const {} = useGetBanks();
 
   useEffect(
     function () {
@@ -49,11 +49,10 @@ export function MapBankButton() {
 
   const mapNewBankForm = useForm({
     initialValues: {
+      bank: "",
+      gateway: "",
+      code: "",
       bank_name: "",
-      bank_code: "",
-      gateway_id: "",
-      gateway_bank_code: "",
-      gateway_bank_name: "",
     },
     validate: zodResolver(MapBankValidator),
   });
@@ -68,16 +67,10 @@ export function MapBankButton() {
   }
 
   function handleGatewayChange(gateway: string) {
-    // mapNewBankForm.setFieldValue("gateway_bank_code", "");
-    mapNewBankForm.setFieldValue("gateway_id", gateway);
+    mapNewBankForm.setFieldValue("code", "");
+    mapNewBankForm.setFieldValue("gateway", gateway);
     setCurrentGateway(gateway);
   }
-
-  let gatewayInfo =  gatewayBanks?.data.result?.map((bank) => ({
-    label: bank.bankName,
-    value: bank.bankCode,
-  })) ?? []
-
   return (
     <>
       <Button
@@ -107,11 +100,7 @@ export function MapBankButton() {
               data={bankOptions}
               placeholder="Select Bank"
               size="md"
-              onChange={(val) => {
-                mapNewBankForm.setFieldValue("bank_code", val as string);
-                let res = bankOptions.find((item) => item.value === val);
-                mapNewBankForm.setFieldValue("bank_name", res?.label);
-              }}
+              {...mapNewBankForm.getInputProps("bank")}
               nothingFound={<span>Bank not found</span>}
               searchable
             />
@@ -120,22 +109,22 @@ export function MapBankButton() {
               data={gatewayOptions}
               placeholder="Select gateway"
               size="md"
-              {...mapNewBankForm.getInputProps("gateway_id")}
+              {...mapNewBankForm.getInputProps("gateway")}
               onChange={handleGatewayChange}
             />
 
             <Select
               label="Select bank from gateway"
-              data={gatewayInfo}
+              data={
+                gatewayBanks?.data.result?.map((bank) => ({
+                  label: bank.bankName,
+                  value: bank.bankCode,
+                })) ?? []
+              }
               placeholder="Select bank from gateway"
               size="md"
-              // {...mapNewBankForm.getInputProps("code")}
-              onChange={(val) => {
-                mapNewBankForm.setFieldValue("gateway_bank_code", val as string);
-                let res = gatewayInfo.find((item) => item.value === val);
-                mapNewBankForm.setFieldValue("gateway_bank_name", res?.label as string);
-              }}
-              disabled={!mapNewBankForm.values.gateway_id}
+              {...mapNewBankForm.getInputProps("code")}
+              disabled={!mapNewBankForm.values.gateway}
               // onChange={handleGatewayChange}
               searchable
               dropdownPosition="bottom"
@@ -144,7 +133,7 @@ export function MapBankButton() {
               label="Bank Display name"
               placeholder="Enter bank name"
               size="md"
-              disabled={!mapNewBankForm.values.gateway_id}
+              disabled={!mapNewBankForm.values.gateway}
               {...mapNewBankForm.getInputProps("bank_name")}
             />
             <Button

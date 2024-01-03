@@ -18,6 +18,7 @@ import { TransferOperationStage } from "@/layout/common/send-money-modal";
 import { PayFxRecipient } from "@/layout/common/send-fx-modal";
 import { FxTransferOperationStage } from "@/layout/common/fx-forms/dollar-form";
 import { AddNewAccountValidator } from "@/layout/admin/accounts";
+import { id } from "date-fns/locale";
 
 export function useGetBanks() {
     return useQuery(["banks"], function (): Promise<AxiosResponse<IBank[]>> {
@@ -43,8 +44,8 @@ export function useBankOptions() {
         function () {
             return (
                 banks?.data.map((bank) => ({
-                    label: bank.bankName,
-                    value: bank.bankCode,
+                    label: bank.name,
+                    value: bank.id.toString(),
                 })) ?? []
             );
         },

@@ -325,7 +325,7 @@ export function LocalProceedModal({
         if (isFXPayout) {
             return;
         }
-        window.location.reload();
+        window.history.back();
     }
     let colorPrimary = Cookies.get("primary_color")
         ? Cookies.get("primary_color")

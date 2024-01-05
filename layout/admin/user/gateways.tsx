@@ -257,6 +257,7 @@ function GatewayOption({
           {createVirtualAccountModalOpen && <CreateVirtualAccountModal 
         createVirtualAccountModalOpen= {createVirtualAccountModalOpen} setCreateVirtualAccountModalOpen={setCreateVirtualAccountModalOpen}
         gatewayId= {gateway?.id as unknown as string}
+        gateway= {gateway?.gateway_reference}
         />}
         <Group key={gateway.id}>
             {/* <Text>{idx + 1}</Text> */}

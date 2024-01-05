@@ -22,12 +22,14 @@ interface CreateVirtualAccountModalProps {
   createVirtualAccountModalOpen: boolean;
   setCreateVirtualAccountModalOpen: (value: boolean) => void;
   gatewayId: string;
+  gateway: string;
 }
 
 function CreateVirtualAccountModal({
   createVirtualAccountModalOpen,
   setCreateVirtualAccountModalOpen,
   gatewayId,
+  gateway
 }: CreateVirtualAccountModalProps) {
   const [accountTitle, setAccountTitle] = useState<string>("");
   const {
@@ -39,7 +41,7 @@ function CreateVirtualAccountModal({
   const {
     mutate: dynamicCreateVirtualAccount,
     isLoading: dynamicCreateVirtualAccountLoading,
-  } = useDynamicCreateVirtualAccount(gatewayId);
+  } = useDynamicCreateVirtualAccount();
 
   const virtualAccountOptions =
     virtualAccountDetails &&
@@ -114,8 +116,10 @@ function CreateVirtualAccountModal({
     : "#132144";
 
   function handleSubmit(values: z.infer<typeof virtualAccountFormValidator>) {
-    console.log("values", values);
-    dynamicCreateVirtualAccount(values);
+    dynamicCreateVirtualAccount({
+      selected_gatewayid: gatewayId,
+      data: values,
+    });
   }
 
   if (virtualAccountDetailsError) {
@@ -134,6 +138,7 @@ function CreateVirtualAccountModal({
       </div>
     );
   }
+
   return (
     <div>
       <Modal

@@ -25,6 +25,7 @@ export function useGetGateways() {
   });
 }
 
+
 export function useClientSelectedGatewayOptions() {
   const router = useRouter();
   const { data, isLoading } = useClientSelectedGateways(router?.query.id as string);
@@ -144,10 +145,10 @@ export function useCreateNewGateway(cb: () => void) {
   );
 }
 
-export function useDynamicCreateVirtualAccount(gatewayId: string) {
+export function useDynamicCreateVirtualAccount() {
   return useMutation(
     function (payload:any) {
-      return axiosInstance.post(`local/virtual-account/generate/${gatewayId}/`, payload);
+      return axiosInstance.post(`local/virtual-account/generate/`, payload);
     },
     {
       onSuccess: function () {
@@ -157,12 +158,16 @@ export function useDynamicCreateVirtualAccount(gatewayId: string) {
           color: "green",
         });
       },
-      onError: function () {
+      onError: function (error: any) {
+        console.log("error", error)
+        const errorShown = (error.response?.data?.errors) as Array<{ attr: string; code: string; detail: string }>;
+        errorShown.map((value: { attr: string; code: string; detail: string }) => {
         return showNotification({
-          title: "An error occurred",
-          message: "Unable to request a virtual account",
+          title: "Unable to request a virtual account",
+          message: `${value.attr}: ${value.detail}`,
           color: "red",
         });
+      });
       },
       onSettled: function () {
         queryClient.invalidateQueries(["apiclient", "gateways"]);

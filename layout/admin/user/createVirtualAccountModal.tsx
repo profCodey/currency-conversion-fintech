@@ -64,7 +64,16 @@ function CreateVirtualAccountModal({
   }
 
   const generateSchema = (field: any) => {
-    if (field.type === "text") {
+    if (field.name === "email") {
+      if (field.required) {
+        return z
+          .string()
+          .email({ message: `Enter a valid email for ${field.label}` })
+          .min(1, { message: `Enter a value for ${field.label}` });
+      }
+      return z.string().email();
+    } 
+    else if (field.type === "text") {
       if (field.required) {
         return z
           .string()

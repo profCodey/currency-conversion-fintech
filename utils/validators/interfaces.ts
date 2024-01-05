@@ -350,7 +350,9 @@ export interface IFxPayout {
   rate: string;
   destination_currency_code: string;
   source_Currency_code: string;
-  destination_amount: number
+  destination_amount: number;
+  invoice: string;
+  source_of_fund: string;
 }
 
 export interface IAccount {

@@ -95,6 +95,9 @@ export function FxPayoutDetail({
       </Box>
       <Stack spacing="md" p={20} className="bg-gray-30">
         <Detail title="Account number" content={payout?.account_number} />
+        <Detail title="Bank Name" content={payout?.bank_name} />
+        <Detail title="Destination Currency" content={payout?.destination_currency_code} />
+        <Detail title="Sending Amount" content={payout?.amount} />
         <Detail title="BIC" content={payout?.bic} />
         <Detail title="IBAN" content={payout?.iban} />
         <Detail title="Created by" content={payout?.created_by_name} />
@@ -106,6 +109,16 @@ export function FxPayoutDetail({
         <Detail title="State" content={payout?.state} />
         <Detail title="City" content={payout?.city} />
         <Detail title="Reference" content={payout?.reference} />
+          <DetailLink
+            title="Invoice"
+            content="Invoice"
+            link={payout?.invoice}
+          />
+         <DetailLink 
+         title="Source of Fund"
+         content="Source of Fund"
+         link={payout?.source_of_fund}
+         />
       </Stack>
 
       {isAdmin && (
@@ -157,6 +170,30 @@ function Detail({
     <div className="flex w-full">
       <span className="font-semibold flex-shrink-0">{title}:</span>
       <span className="flex-grow text-right">{content || "Nil"}</span>
+    </div>
+  );
+}
+
+function DetailLink({
+  title,
+  content,
+  link,
+}: {
+  title: string;
+  content: string;
+  link: string;
+}) {
+  return (
+    <div className="flex w-full">
+      <span className="font-semibold flex-shrink-0">{title}:</span>
+      <a
+        href={link}
+        target="_blank"
+        className="flex-grow text-right text-blue-500 underline"
+        download
+      >
+        {content}
+      </a>
     </div>
   );
 }

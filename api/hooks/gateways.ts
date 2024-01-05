@@ -87,7 +87,7 @@ export function useGatewayOptions() {
 }
 
 
-export function useCreateVirtualAccount(cb: () => void) {
+export function useCreateVirtualAccount() {
   return useMutation(
     function (selected_gateway_id: string) {
       const payload = { selected_gateway_id };
@@ -109,7 +109,6 @@ export function useCreateVirtualAccount(cb: () => void) {
         });
       },
       onSettled: function () {
-        cb && cb();
         queryClient.invalidateQueries(["apiclient", "gateways"]);
       },
     }
@@ -143,6 +142,41 @@ export function useCreateNewGateway(cb: () => void) {
       },
     }
   );
+}
+
+export function useDynamicCreateVirtualAccount(gatewayId: string) {
+  return useMutation(
+    function (payload:any) {
+      return axiosInstance.post(`local/virtual-account/generate/${gatewayId}/`, payload);
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation successful",
+          message: "Request for a virtual account sent successfully",
+          color: "green",
+        });
+      },
+      onError: function () {
+        return showNotification({
+          title: "An error occurred",
+          message: "Unable to request a virtual account",
+          color: "red",
+        });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["apiclient", "gateways"]);
+      },
+    }
+  );
+}
+
+export function useGetVirtualAccountDetails(gatewayId: string) {
+  return useQuery(["virtual-account", gatewayId], function (): Promise<AxiosResponse> {
+    return axiosInstance.post(
+      `/local/virtual-account/template/${gatewayId}/`
+    );
+  });
 }
 
 export function useEditGateway(gatewayId: number, cb: () => void) {

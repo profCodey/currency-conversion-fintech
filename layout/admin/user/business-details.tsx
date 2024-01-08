@@ -49,35 +49,35 @@ export function BusinessDetails({
 }: BusinessDetailsProps) {
   const router = useRouter();
 
-  const { data: clientProfileDetails, isLoading } = useClientProfileDetails(
+  const { data: clientProfileDetails, isLoading:clientProfileLoading, isFetching:clientProfileIsFetching} = useClientProfileDetails(
     router?.query.id as string
   );
-  const { data: clientDocuments, isLoading: clientDocumentsLoading } =
+  const { data: clientDocuments, isLoading: clientDocumentsLoading, isFetching:clientDocumentIsFetching} =
     useClientDocuments(router?.query.id as string);
   const { mutate: updateProfile, isLoading: businessLoading } =
     useUpdateBusinessProfile(Number(router?.query.id));
 
   const businessProfileForm = useForm({
     initialValues: {
-      bvn: clientProfileDetails?.data.bvn || "",
-      city: clientProfileDetails?.data.city || "",
-      state: clientProfileDetails?.data.state || "",
-      zip_code: clientProfileDetails?.data.zip_code || "",
-      tax_number: clientProfileDetails?.data.tax_number || "",
-      business_legal_name: clientProfileDetails?.data.business_legal_name || "",
-      business_code: clientProfileDetails?.data.business_code || "",
+      bvn: clientProfileDetails?.data.bvn ?? "",
+      city: clientProfileDetails?.data.city ?? "",
+      state: clientProfileDetails?.data.state ?? "",
+      zip_code: clientProfileDetails?.data.zip_code ?? "",
+      tax_number: clientProfileDetails?.data.tax_number ?? "",
+      business_legal_name: clientProfileDetails?.data.business_legal_name ?? "",
+      business_code: clientProfileDetails?.data.business_code ?? "",
       business_trading_name:
-        clientProfileDetails?.data.business_trading_name || "",
+        clientProfileDetails?.data.business_trading_name ?? "",
       country_of_registration:
-        clientProfileDetails?.data.country_of_registration || "",
+        clientProfileDetails?.data.country_of_registration ?? "",
       primary_business_activity:
-        clientProfileDetails?.data.primary_business_activity || "",
+        clientProfileDetails?.data.primary_business_activity ?? "",
       business_registration_date: clientProfileDetails?.data
         .business_registration_date
         ? new Date(clientProfileDetails?.data.business_registration_date)
         : null,
       business_registration_number:
-        clientProfileDetails?.data.business_registration_number || "",
+        clientProfileDetails?.data.business_registration_number ?? "",
     },
     validate: zodResolver(businessProfileFormValidator),
   });
@@ -86,25 +86,25 @@ export function BusinessDetails({
   useEffect(() => {
     if (clientProfileDetails?.data) {
       businessProfileForm.setValues({
-        bvn: clientProfileDetails?.data.bvn || "",
-        city: clientProfileDetails?.data.city || "",
-        state: clientProfileDetails?.data.state || "",
-        zip_code: clientProfileDetails?.data.zip_code || "",
-        tax_number: clientProfileDetails?.data.tax_number || "",
-        business_legal_name: clientProfileDetails?.data.business_legal_name || "",
-        business_code: clientProfileDetails?.data.business_code || "",
+        bvn: clientProfileDetails?.data.bvn ?? "",
+        city: clientProfileDetails?.data.city ?? "",
+        state: clientProfileDetails?.data.state ?? "",
+        zip_code: clientProfileDetails?.data.zip_code ?? "",
+        tax_number: clientProfileDetails?.data.tax_number ?? "",
+        business_legal_name: clientProfileDetails?.data.business_legal_name ?? "",
+        business_code: clientProfileDetails?.data.business_code ?? "",
         business_trading_name:
-          clientProfileDetails?.data.business_trading_name || "",
+          clientProfileDetails?.data.business_trading_name ?? "",
         country_of_registration:
-          clientProfileDetails?.data.country_of_registration || "",
+          clientProfileDetails?.data.country_of_registration ?? "",
         primary_business_activity:
-          clientProfileDetails?.data.primary_business_activity || "",
+          clientProfileDetails?.data.primary_business_activity ?? "",
         business_registration_date: clientProfileDetails?.data
           .business_registration_date
           ? new Date(clientProfileDetails?.data.business_registration_date)
           : null,
         business_registration_number:
-          clientProfileDetails?.data.business_registration_number || "",
+          clientProfileDetails?.data.business_registration_number ?? "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,11 +122,10 @@ export function BusinessDetails({
 
   function closeRateModal() {
     setUpdateUserDetailsOpen(false);
-    businessProfileForm.reset();
   }
 
   return (
-    <Skeleton visible={isLoading} className="flex-grow mr-auto">
+    <Skeleton visible={clientProfileLoading || clientDocumentsLoading || clientDocumentIsFetching || clientProfileIsFetching } className="flex-grow mr-auto">
       <section className="p-6 h-full bg-white shadow flex gap-8 flex-grow mr-auto items-center rounded-md">
         {userInfo?.client_type !== "individual" &&
           (clientDocuments?.data.logo ? (
@@ -234,6 +233,7 @@ export function BusinessDetails({
                 placeholder="Enter Merchant Legal Name"
                 label="Merchant Legal Name"
                 size="lg"
+                {...businessProfileForm.getInputProps("business_legal_name")}
                 classNames={{
                   input: "disabled:bg-white text-black",
                 }}

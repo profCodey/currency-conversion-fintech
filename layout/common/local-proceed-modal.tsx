@@ -22,7 +22,7 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { ArrowRight, Danger, DirectboxSend, Warning2 } from "iconsax-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { z } from "zod";
 import { FxTransferOperationStage } from "./fx-forms/dollar-form";
 import { CurrencyDetailType } from "@/utils/validators/interfaces";
@@ -100,6 +100,7 @@ export const LocalExchangePayRecipient = z.object({
 interface SendMoneyProps {
     modalOpen: boolean;
     close(): void;
+    setShowConfirmationModal: Dispatch<SetStateAction<boolean>>;
     banks?: { label: string; value: string }[];
     currencies?: { label: string; value: string }[];
     gateway?: number | undefined;
@@ -130,6 +131,7 @@ export function LocalProceedModal({
     banks,
     currencies,
     recipientDetails,
+    setShowConfirmationModal,
     destinationDetails,
     receivingCurrency,
     sourceDetails,
@@ -318,14 +320,16 @@ export function LocalProceedModal({
     }
 
     function handleModalClose() {
-        payRecipientForm.reset();
-        queryClient.removeQueries(["name-enquiry"]);
+        // payRecipientForm.reset();
+        // queryClient.removeQueries(["name-enquiry"]);
         close();
+       
         setForm("send-money");
-        if (isFXPayout) {
-            return;
-        }
-        window.history.back();
+        // if (isFXPayout) {
+        //     return;
+        // }
+        setShowConfirmationModal(true);
+        // window.history.back();
     }
     let colorPrimary = Cookies.get("primary_color")
         ? Cookies.get("primary_color")
@@ -397,7 +401,7 @@ export function LocalProceedModal({
                     className="bg-white hover:bg-white text-red-600 border-1 border-red-600"
                     onClick={handleModalClose}
                     size="md">
-                    Cancel
+                    Back
                 </Button>
                 <Button
                     style={{ backgroundColor: colorBackground }}

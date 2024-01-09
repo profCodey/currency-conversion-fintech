@@ -206,7 +206,7 @@ export function useCreateFxPayout(
                     }
                 }
 
-                cb("transaction-failed");
+                // cb("transaction-failed");
                 // showNotification({
                 //   message: response?.detail || "Registration unsuccessful",
                 //   color: "red",

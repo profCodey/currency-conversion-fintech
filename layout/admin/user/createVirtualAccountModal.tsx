@@ -23,13 +23,15 @@ interface CreateVirtualAccountModalProps {
   setCreateVirtualAccountModalOpen: (value: boolean) => void;
   gatewayId: string;
   gateway: string;
+  gatewayName: string;
 }
 
 function CreateVirtualAccountModal({
   createVirtualAccountModalOpen,
   setCreateVirtualAccountModalOpen,
   gatewayId,
-  gateway
+  gateway,
+  gatewayName
 }: CreateVirtualAccountModalProps) {
   const [accountTitle, setAccountTitle] = useState<string>("");
   const {
@@ -132,12 +134,11 @@ function CreateVirtualAccountModal({
   }
 
   if (virtualAccountDetailsError) {
-    return showNotification({
-      title: "An error occured",
-      message:
-        "Unable to create virtual account at the moment. Please try again later.",
-      color: "red",
-    });
+    return (
+      <div className="mx-auto max-w-md flex items-center gap-x-2">
+        Unable to create virtual account for {gatewayName} at the moment. Please try again later.
+      </div>
+    );
   }
 
   if (virtualAccountDetailsLoading) {

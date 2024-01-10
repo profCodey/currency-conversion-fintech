@@ -23,6 +23,8 @@ import CreateVirtualAccountModal from "./createVirtualAccountModal";
 import { useDynamicCreateVirtualAccount } from "@/api/hooks/gateways";
 
 let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+const useFxWalletString = Cookies.get("use_fx_wallet");
+const useFxWallet = useFxWalletString === "true";
 
 export const CreateGateWayValidator = z.object({
     gateway: z.string().min(1, { message: "Select gateway" }),
@@ -258,17 +260,23 @@ function GatewayOption({
         createVirtualAccountModalOpen= {createVirtualAccountModalOpen} setCreateVirtualAccountModalOpen={setCreateVirtualAccountModalOpen}
         gatewayId= {gateway?.id as unknown as string}
         gateway= {gateway?.gateway_reference}
+        gatewayName = {gateway.gateway_name}
         />}
         <Group key={gateway.id}>
             {/* <Text>{idx + 1}</Text> */}
             <Text>{gateway.gateway_name}</Text>
-            <Button
+            {useFxWallet  ? <Button
                 className="bg-primary-100 "
-                // onClick={() =>handleCreate(gateway?.id as unknown as string)}
                 onClick={openVirtualAccountModal}
                 >
                     Create Virtual Account
-                </Button>
+                </Button> :
+                <Button
+                className="bg-primary-100 "
+                onClick={() =>handleCreate(gateway?.id as unknown as string)}
+                >
+                    Create Virtual Account
+                </Button>}
             <Group className="ml-auto" spacing="sm">
                 {gateway.status === "pending" ? (
                     <>

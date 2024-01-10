@@ -128,7 +128,7 @@ export function BusinessDetails({
   return (
     <Skeleton visible={isLoading} className="flex-grow mr-auto">
       <section className="p-6 h-full bg-white shadow flex gap-8 flex-grow mr-auto items-center rounded-md">
-        {userInfo?.client_type !== "individual" &&
+        {/* {userInfo?.client_type !== "individual" &&
           (clientDocuments?.data.logo ? (
             <div className="w-fit">
               <Image
@@ -143,7 +143,7 @@ export function BusinessDetails({
             <div className="px-[50px] py-[45px] bg-primary-100 rounded-md">
               <PaycelerLogo />
             </div>
-          ))}
+          ))} */}
 
         {userInfo?.client_type !== "individual" ? (
           <Stack spacing="xs" className="flex-grow">

@@ -315,7 +315,7 @@ export function LocalProceedModal({
     }
 
     function handleModalClose() {
-        payRecipientForm.reset();
+        // payRecipientForm.reset();
         setShowConfirmationModal(false)
         setForm("send-money")
         // queryClient.removeQueries(["name-enquiry"]);

@@ -22,7 +22,7 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { ArrowRight, Danger, DirectboxSend, Warning2 } from "iconsax-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { z } from "zod";
 import { FxTransferOperationStage } from "./fx-forms/dollar-form";
 import { CurrencyDetailType } from "@/utils/validators/interfaces";
@@ -100,6 +100,7 @@ export const LocalExchangePayRecipient = z.object({
 interface SendMoneyProps {
     modalOpen: boolean;
     close(): void;
+    setShowConfirmationModal: Dispatch<SetStateAction<boolean>>;
     banks?: { label: string; value: string }[];
     currencies?: { label: string; value: string }[];
     gateway?: number | undefined;
@@ -130,6 +131,7 @@ export function LocalProceedModal({
     banks,
     currencies,
     recipientDetails,
+    setShowConfirmationModal,
     destinationDetails,
     receivingCurrency,
     sourceDetails,
@@ -227,11 +229,6 @@ export function LocalProceedModal({
         validate: zodResolver(LocalExchangePayRecipient),
     });
 
-    const handleFileChange = (fileKey: string, fileEvent: File) => {
-        payRecipientForm.setFieldValue(`${fileKey}`, fileEvent);
-        // console.log("payForm", payRecipientForm.values);
-    };
-
     useEffect(() => {
         payRecipientForm.setValues({
             destination_currency: Number(receivingCurrency),
@@ -318,14 +315,10 @@ export function LocalProceedModal({
     }
 
     function handleModalClose() {
-        payRecipientForm.reset();
-        queryClient.removeQueries(["name-enquiry"]);
-        close();
-        setForm("send-money");
-        if (isFXPayout) {
-            return;
-        }
-        window.history.back();
+        // payRecipientForm.reset();
+        setShowConfirmationModal(false)
+        setForm("send-money")
+        // queryClient.removeQueries(["name-enquiry"]);
     }
     let colorPrimary = Cookies.get("primary_color")
         ? Cookies.get("primary_color")
@@ -352,6 +345,20 @@ export function LocalProceedModal({
         //   refetch();
         // }
     }
+
+    useEffect(()=> {
+        setAmountEnquiry(payRecipientForm.values.amount);
+    }, [payRecipientForm.values.amount])
+    useEffect(()=> {
+        setAccNameEnquiry(payRecipientForm.values.account_name);
+    }, [payRecipientForm.values.account_name])
+    useEffect(()=> {
+        setBankEnquiry(payRecipientForm.values.bank_name);
+    }, [payRecipientForm.values.bank_name])
+    useEffect(()=> {
+        setAccNumberEnquiry(payRecipientForm.values.account_number);
+    }, [payRecipientForm.values.account_number])
+    
 
     const handlePayout = () => {
         createFxPayout({
@@ -395,9 +402,9 @@ export function LocalProceedModal({
             <Group grow className="w-full">
                 <Button
                     className="bg-white hover:bg-white text-red-600 border-1 border-red-600"
-                    onClick={handleModalClose}
+                    onClick={()=> setForm("send-money")}
                     size="md">
-                    Cancel
+                    Back
                 </Button>
                 <Button
                     style={{ backgroundColor: colorBackground }}
@@ -432,12 +439,7 @@ export function LocalProceedModal({
                 placeholder="Bank Name"
                 withAsterisk
                 required
-                // data={banks}
-                onChange={(e) => {
-                    const bank = e.currentTarget.value;
-                    setBankEnquiry(bank);
-                    payRecipientForm.setFieldValue("bank_name", bank);
-                }}
+                {...payRecipientForm.getInputProps("bank_name")}
             />
             {/* <Select
         size="md"
@@ -454,7 +456,7 @@ export function LocalProceedModal({
                 required
                 label="Account number"
                 placeholder="Enter account number"
-                onChange={handleAccountNumberChange}
+                {...payRecipientForm.getInputProps("account_number")}
             />
 
             <TextInput
@@ -463,11 +465,7 @@ export function LocalProceedModal({
                 placeholder="Enter account name"
                 label="Account name"
                 required
-                onChange={(e) => {
-                    let accName = e.target.value;
-                    setAccNameEnquiry(accName);
-                    payRecipientForm.setFieldValue("account_name", accName);
-                }}
+                {...payRecipientForm.getInputProps("account_name")}
 
                 // disabled
             />
@@ -477,10 +475,7 @@ export function LocalProceedModal({
                     label="Amount"
                     placeholder="Amount"
                     withAsterisk
-                    onChange={(value) => {
-                        setAmountEnquiry(value);
-                        payRecipientForm.setFieldValue("amount", value);
-                    }}
+                    {...payRecipientForm.getInputProps("amount")}
                 />
             )}
 
@@ -492,17 +487,10 @@ export function LocalProceedModal({
                 {...payRecipientForm.getInputProps("sort_code")}
                 // disabled
             />
-            {/* <TextInput
-        size="md"
-        // withAsterisk
-        placeholder="Bank address"
-        label="Bank address"
-        {...payRecipientForm.getInputProps("bank_address")}
-        // disabled
-      /> */}
             <Select
                 //@ts-ignore
                 data={purposes}
+                required
                 label="Purpose of Payment"
                 placeholder="Select Purpose of Payment"
                 {...payRecipientForm.getInputProps("purpose_of_payment")}
@@ -514,9 +502,6 @@ export function LocalProceedModal({
                 placeholder="Select Country"
                 required
                 withAsterisk
-                // onChange={(val) => {
-                //   payRecipientForm.setFieldValue("country", val as string);
-                // }}
                 {...payRecipientForm.getInputProps("country")}
             />
             <TextInput
@@ -563,7 +548,6 @@ export function LocalProceedModal({
                 placeholder="Swift Code"
                 label="Swift Code"
                 {...payRecipientForm.getInputProps("swift_code")}
-
                 // disabled
             />
 
@@ -576,9 +560,7 @@ export function LocalProceedModal({
                         ? "Source of Fund file is required."
                         : ""
                 }
-                onChange={(file) => {
-                    handleFileChange("source_of_funds", file!);
-                }}
+                {...payRecipientForm.getInputProps("source_of_funds")}
             />
 
             <FileInput
@@ -591,10 +573,7 @@ export function LocalProceedModal({
                       : ""
               }              
                 placeholder="Upload 'Invoice Document'"
-                // leftIcon={<IconAt style={{ width: rem(18), height: rem(18) }} />}
-                onChange={(file) => {
-                    handleFileChange("invoice", file!);
-                }}
+                {...payRecipientForm.getInputProps("invoice")}
             />
 
             <Textarea
@@ -628,6 +607,7 @@ export function LocalProceedModal({
                 {FormContent?.component}
             </Modal>
         </section>
+
     );
 }
 

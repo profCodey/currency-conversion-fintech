@@ -302,6 +302,7 @@ let currencies: { value: string; label: string }[] = useMemo(() => {
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 
   return (
+    <>
     <section className="w-full h-full min-h-screen flex items-center justify-center">
       <div className="bg-gray-30 border rounded-lg p-4">
         <Skeleton visible={currenciesLoading || ratesLoading}>
@@ -470,6 +471,7 @@ style={{ backgroundColor: colorBackground }}
         <LocalProceedModal
           modalOpen={showConfirmationModal}
           close={() => setShowConfirmationModal(false)}
+          setShowConfirmationModal = {setShowConfirmationModal}
           banks={bankOptions}
           currencies={currencyOptions}
           gateway={defaultGateway?.gateway}
@@ -498,6 +500,7 @@ style={{ backgroundColor: colorBackground }}
         />
       </div>
     </section>
+    </>
     
   );
 };

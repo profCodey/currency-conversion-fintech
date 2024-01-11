@@ -20,6 +20,9 @@ export function ClientWalletBalances() {
     router?.query.id as string
   );
 
+  const totalWalletBalance = clientDetails?.data.result.gatewaybalances.reduce(
+    (acc, gateway) => acc + gateway.balance, 0);
+
   return (
     <Skeleton
       visible={clientDetailsLoading || walletsLoading}
@@ -45,9 +48,10 @@ export function ClientWalletBalances() {
           <div className="px-4 py-3 bg-white flex items-center gap-4 justify-between rounded-md border">
             <span className="mr-auto">
               {getCurrency("NGN")}
-              {clientDetails?.data.result?.walletBalance
+              {/* {clientDetails?.data.result?.walletBalance
                 ? currencyFormatter(clientDetails?.data.result?.walletBalance)
-                : "0.00"}
+                : "0.00"} */}
+                {totalWalletBalance}
             </span>
             <CircleNigerianFlag />
 

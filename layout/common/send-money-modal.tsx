@@ -162,9 +162,10 @@ export function SendMoneyModal({
  }
 
  function handleModalClose() {
-  payRecipientForm.reset();
-  queryClient.removeQueries(["name-enquiry"]);
-  close();
+  // payRecipientForm.reset();
+  // queryClient.removeQueries(["name-enquiry"]);
+  // close();
+  setForm("send-money");
  }
 
  const ConfirmationForm = (
@@ -179,7 +180,7 @@ export function SendMoneyModal({
      className="bg-white hover:bg-white text-red-600 border-1 border-red-600"
      onClick={handleModalClose}
      size="md">
-     Cancel
+     Back
     </Button>
     <Button
      className="bg-primary-100 hover:bg-primary-100"
@@ -214,6 +215,7 @@ export function SendMoneyModal({
     data={banks}
     {...payRecipientForm.getInputProps("bank")}
     disabled={!!recipientDetails?.account_name}
+    searchable
    />
    <Select
     size="md"
@@ -288,7 +290,13 @@ export function SendMoneyModal({
    <Modal
     opened={modalOpen}
     title={FormContent?.title}
-    onClose={handleModalClose}>
+    onClose={()=> {
+      close()
+      if (form === "confirm-details") {
+          setForm("send-money")
+        }
+      payRecipientForm.reset();
+    }}>
     {FormContent?.component}
    </Modal>
   </section>

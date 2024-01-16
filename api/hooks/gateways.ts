@@ -25,6 +25,7 @@ export function useGetGateways() {
   });
 }
 
+
 export function useClientSelectedGatewayOptions() {
   const router = useRouter();
   const { data, isLoading } = useClientSelectedGateways(router?.query.id as string);
@@ -87,7 +88,7 @@ export function useGatewayOptions() {
 }
 
 
-export function useCreateVirtualAccount(cb: () => void) {
+export function useCreateVirtualAccount() {
   return useMutation(
     function (selected_gateway_id: string) {
       const payload = { selected_gateway_id };
@@ -109,7 +110,6 @@ export function useCreateVirtualAccount(cb: () => void) {
         });
       },
       onSettled: function () {
-        cb && cb();
         queryClient.invalidateQueries(["apiclient", "gateways"]);
       },
     }
@@ -143,6 +143,45 @@ export function useCreateNewGateway(cb: () => void) {
       },
     }
   );
+}
+
+export function useDynamicCreateVirtualAccount() {
+  return useMutation(
+    function (payload:any) {
+      return axiosInstance.post(`local/virtual-account/generate/`, payload);
+    },
+    {
+      onSuccess: function () {
+        showNotification({
+          title: "Operation successful",
+          message: "Request for a virtual account sent successfully",
+          color: "green",
+        });
+      },
+      onError: function (error: any) {
+        console.log("error", error)
+        const errorShown = (error.response?.data?.errors) as Array<{ attr: string; code: string; detail: string }>;
+        errorShown.map((value: { attr: string; code: string; detail: string }) => {
+        return showNotification({
+          title: "Unable to request a virtual account",
+          message: `${value.attr}: ${value.detail}`,
+          color: "red",
+        });
+      });
+      },
+      onSettled: function () {
+        queryClient.invalidateQueries(["apiclient", "gateways"]);
+      },
+    }
+  );
+}
+
+export function useGetVirtualAccountDetails(gatewayId: string) {
+  return useQuery(["virtual-account", gatewayId], function (): Promise<AxiosResponse> {
+    return axiosInstance.post(
+      `/local/virtual-account/template/${gatewayId}/`
+    );
+  });
 }
 
 export function useEditGateway(gatewayId: number, cb: () => void) {

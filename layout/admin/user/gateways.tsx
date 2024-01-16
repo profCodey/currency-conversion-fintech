@@ -19,8 +19,12 @@ import { useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import Cookies from "js-cookie";
+import CreateVirtualAccountModal from "./createVirtualAccountModal";
+import { useDynamicCreateVirtualAccount } from "@/api/hooks/gateways";
 
 let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
+const useFxWalletString = Cookies.get("use_fx_wallet");
+const useFxWallet = useFxWalletString === "true";
 
 export const CreateGateWayValidator = z.object({
     gateway: z.string().min(1, { message: "Select gateway" }),
@@ -42,8 +46,6 @@ export function ClientGateways() {
     const { mutate: createNewGateway, isLoading: createNewGatewayLoading } = useCreateNewGateway(() => {
       setCreateModalOpen(false);
     });
-
-  
    
     const { mutate: approveGateway, isLoading: approveGatewayLoading } =
       useApproveGateway(() => {
@@ -57,7 +59,6 @@ export function ClientGateways() {
           user: parseInt(router.query.id as string)
         });
       }
-
 
       const createNewGateForm = useForm({
         initialValues: {
@@ -92,6 +93,7 @@ export function ClientGateways() {
     }
 
     return (
+        <>
         <section className="p-5">
             <div className="flex flex-row gap-4">
                 <h3 className="text-gray-90 font-semibold mb-2">
@@ -222,6 +224,7 @@ export function ClientGateways() {
                 </Stack>
             </Modal>
         </section>
+        </>
     );
 }
 
@@ -238,27 +241,42 @@ function GatewayOption({
     approveGateway: (arg0: ISelectedGateway) => void;
     rejectGateway: (arg0: ISelectedGateway) => void;
 }) {
-    const { mutate: createVirtualAccount, isLoading: createVirtualAccountLoading } = useCreateVirtualAccount(() => {
-      console.log("Virtual account created");    })
-
-     
+    const { mutate: createVirtualAccount, isLoading: createVirtualAccountLoading } = useCreateVirtualAccount()
+      const [createVirtualAccountModalOpen, setCreateVirtualAccountModalOpen] = useState(false);
+    
       function handleCreate ( gateway_id: string ) {
         const selected_gateway_id = gateway_id
         createVirtualAccount(selected_gateway_id)
     }
 
+    function openVirtualAccountModal () {
+        setCreateVirtualAccountModalOpen(true)
+    }
     
 
     return (
+        <>
+          {createVirtualAccountModalOpen && <CreateVirtualAccountModal 
+        createVirtualAccountModalOpen= {createVirtualAccountModalOpen} setCreateVirtualAccountModalOpen={setCreateVirtualAccountModalOpen}
+        gatewayId= {gateway?.id as unknown as string}
+        gateway= {gateway?.gateway_reference}
+        gatewayName = {gateway.gateway_name}
+        />}
         <Group key={gateway.id}>
             {/* <Text>{idx + 1}</Text> */}
             <Text>{gateway.gateway_name}</Text>
-            <Button
+            {useFxWallet  ? <Button
+                className="bg-primary-100 "
+                onClick={openVirtualAccountModal}
+                >
+                    Create Virtual Account
+                </Button> :
+                <Button
                 className="bg-primary-100 "
                 onClick={() =>handleCreate(gateway?.id as unknown as string)}
                 >
                     Create Virtual Account
-                </Button>
+                </Button>}
             <Group className="ml-auto" spacing="sm">
                 {gateway.status === "pending" ? (
                     <>
@@ -286,5 +304,6 @@ function GatewayOption({
                 )}
             </Group>
         </Group>
+        </>
     );
 }

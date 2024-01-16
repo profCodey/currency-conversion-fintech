@@ -134,18 +134,28 @@ export function useCreatePayout(
         {
             onSuccess: function (data: AxiosResponse) {
                 if (data?.data.status) {
-                    cb("transaction-success");
+                    showNotification({
+                        title: "Operation Successful",
+                        message: "Registration Successful",
+                        color: "green",
+                      });
                 } else {
-                    cb("transaction-failed");
+                    showNotification({
+                        title: "Operation failed",
+                        message: "Registration unsuccessful",
+                        color: "red",
+                      });
                 }
             },
             onError: function (data: AxiosError) {
                 const response = data.response?.data as ErrorItem;
-                cb("transaction-failed");
-                // showNotification({
-                //   message: response?.detail || "Registration unsuccessful",
-                //   color: "red",
-                // });
+                console.log("response", response);
+                const combinedDetails = response.errors.map((error: { detail: any; }) => error.detail).join(', ');
+                showNotification({
+                  title: "Operation failed",
+                  message: combinedDetails || "Registration unsuccessful",
+                  color: "red",
+                });
             },
         }
     );

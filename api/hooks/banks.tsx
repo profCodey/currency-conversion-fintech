@@ -135,8 +135,8 @@ export function useCreatePayout(
             onSuccess: function (data: AxiosResponse) {
                 if (data?.data.status) {
                     showNotification({
-                        title: "Operation failed",
-                        message: "Registration unsuccessful",
+                        title: "Operation Successful",
+                        message: "Registration Successful",
                         color: "green",
                       });
                 } else {

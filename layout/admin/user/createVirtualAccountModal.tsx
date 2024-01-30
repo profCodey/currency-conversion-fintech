@@ -74,7 +74,7 @@ function CreateVirtualAccountModal({
           .min(1, { message: `Enter a value for ${field.label}` });
       }
       return z.string().email();
-    } 
+    }
     else if (field.type === "text") {
       if (field.required) {
         return z
@@ -152,7 +152,7 @@ function CreateVirtualAccountModal({
   return (
     <div>
       <Modal
-        title="Add Global List"
+        title="Create Virtual Account"
         opened={createVirtualAccountModalOpen}
         onClose={closeVirtualAccountModal}
         size="md"
@@ -173,7 +173,7 @@ function CreateVirtualAccountModal({
             onChange={(value) => {
               value && setAccountTitle(value);
               addVirtualAccountForm.setFieldValue(
-                "title",
+                "optioncode",
                 value as string | number
               );
             }}

@@ -106,7 +106,7 @@ export function FxPayoutHistory() {
 if (emptyTransactionHistory) {
     return (
         <div className="mt-6">
-            <EmptyTransactionHistory message="Transaction history empty" />
+            <EmptyTransactionHistory message="FX Payout history empty" />
         </div>
     );
 }

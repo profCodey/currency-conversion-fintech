@@ -172,7 +172,7 @@ function handlePDFDonwload(data: IExchangeDetailed){
 if (emptyTransactionHistory) {
   return (
       <div className="mt-6">
-          <EmptyTransactionHistory message="Transaction history empty" />
+          <EmptyTransactionHistory message="Exchange history empty" />
       </div>
   );
 }

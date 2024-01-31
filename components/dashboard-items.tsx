@@ -29,38 +29,36 @@ const routes = [
   },
   {
     route: "/fx-payouts",
-    label: "FX",
+    label: "Transactions",
     icon: <Cards variant="Bold"/>,
     children: [
       {
         route: "/fx-payouts",
-        label: "Payout Transactions",
+        label: "Fx Payouts",
       },
       {
         route: "/fx-exchange",
-        label: "Exchange",
-      },
-    ],
-  },
-  {
-    route: "/local-transactions",
-    label: "Payout",
-    icon: <TransactionsIcon />,
-    children: [
-      {
-        route: "/local-transactions",
-        label: "Transactions",
-      },
-      {
-        route: "/local-statement",
-        label: "Account Statement",
+        label: "Fx Exchange",
       },
       {
         route: "/local-manual-funding",
-        label: "Manual Funding",
+        label: "Fx Manual Fundings",
+      },
+      {
+        route: "/local-transactions",
+        label: "Naira Payouts",
+      },
+      {
+        route: "/local-statement",
+        label: "Naira Account Statement",
+      },
+      {
+        route: "/local-manual-funding",
+        label: "Naira Manual Fundings",
       },
     ],
   },
+  
   {
     route: "/collection",
     label: "Collection",

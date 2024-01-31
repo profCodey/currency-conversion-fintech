@@ -130,13 +130,13 @@ function WalletsContainer({ children }: { children: ReactNode }) {
   let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   return (
-    <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col gap-4">
+    <div className="py-6 px-6 bg-white rounded-3xl border  flex flex-col gap-4">
       <section className="flex justify-between items-center  text-sm">
         <div>
-          <p className="text-2xl text-semibold mb-2 "
-          style={{ color: colorPrimary}}>
+        <h2 className={" text-2xl font-secondary mb-2 "}
+      style={{ color: colorPrimary}}>
             FX Balances
-          </p>
+          </h2>
           <span className="text-black font-normal text-base">
             Click on the account for more information
           </span>
@@ -182,13 +182,13 @@ function handleGatewayChange(gateway: string) {
   });
 
   return (
-    <div className="py-6 px-6 bg-white rounded-3xl border font-semibold flex flex-col gap-4">
+    <div className="py-6 px-6 bg-white rounded-3xl border  flex flex-col gap-4">
       <section className="flex justify-between items-center  text-sm">
         <div>
-          <p className="text-2xl text-semibold mb-2 "
-          style={{ color: colorPrimary }}>
+        <h2 className={" text-2xl font-secondary mb-2"}
+      style={{ color: colorPrimary}}>
             Naira Gateways
-          </p>
+          </h2>
           <span className="text-black font-normal text-base">
             Click on the account for more information
           </span>

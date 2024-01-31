@@ -347,7 +347,9 @@ export const FxOptionsModal = ({
             <Modal
                 opened={showExchangeModal}
                 onClose={closeExchageModal}
-                title={`Send ${title}`}
+                title={<h2 className={"text-2xl font-secondary mt-2"} style={{ color: colorPrimary }}>
+                    Send ${title}
+                </h2>}
                 centered>
                 <div className="z-100">
                     <ExchangeBox gatewayID={id} />

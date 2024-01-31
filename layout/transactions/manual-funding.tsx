@@ -25,6 +25,7 @@ import { jsPDF } from "jspdf";
 // import { CSVLink } from 'react-csv';
 
 import * as XLSX from 'xlsx';
+import { EmptyTransactionHistory } from "./transaction-history";
 
 
 export const exportToExcel = (data:any, filename:string) => {

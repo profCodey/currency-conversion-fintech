@@ -34,6 +34,7 @@ import { useGetAccounts } from "@/api/hooks/accounts";
 import { ExchangeBox } from "../dashboard/exchange-box";
 import { useFXWalletAccounts } from "@/api/hooks/accounts";
 import Cookies from "js-cookie";
+import ExchangeFxFundPage from "../dashboard/exchange-nr";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -198,6 +199,15 @@ export const ConfirmationForm = ({
     handleSend(arg0: z.infer<typeof PayFxRecipient>): void;
     buttonLoading: boolean;
 }) => {
+    let colorPrimary = Cookies.get("primary_color")
+        ? Cookies.get("primary_color")
+        : "#132144";
+    let colorSecondary = Cookies.get("secondary_color")
+        ? Cookies.get("secondary_color")
+        : "#132144";
+    let colorBackground = Cookies.get("background_color")
+        ? Cookies.get("background_color")
+        : "#132144";
     let colorPrimary = Cookies.get("primary_color")
         ? Cookies.get("primary_color")
         : "#132144";
@@ -394,6 +404,7 @@ export const NairaOptionsModal = ({
     const [opened, { open, close: closeModal }] = useDisclosure(false);
     const { data: virtualAccount } = useGetVirtualAccount(String(id));
     const { bankOptions } = useBankOptions();
+    const [showNgnModalOpen, setShowNgnModalOpen] = useState(false);
     const { currencyOptions } = useCurrencyOptions();
     const { defaultGateway } = useDefaultGateway();
     const [recipientDetails, setRecipientDetails] = useState<
@@ -406,6 +417,14 @@ export const NairaOptionsModal = ({
         account_number: "",
         narration: "",
     });
+
+    function handleNgnExchangeOpen() {
+        setShowNgnModalOpen(true);
+    }
+
+    function closeNgnExchangeModal() {
+        setShowNgnModalOpen(false);
+    }
 
     return (
         <>
@@ -500,18 +519,12 @@ export const NairaOptionsModal = ({
                     <ArrowRight />
                 </div>
                 <Divider my="sm" />
-                {/* <Link className="flex items-center justify-between mb-3" href={`/transactions/exchange/${id}`}>
-          <div className="text-[#6882B6]">
-            <h3 className="text-2xl font-semibold"> Transaction </h3>
-            <span className="text-sm font-semibold">View all transactions </span>
-          </div>
-          <ArrowRight />
-        </Link>
-        <Divider my="sm" /> */}
-                <Link
+
+                <div
+                    style={{ cursor: "pointer", color: colorSecondary }}
                     className="flex items-center justify-between mb-3"
-                    href={`/dashboard/ngn/${id}`}>
-                    <div style={{ color: colorSecondary }}>
+                    onClick={handleNgnExchangeOpen}>
+                    <div>
                         <h3 className="text-2xl font-semibold"> Exchange </h3>
                         <span className="text-sm font-semibold text-black">
                             {" "}
@@ -519,7 +532,7 @@ export const NairaOptionsModal = ({
                         </span>
                     </div>
                     <ArrowRight />
-                </Link>
+                </div>
                 {/* <Divider my="sm"/>
           <Link className="flex items-center justify-between mb-3" href="/transactions">
           <div className="text-[#6882B6]">
@@ -537,6 +550,21 @@ export const NairaOptionsModal = ({
                 gateway={defaultGateway?.gateway}
                 recipientDetails={recipientDetails}
             />
+            <Modal
+                opened={showNgnModalOpen}
+                onClose={closeNgnExchangeModal}
+                title={
+                    <h2
+                        className={" text-2xl font-secondary"}
+                        style={{ color: colorPrimary }}>
+                        Exchange your fund
+                    </h2>
+                }
+                centered>
+                <div className="z-100">
+                    <ExchangeFxFundPage gatewayID={id} />
+                </div>
+            </Modal>
         </>
     );
 };

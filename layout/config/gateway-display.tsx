@@ -90,15 +90,13 @@ function Gateway({
            onClick={() => isVerified && handleSelect(gateway)}
            disabled={!isVerified}
          >
-           Set as Default
+           Set as default
          </Button>
       ) :
       gateway.is_default ? (
-        <Button className="  py-2 px-3  rounded-[4px]"
-        style={{ borderColor: colorBackground, color: colorBackground, backgroundColor: "white" }}
-        >
-          Default
-        </Button>
+        <p  style={{color: colorBackground}}>
+        Default
+      </p>
       ) :
       gateway.status == "rejected" ? (
         <p className="text-red-500 font-medium" color="red">

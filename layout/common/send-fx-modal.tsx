@@ -310,7 +310,7 @@ export const FxOptionsModal = ({
                     onClick={handleSendMoneyOpen}>
                     <div style={{ color: colorSecondary }}>
                         <h3 className="text-2xl font-semibold"> Send Fund </h3>
-                        <span className="text-sm font-semibold text-black">
+                        <span className="text-sm font-normal " style={{ color: colorPrimary }}>
                             Send to foreign account{" "}
                         </span>
                     </div>
@@ -326,7 +326,7 @@ export const FxOptionsModal = ({
                             {" "}
                             Convert Fund{" "}
                         </h3>
-                        <span className="text-sm font-semibold text-black">
+                        <span className="text-sm font-normal " style={{ color: colorPrimary }}>
                             Convert to other currencies{" "}
                         </span>
                     </div>
@@ -341,7 +341,7 @@ export const FxOptionsModal = ({
                             {" "}
                             Transaction{" "}
                         </h3>
-                        <span className="text-sm font-semibold text-black">
+                        <span className="text-sm font-normal " style={{ color: colorPrimary }}>
                             View all transactions{" "}
                         </span>
                     </div>
@@ -438,28 +438,28 @@ export const NairaOptionsModal = ({
                         </h3>
                         <div className="flex flex-col align-center text-black justify-center w-100">
                             <div className="mb-[-3px] flex">
-                                <div className="text-sm font-bold w-1/3">
+                                <div className="text-sm font-medium w-1/3" style={{ color: colorPrimary }}>
                                     Account Name:{" "}
                                 </div>
-                                <div className="text-sm text-black font-medium">
+                                <div className="text-sm font-normal" style={{ color: colorPrimary }}>
                                     {" "}
                                     {virtualAccount?.data.account_name}{" "}
                                 </div>
                             </div>
                             <div className="mb-[-3px] flex">
-                                <div className="text-sm font-bold  w-1/3">
+                            <div className="text-sm font-medium w-1/3" style={{ color: colorPrimary }}>
                                     Bank Name:{" "}
                                 </div>
-                                <div className="text-sm text-black font-medium">
+                                <div className="text-sm font-normal" style={{ color: colorPrimary }}>
                                     {" "}
                                     {virtualAccount?.data.bank_name}{" "}
                                 </div>
                             </div>
                             <div className="mb-[-3px] flex">
-                                <div className="text-sm font-bold  w-1/3">
+                            <div className="text-sm font-medium w-1/3" style={{ color: colorPrimary }}>
                                     Account Number:{" "}
                                 </div>
-                                <div className="text-sm text-black font-medium">
+                                <div className="text-sm font-normal" style={{ color: colorPrimary }}>
                                     {" "}
                                     {virtualAccount?.data.account_number}{" "}
                                 </div>
@@ -503,7 +503,7 @@ export const NairaOptionsModal = ({
                             {" "}
                             Withdraw Fund{" "}
                         </h3>
-                        <span className="text-sm text-black font-semibold">
+                        <span className="text-sm font-normal" style={{ color: colorPrimary }}>
                             Withdraw to local account{" "}
                         </span>
                     </div>
@@ -517,7 +517,7 @@ export const NairaOptionsModal = ({
                     onClick={handleNgnExchangeOpen}>
                     <div>
                         <h3 className="text-2xl font-semibold"> Exchange </h3>
-                        <span className="text-sm font-semibold text-black">
+                        <span className="text-sm font-normal" style={{ color: colorPrimary }}>
                             {" "}
                             Exchange NGN to other currencies{" "}
                         </span>
@@ -544,6 +544,7 @@ export const NairaOptionsModal = ({
             <Modal
                 opened={showNgnModalOpen}
                 onClose={closeNgnExchangeModal}
+                size={500}
                 title={
                     <h2
                         className={" text-2xl font-secondary"}

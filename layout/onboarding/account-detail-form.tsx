@@ -183,7 +183,7 @@ export const AccountDetailForm = ({
                 visible={fetchingNewClientNameEnquiryDetails || loadingBanks}
                 overlayBlur={2}
             />
-            {!showNext || !showNextBtn ? (
+            
                 <div
                     style={{
                         backgroundColor: "#d4edda",
@@ -197,7 +197,6 @@ export const AccountDetailForm = ({
                         Naira balance at the close of every business day
                     </h2>
                 </div>
-            ) : null}
 
             {accountDeets?.data ? (
                 // Render TextInput if accountDeets?.data is available

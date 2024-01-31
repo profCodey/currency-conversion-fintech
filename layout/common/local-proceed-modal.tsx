@@ -22,7 +22,13 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { ArrowRight, Danger, DirectboxSend, Warning2 } from "iconsax-react";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+    ChangeEvent,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useState,
+} from "react";
 import { z } from "zod";
 import { FxTransferOperationStage } from "./fx-forms/dollar-form";
 import { CurrencyDetailType } from "@/utils/validators/interfaces";
@@ -172,7 +178,13 @@ export function LocalProceedModal({
         switch (state) {
             case "send-money":
                 return {
-                    title: "Recipient Details",
+                    title: (
+                        <h2
+                            className={" text-2xl font-secondary mt-2"}
+                            style={{ color: colorPrimary }}>
+                            Recipient Details
+                        </h2>
+                    ),
                     component: SendMoneyForm,
                 };
             case "confirm-details":
@@ -316,8 +328,8 @@ export function LocalProceedModal({
 
     function handleModalClose() {
         // payRecipientForm.reset();
-        setShowConfirmationModal(false)
-        setForm("send-money")
+        setShowConfirmationModal(false);
+        setForm("send-money");
         // queryClient.removeQueries(["name-enquiry"]);
     }
     let colorPrimary = Cookies.get("primary_color")
@@ -346,19 +358,18 @@ export function LocalProceedModal({
         // }
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         setAmountEnquiry(payRecipientForm.values.amount);
-    }, [payRecipientForm.values.amount])
-    useEffect(()=> {
+    }, [payRecipientForm.values.amount]);
+    useEffect(() => {
         setAccNameEnquiry(payRecipientForm.values.account_name);
-    }, [payRecipientForm.values.account_name])
-    useEffect(()=> {
+    }, [payRecipientForm.values.account_name]);
+    useEffect(() => {
         setBankEnquiry(payRecipientForm.values.bank_name);
-    }, [payRecipientForm.values.bank_name])
-    useEffect(()=> {
+    }, [payRecipientForm.values.bank_name]);
+    useEffect(() => {
         setAccNumberEnquiry(payRecipientForm.values.account_number);
-    }, [payRecipientForm.values.account_number])
-    
+    }, [payRecipientForm.values.account_number]);
 
     const handlePayout = () => {
         createFxPayout({
@@ -402,7 +413,7 @@ export function LocalProceedModal({
             <Group grow className="w-full">
                 <Button
                     className="bg-white hover:bg-white text-red-600 border-1 border-red-600"
-                    onClick={()=> setForm("send-money")}
+                    onClick={() => setForm("send-money")}
                     size="md">
                     Back
                 </Button>
@@ -568,10 +579,10 @@ export function LocalProceedModal({
                 // description=""
                 required
                 error={
-                  !payRecipientForm.values.invoice
-                      ? "Invoice file is required."
-                      : ""
-              }              
+                    !payRecipientForm.values.invoice
+                        ? "Invoice file is required."
+                        : ""
+                }
                 placeholder="Upload 'Invoice Document'"
                 {...payRecipientForm.getInputProps("invoice")}
             />
@@ -607,7 +618,6 @@ export function LocalProceedModal({
                 {FormContent?.component}
             </Modal>
         </section>
-
     );
 }
 

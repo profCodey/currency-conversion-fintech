@@ -210,6 +210,7 @@ export function BusinessProfileForm({
         placeholder="BVN"
         label="BVN"
         size="lg"
+        maxLength={11} 
         required
         {...businessProfileForm.getInputProps("bvn")}
         classNames={{ input: "disabled:bg-white text-black" }}

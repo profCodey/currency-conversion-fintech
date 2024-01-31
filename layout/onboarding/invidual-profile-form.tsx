@@ -112,6 +112,7 @@ export function InvidualProfileForm({
             <TextInput
                 placeholder="BVN"
                 label="BVN"
+                maxLength={11} 
                 size="lg"
                 {...invidualProfileForm.getInputProps("bvn")}
                 classNames={{ input: "disabled:bg-white text-black" }}

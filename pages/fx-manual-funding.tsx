@@ -10,9 +10,9 @@ export default function Transactions() {
   return (
     <div className="flex flex-col gap-6 h-full">
       <div >
-        <h2 style={{ color: colorPrimary}} className={"text-2xl font-secondary mt-2"}>Naira Manual Funding</h2>
-        <span style={{ color: colorPrimary}}>View Naira Manual Funding History</span>
-        <ManualFundingHistory category="local"/>
+        <h2 style={{ color: colorPrimary}} className={"text-2xl font-secondary mt-2"}>FX Manual Funding</h2>
+        <span style={{ color: colorPrimary}}>View FX Manual Funding History</span>
+        <ManualFundingHistory category="fx"/>
       </div>
     </div>
   );

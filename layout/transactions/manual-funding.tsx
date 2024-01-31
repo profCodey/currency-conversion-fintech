@@ -36,11 +36,13 @@ export const exportToExcel = (data:any, filename:string) => {
 
 
 // TODO: Use one code instance of manual funding history table
-
-export function ManualFundingHistory() {
+interface IManualFundingHistoryProps {
+  category: string;
+}
+export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
   const { data: manualFundings, isLoading: manualFundingsLoading } =
-    useGetManualFundings();
+    useGetManualFundings(category);
     const [modalVisible, setModalVisible] = useState(false); 
     
   const { role, isLoading } = useRole();

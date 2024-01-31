@@ -20,7 +20,7 @@ export function ClientWalletBalances() {
     router?.query.id as string
   );
 
-  const totalWalletBalance = clientDetails?.data.result.gatewaybalances.reduce(
+  const totalWalletBalance = clientDetails?.data?.result?.gatewaybalances?.reduce(
     (acc, gateway) => acc + gateway.balance, 0);
 
   return (
@@ -55,7 +55,7 @@ export function ClientWalletBalances() {
             </span>
             <CircleNigerianFlag />
 
-            {clientDetails?.data.result && (
+            {clientDetails?.data?.result && (
               <Popover position="bottom" withArrow shadow="md">
                 <Popover.Target>
                   <ActionIcon>
@@ -64,7 +64,7 @@ export function ClientWalletBalances() {
                 </Popover.Target>
                 <Popover.Dropdown>
                   <section className="flex flex-col gap-6 p-2">
-                    {clientDetails?.data.result?.gatewaybalances.map(
+                    {clientDetails?.data?.result?.gatewaybalances?.map(
                       (gateway) => (
                         <div
                           key={gateway.gatewayId}

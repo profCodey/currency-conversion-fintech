@@ -325,11 +325,11 @@ export function useDeleteAccount(cb?: () => void) {
     );
 }
 
-export function useGetManualFundings() {
+export function useGetManualFundings(category: string) {
     return useQuery({
         queryKey: ["manual-fundings"],
         queryFn: function (): Promise<AxiosResponse<IManualPayment[]>> {
-            return axiosInstance.get(`/manual-funding/`);
+            return axiosInstance.get(`/manual-funding?category=${category}`);
         },
     });
 }

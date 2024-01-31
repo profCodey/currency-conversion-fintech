@@ -18,8 +18,8 @@ export function middleware(request: NextRequest) {
     "/local-transactions",
     "/local-statement",
     "/collection",
-    "/local-manual-funding"
-
+    "/local-manual-funding",
+    "/fx-manual-funding"
   ];
 
   const adminPaths = [

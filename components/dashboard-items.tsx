@@ -41,7 +41,7 @@ const routes = [
         label: "Fx Exchange",
       },
       {
-        route: "/local-manual-funding",
+        route: "/fx-manual-funding",
         label: "Fx Manual Fundings",
       },
       {

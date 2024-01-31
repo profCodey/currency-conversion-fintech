@@ -25,6 +25,7 @@ import { jsPDF } from "jspdf";
 // import { CSVLink } from 'react-csv';
 
 import * as XLSX from 'xlsx';
+import { EmptyTransactionHistory } from "./transaction-history";
 
 
 export const exportToExcel = (data:any, filename:string) => {
@@ -36,11 +37,13 @@ export const exportToExcel = (data:any, filename:string) => {
 
 
 // TODO: Use one code instance of manual funding history table
-
-export function ManualFundingHistory() {
+interface IManualFundingHistoryProps {
+  category: string;
+}
+export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
   const { data: manualFundings, isLoading: manualFundingsLoading } =
-    useGetManualFundings();
+    useGetManualFundings(category);
     const [modalVisible, setModalVisible] = useState(false); 
     
   const { role, isLoading } = useRole();
@@ -60,6 +63,10 @@ export function ManualFundingHistory() {
     }
   }
 
+  let emptyTransactionHistory =
+  manualFundings?.data &&
+  (manualFundings?.data === null ||
+    manualFundings?.data.length < 1);
   
   const handleDownloadExcel = () => {
     exportToExcel(manualFundings?.data || [],  'manual_fundings.xlsx');
@@ -101,7 +108,7 @@ export function ManualFundingHistory() {
     // Download the PDF
     pdf.save("transaction_receipt.pdf");
   };
-  
+
   const ColumnHelper = createColumnHelper<IManualPayment>();
 
   const columns = useMemo(function () {
@@ -222,6 +229,13 @@ export function ManualFundingHistory() {
   //   [manualFundings?.data, isAdmin]
   // );
 
+  if (emptyTransactionHistory) {
+    return (
+        <div className="mt-6">
+            <EmptyTransactionHistory message="FX Payout history empty" />
+        </div>
+    );
+}
 
   return (
     <>

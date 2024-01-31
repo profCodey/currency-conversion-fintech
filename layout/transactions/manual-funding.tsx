@@ -63,6 +63,10 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
     }
   }
 
+  let emptyTransactionHistory =
+  manualFundings?.data &&
+  (manualFundings?.data === null ||
+    manualFundings?.data.length < 1);
   
   const handleDownloadExcel = () => {
     exportToExcel(manualFundings?.data || [],  'manual_fundings.xlsx');
@@ -105,6 +109,14 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
     pdf.save("transaction_receipt.pdf");
   };
   
+  if (emptyTransactionHistory) {
+    return (
+        <div className="mt-6">
+            <EmptyTransactionHistory message="FX Payout history empty" />
+        </div>
+    );
+}
+
   const ColumnHelper = createColumnHelper<IManualPayment>();
 
   const columns = useMemo(function () {

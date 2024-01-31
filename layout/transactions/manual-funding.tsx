@@ -108,14 +108,6 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
     // Download the PDF
     pdf.save("transaction_receipt.pdf");
   };
-  
-  if (emptyTransactionHistory) {
-    return (
-        <div className="mt-6">
-            <EmptyTransactionHistory message="FX Payout history empty" />
-        </div>
-    );
-}
 
   const ColumnHelper = createColumnHelper<IManualPayment>();
 
@@ -237,6 +229,13 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
   //   [manualFundings?.data, isAdmin]
   // );
 
+  if (emptyTransactionHistory) {
+    return (
+        <div className="mt-6">
+            <EmptyTransactionHistory message="FX Payout history empty" />
+        </div>
+    );
+}
 
   return (
     <>

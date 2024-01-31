@@ -132,6 +132,7 @@ export function ClientGateways() {
                                     style={{backgroundColor:colorBackground}}
                                     className="hover:bg-primary-100 my-5"
                                     size="md"
+                                    loading={createNewGatewayLoading}
                                     type="submit">
                                     Create
                                 </Button>

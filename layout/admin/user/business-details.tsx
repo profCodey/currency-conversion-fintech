@@ -338,6 +338,7 @@ export function BusinessDetails({
               className="hover:bg-primary-100"
               size="md"
               type="submit"
+              loading={businessLoading}
               loaderPosition="right"
               //@ts-ignore
               onClick={handleSubmit}

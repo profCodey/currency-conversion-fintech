@@ -208,15 +208,6 @@ export const ConfirmationForm = ({
     let colorBackground = Cookies.get("background_color")
         ? Cookies.get("background_color")
         : "#132144";
-    let colorPrimary = Cookies.get("primary_color")
-        ? Cookies.get("primary_color")
-        : "#132144";
-    let colorSecondary = Cookies.get("secondary_color")
-        ? Cookies.get("secondary_color")
-        : "#132144";
-    let colorBackground = Cookies.get("background_color")
-        ? Cookies.get("background_color")
-        : "#132144";
     return (
         <Stack align="center" className="w-full">
             <Warning2 size={60} />

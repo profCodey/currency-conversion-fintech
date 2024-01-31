@@ -170,8 +170,9 @@ export function FXProceedModal({
     switch (state) {
       case "send-money":
         return {
-          title: "Recipient Details",
-          component: SendMoneyForm,
+          title: <h2 className={" text-2xl font-secondary mt-2"}
+          style={{ color: colorPrimary}}>Recipient Details</h2>,
+                    component: SendMoneyForm,
         };
       case "confirm-details":
         return {

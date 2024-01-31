@@ -26,7 +26,7 @@ export default function GatewaysDisplay({
 
   return (
     <section className="text-gray-90">
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-[50vh]">
+      <section className="grid grid-cols-1 md:grid-cols-2 min-h-[50vh]">
         <section className="flex flex-col gap-2 p-5 border-r  rounded-lg bg-gray-30 border ">
           <div className="flex gap-4">
             <h3 className="text-secondary mb-2">Select Default Gateway</h3>
@@ -83,26 +83,32 @@ function Gateway({
     >
       <span className="text-sm font-semibold">{gateway.gateway_name}</span>
 
-      {gateway.status !== "approved" ? (
-        <Button variant="subtle" color="red">
-          Not approved
-        </Button>
-      ) : gateway.is_default ? (
+      { gateway.status == "approved" && !gateway.is_default ? (
+           <Button
+           className="py-2 px-3 text-gray-200 rounded-[4px]"
+           style={{ backgroundColor: colorBackground }}
+           onClick={() => isVerified && handleSelect(gateway)}
+           disabled={!isVerified}
+         >
+           Set as Default
+         </Button>
+      ) :
+      gateway.is_default ? (
         <Button className="  py-2 px-3  rounded-[4px]"
         style={{ borderColor: colorBackground, color: colorBackground, backgroundColor: "white" }}
         >
           Default
         </Button>
-      ) : (
-        <Button
-          className="py-2 px-3 text-gray-200 rounded-[4px]"
-          style={{ backgroundColor: colorBackground }}
-          onClick={() => isVerified && handleSelect(gateway)}
-          disabled={!isVerified}
-        >
-          Make Default
-        </Button>
-      )}
+      ) :
+      gateway.status == "rejected" ? (
+        <p className="text-red-500 font-medium" color="red">
+          Not approved
+        </p>
+      ) : gateway.status == "pending" ? (
+        <p className="text-red-500 font-medium" color="red">
+          Awaiting Approval
+        </p>
+      ) : ""}
     </div>
   );
 }

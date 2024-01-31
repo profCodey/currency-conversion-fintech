@@ -13,6 +13,7 @@ import { FaDownload } from "react-icons/fa6";
 // import { CSVLink } from 'react-csv';
 import * as XLSX from "xlsx";
 import Cookies from "js-cookie";
+import { EmptyTransactionHistory } from "./transaction-history";
 
 export function FxPayoutHistory() {
     const [payout, setPayout] = useState<IFxPayout | null>(null);
@@ -32,7 +33,12 @@ export function FxPayoutHistory() {
                 return null;
         }
     }
-
+   
+    let emptyTransactionHistory =
+    fxPayouts?.data &&
+    (fxPayouts?.data === null ||
+      fxPayouts?.data.length < 1);
+      
     const handleDownloadExcel = () => {
         const ws = XLSX.utils.json_to_sheet(
             fxPayouts?.data?.map((payout) => ({
@@ -96,6 +102,14 @@ export function FxPayoutHistory() {
         },
         [fxPayouts?.data]
     );
+
+if (emptyTransactionHistory) {
+    return (
+        <div className="mt-6">
+            <EmptyTransactionHistory message="Transaction history empty" />
+        </div>
+    );
+}
 
     let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
 

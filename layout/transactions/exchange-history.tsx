@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { FaDownload } from "react-icons/fa6";
 import { jsPDF } from "jspdf";
 import Cookies from "js-cookie";
+import { EmptyTransactionHistory } from "./transaction-history";
 
 export function ExchangeHistory() {
   const [exchange, setExchange] = useState<IExchangeDetailed | null>(null);
@@ -31,6 +32,11 @@ export function ExchangeHistory() {
         return null;
     }
   }
+
+  let emptyTransactionHistory =
+    exchanges?.data &&
+    (exchanges?.data === null ||
+      exchanges?.data.length < 1);
 
   type exchangeHistory = Record<string, string | number> & {
     source_account_detail: {
@@ -162,6 +168,14 @@ function handlePDFDonwload(data: IExchangeDetailed){
     },
     [exchanges?.data]
   );
+
+if (emptyTransactionHistory) {
+  return (
+      <div className="mt-6">
+          <EmptyTransactionHistory message="Transaction history empty" />
+      </div>
+  );
+}
 
   let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   

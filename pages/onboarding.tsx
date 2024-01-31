@@ -29,7 +29,8 @@ import Cookies from "js-cookie";
 export default function Onboarding() {
     const [activeTab, setActiveTab] = useState<string | null>("basic-profile");
     const { data } = useGetCurrentUser();
-    // console.log({ userData: data?.data });
+
+    console.log(Cookies);
     const {
         bankOptions,
         getBankName,
@@ -53,6 +54,8 @@ export default function Onboarding() {
     let colorBackground = Cookies.get("background_color")
         ? Cookies.get("background_color")
         : "#132144";
+    const useFxWalletString = Cookies.get("use_fx_wallet");
+    const useFxWallet = useFxWalletString === "true";
 
     // console.log({ accountDetails:accountDetails?.data });
 
@@ -123,10 +126,12 @@ export default function Onboarding() {
         } else if (tab === "account-detail") setActiveTab(tab);
         // else if (tab === "gateway-options" && !disableDocumentNextButton())
         //   setActiveTab(tab);
-          else if (tab === "gateway-options" && !disableBusinessDocumentNextButton())
-          setActiveTab(tab);
-        else if (tab === "status")
+        else if (
+            tab === "gateway-options" &&
+            !disableBusinessDocumentNextButton()
+        )
             setActiveTab(tab);
+        else if (tab === "status") setActiveTab(tab);
         else if (tab === "confirmation") setActiveTab(tab);
     }
 
@@ -164,9 +169,11 @@ export default function Onboarding() {
                             </Tabs.Tab>
                         )}
                         {/* <Tabs.Tab value="gateway-options">Gateway Options</Tabs.Tab> */}
-                        <Tabs.Tab value="account-detail">
-                            Account Detail
-                        </Tabs.Tab>
+                        {!useFxWallet && (
+                            <Tabs.Tab value="account-detail">
+                                Account Detail
+                            </Tabs.Tab>
+                        )}
                         {/* <Tabs.Tab value="confirmation">Confirmation</Tabs.Tab>   */}
                         <Tabs.Tab value="status">Status</Tabs.Tab>
                     </Tabs.List>
@@ -211,17 +218,19 @@ export default function Onboarding() {
             />
 
           </Tabs.Panel> */}
-                    <Tabs.Panel value="account-detail" pt="lg">
-                        <AccountDetailForm
-                            formData={accountDetails?.data}
-                            nextTab={handleTabChange}
-                            disableFields={false}
-                            banks={bankOptions}
-                            loadingBanks={isLoadingBanks}
-                            // gateway={defaultGateway?.gateway}
-                            showNext={showAccountDetailNextBtn}
-                        />
-                    </Tabs.Panel>
+                    {!useFxWallet && (
+                        <Tabs.Panel value="account-detail" pt="lg">
+                            <AccountDetailForm
+                                formData={accountDetails?.data}
+                                nextTab={handleTabChange}
+                                disableFields={false}
+                                banks={bankOptions}
+                                loadingBanks={isLoadingBanks}
+                                // gateway={defaultGateway?.gateway}
+                                showNext={showAccountDetailNextBtn}
+                            />
+                        </Tabs.Panel>
+                    )}
                     {/* <Tabs.Panel value="confirmation" pt="lg">
             <Confirmation />
             </Tabs.Panel> */}

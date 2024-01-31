@@ -183,6 +183,21 @@ export const AccountDetailForm = ({
                 visible={fetchingNewClientNameEnquiryDetails || loadingBanks}
                 overlayBlur={2}
             />
+            
+                <div
+                    style={{
+                        backgroundColor: "#d4edda",
+                        color: "#155724",
+                        padding: "1rem",
+                        border: "1px solid #c3e6cb",
+                        borderRadius: "0.25rem",
+                    }}>
+                    <h2>
+                        Kindly provide your business account details to receive
+                        Naira balance at the close of every business day
+                    </h2>
+                </div>
+
             {accountDeets?.data ? (
                 // Render TextInput if accountDeets?.data is available
                 <TextInput

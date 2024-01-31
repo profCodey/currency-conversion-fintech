@@ -93,9 +93,11 @@ export const accountDetailFormValidator = z.object({
   account_number: z.string()
   .refine((value) => /^\d{10}$/.test(value), {
     message: "Account Number must be 10 digits",}),
-    // account_name: z.string().min(1),
+    account_name: z.string().min(1),
   bank_name:z.string(),
+
   bank:z.string(),
+
 })
 export const addRecipientFormValidator = z.object({
   currency: z.string(),

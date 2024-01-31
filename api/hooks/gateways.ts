@@ -228,7 +228,8 @@ export function useGetSelectedGateways() {
     });
 }
 
-export function useAddGateway(cb?: () => void) {
+// Update the function signature
+export function useAddGateway(onSuccessCallback?: () => void) {
   return useMutation(
     function (payload: { gateway: number; is_approved?: boolean }) {
       return axiosInstance.post("/local/selected-gateways/", payload);
@@ -237,37 +238,38 @@ export function useAddGateway(cb?: () => void) {
       onSuccess: function () {
         showNotification({
           title: "Operation Successful",
-          message: `Request succesfully sent. You will be notified as soon as it is approved.`,
+          message: `Request successfully sent. You will be notified as soon as it is approved.`,
           color: "green",
         });
-      },
-      onError: function (error:any) {
 
+        // Call the onSuccessCallback if provided
+        onSuccessCallback?.();
+      },
+      onError: function (error: any) {
         let errorShown = error.response?.data?.errors;
         if (Array.isArray(errorShown)) {
-          let errors = errorShown.map((value: { attr: string; code: string; detail: string }) => {
-            return showNotification({
+          errorShown.forEach((value: { attr: string; code: string; detail: string }) => {
+            showNotification({
               title: "An error occurred",
               message: `${value.attr}: ${value.detail}`,
               color: "red",
             });
           });
-          return errors;
         } else {
-          return showNotification({
+          showNotification({
             title: "An error occurred",
-            message:  "Unable to add gateway",
+            message: "Unable to add gateway",
             color: "red",
           });
         }
       },
       onSettled: function () {
-        cb && cb();
         queryClient.invalidateQueries(["apiclient", "gateways"]);
       },
     }
   );
 }
+
 
 export function useMakeDefaultGateway(cb?: () => void) {
   return useMutation(

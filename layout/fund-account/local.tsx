@@ -29,7 +29,6 @@ export function LocalManualFunding({gatewayID}: {gatewayID: number|undefined}) {
   const { data: bankDetails, isLoading } = useGetPaycelerBankDetails();
   const { localAccountOptions, isLoading: accountsLoading } =
     useAccountOptions();
-    console.log(localAccountOptions)
   const { mutate: postManualFunding, isLoading: postManualFundingLoading } =
     usePostManualFunding(closeForm);
   function handleLocalFormSubmit(values: z.infer<typeof fundManualAccount>) {

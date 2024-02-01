@@ -373,7 +373,7 @@ export const FxOptionsModal = ({
                     <div>
                         <h3 className="text-2xl font-semibold">
                             {" "}
-                            Fx Manual Funding{" "}
+                            Manual Funding{" "}
                         </h3>
                         <span
                             className="text-sm font-normal"
@@ -613,7 +613,7 @@ export const NairaOptionsModal = ({
                     <div>
                         <h3 className="text-2xl font-semibold">
                             {" "}
-                            Naira Manual Funding{" "}
+                            Manual Funding{" "}
                         </h3>
                         <span
                             className="text-sm font-normal"

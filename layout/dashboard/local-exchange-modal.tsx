@@ -306,12 +306,10 @@ let currencies: { value: string; label: string }[] = useMemo(() => {
 
   return (
     <>
-    <section className="w-full h-full min-h-screen flex items-center justify-center">
+    <section className="w-full flex ">
       <div className="bg-gray-30 border rounded-lg p-4">
         <Skeleton visible={currenciesLoading || ratesLoading}>
-          <section className="text-primary-70 text-lg text-center">
-            Exchange your fund
-          </section>
+         
 
           {liveRate == null && sourceAccCurrency && destinationAccCurrency && (
             <div className="text-red-600 font-medium font-secondary text-sm text-center mt-1">

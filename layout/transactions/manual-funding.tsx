@@ -245,7 +245,7 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
 
       <LoadingOverlay visible={manualFundingsLoading || isLoading} />
       {emptyTransactionHistory ? <div className="mt-6">
-            <EmptyTransactionHistory message="FX Payout history empty" />
+            <EmptyTransactionHistory message="Naira Manual Funding history empty" />
         </div>:
         <Table columns={columns} data={manualFundings?.data || []} handleDownloadCSV={handleDownloadExcel} /> }
       {/* <MTable verticalSpacing="md">

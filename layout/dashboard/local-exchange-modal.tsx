@@ -32,7 +32,7 @@ import { useGetCurrencies } from "@/api/hooks/currencies";
 interface ExchangeBoxProps {
     gatewayID?: number|undefined;
 }
-const ExchangeFxFundPage = ({gatewayID}: ExchangeBoxProps) => {
+const LocalExchangeModal = ({gatewayID}: ExchangeBoxProps) => {
   const sourceRef = useRef<CurrencyDetailType | null>(null);
   const liveRateRef = useRef<number | null>(null);
   const sourceAmountRef = useRef<number>(1);
@@ -508,8 +508,8 @@ style={{ backgroundColor: colorBackground }}
   );
 };
 
-export default ExchangeFxFundPage;
+export default LocalExchangeModal;
 
-ExchangeFxFundPage.getLayout = function getLayout(page: ReactElement) {
+LocalExchangeModal.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };

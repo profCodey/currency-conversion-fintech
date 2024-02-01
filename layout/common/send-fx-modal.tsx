@@ -34,7 +34,7 @@ import { useGetAccounts } from "@/api/hooks/accounts";
 import { ExchangeBox } from "../dashboard/exchange-box";
 import { useFXWalletAccounts } from "@/api/hooks/accounts";
 import Cookies from "js-cookie";
-import ExchangeFxFundPage from "../dashboard/exchange-nr";
+import LocalExchangeModal from "../dashboard/local-exchange-modal";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -554,7 +554,7 @@ export const NairaOptionsModal = ({
                 }
                 centered>
                 <div className="z-100">
-                    <ExchangeFxFundPage gatewayID={id} />
+                    <LocalExchangeModal gatewayID={id} />
                 </div>
             </Modal>
         </>

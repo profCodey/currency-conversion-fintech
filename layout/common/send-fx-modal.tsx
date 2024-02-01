@@ -35,6 +35,8 @@ import { ExchangeBox } from "../dashboard/exchange-box";
 import { useFXWalletAccounts } from "@/api/hooks/accounts";
 import Cookies from "js-cookie";
 import LocalExchangeModal from "../dashboard/local-exchange-modal";
+import { FxManualFunding } from "../fund-account/fx";
+import { LocalManualFunding } from "../fund-account/local";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -264,6 +266,7 @@ export const FxOptionsModal = ({
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
+    const [showManualFundingOpen, setShowManualFundingOpen] = useState(false);
     const { isLoading, data: userInfo } = useGetCurrentUser();
     const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
     const wallet = wallets?.data.find((wallet) => {
@@ -291,6 +294,14 @@ export const FxOptionsModal = ({
         setShowExchangeModal(false);
     }
 
+    function handleManualFundingOpen() {
+        setShowManualFundingOpen(true);
+    }
+
+    function closeManualFundingModal() {
+        setShowManualFundingOpen(false);
+    }
+
     return (
         <>
             <Modal
@@ -310,7 +321,9 @@ export const FxOptionsModal = ({
                     onClick={handleSendMoneyOpen}>
                     <div style={{ color: colorSecondary }}>
                         <h3 className="text-2xl font-semibold"> Send Fund </h3>
-                        <span className="text-sm font-normal " style={{ color: colorPrimary }}>
+                        <span
+                            className="text-sm font-normal "
+                            style={{ color: colorPrimary }}>
                             Send to foreign account{" "}
                         </span>
                     </div>
@@ -326,7 +339,9 @@ export const FxOptionsModal = ({
                             {" "}
                             Convert Fund{" "}
                         </h3>
-                        <span className="text-sm font-normal " style={{ color: colorPrimary }}>
+                        <span
+                            className="text-sm font-normal "
+                            style={{ color: colorPrimary }}>
                             Convert to other currencies{" "}
                         </span>
                     </div>
@@ -341,12 +356,33 @@ export const FxOptionsModal = ({
                             {" "}
                             Transaction{" "}
                         </h3>
-                        <span className="text-sm font-normal " style={{ color: colorPrimary }}>
+                        <span
+                            className="text-sm font-normal "
+                            style={{ color: colorPrimary }}>
                             View all transactions{" "}
                         </span>
                     </div>
                     <ArrowRight />
                 </Link>
+                <Divider my="sm" />
+
+                <div
+                    style={{ cursor: "pointer", color: colorSecondary }}
+                    className="flex items-center justify-between mb-3"
+                    onClick={handleManualFundingOpen}>
+                    <div>
+                        <h3 className="text-2xl font-semibold">
+                            {" "}
+                            Manual Funding{" "}
+                        </h3>
+                        <span
+                            className="text-sm font-normal"
+                            style={{ color: colorPrimary }}>
+                            Click here to manually find your account
+                        </span>
+                    </div>
+                    <ArrowRight />
+                </div>
             </Modal>
             <FXProceedModal
                 modalOpen={showConfirmationModal}
@@ -366,13 +402,32 @@ export const FxOptionsModal = ({
             <Modal
                 opened={showExchangeModal}
                 onClose={closeExchageModal}
-                title={<h2 className={"text-2xl font-secondary mt-2"} style={{ color: colorPrimary }}>
-                    Send ${title}
-                </h2>}
+                title={
+                    <h2
+                        className={"text-2xl font-secondary mt-2"}
+                        style={{ color: colorPrimary }}>
+                        Send ${title}
+                    </h2>
+                }
                 centered>
                 <div className="z-100">
                     <ExchangeBox gatewayID={id} />
                 </div>
+            </Modal>
+            <Modal
+                opened={showManualFundingOpen}
+                onClose={closeManualFundingModal}
+                title={
+                    <h2
+                        className={" text-2xl font-secondary"}
+                        style={{ color: colorPrimary }}>
+                        Fund your wallet
+                    </h2>
+                }
+                centered>
+                <div className="z-100">
+                    <FxManualFunding gatewayID={id} closeModal={closeManualFundingModal} />
+                 </div>
             </Modal>
         </>
     );
@@ -396,6 +451,7 @@ export const NairaOptionsModal = ({
     const { data: virtualAccount } = useGetVirtualAccount(String(id));
     const { bankOptions } = useBankOptions();
     const [showNgnModalOpen, setShowNgnModalOpen] = useState(false);
+    const [showManualFundingOpen, setShowManualFundingOpen] = useState(false);
     const { currencyOptions } = useCurrencyOptions();
     const { defaultGateway } = useDefaultGateway();
     const [recipientDetails, setRecipientDetails] = useState<
@@ -415,6 +471,14 @@ export const NairaOptionsModal = ({
 
     function closeNgnExchangeModal() {
         setShowNgnModalOpen(false);
+    }
+
+    function handleManualFundingOpen() {
+        setShowManualFundingOpen(true);
+    }
+
+    function closeManualFundingModal() {
+        setShowManualFundingOpen(false);
     }
 
     return (
@@ -438,28 +502,40 @@ export const NairaOptionsModal = ({
                         </h3>
                         <div className="flex flex-col align-center text-black justify-center w-100">
                             <div className="mb-[-3px] flex">
-                                <div className="text-sm font-medium w-1/3" style={{ color: colorPrimary }}>
+                                <div
+                                    className="text-sm font-medium w-1/3"
+                                    style={{ color: colorPrimary }}>
                                     Account Name:{" "}
                                 </div>
-                                <div className="text-sm font-normal" style={{ color: colorPrimary }}>
+                                <div
+                                    className="text-sm font-normal"
+                                    style={{ color: colorPrimary }}>
                                     {" "}
                                     {virtualAccount?.data.account_name}{" "}
                                 </div>
                             </div>
                             <div className="mb-[-3px] flex">
-                            <div className="text-sm font-medium w-1/3" style={{ color: colorPrimary }}>
+                                <div
+                                    className="text-sm font-medium w-1/3"
+                                    style={{ color: colorPrimary }}>
                                     Bank Name:{" "}
                                 </div>
-                                <div className="text-sm font-normal" style={{ color: colorPrimary }}>
+                                <div
+                                    className="text-sm font-normal"
+                                    style={{ color: colorPrimary }}>
                                     {" "}
                                     {virtualAccount?.data.bank_name}{" "}
                                 </div>
                             </div>
                             <div className="mb-[-3px] flex">
-                            <div className="text-sm font-medium w-1/3" style={{ color: colorPrimary }}>
+                                <div
+                                    className="text-sm font-medium w-1/3"
+                                    style={{ color: colorPrimary }}>
                                     Account Number:{" "}
                                 </div>
-                                <div className="text-sm font-normal" style={{ color: colorPrimary }}>
+                                <div
+                                    className="text-sm font-normal"
+                                    style={{ color: colorPrimary }}>
                                     {" "}
                                     {virtualAccount?.data.account_number}{" "}
                                 </div>
@@ -503,7 +579,9 @@ export const NairaOptionsModal = ({
                             {" "}
                             Withdraw Fund{" "}
                         </h3>
-                        <span className="text-sm font-normal" style={{ color: colorPrimary }}>
+                        <span
+                            className="text-sm font-normal"
+                            style={{ color: colorPrimary }}>
                             Withdraw to local account{" "}
                         </span>
                     </div>
@@ -517,21 +595,34 @@ export const NairaOptionsModal = ({
                     onClick={handleNgnExchangeOpen}>
                     <div>
                         <h3 className="text-2xl font-semibold"> Exchange </h3>
-                        <span className="text-sm font-normal" style={{ color: colorPrimary }}>
+                        <span
+                            className="text-sm font-normal"
+                            style={{ color: colorPrimary }}>
                             {" "}
                             Exchange NGN to other currencies{" "}
                         </span>
                     </div>
                     <ArrowRight />
                 </div>
-                {/* <Divider my="sm"/>
-          <Link className="flex items-center justify-between mb-3" href="/transactions">
-          <div className="text-[#6882B6]">
-            <h3 className="text-2xl font-semibold"> Fund </h3>
-            <span className="text-sm font-semibold">Fund your NGN wallet </span>
-          </div>
-          <ArrowRight />
-        </Link> */}
+                <Divider my="sm" />
+
+                <div
+                    style={{ cursor: "pointer", color: colorSecondary }}
+                    className="flex items-center justify-between mb-3"
+                    onClick={handleManualFundingOpen}>
+                    <div>
+                        <h3 className="text-2xl font-semibold">
+                            {" "}
+                            Manual Funding{" "}
+                        </h3>
+                        <span
+                            className="text-sm font-normal"
+                            style={{ color: colorPrimary }}>
+                            Click here to manually find your account
+                        </span>
+                    </div>
+                    <ArrowRight />
+                </div>
             </Modal>
             <SendMoneyModal
                 modalOpen={opened}
@@ -555,6 +646,22 @@ export const NairaOptionsModal = ({
                 centered>
                 <div className="z-100">
                     <LocalExchangeModal gatewayID={id} />
+                </div>
+            </Modal>
+            <Modal
+                opened={showManualFundingOpen}
+                onClose={closeManualFundingModal}
+                size={500}
+                title={
+                    <h2
+                        className={" text-2xl font-secondary"}
+                        style={{ color: colorPrimary }}>
+                        Fund your wallet
+                    </h2>
+                }
+                centered>
+                <div className="z-100">
+                    <LocalManualFunding gatewayID={id} closeModal={closeManualFundingModal} />
                 </div>
             </Modal>
         </>

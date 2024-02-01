@@ -353,6 +353,7 @@ export function usePostManualFunding(cb?: () => void) {
                         message: data?.data.message,
                         color: "red",
                     });
+                    cb && cb();
             },
             onError: function (data: AxiosError) {
                 const response = data.response?.data as ErrorItem;

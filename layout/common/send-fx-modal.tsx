@@ -426,7 +426,7 @@ export const FxOptionsModal = ({
                 }
                 centered>
                 <div className="z-100">
-                    <FxManualFunding gatewayID={id}/>
+                    <FxManualFunding gatewayID={id} closeModal={closeManualFundingModal} />
                  </div>
             </Modal>
         </>

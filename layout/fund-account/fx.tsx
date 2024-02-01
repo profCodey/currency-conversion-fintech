@@ -25,8 +25,10 @@ import Cookies from "js-cookie";
 
 export function FxManualFunding({
     gatewayID,
+    closeModal,
 }: {
     gatewayID: number | undefined;
+    closeModal: () => void;
 }) {
     let colorPrimary = Cookies.get("primary_color")
         ? Cookies.get("primary_color")
@@ -47,6 +49,7 @@ export function FxManualFunding({
         useGetCurrencies();
     const { mutate: postManualFunding, isLoading: postManualFundingLoading } =
         usePostManualFunding(closeForm);
+   
     function handleLocalFormSubmit(values: z.infer<typeof fundManualAccount>) {
         modals.openConfirmModal({
             title: "Please confirm the following details",
@@ -59,19 +62,27 @@ export function FxManualFunding({
                 loading: postManualFundingLoading,
             },
             onCancel: closeAllModals,
-            onConfirm: () => postManualFunding(values),
+            onConfirm: () => {
+                postManualFunding(values);
+            },
         });
     }
 
     function closeForm() {
+
         closeAllModals();
         fundManualAccountForm.reset();
+        closeModal();
     }
 
-    const selectedAccount= fxAccountOptions.find((option) => option.value === String(gatewayID)); 
+    const selectedAccount = fxAccountOptions.find(
+        (option) => option.value === String(gatewayID)
+    );
     const fundManualAccountForm = useForm({
         initialValues: {
-            target_account: selectedAccount ? selectedAccount.value.toString(): "",
+            target_account: selectedAccount
+                ? selectedAccount.value.toString()
+                : "",
             amount: 1000,
             sender_name: "",
             sender_narration: "",

@@ -59,11 +59,11 @@ const routes = [
     ],
   },
   
-  {
-    route: "/collection",
-    label: "Collection",
-    icon: <TransactionsIcon />
-  },
+  // {
+  //   route: "/collection",
+  //   label: "Collection",
+  //   icon: <TransactionsIcon />
+  // },
   {
     route: "/recipients",
     label: "Recipient",
@@ -79,11 +79,11 @@ const routes = [
     label: "Config",
     icon: <SettingsIcon />,
   },
-  {
-    route: "/fund-account",
-    label: "Manual Funding",
-    icon: <FundAccountIcon />,
-  },
+  // {
+  //   route: "/fund-account",
+  //   label: "Manual Funding",
+  //   icon: <FundAccountIcon />,
+  // },
   {
     route: "/support",
     label: "Support",

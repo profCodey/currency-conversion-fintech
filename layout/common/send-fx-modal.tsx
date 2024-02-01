@@ -635,7 +635,6 @@ export const NairaOptionsModal = ({
             <Modal
                 opened={showNgnModalOpen}
                 onClose={closeNgnExchangeModal}
-                size={500}
                 title={
                     <h2
                         className={" text-2xl font-secondary"}
@@ -651,7 +650,6 @@ export const NairaOptionsModal = ({
             <Modal
                 opened={showManualFundingOpen}
                 onClose={closeManualFundingModal}
-                size={500}
                 title={
                     <h2
                         className={" text-2xl font-secondary"}

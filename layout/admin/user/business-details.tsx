@@ -338,12 +338,12 @@ export function BusinessDetails({
               className="hover:bg-primary-100"
               size="md"
               type="submit"
-              loading={businessLoading}
               loaderPosition="right"
+              loading={businessLoading}
               //@ts-ignore
               onClick={handleSubmit}
             >
-              Submit
+              Update
             </Button>
           </Group>
           </Stack>

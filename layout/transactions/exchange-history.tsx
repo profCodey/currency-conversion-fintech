@@ -134,16 +134,14 @@ function handlePDFDonwload(data: IExchangeDetailed){
       return exchanges?.data?.map(function (exchange) {
         return (
           <tr key={exchange.id}>
+            <td>{exchange.source_account_detail?.label} - {exchange.destination_account_detail?.label}</td>
+            <td>{exchange.amount}</td>
+            <td>{exchange.rate}</td>
             <td className="flex gap-1 items-center">
               {getTransactionIcon(exchange.status)}{" "}
               <span>{exchange.status}</span>
             </td>
-            <td>{exchange.created_by_name}</td>
-            <td>{exchange.amount}</td>
             <td>{dayjs(exchange.created_on).format("MMM D, YYYY h:mm A")}</td>
-            <td>{exchange.rate}</td>
-            <td>{exchange.source_account_detail?.label}</td>
-            <td>{exchange.destination_account_detail?.label}</td>
             <td>
               <Button
                 size="xs"
@@ -185,13 +183,11 @@ if (emptyTransactionHistory) {
         <Table verticalSpacing="md" withBorder className="relative  top-16">
           <thead>
             <tr className="font-primary font-light">
-              <th>Status</th>
-              <th>Created By</th>
+              <th>Destination</th>
               <th>Amount</th>
-              <th>Date</th>
               <th>Rate</th>
-              <th>Source account</th>
-              <th>Destination account</th>
+              <th>Status</th>
+              <th>Date</th>
               <th>View Details</th>
               <th>Download</th>
             </tr>

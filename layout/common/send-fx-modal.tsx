@@ -311,7 +311,7 @@ export const FxOptionsModal = ({
                     <h2
                         className={" text-2xl font-secondary"}
                         style={{ color: colorPrimary }}>
-                        Send ${title}
+                        Send {title}
                     </h2>
                 }
                 centered>

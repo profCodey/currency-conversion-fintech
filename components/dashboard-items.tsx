@@ -34,15 +34,15 @@ const routes = [
     children: [
       {
         route: "/fx-payouts",
-        label: "Fx Payouts",
+        label: "FX Payouts",
       },
       {
         route: "/fx-exchange",
-        label: "Fx Exchange",
+        label: "FX Exchange",
       },
       {
         route: "/fx-manual-funding",
-        label: "Fx Manual Fundings",
+        label: "FX Manual Fundings",
       },
       {
         route: "/local-transactions",

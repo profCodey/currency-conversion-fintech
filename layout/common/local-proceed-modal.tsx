@@ -327,9 +327,23 @@ export function LocalProceedModal({
     }
 
     function handleModalClose() {
-        // payRecipientForm.reset();
         setShowConfirmationModal(false);
         setForm("send-money");
+        payRecipientForm.values.account_name = "";
+        payRecipientForm.values.account_number = "";
+        payRecipientForm.values.narration = "";
+        payRecipientForm.values.bank_name = "";
+        payRecipientForm.values.purpose_of_payment = "";
+        payRecipientForm.values.country = "";
+        payRecipientForm.values.sort_code = "";
+        payRecipientForm.values.bic = "";
+        payRecipientForm.values.recipient_address = "";
+        payRecipientForm.values.city = "";
+        payRecipientForm.values.state = "";
+        payRecipientForm.values.zipcode = "";
+        payRecipientForm.values.swift_code = "";
+        payRecipientForm.values.invoice = null;
+        payRecipientForm.values.source_of_funds = null;
         // queryClient.removeQueries(["name-enquiry"]);
     }
     let colorPrimary = Cookies.get("primary_color")

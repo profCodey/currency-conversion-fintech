@@ -43,7 +43,7 @@ function CreateVirtualAccountModal({
   const {
     mutate: dynamicCreateVirtualAccount,
     isLoading: dynamicCreateVirtualAccountLoading,
-  } = useDynamicCreateVirtualAccount();
+  } = useDynamicCreateVirtualAccount(closeVirtualAccountModal);
 
   const virtualAccountOptions =
     virtualAccountDetails &&

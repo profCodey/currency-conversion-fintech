@@ -146,7 +146,7 @@ export function useCreateNewGateway(cb1: () => void, cb2: () => void) {
   );
 }
 
-export function useDynamicCreateVirtualAccount() {
+export function useDynamicCreateVirtualAccount(cb: () => void) {
   return useMutation(
     function (payload:any) {
       return axiosInstance.post(`local/virtual-account/generate/`, payload);
@@ -158,6 +158,7 @@ export function useDynamicCreateVirtualAccount() {
           message: "Request for a virtual account sent successfully",
           color: "green",
         });
+        cb && cb();
       },
       onError: function (error: any) {
         console.log("error", error)

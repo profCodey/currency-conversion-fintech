@@ -661,7 +661,7 @@ export const NairaOptionsModal = ({
                 }
                 centered>
                 <div className="z-100">
-                    <LocalManualFunding gatewayID={id}/>
+                    <LocalManualFunding gatewayID={id} closeModal={closeManualFundingModal} />
                 </div>
             </Modal>
         </>

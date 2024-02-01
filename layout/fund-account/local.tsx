@@ -24,8 +24,10 @@ import Cookies from "js-cookie";
 
 export function LocalManualFunding({
     gatewayID,
+    closeModal,
 }: {
     gatewayID: number | undefined;
+    closeModal: () => void;
 }) {
     let colorPrimary = Cookies.get("primary_color")
         ? Cookies.get("primary_color")
@@ -63,6 +65,7 @@ export function LocalManualFunding({
     function closeForm() {
         closeAllModals();
         fundManualAccountForm.reset();
+        closeModal();
     }
     const localBanks = useMemo(
         function () {

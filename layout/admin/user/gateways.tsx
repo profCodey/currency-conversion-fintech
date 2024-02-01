@@ -43,9 +43,7 @@ export function ClientGateways() {
     );
     const [currentGateway, setCurrentGateway] = useState<string | null>(null);
 
-    const { mutate: createNewGateway, isLoading: createNewGatewayLoading } = useCreateNewGateway(() => {
-      setCreateModalOpen(false);
-    });
+    const { mutate: createNewGateway, isLoading: createNewGatewayLoading } = useCreateNewGateway(openCreateModal, closeCreateModal);
    
     const { mutate: approveGateway, isLoading: approveGatewayLoading } =
       useApproveGateway(() => {
@@ -79,6 +77,14 @@ export function ClientGateways() {
     function handleGatewayChange(gateway: string) {
         setCurrentGateway(gateway);
         createNewGateForm.setFieldValue("gateway", gateway);
+    }
+
+    function openCreateModal() {
+        setCreateModalOpen(true)
+    }
+
+    function closeCreateModal() {
+        setCreateModalOpen(false)
     }
 
     if (isLoading) {
@@ -132,6 +138,7 @@ export function ClientGateways() {
                                     style={{backgroundColor:colorBackground}}
                                     className="hover:bg-primary-100 my-5"
                                     size="md"
+                                    loading={createNewGatewayLoading}
                                     type="submit">
                                     Create
                                 </Button>

@@ -67,11 +67,10 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
   manualFundings?.data &&
   (manualFundings?.data === null ||
     manualFundings?.data.length < 1);
-  
+
   const handleDownloadExcel = () => {
     exportToExcel(manualFundings?.data || [],  'manual_fundings.xlsx');
   };
-  
 
   
   const handleDownload = (rowData:IManualPayment) => {
@@ -229,13 +228,13 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
   //   [manualFundings?.data, isAdmin]
   // );
 
-  if (emptyTransactionHistory) {
-    return (
-        <div className="mt-6">
-            <EmptyTransactionHistory message="FX Payout history empty" />
-        </div>
-    );
-}
+//   if (emptyTransactionHistory) {
+//     return (
+//         <div className="mt-6">
+//             <EmptyTransactionHistory message="FX Payout history empty" />
+//         </div>
+//     );
+// }
 
   return (
     <>
@@ -245,7 +244,10 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
 
 
       <LoadingOverlay visible={manualFundingsLoading || isLoading} />
-      <Table columns={columns} data={manualFundings?.data || []} handleDownloadCSV={handleDownloadExcel} />
+      {emptyTransactionHistory ? <div className="mt-6">
+            <EmptyTransactionHistory message="FX Payout history empty" />
+        </div>:
+        <Table columns={columns} data={manualFundings?.data || []} handleDownloadCSV={handleDownloadExcel} /> }
       {/* <MTable verticalSpacing="md">
         <thead>
           <tr>

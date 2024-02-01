@@ -117,13 +117,14 @@ export function useCreateVirtualAccount() {
 }
 
 
-export function useCreateNewGateway(cb: () => void) {
+export function useCreateNewGateway(cb1: () => void, cb2: () => void) {
   return useMutation(
     function (payload:{ gateway: number; user: number; }) {
       return axiosInstance.post("/local/mapgateway-to-client/", payload);
     },
     {
       onSuccess: function () {
+        cb2 && cb2();
         showNotification({
           title: "Operation Successful",
           message: `Successfully created gateway`,
@@ -131,6 +132,7 @@ export function useCreateNewGateway(cb: () => void) {
         });
       },
       onError: function () {
+        cb1 && cb1();
         return showNotification({
           title: "An error occured",
           message: "Unable to create gateway",
@@ -138,7 +140,6 @@ export function useCreateNewGateway(cb: () => void) {
         });
       },
       onSettled: function () {
-        cb && cb();
         queryClient.invalidateQueries(["apiclient", "gateways"]);
       },
     }

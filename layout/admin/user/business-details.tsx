@@ -339,10 +339,11 @@ export function BusinessDetails({
               size="md"
               type="submit"
               loaderPosition="right"
+              loading={businessLoading}
               //@ts-ignore
               onClick={handleSubmit}
             >
-              Submit
+              Update
             </Button>
           </Group>
           </Stack>

@@ -39,9 +39,14 @@ export default function UserProfile() {
 
   const { data: withdrawalAcc, isLoading: withdrawalAccLoading } =
     useGetWithdrawalAccount(router?.query.id as string);
-
+    const [userDetails, setUserDetails] = useState(userInfo?.data)
     const [updateUserDetailsOpen, setUpdateUserDetailsOpen] = useState(false);
-
+ 
+    useEffect(()=> {
+      if(userInfo?.data){
+        setUserDetails(userInfo?.data)
+      }
+    }, [userInfo?.data])
   const items = [
     { title: "User details", href: `/admin/users` },
     { title: id, href: `/admin/users/${id}` },
@@ -75,7 +80,7 @@ export default function UserProfile() {
       />
 
       <section className="flex flex-col lg:flex-row gap-6 justify-between relative z-10">
-        <BusinessDetails userInfo={userInfo?.data} updateUserDetailsOpen={updateUserDetailsOpen} setUpdateUserDetailsOpen={setUpdateUserDetailsOpen} />
+        <BusinessDetails userInfo={userDetails} updateUserDetailsOpen={updateUserDetailsOpen} setUpdateUserDetailsOpen={setUpdateUserDetailsOpen} />
         <ClientWalletBalances />
       </section>
 

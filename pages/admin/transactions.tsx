@@ -42,7 +42,7 @@ console.log("settings", settings);
             <Tabs.Tab value="fx-payouts">Foreign Payouts</Tabs.Tab>
             <Tabs.Tab value="fundings">Fundings</Tabs.Tab>
             {!settings?.use_fx_wallet && <Tabs.Tab value="exchange">Exchange</Tabs.Tab>}
-            <Tabs.Tab value="fx">Foreign Transactions</Tabs.Tab>
+            {/* <Tabs.Tab value="fx">Foreign Transactions</Tabs.Tab> */}
           </Tabs.List>
           <Tabs.Panel value="fx-payouts" className="pt-5">
             <FxPayoutHistory />

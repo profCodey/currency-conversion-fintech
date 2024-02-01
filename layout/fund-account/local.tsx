@@ -20,16 +20,16 @@ import { useForm, zodResolver } from "@mantine/form";
 import { closeAllModals, modals } from "@mantine/modals";
 import { useMemo } from "react";
 import { z } from "zod";
-import { ManualFundingHistory } from "../transactions/manual-funding";
 import Cookies from "js-cookie";
 
-export function LocalManualFunding() {
+export function LocalManualFunding({gatewayID}: {gatewayID: number|undefined}) {
   let colorPrimary = Cookies.get("primary_color") ? Cookies.get("primary_color") : "#132144";
     let colorSecondary = Cookies.get("secondary_color") ? Cookies.get("secondary_color") : "#132144";
     let colorBackground = Cookies.get("background_color") ? Cookies.get("background_color") : "#132144";
   const { data: bankDetails, isLoading } = useGetPaycelerBankDetails();
   const { localAccountOptions, isLoading: accountsLoading } =
     useAccountOptions();
+    console.log(localAccountOptions)
   const { mutate: postManualFunding, isLoading: postManualFundingLoading } =
     usePostManualFunding(closeForm);
   function handleLocalFormSubmit(values: z.infer<typeof fundManualAccount>) {
@@ -46,6 +46,7 @@ export function LocalManualFunding() {
     });
   }
 
+ 
   function closeForm() {
     closeAllModals();
     fundManualAccountForm.reset();
@@ -56,9 +57,11 @@ export function LocalManualFunding() {
     },
     [bankDetails?.data]
   );
+  const selectedAccount = localAccountOptions.find((option) => option.value === String(gatewayID));
+
   const fundManualAccountForm = useForm({
     initialValues: {
-      target_account: "",
+      target_account: selectedAccount ? selectedAccount.value.toString() : "", // Set the default value based on gatewayID
       amount: 1000,
       sender_name: "",
       sender_narration: "",
@@ -79,6 +82,7 @@ export function LocalManualFunding() {
             label="Account"
             placeholder="Select Account"
             size="md"
+            disabled
             data={localAccountOptions}
             nothingFound={<span>No gateway found</span>}
             {...fundManualAccountForm.getInputProps("target_account")}
@@ -157,7 +161,6 @@ export function LocalManualFunding() {
         </Stack>
       </form>
 
-      <ManualFundingHistory />
     </Group>
   );
 }

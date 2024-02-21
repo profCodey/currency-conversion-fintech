@@ -5,7 +5,7 @@ import { ManualFundingHistory } from "../transactions/manual-funding";
 export function TransactionsList() {
   return (
     <section className="flex-grow flex flex-col">
-      <ManualFundingHistory />
+      <ManualFundingHistory adminCategory={true}/>
     </section>
   );
 }

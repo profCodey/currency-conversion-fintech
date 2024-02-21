@@ -24,7 +24,7 @@ import { Text } from "@mantine/core";
 import { modals, closeAllModals } from "@mantine/modals";
 import { ReactNode, useState, useEffect } from "react";
 import AppLogo from "@/public/logo-light.svg";
-import MobileLogo from "@/public/payceler-logo.svg";
+import MobileLxxogo from "@/public/payceler-logo.svg";
 import { AdminDashboardItems } from "@/components/admin-dashboard-items";
 import { USER_CATEGORIES } from "@/utils/constants";
 import Link from "next/link";

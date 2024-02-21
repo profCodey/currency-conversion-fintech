@@ -12,7 +12,7 @@ import {
   LoadingOverlay,
   Table as MTable,
 } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FundingStatuses, ManualFundingDrawer } from "./manual-funding-drawer";
 import TransactionFailedIcon from "@/public/transaction-cancelled.svg";
 import TransactionCompletedIcon from "@/public/transaction-completed.svg";
@@ -27,7 +27,7 @@ import { jsPDF } from "jspdf";
 import * as XLSX from 'xlsx';
 import { EmptyTransactionHistory } from "./transaction-history";
 
-
+ 
 export const exportToExcel = (data:any, filename:string) => {
   const ws = XLSX.utils.json_to_sheet(data);
   const wb = XLSX.utils.book_new();
@@ -39,13 +39,15 @@ export const exportToExcel = (data:any, filename:string) => {
 // TODO: Use one code instance of manual funding history table
 interface IManualFundingHistoryProps {
   category: string;
+  adminCategory?: boolean;
 }
-export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
+export function ManualFundingHistory({category, adminCategory}: IManualFundingHistoryProps) {
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
-  const { data: manualFundings, isLoading: manualFundingsLoading } =
-    useGetManualFundings(category);
+  const { data: manualFundings, isLoading: manualFundingsLoading, refetch: manualFundingRefetch } =
+    useGetManualFundings(category ?? selectedStatus);
     const [modalVisible, setModalVisible] = useState(false); 
-    
+
   const { role, isLoading } = useRole();
   const isAdmin = role === USER_CATEGORIES.ADMIN;
 
@@ -72,6 +74,9 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
     exportToExcel(manualFundings?.data || [],  'manual_fundings.xlsx');
   };
 
+  useEffect(()=> {
+    manualFundingRefetch()
+  }, [manualFundingRefetch, selectedStatus])
   
   const handleDownload = (rowData:IManualPayment) => {
     const pdf = new jsPDF();
@@ -247,7 +252,11 @@ export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
       {emptyTransactionHistory ? <div className="mt-6">
             <EmptyTransactionHistory message="Naira Manual Funding history empty" />
         </div>:
-        <Table columns={columns} data={manualFundings?.data || []} handleDownloadCSV={handleDownloadExcel} /> }
+<>
+
+        <Table columns={columns} data={manualFundings?.data || []} handleDownloadCSV={handleDownloadExcel} setSelectedStatus={setSelectedStatus} selectedStatus ={selectedStatus}/> 
+        </>
+        }
       {/* <MTable verticalSpacing="md">
         <thead>
           <tr>

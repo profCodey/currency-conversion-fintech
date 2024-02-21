@@ -16,6 +16,8 @@ declare module "@tanstack/table-core" {
   }
 }
 import Cookies from "js-cookie";
+import { FaFilter } from "react-icons/fa6";
+import { Button, Group, Menu } from "@mantine/core";
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -34,10 +36,14 @@ export default function Table({
   columns,
   data,
   handleDownloadCSV, 
+  setSelectedStatus,
+  selectedStatus
 }: {
   columns: Array<any | false>;
   data: any[];
   handleDownloadCSV?: () => void; 
+  setSelectedStatus?: (status: string) => void;
+  selectedStatus?: string;
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -68,7 +74,37 @@ export default function Table({
           placeholder="Search all columns..."
         />
 
-        <div>
+        <div className="flex gap-3">
+      {setSelectedStatus &&
+        <Group className="">
+      <Menu shadow="md" width={200}>
+      <Menu.Target>
+        <Button 
+        className="font-normal border-2 border-gray-200 hover:bg-[#132144]"
+         style={{color:"#000", backgroundColor:"#fff", height:"40px"}}
+         leftIcon= {<FaFilter />}
+        >Filter By Category</Button>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item
+          onClick={() => { setSelectedStatus && setSelectedStatus("") }}
+        >
+          All
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => { setSelectedStatus && setSelectedStatus("fx") }}
+        >
+          FX
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => { setSelectedStatus && setSelectedStatus("local") }}
+        >
+          Local
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+      </Group> }
+
         <button
           onClick={handleDownloadCSV}
           style={{backgroundColor:colorBackground}}

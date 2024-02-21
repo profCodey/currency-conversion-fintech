@@ -41,7 +41,7 @@ interface IManualFundingHistoryProps {
   category: string;
   adminCategory?: boolean;
 }
-export function ManualFundingHistory({category, adminCategory}: IManualFundingHistoryProps) {
+export function ManualFundingHistory({category}: IManualFundingHistoryProps) {
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [fundingData, setFundingData] = useState<IManualPayment | null>(null);
   const { data: manualFundings, isLoading: manualFundingsLoading, refetch: manualFundingRefetch } =

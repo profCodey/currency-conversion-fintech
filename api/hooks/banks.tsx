@@ -326,15 +326,12 @@ export function useDeleteAccount(cb?: () => void) {
 }
 
 export function useGetManualFundings(category: string) {
-    const res = useQuery({
+    return useQuery({
         queryKey: ["manual-fundings"],
         queryFn: function (): Promise<AxiosResponse<IManualPayment[]>> {
             return axiosInstance.get(`/manual-funding?category=${category}`);
         },
     });
-
-    console.log('res', res)
-    return res
 }
 
 export function usePostManualFunding(cb?: () => void) {

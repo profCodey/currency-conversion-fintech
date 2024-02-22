@@ -22,9 +22,17 @@ export function useGetCurrencies() {
     },
     [data?.data]
   );
+  
+  const getCurrencySymbolFromId = useCallback(
+    (code: number) => {
+      return data?.data.find((currency) => currency.id === code)?.symbol;
+    },
+    [data?.data]
+  );
 
-  return { data, getCurrencyCodeFromId, ...rest };
+  return { data, getCurrencyCodeFromId, getCurrencySymbolFromId, ...rest };
 }
+
 
 export function useEditNewCurrency(cb?: () => void) {
   return useMutation(

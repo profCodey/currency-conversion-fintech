@@ -65,7 +65,10 @@ export interface ICreditDebit {
   created_on: string;
   updated_on: string;
   }
-
+  
+  export interface ICharge {
+    charges: number;
+  }
 export interface IGateway {
   id: number;
   description: string;
@@ -109,6 +112,7 @@ export interface ICurrency {
   id: number;
   code: string;
   name: string;
+  symbol: string;
 }
 
 export interface IUserDetail {

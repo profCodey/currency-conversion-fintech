@@ -17,6 +17,12 @@ export const signupFormValidator = z
     path: ["confirm_password"],
   });
 
+  export const localTransactionCreditFormValidator = z.object({
+    source_account: z.string().min(1, { message: "Select source account" }),
+    unit: z.number().gte(1, { message: "Enter valid amount" }),
+    destination_account: z.string().min(1, { message: "Select destination account" }),
+  })
+
 export const loginFormValidator = z.object({
   email: z.string().email("Enter valid email"),
   password: z

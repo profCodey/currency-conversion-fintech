@@ -37,6 +37,7 @@ import Cookies from "js-cookie";
 import LocalExchangeModal from "../dashboard/local-exchange-modal";
 import { FxManualFunding } from "../fund-account/fx";
 import { LocalManualFunding } from "../fund-account/local";
+import { LoadTransactionCredit } from "../fund-account/local-transaction-credit";
 
 export const PayFxRecipient = z.object({
     //   bank: z.string().min(1, { message: "Bank name is required" }),
@@ -267,6 +268,8 @@ export const FxOptionsModal = ({
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
     const [showManualFundingOpen, setShowManualFundingOpen] = useState(false);
+    const [showTransactioniCreditOpen, setShowTransactionCreditOpen] =
+        useState(false);
     const { isLoading, data: userInfo } = useGetCurrentUser();
     const { isLoading: walletsLoading, data: wallets } = useGetAccounts();
     const wallet = wallets?.data.find((wallet) => {
@@ -284,6 +287,9 @@ export const FxOptionsModal = ({
         : "#132144";
     function handleSendMoneyOpen() {
         setShowConfirmationModal(true);
+    }
+    function handleLoadTransactionOpen() {
+        setShowTransactionCreditOpen(true);
     }
 
     function handleSendExchangeOpen() {
@@ -383,6 +389,24 @@ export const FxOptionsModal = ({
                     </div>
                     <ArrowRight />
                 </div>
+                <Divider my="sm" />
+                <div
+                    style={{ cursor: "pointer" }}
+                    className="flex items-center justify-between mb-3"
+                    onClick={handleLoadTransactionOpen}>
+                    <div style={{ color: colorSecondary }}>
+                        <h3 className="text-2xl font-semibold">
+                            {" "}
+                            Load Transaction Credit
+                        </h3>
+                        <span
+                            className="text-sm font-normal "
+                            style={{ color: colorPrimary }}>
+                            Click here to preload credit for your transaction
+                        </span>
+                    </div>
+                    <ArrowRight />
+                </div>
             </Modal>
             <FXProceedModal
                 modalOpen={showConfirmationModal}
@@ -406,7 +430,7 @@ export const FxOptionsModal = ({
                     <h2
                         className={"text-2xl font-secondary mt-2"}
                         style={{ color: colorPrimary }}>
-                        Send ${title}
+                        Send {title}
                     </h2>
                 }
                 centered>
@@ -426,8 +450,35 @@ export const FxOptionsModal = ({
                 }
                 centered>
                 <div className="z-100">
-                    <FxManualFunding gatewayID={id} closeModal={closeManualFundingModal} />
-                 </div>
+                    <FxManualFunding
+                        gatewayID={id}
+                        closeModal={closeManualFundingModal}
+                    />
+                </div>
+            </Modal>
+            <Modal
+                opened={showTransactioniCreditOpen}
+                onClose={() => setShowTransactionCreditOpen(false)}
+                
+                title={
+                    <h2
+                        className={" text-2xl font-secondary"}
+                        style={{ color: colorPrimary }}>
+                        Load Transaction Credit
+                    </h2>
+                }
+                centered
+                // overlayStyle={{ backdropFilter: "blur(8px)" }} // Adds a blurry background
+                // styles={{ modal: { maxHeight: "200vh", overflowY: "auto" } }}
+                >
+                <div className="z-100">
+                    <LoadTransactionCredit
+                        gatewayID={id}
+                        //@ts-ignore
+                        currencyId={wallet?.currency.id}
+                        closeModal={() => setShowTransactionCreditOpen(false)}
+                    />
+                </div>
             </Modal>
         </>
     );
@@ -659,7 +710,10 @@ export const NairaOptionsModal = ({
                 }
                 centered>
                 <div className="z-100">
-                    <LocalManualFunding gatewayID={id} closeModal={closeManualFundingModal} />
+                    <LocalManualFunding
+                        gatewayID={id}
+                        closeModal={closeManualFundingModal}
+                    />
                 </div>
             </Modal>
         </>

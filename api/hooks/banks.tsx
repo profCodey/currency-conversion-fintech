@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryFunction, useMutation, useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "..";
 import { AxiosError, AxiosResponse } from "axios";
 import {
@@ -7,10 +7,14 @@ import {
     IManualPayment,
     INameEnquiry,
     IPaycelerAccount,
+    ICharge,
 } from "@/utils/validators/interfaces";
 import { showNotification } from "@mantine/notifications";
 import { ErrorItem } from "./auth";
-import { fundManualAccount } from "@/utils/validators";
+import {
+    fundManualAccount,
+    localTransactionCreditFormValidator,
+} from "@/utils/validators";
 import { z } from "zod";
 import { queryClient } from "@/pages/_app";
 import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
@@ -125,7 +129,6 @@ export function useCreatePayout(
     return useMutation(
         function (payload: LocalPayout) {
             return axiosInstance.post("/local/payouts/create/", payload, {
-
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -138,23 +141,25 @@ export function useCreatePayout(
                         title: "Operation Successful",
                         message: "Registration Successful",
                         color: "green",
-                      });
+                    });
                 } else {
                     showNotification({
                         title: "Operation failed",
                         message: "Registration unsuccessful",
                         color: "red",
-                      });
+                    });
                 }
             },
             onError: function (data: AxiosError) {
                 const response = data.response?.data as ErrorItem;
                 console.log("response", response);
-                const combinedDetails = response.errors.map((error: { detail: any; }) => error.detail).join(', ');
+                const combinedDetails = response.errors
+                    .map((error: { detail: any }) => error.detail)
+                    .join(", ");
                 showNotification({
-                  title: "Operation failed",
-                  message: combinedDetails || "Registration unsuccessful",
-                  color: "red",
+                    title: "Operation failed",
+                    message: combinedDetails || "Registration unsuccessful",
+                    color: "red",
                 });
             },
         }
@@ -169,7 +174,6 @@ export function useCreateFxPayout(
     return useMutation(
         function (payload: z.infer<typeof PayFxRecipient>) {
             return axiosInstance.post("/fx/payout/", payload, {
-
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -188,7 +192,7 @@ export function useCreateFxPayout(
                     type: string;
                     errors: ErrorItem[] | ErrorItem;
                 };
-                
+
                 const response: E = data.response?.data as unknown as E;
                 const errors = response?.errors;
                 //  console.log({ errRes: response });
@@ -300,8 +304,7 @@ export function useDeactivateAccount(cb?: () => void) {
 
 export function useDeleteAccount(cb?: () => void) {
     return useMutation(
-        (id: number) =>
-            axiosInstance.delete(`/payceler_accounts/${id}/`),
+        (id: number) => axiosInstance.delete(`/payceler_accounts/${id}/`),
         {
             onSuccess: function (data: AxiosResponse) {
                 showNotification({
@@ -334,6 +337,52 @@ export function useGetManualFundings(category: string) {
     });
 }
 
+export function useLoadTransactionCredit(cb?: () => void) {
+    return useMutation(
+        function (
+            payload: z.infer<typeof localTransactionCreditFormValidator>
+        ) {
+            return axiosInstance.post(`load-transaction-credit/`, payload);
+        },
+        {
+            onSuccess: function (data: AxiosResponse) {
+                if (data?.data.status) {
+                    showNotification({
+                        title: "Operation successful",
+                        message: "Transaction credited successfully",
+                        color: "green",
+                    });
+                } else
+                    showNotification({
+                        message: data?.data.message,
+                        color: "red",
+                    });
+                cb && cb();
+            },
+            onError: function (data: AxiosError) {
+                const response = data.response?.data as { type: string; errors: Array<{ code: string; detail: string; attr: string | null }> };
+
+                if (response?.type === "validation_error" && response.errors.length > 0) {
+                    const errorMessage = response.errors[0].detail;
+                    showNotification({
+                        message: errorMessage,
+                        color: "red",
+                    });
+                } else {
+                    showNotification({
+                        message: "Unable to credit transaction",
+                        color: "red",
+                    });
+                }
+            },
+            onSettled: function () {
+                cb && cb();
+                queryClient.invalidateQueries(["load-transaction-credit"]);
+            },
+        }
+    );
+}
+
 export function usePostManualFunding(cb?: () => void) {
     return useMutation(
         function (payload: z.infer<typeof fundManualAccount>) {
@@ -353,7 +402,7 @@ export function usePostManualFunding(cb?: () => void) {
                         message: data?.data.message,
                         color: "red",
                     });
-                    cb && cb();
+                cb && cb();
             },
             onError: function (data: AxiosError) {
                 const response = data.response?.data as ErrorItem;
@@ -368,4 +417,48 @@ export function usePostManualFunding(cb?: () => void) {
             },
         }
     );
+}
+
+// Define the function to fetch transaction charges
+function getTransactionCharges(
+    sourceAccountId: string,
+    destinationAccountId: string
+): Promise<AxiosResponse<ICharge>> {
+    return axiosInstance.get(
+        `/get-transaction-charges/?source_account_id=${sourceAccountId}&destination_account_id=${destinationAccountId}`
+    );
+}
+
+export function useGetTransactionCharges(
+    sourceAccountId: string | null,
+    destinationAccountId: string | null
+) {
+    const queryFn: QueryFunction<AxiosResponse<ICharge>> = async () => {
+        if (!sourceAccountId || !destinationAccountId) {
+            throw new Error("Source and destination account IDs are required.");
+        }
+
+        return getTransactionCharges(sourceAccountId, destinationAccountId);
+    };
+
+    const { data, error, isLoading, mutate } = useQuery(
+        ["transaction-charges", sourceAccountId, destinationAccountId],
+        queryFn,
+        {
+            enabled: !!sourceAccountId && !!destinationAccountId,
+        }
+    );
+
+    const mutation = useMutation(queryFn, {
+        onSuccess: () => {
+            // Optionally do something on success
+        },
+    });
+
+    return {
+        data,
+        error,
+        isLoading,
+        mutate: mutation.mutate,
+    };
 }

@@ -492,3 +492,15 @@ export interface IWithdrawalAccount {
   account_number: string;
   bank: number;
 }
+
+export interface IClientCharges {
+  id: number;
+  title: string; 
+  readOnly?: true; 
+  source_account: number;
+  destination_account: number;
+  amount: string; 
+  client_name: string;
+  source_account_name: string;
+  destination_account_name: string;
+}

@@ -38,8 +38,8 @@ export function middleware(request: NextRequest) {
     "/admin/currencies",
     "/admin/purposes",
     "/admin/global-limit",
-    "/admin/user-limit"
-    
+    "/admin/user-limit",
+    "/admin/client-charges",
   ];
 
   const publicPaths = [

@@ -180,7 +180,8 @@ export function LoadTransactionCredit({
                         <>
                             {transactionCharges && (
                                 <>
-                                    <Pill
+                                   <div className="text-center">
+                                   <Pill
                                         text={`Charges per transaction: ${getCurrency(
                                             getCurrencyCodeFromId(currencyId)
                                         )}${currencyFormatter(
@@ -188,6 +189,7 @@ export function LoadTransactionCredit({
                                         )}`}
                                         color="bg-green-500"
                                     />
+                                   </div>
                                     <NumberInput
                                         size="md"
                                         label="Enter Unit"
@@ -206,8 +208,7 @@ export function LoadTransactionCredit({
                                             "unit"
                                         )}
                                     />
-                                    <Text>
-                                        You will be charged a total amount of:{" "}
+                                    <Text className="text-center">
                                         <Pill
                                             text={`You will be charged a total amount${getCurrency(
                                                 getCurrencyCodeFromId(

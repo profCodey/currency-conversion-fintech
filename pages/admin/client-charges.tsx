@@ -78,7 +78,7 @@ export default function Purposes() {
 
     const _rows = useMemo(
         function () {
-            return clientCharges?.data.map((clientCharges: IClientCharges, idx: number) => (
+            return clientCharges && clientCharges?.data.map((clientCharges: IClientCharges, idx: number) => (
                 <tr key={clientCharges.id}>
                     <td>{idx + 1}</td>
                     <td>{clientCharges.client_name}</td>  
@@ -134,7 +134,8 @@ export default function Purposes() {
                         onClose={closeClientChargeModal}
                         size="md"
                         className="relative"
-                        position="right">
+                        position="right"
+                        closeOnClickOutside={false}>
                         <form
                             onSubmit={editClientChargeForm.onSubmit(handleSubmit)}
                             className="relative">

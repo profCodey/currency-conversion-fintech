@@ -453,6 +453,22 @@ export function useGetTransactionCharges(
         onSuccess: () => {
             // Optionally do something on success
         },
+        onError: function (data: AxiosError) {
+            const response = data.response?.data as { type: string; errors: Array<{ code: string; detail: string; attr: string | null }> };
+
+            if (response?.type === "validation_error" && response.errors.length > 0) {
+                const errorMessage = response.errors[0].detail;
+                showNotification({
+                    message: "client charges doesn't exist for this transaction, please select another detination account" || errorMessage,
+                    color: "red",
+                });
+            } else {
+                showNotification({
+                    message: "Unable to fetch charges, try again later",
+                    color: "red",
+                });
+            }
+        },
     });
 
     return {

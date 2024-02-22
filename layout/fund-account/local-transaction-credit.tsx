@@ -75,6 +75,7 @@ export function LoadTransactionCredit({
     );
 
     const [showUnitInput, setShowUnitInput] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
 
     useEffect(() => {
         if (localTransactionCreditForm.values.destination_account) {
@@ -96,7 +97,10 @@ export function LoadTransactionCredit({
         localTransactionCreditForm.values.source_account,
         selectedAccount?.value,
     ]);
-    //
+
+   
+
+    
     useEffect(() => {
         if (
             !transactionChargesLoading &&
@@ -104,6 +108,8 @@ export function LoadTransactionCredit({
             transactionCharges
         ) {
             setShowUnitInput(true);
+        } else {
+            setErrorMessage(true);
         }
     }, [
         transactionChargesLoading,
@@ -162,6 +168,7 @@ export function LoadTransactionCredit({
                         placeholder="Select Account"
                         size="md"
                         disabled
+                        style={{ marginTop: 10 }}
                         data={fxAccountOptions}
                         {...localTransactionCreditForm.getInputProps(
                             "source_account"
@@ -171,6 +178,7 @@ export function LoadTransactionCredit({
                         label="Destination Account"
                         placeholder="Select Account"
                         size="md"
+                        style={{ marginTop: 10 }}
                         data={accountOptions}
                         {...localTransactionCreditForm.getInputProps(
                             "destination_account"
@@ -210,12 +218,12 @@ export function LoadTransactionCredit({
                                     />
                                     <Text className="text-center">
                                         <Pill
-                                            text={`You will be charged a total amount${getCurrency(
+                                            text={`You will be charged a total amount: ${getCurrency(
                                                 getCurrencyCodeFromId(
                                                     currencyId
                                                 )
                                             )}${currencyFormatter(totalToPay)}`}
-                                            color="bg-blue-500" // Replace with the actual color you want
+                                            color="bg-green-500" // Replace with the actual color you want
                                         />
                                     </Text>
                                 </>
@@ -225,8 +233,9 @@ export function LoadTransactionCredit({
                     <Button
                         type="submit"
                         size="md"
-                        style={{ backgroundColor: colorSecondary }}
-                        loading={loadTansactionCreditLoading}>
+                        style={{ backgroundColor: colorSecondary, marginTop: 30 }}
+                        loading={loadTansactionCreditLoading}
+                        disabled={!transactionCharges}>
                         Confirm Load
                     </Button>
                 </Stack>

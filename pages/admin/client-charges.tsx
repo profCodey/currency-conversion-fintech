@@ -73,7 +73,6 @@ export default function Purposes() {
 
             //@ts-ignore
             updateClientCharge(payload);
-            closeClientChargeModal();
         }
     }
 

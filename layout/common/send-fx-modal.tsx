@@ -268,6 +268,7 @@ export const FxOptionsModal = ({
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const { fxPurposes, isLoading: isLoadingPurpose } = useGetFxPurposes();
     const [showManualFundingOpen, setShowManualFundingOpen] = useState(false);
+    const [showParentModal, setShowParentModal] = useState(optionsOpen)
     const [showTransactioniCreditOpen, setShowTransactionCreditOpen] =
         useState(false);
     const { isLoading, data: userInfo } = useGetCurrentUser();
@@ -290,6 +291,7 @@ export const FxOptionsModal = ({
     }
     function handleLoadTransactionOpen() {
         setShowTransactionCreditOpen(true);
+        setShowParentModal(close)
     }
 
     function handleSendExchangeOpen() {

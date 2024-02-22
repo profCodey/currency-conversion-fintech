@@ -165,6 +165,11 @@ export function AdminDashboardItems() {
       ],
     },
     {
+      route: "/admin/client-charges",
+      label: "Client Charges",
+      icon: <TransactionsIcon />,
+    },
+    {
       route: "/admin/logs",
       label: "Logs",
       icon: <DocumentText />,

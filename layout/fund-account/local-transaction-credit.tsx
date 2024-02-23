@@ -76,6 +76,8 @@ export function LoadTransactionCredit({
 
     const [showUnitInput, setShowUnitInput] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [loadingTransactionCharges, setLoadingTransactionCharges] =
+        useState(false);
 
     useEffect(() => {
         if (localTransactionCreditForm.values.destination_account) {
@@ -84,23 +86,39 @@ export function LoadTransactionCredit({
                 localTransactionCreditForm.values.source_account;
             const destinationAccountId =
                 localTransactionCreditForm.values.destination_account;
+            let isMounted = true;
 
-            // Make sure to use the correct function name for the mutation
-            getTransactionCharges({
-                source_account_id: sourceAccountId,
-                destination_account_id: destinationAccountId,
-            } as unknown as QueryFunctionContext<QueryKey, any>); // Add type assertion here
+            // Set loading to true
+            setLoadingTransactionCharges(true);
+
+            Promise.resolve(
+                getTransactionCharges({
+                    source_account_id: sourceAccountId,
+                    destination_account_id: destinationAccountId,
+                } as unknown as QueryFunctionContext<QueryKey, any>)
+            )
+                .then(() => {
+                    if (isMounted) {
+                        setLoadingTransactionCharges(false);
+                    }
+                })
+                .catch(() => {
+                    if (isMounted) {
+                        setLoadingTransactionCharges(false);
+                    }
+                });
+            return () => {
+                isMounted = false;
+            };
         }
     }, [
         getTransactionCharges,
+        loadingTransactionCharges,
         localTransactionCreditForm.values.destination_account,
         localTransactionCreditForm.values.source_account,
         selectedAccount?.value,
     ]);
 
-   
-
-    
     useEffect(() => {
         if (
             !transactionChargesLoading &&
@@ -137,8 +155,11 @@ export function LoadTransactionCredit({
         });
     }
 
+    
+
     function closeForm() {
         closeAllModals();
+        closeModal();
     }
 
     const totalToPay =
@@ -158,7 +179,7 @@ export function LoadTransactionCredit({
                         // bankDetailsLoading ||
                         accountsLoading ||
                         currenciesLoading ||
-                        // transactionChargesLoading ||
+                        loadingTransactionCharges ||
                         loadTansactionCreditLoading
                     }
                 />
@@ -188,16 +209,18 @@ export function LoadTransactionCredit({
                         <>
                             {transactionCharges && (
                                 <>
-                                   <div className="text-center">
-                                   <Pill
-                                        text={`Charges per transaction: ${getCurrency(
-                                            getCurrencyCodeFromId(currencyId)
-                                        )}${currencyFormatter(
-                                            transactionCharges.data.charges
-                                        )}`}
-                                        color="bg-green-500"
-                                    />
-                                   </div>
+                                    <div className="text-center">
+                                        <Pill
+                                            text={`Charges per transaction: ${getCurrency(
+                                                getCurrencyCodeFromId(
+                                                    currencyId
+                                                )
+                                            )}${currencyFormatter(
+                                                transactionCharges.data.charges
+                                            )}`}
+                                            color="bg-gray-200"
+                                        />
+                                    </div>
                                     <NumberInput
                                         size="md"
                                         label="Enter Unit"
@@ -223,7 +246,7 @@ export function LoadTransactionCredit({
                                                     currencyId
                                                 )
                                             )}${currencyFormatter(totalToPay)}`}
-                                            color="bg-green-500" // Replace with the actual color you want
+                                            color="bg-gray-200" // Replace with the actual color you want
                                         />
                                     </Text>
                                 </>
@@ -233,8 +256,12 @@ export function LoadTransactionCredit({
                     <Button
                         type="submit"
                         size="md"
-                        style={{ backgroundColor: colorSecondary, marginTop: 30 }}
-                        loading={loadTansactionCreditLoading}
+                        style={{
+                            backgroundColor: colorSecondary,
+                            marginTop: 30,
+                        }}
+                        loading={
+                            loadTansactionCreditLoading}
                         disabled={!transactionCharges}>
                         Confirm Load
                     </Button>

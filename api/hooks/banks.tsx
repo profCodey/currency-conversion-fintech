@@ -354,15 +354,25 @@ export function useLoadTransactionCredit(cb?: () => void) {
                     });
                 } else
                     showNotification({
-                        message: data?.data.message,
+                        message: "Transaction credit loaded successfully",
                         color: "red",
                     });
                 cb && cb();
             },
             onError: function (data: AxiosError) {
-                const response = data.response?.data as { type: string; errors: Array<{ code: string; detail: string; attr: string | null }> };
-
-                if (response?.type === "validation_error" && response.errors.length > 0) {
+                const response = data.response?.data as {
+                    type: string;
+                    errors: Array<{
+                        code: string;
+                        detail: string;
+                        attr: string | null;
+                    }>;
+                };
+            
+                if (
+                    response?.type === "validation_error" &&
+                    response.errors.length > 0
+                ) {
                     const errorMessage = response.errors[0].detail;
                     showNotification({
                         message: errorMessage,
@@ -375,6 +385,7 @@ export function useLoadTransactionCredit(cb?: () => void) {
                     });
                 }
             },
+            
             onSettled: function () {
                 cb && cb();
                 queryClient.invalidateQueries(["load-transaction-credit"]);

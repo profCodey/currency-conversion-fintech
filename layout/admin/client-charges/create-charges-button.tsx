@@ -122,10 +122,13 @@ export function CreateClientChargeButton() {
             <Select
               label="Source Account"
               data={
-                clientAccount?.data?.map((account) => ({
-                  label: `${account.label}`,
-                  value: account.id.toString(),
-                })) ?? []
+                [
+                  { label: "", value: "" }, // Add an empty object at index 0
+                  ...(clientAccount?.data?.map((account) => ({
+                    label: `${account.label}`,
+                    value: account.id.toString(),
+                  })) ?? [])
+                ]
               }
               placeholder="Click to select an account from the list"
               size="md"
@@ -140,10 +143,13 @@ export function CreateClientChargeButton() {
             <Select
               label="Destination Account"
               data={
-                clientAccount?.data?.map((account) => ({
-                  label: `${account.label}`,
-                  value: account.id.toString(),
-                })) ?? []
+                [
+                  { label: "", value: "" }, // Add an empty object at index 0
+                  ...(clientAccount?.data?.map((account) => ({
+                    label: `${account.label}`,
+                    value: account.id.toString(),
+                  })) ?? [])
+                ]
               }
               placeholder="Click to select an account from the list"
               size="md"

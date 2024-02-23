@@ -476,7 +476,6 @@ export const FxOptionsModal = ({
                 <div className="z-100">
                     <LoadTransactionCredit
                         gatewayID={id}
-                        //@ts-ignore
                         currencyId={wallet?.currency.id}
                         closeModal={() => setShowTransactionCreditOpen(false)}
                     />

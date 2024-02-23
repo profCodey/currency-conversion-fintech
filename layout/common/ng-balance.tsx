@@ -117,28 +117,28 @@ export default function NGNBalance(props: { wallet: IAccount }) {
                 </div>
             </div>
             <span
-                style={{ color: colorSecondary }}
+                
                 className=" font-semibold text-xl flex gap-x-1">
                 <div className="flex justify-between w-full">
                     <div className="grid ">
-                        <p>
+                        <span style={{ color: colorSecondary }}>
                             {getCurrency(wallet.currency.code)}
                             {getBalanceText(
                                 currencyFormatter(Number(wallet.true_balance)),
                                 seeBalance
-                            )}
-                        </p>
-                        <p className="text-xs m">Gateway balance</p>
+                            )} 
+                        </span>
+                        <span style={{ fontSize:'8px'}} >Gateway balance</span>
                     </div>
                     <div className="grid">
-                        <p>
+                        <span style={{ color: colorSecondary }}>
                             {getCurrency(wallet.currency.code)}
                             {getBalanceText(
                             currencyFormatter(Number(wallet.transaction_credit)),
                             seeBalance
                             )}
-                        </p>
-                        <p className="text-xs">Transaction credit</p>
+                        </span>
+                        <span style={{ fontSize:'8px'}} >Transaction credit</span>
                     </div>
                    
                 </div>

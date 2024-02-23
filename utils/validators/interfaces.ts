@@ -367,6 +367,7 @@ export interface IAccount {
   account_name: string;
   bank_name: string;
   true_balance: string;
+  transaction_credit: string;
   category: "fx" | "local";
   is_active: boolean;
   reference?: string;

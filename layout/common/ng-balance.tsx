@@ -128,9 +128,9 @@ export default function NGNBalance(props: { wallet: IAccount }) {
                                 seeBalance
                             )} 
                         </span>
-                        <span style={{ fontSize:'8px'}} >Gateway balance</span>
+                        <span style={{ fontSize:'8px'}} className="-mt-3">Gateway balance</span>
                     </div>
-                    <div className="grid">
+                    <div className="grid ">
                         <span style={{ color: colorSecondary }}>
                             {getCurrency(wallet.currency.code)}
                             {getBalanceText(
@@ -138,7 +138,7 @@ export default function NGNBalance(props: { wallet: IAccount }) {
                             seeBalance
                             )}
                         </span>
-                        <span style={{ fontSize:'8px'}} >Transaction credit</span>
+                        <span style={{ fontSize:'8px'}} className="-mt-3">Transaction credit</span>
                     </div>
                    
                 </div>

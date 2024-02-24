@@ -122,7 +122,7 @@ export default function NGNBalance(props: { wallet: IAccount }) {
                 <div className="flex justify-between w-full">
                     <div className="grid ">
                         <span style={{ color: colorSecondary }}>
-                            {getCurrency(wallet.currency.code)}
+                            {/* {getCurrency(wallet.currency.code)} */}
                             {getBalanceText(
                                 currencyFormatter(Number(wallet.true_balance)),
                                 seeBalance
@@ -132,7 +132,7 @@ export default function NGNBalance(props: { wallet: IAccount }) {
                     </div>
                     <div className="grid ">
                         <span style={{ color: colorSecondary }}>
-                            {getCurrency(wallet.currency.code)}
+                            {/* {getCurrency(wallet.currency.code)} */}
                             {getBalanceText(
                             currencyFormatter(Number(wallet.transaction_credit)),
                             seeBalance

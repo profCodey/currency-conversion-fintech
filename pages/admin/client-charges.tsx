@@ -81,10 +81,9 @@ export default function Purposes() {
             return clientCharges && clientCharges?.data.map((clientCharges: IClientCharges, idx: number) => (
                 <tr key={clientCharges.id}>
                     <td>{idx + 1}</td>
-                    <td>{clientCharges.client_name}</td>  
-                    <td>{clientCharges.amount}</td>    
-                    <td>{clientCharges.source_account_name}</td>   
-                    <td>{clientCharges.destination_account_name}</td>                   
+                    <td>{clientCharges.client_name}</td>
+                    <td>{clientCharges.source_currency_name}</td>
+                    <td>{clientCharges.amount}</td>
                     <td>
                         <Menu width={150} position="right">
                             <Menu.Target>
@@ -119,11 +118,10 @@ export default function Purposes() {
                     <LoadingOverlay visible={clientChargesLoading} />
                     <thead>
                         <tr>
-                            <th>S/N</th>                           
+                            <th>S/N</th>
                             <th>Client Name</th>
+                            <th>Currency</th>
                             <th>Amount</th>
-                            <th>Source Account Name</th>
-                            <th>Destination Account Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -176,7 +174,7 @@ export default function Purposes() {
                                         loading={updateClientChargeLoading}
                                         onClick={() => {
                                             editClientChargeForm.validate();
-                                           
+
                                             handleSubmit(
                                                 editClientChargeForm.values
                                             );

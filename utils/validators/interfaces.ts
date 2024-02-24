@@ -65,7 +65,7 @@ export interface ICreditDebit {
   created_on: string;
   updated_on: string;
   }
-  
+
   export interface ICharge {
     charges: number;
   }
@@ -500,12 +500,10 @@ export interface IWithdrawalAccount {
 
 export interface IClientCharges {
   id: number;
-  title: string; 
-  readOnly?: true; 
-  source_account: number;
-  destination_account: number;
-  amount: string; 
+  title: string;
+  readOnly?: true;
+  source_currency: number;
+  amount: string;
   client_name: string;
-  source_account_name: string;
-  destination_account_name: string;
+  source_currency_name: string;
 }

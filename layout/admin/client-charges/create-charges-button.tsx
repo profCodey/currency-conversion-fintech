@@ -13,12 +13,11 @@ import { useState } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 import { useUsersList } from "@/api/hooks/admin/users";
-import { useGetClientAccounts } from "@/api/hooks/accounts";
+import { useGetCurrencies } from "@/api/hooks/currencies";
 
 export const clientChargeFormValidator = z.object({
   client: z.number().gt(0, "Kindly select a user"),
-  source_account: z.number().gt(0, "Kindly select source account"),
-  destination_account: z.number().gt(0, "Kindly select destination account"),
+  source_currency: z.number().gt(0, "Kindly select source currency"),
   amount: z.string().min(1, "Enter a value for amount"),
 });
 
@@ -28,14 +27,13 @@ export function CreateClientChargeButton() {
   const { mutate: addClientCharge, isLoading: clientChargeLoading } =
     useAddClientCharge(closeClientChargeModal);
   const { data: usersList, isLoading: usersLoading } = useUsersList();
-  const { isLoading: clientAccountLoading, data: clientAccount } =
-    useGetClientAccounts(userId as string);
+  const { isLoading: currencyLoading, data: currencies } =
+    useGetCurrencies();
 
   const addClientChargeForm = useForm({
     initialValues: {
       client: 0,
-      source_account: 0,
-      destination_account: 0,
+      source_currency: 0,
       amount: "",
     },
     validate: zodResolver(clientChargeFormValidator),
@@ -60,12 +58,8 @@ export function CreateClientChargeButton() {
     addClientChargeForm.setFieldValue("client", Number(value));
   }
 
-  function handleSourceAcc(value: string | null) {
-    addClientChargeForm.setFieldValue("source_account", Number(value));
-  }
-
-  function handleDestinationAcc(value: string | null) {
-    addClientChargeForm.setFieldValue("destination_account", Number(value));
+  function handleSourceCurrency(value: string | null) {
+    addClientChargeForm.setFieldValue("source_currency", Number(value));
   }
 
   return (
@@ -120,44 +114,23 @@ export function CreateClientChargeButton() {
             />
 
             <Select
-              label="Source Account"
+              label="Source Currency"
               data={
                 [
                   { label: "", value: "" }, // Add an empty object at index 0
-                  ...(clientAccount?.data?.map((account) => ({
-                    label: `${account.label}`,
-                    value: account.id.toString(),
+                  ...(currencies?.data?.map((currency) => ({
+                    label: `${currency.name}`,
+                    value: currency.id.toString(),
                   })) ?? [])
                 ]
               }
-              placeholder="Click to select an account from the list"
+              placeholder="Click to select source currency from the list"
               size="md"
               onChange={(value) => {
-                handleSourceAcc(value);
+                handleSourceCurrency(value);
               }}
               searchable
-              nothingFound={"No account found for the selected user"}
-              required
-            />
-
-            <Select
-              label="Destination Account"
-              data={
-                [
-                  { label: "", value: "" }, // Add an empty object at index 0
-                  ...(clientAccount?.data?.map((account) => ({
-                    label: `${account.label}`,
-                    value: account.id.toString(),
-                  })) ?? [])
-                ]
-              }
-              placeholder="Click to select an account from the list"
-              size="md"
-              onChange={(value) => {
-                handleDestinationAcc(value);
-              }}
-              searchable
-              nothingFound={"No account found for the selected user"}
+              nothingFound={"No currency"}
               required
             />
 

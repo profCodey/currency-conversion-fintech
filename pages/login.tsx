@@ -12,6 +12,7 @@ import { ReactElement } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
 import CookieConsentBanner from "@/components/react-cookie-consent";
+import GoogleTranslate from "@/GoogleTranslate";
 
 export default function Login() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -89,6 +90,7 @@ const backgroundColor = settings?.background_color;
         </div>
     );
 }
+<GoogleTranslate />
 
 Login.getLayout = function getLayout(page: ReactElement) {
     return (

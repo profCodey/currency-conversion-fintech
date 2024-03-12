@@ -11,9 +11,8 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { z } from "zod";
 import Cookies from "js-cookie";
+import GoogleTranslateComponent from '@/GoogleTranslate'
 import CookieConsentBanner from "@/components/react-cookie-consent";
-import GoogleTranslate from "@/GoogleTranslate";
-
 export default function Login() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const { mutate: login, isLoading } = useLogin();
@@ -87,10 +86,10 @@ const backgroundColor = settings?.background_color;
                 </Stack>
             </form>
             {/* {isLoggedIn && <CookieConsentBanner />} */}
+<GoogleTranslateComponent />
         </div>
     );
 }
-<GoogleTranslate />
 
 Login.getLayout = function getLayout(page: ReactElement) {
     return (

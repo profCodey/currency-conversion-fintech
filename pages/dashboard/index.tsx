@@ -11,6 +11,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col gap-6 min-h-full">
+
       <h2 className={" text-2xl font-secondary"}
       style={{ color: colorPrimary}}>
         Thank you for choosing us,{" "}
@@ -25,6 +26,7 @@ export default function Dashboard() {
     </div>
   );
 }
+
 
 Dashboard.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;

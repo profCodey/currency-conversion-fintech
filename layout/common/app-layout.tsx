@@ -34,6 +34,7 @@ import Cookies from "js-cookie";
 import { useGetSiteSettings } from "@/api/hooks/admin/sitesettings";
 import { ISiteSettings } from "@/utils/validators/interfaces";
 import Image from 'next/image';
+import GoogleTranslateComponent from "@/GoogleTranslate"
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -109,6 +110,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   );
 
   return (
+    <>
     <AppShell
       padding={0}
       className="max-h-screen"
@@ -216,10 +218,12 @@ export function AppLayout({ children }: AppLayoutProps) {
           </section>
         </Navbar>
       }
-    >
+      >
+    <GoogleTranslateComponent />
       <section className="order-2 h-full max-h-screen w-full px-5 py-5 overflow-y-auto">
         {content}
       </section>
     </AppShell>
-  );
+</> 
+ );
 }

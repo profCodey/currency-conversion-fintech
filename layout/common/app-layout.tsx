@@ -219,9 +219,9 @@ export function AppLayout({ children }: AppLayoutProps) {
         </Navbar>
       }
       >
-    <GoogleTranslateComponent />
       <section className="order-2 h-full max-h-screen w-full px-5 py-5 overflow-y-auto">
         {content}
+    <GoogleTranslateComponent />
       </section>
     </AppShell>
 </> 
